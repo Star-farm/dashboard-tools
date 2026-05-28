@@ -432,23 +432,150 @@ def sync_drive_to_gcs(request):
 
 ---
 
-## 3. Looker Studio Visualization Setup
+## 3. Connecting GAMA Simulation Output (CSV) to Looker Studio
 
-Once cloud components are running, the `datastudio_output` table will populate with geographic shapes and aggregated values.
+GAMA exports per-agent tabular data as CSV files with simulation metrics across time. This data is used purely for **KPI scorecards and charts** in Looker Studio.
 
-### Connecting the Data
+| id | datetime | seed | Fertilizer Usage | Water Usage | Flood Stress | Drought Stress | Biodiversity | Emission Intensity |
+|----|----------|------|-----------------|-------------|-------------|---------------|-------------|-------------------|
+| 279 | 2/19/2026 | 132 | 4.69 | 876.60 | 0 | 0 | 1 | 0.0391 |
+| 262 | 2/18/2026 | 100 | 6.22 | 799.26 | 0 | 0 | 1 | 0.0383 |
 
-1. Open [Google Looker Studio](https://lookerstudio.google.com/).
-2. Click **Blank Report**.
-3. Under *Connect to data*, search for and select **BigQuery**.
-4. Choose your **Project ID**, dataset (`map_data_us`), and the `datastudio_output` table. Click **Add**.
+---
 
-### Building the Interactive Map
+### Step 1: Upload the CSV to Google Sheets
 
-1. Click **Add a chart** and choose **Google Maps** (or *Filled Map*).
-2. Configure the chart fields:
-    - **Location / Geospatial Dimension** → `Area` column (detected as GEOGRAPHY).
-    - **Tooltip / Identification** → `id` column.
-    - **Color Metric** → `AverageValue` (shades polygons dynamically based on raster calculations).
-3. Add a **Drop-down list control** with dimension set to `Index` — lets viewers switch between *Sowing Date* and *Cropping Intensity* layers.
-4. Add a **Slider control** using the `Year` field to scrub through historical trends.
+1. Open [Google Sheets](https://sheets.google.com) and create a new spreadsheet (e.g. `GAMA_Simulation_Output`).
+2. Go to **File > Import**, upload your `.csv` file, choose **Replace spreadsheet**, separator: **Comma**.
+3. If you have multiple simulation runs, append all rows into one sheet — use the `seed` column to identify each run and `datetime` to track timesteps.
+
+---
+
+### Step 2: Connect Google Sheets to Looker Studio
+
+1. Open [Looker Studio](https://lookerstudio.google.com/) → **Blank Report**.
+2. Under *Connect to data*, select **Google Sheets**.
+3. Choose your `GAMA_Simulation_Output` spreadsheet and the relevant sheet tab. Enable **Use first row as headers**.
+4. Click **Add**.
+
+---
+
+### Step 3: Build KPI and Chart Panels
+
+#### Scorecards (KPIs)
+
+Add a **Scorecard** chart for each key metric. Useful aggregations:
+
+- **Average** `Emission Intensity` across all agents and timesteps.
+- **Average** `Water Usage`, `Fertilizer Usage`, `Pesticide Usage`.
+- **Sum** or **Average** of `Biodiversity`, `Resilient Varieties`, `Water Reliability`, `AWD Adoption`.
+- **Max** of `Flood Stress`, `Drought Stress`, `Salinity Stress` (binary flags — useful for seeing if any agent experienced stress).
+
+#### Time Series Charts
+
+Add a **Time Series chart** to track metrics over the simulation period:
+
+- **X-axis** → `datetime`
+- **Metric** → `Emission Intensity`, `Water Usage`, or `Biodiversity`
+- **Breakdown dimension** → `seed` (plots one line per simulation run for comparison)
+
+#### Bar / Column Charts
+
+Add a **Bar chart** to compare averages across agent groups or scenario seeds:
+
+- **Dimension** → `seed` or `id`
+- **Metrics** → `Fertilizer Usage`, `Pesticide Usage`, `Water Usage`
+
+#### Controls (Filters)
+
+Add interactive controls to let viewers slice the data:
+
+- **Date Range control** → `datetime` (filter to a specific simulation period)
+- **Drop-down list** → `seed` (switch between simulation runs / scenarios)
+- **Drop-down list** → `Flood Stress` / `Drought Stress` / `Salinity Stress` (filter to stressed agents only)
+
+---
+
+### Path B — Via BigQuery *(if the CSV is too large for Google Sheets)*
+
+If your simulation output exceeds ~200k rows or 10 MB, load it into BigQuery and connect from there instead.
+
+1. In BigQuery, open your dataset (`map_data_us`) → **Create Table**.
+2. Source: **Google Drive** → paste your Google Sheets URL. File format: **Google Sheets**.
+3. Table name: `gama_output`. Enable **Auto-detect schema** → **Create Table**.
+
+> BigQuery does not allow spaces in column names. Rename columns in Sheets first if needed (e.g. `Flood Stress` → `Flood_Stress`).
+
+4. In Looker Studio, connect to **BigQuery** → `map_data_us` → `gama_output` instead of Google Sheets.
+5. Build the same KPI and chart panels as in Step 3 above.
+
+---
+
+## 4. Looker Studio Visualization Setup
+
+This section covers two separate dashboards — one for the **raster pipeline output** (spatial map), and one for **GAMA simulation output** (KPIs and charts). They can be built as separate pages inside the same Looker Studio report.
+
+---
+
+### Dashboard A — Raster Pipeline Map
+
+Once the cloud pipeline is running, the `datastudio_output` table populates with geographic shapes and aggregated raster values.
+
+#### Connecting the Data
+
+1. Open [Looker Studio](https://lookerstudio.google.com/) → **Blank Report**.
+2. Under *Connect to data*, select **BigQuery**.
+3. Choose your **Project ID**, dataset (`map_data_us`), and the `datastudio_output` table → **Add**.
+
+#### Building the Interactive Map
+
+1. Click **Add a chart** → **Google Maps** (or *Filled Map*).
+2. Configure chart fields:
+   - **Location** → `Area` column (detected as GEOGRAPHY — polygon boundaries).
+   - **Tooltip** → `id` column.
+   - **Color Metric** → `AverageValue` (shades polygons by raster-extracted value).
+3. Add a **Drop-down list control** with dimension `Index` — lets viewers switch between *Sowing Date* and *Cropping Intensity* layers.
+4. Add a **Slider control** using `Year` to scrub through historical trends.
+
+---
+
+### Dashboard B — GAMA Simulation KPIs & Charts
+
+Add a second **page** to the same report (or create a new report) and connect it to the GAMA Google Sheet (or BigQuery table if using Path B from Section 3).
+
+#### Connecting the Data
+
+1. Click **Add data** → **Google Sheets** (or **BigQuery** for Path B).
+2. Select your `GAMA_Simulation_Output` spreadsheet → **Add**.
+
+#### Scorecards (KPIs)
+
+Add a **Scorecard** chart for each key metric. Recommended aggregations:
+
+- **AVG** `Emission Intensity` — average across all agents and timesteps.
+- **AVG** `Water Usage`, `Fertilizer Usage`, `Pesticide Usage`.
+- **AVG** `Biodiversity`, `Resilient Varieties`, `Water Reliability`, `AWD Adoption`.
+- **MAX** `Flood Stress`, `Drought Stress`, `Salinity Stress` — flags whether any agent experienced stress in the filtered period.
+
+#### Time Series Chart
+
+Track how metrics evolve over the simulation:
+
+- **X-axis** → `datetime`
+- **Metric** → `Emission Intensity`, `Water Usage`, or `Biodiversity`
+- **Breakdown dimension** → `seed` (one line per simulation run for easy comparison)
+
+#### Bar Chart
+
+Compare metric averages across scenario runs or agent groups:
+
+- **Dimension** → `seed` or `id`
+- **Metrics** → `Fertilizer Usage`, `Pesticide Usage`, `Water Usage`
+
+#### Controls (Filters)
+
+Add interactive controls so viewers can slice the data:
+
+- **Date Range control** → `datetime`
+- **Drop-down list** → `seed` (switch between simulation runs / scenarios)
+- **Drop-down list** → `Flood Stress`, `Drought Stress`, or `Salinity Stress` (filter to stressed agents only)

@@ -1,4 +1,3 @@
-# ruff: noqa: E402
 """
 AI-Agent Backplane & API Server
 Security hardened: rate limiting, security headers, CORS restriction,
@@ -136,13 +135,6 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["X-XSS-Protection"] = "1; mode=block"
-    response.headers["Content-Security-Policy"] = (
-        "default-src 'none'; "
-        "script-src 'self'; "
-        "connect-src 'self'; "
-        "img-src 'self' data:; "
-        "style-src 'self' 'unsafe-inline'"
-    )
     return response
 
 
@@ -313,8 +305,11 @@ def api_compare(request: Request, req: CompareRequest):
     _validate_metrics(resolved_metrics)
 
     try:
-        query = f"Compare {' and '.join(resolved_metrics)} by {req.dimension}"
-        result = orchestrator.process_query(query, context={"filters": req.filters})
+        result = orchestrator.process_query("compare", context={
+            "metrics": resolved_metrics,
+            "dimension": req.dimension,
+            "filters": req.filters,
+        })
         return result
     except HTTPException as http_exc:
         raise http_exc

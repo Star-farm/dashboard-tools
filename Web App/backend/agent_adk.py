@@ -1,4 +1,3 @@
-import re
 import itertools
 from enum import Enum
 import numpy as np
@@ -7,54 +6,9 @@ import mcp_server
 from mcp_server import (
     get_aggregated_metrics,
     run_agricultural_simulation,
-    get_scenarios,
     _score_batch
 )
 
-# ── Canonical Lookup Tables ──────────────────────────────────────────────────
-
-DIMENSION_MAP = {
-    "climate":           "Climate Type",
-    "season":            "Season Type",
-    "scenario":          "Scenario Group",
-    "scenario name":     "Scenario Name",
-    "awd":               "AWD Adoption",
-    "resource":          "Resource Scenario",
-    "year":              "Year",
-}
-
-METRIC_MAP = {
-    "emission intensity":  "Emission Intensity",
-    "flood stress":        "Flood Stress",
-    "salinity stress":     "Salinity Stress",
-    "drought stress":      "Drought Stress",
-    "water reliability":   "Water Reliability",
-    "resilient varieties": "Resilient Varieties",
-    "labor intensity":     "Labor Intensity",
-    "max flood":           "Max Flood Continuous",
-    "production cost":     "Production Cost",
-    "straw value":         "Straw Value",
-    "net income":          "Net Income",
-    "profit margin":       "Profit Margin",
-    "avg yield":           "Avg Yield",
-    "yield":               "Avg Yield",
-    "methane":             "Methane Emissions",
-    "emission":            "Methane Emissions",
-    "profit":              "Profit Margin",
-    "income":              "Net Income",
-    "cost":                "Production Cost",
-    "water":               "Water Usage",
-    "fertilizer":          "Fertilizer Usage",
-    "pesticide":           "Pesticide Usage",
-    "salinity":            "Salinity Exposure",
-    "flood":               "Max Flood Continuous",
-    "drought":             "Drought Stress",
-    "biodiversity":        "Biodiversity",
-    "resilient":           "Resilient Varieties",
-    "reliability":         "Water Reliability",
-    "labor":               "Labor Intensity",
-    "straw":               "Straw Value",
-}
 
 DEFAULT_METRICS = [
     "Avg Yield",
@@ -107,39 +61,9 @@ PRED_KEY_LABELS = {
     "Salinity Stress":        ("-", "index",      ".3f"),
 }
 
-COLUMN_NAME_OVERRIDES = {
-    "Scenario Groups": "Scenario Group",
-    "Awd Options":      "AWD Adoption"
-}
 
 
 # ── Shared Helper Functions ───────────────────────────────────────────────────
-
-def _resolve_dimension(raw: str) -> str | None:
-    """Map a free-text dimension phrase to a DataFrame column name, or None."""
-    raw = raw.strip().lower()
-    for key in sorted(DIMENSION_MAP, key=len, reverse=True):
-        if key in raw:
-            return DIMENSION_MAP[key]
-    return None
-
-
-def _resolve_metrics(raw: str) -> list[str]:
-    """Map a free-text metric phrase to a deduplicated list of column names."""
-    raw = raw.strip().lower()
-    if any(word in raw for word in ("all", "everything", "every metric")):
-        return list(DEFAULT_METRICS)
-
-    seen, cols = set(), []
-    for key in sorted(METRIC_MAP, key=len, reverse=True):
-        if key in raw:
-            col = METRIC_MAP[key]
-            if col not in seen:
-                seen.add(col)
-                cols.append(col)
-
-    return cols if cols else list(DEFAULT_METRICS)
-
 
 def _fmt_val(val: float, fmt: str) -> str:
     try:
@@ -156,16 +80,6 @@ def _format_predictions(preds: dict) -> str:
             lines.append(f"  {icon} {col}: {_fmt_val(val, fmt)} {unit}")
     return "\n".join(lines)
 
-
-def _extract_numeric(pattern: str, text: str, default: float) -> float:
-    """Safely extract a float value using regex pattern."""
-    match = re.search(pattern, text)
-    if match:
-        try:
-            return float(match.group(1))
-        except (ValueError, TypeError):
-            pass
-    return default
 
 
 # ── Agent Base Class ──────────────────────────────────────────────────────────
@@ -413,47 +327,31 @@ class AgentOrchestrator:
             f"  • Pesticide:      {inputs.get('Pesticide Usage', '-')} kg/ha"
         )
 
-    def process_query(self, query: str, context: dict = None) -> dict:
-        query_lower = query.lower().strip()
-        context     = context or {}
+    def process_query(self, task: str, context: dict = None) -> dict:
+        """Route an explicit task to the appropriate agent.
 
-        # ── 0. Parse 'Compare X by Y' queries ─────────────────────────────────
-        compare_match = re.search(
-            r'\bcompare\b\s+(.+?)\s+\bby\b\s+(.+?)(?:\s+\bin\b\s+(.+))?$',
-            query_lower
-        )
-        if compare_match:
-            raw_metrics   = compare_match.group(1)
-            raw_dimension = compare_match.group(2)
-            raw_filter    = compare_match.group(3)
+        Args:
+            task: One of 'compare', 'simulate', or 'optimize'.
+            context: Structured parameters for the task.
+        """
+        context = context or {}
 
-            dimension = _resolve_dimension(raw_dimension)
-            metrics   = _resolve_metrics(raw_metrics)
+        # ── Compare ───────────────────────────────────────────────────────────
+        if task == "compare":
+            dimension = context.get("dimension")
+            metrics   = context.get("metrics")
+            filters   = context.get("filters", {})
 
             if not dimension:
-                available = ", ".join(DIMENSION_MAP.keys())
                 return {
                     "agent":  self.agg_agent.name,
                     "role":   self.agg_agent.role,
-                    "result": {"error": f"Unknown dimension '{raw_dimension}'."},
-                    "text":   (
-                        f"I don't recognise '{raw_dimension}' as a grouping dimension.\n"
-                        f"Available options: {available}."
-                    ),
+                    "result": {"error": "No dimension specified for comparison."},
+                    "text":   "No dimension specified for comparison.",
                 }
 
-            filters = dict(context.get("filters", {}))
-            if raw_filter:
-                scenarios_info = get_scenarios()
-                for key, options in scenarios_info.items():
-                    col_name = key.replace("_", " ").title()
-                    col_name = COLUMN_NAME_OVERRIDES.get(col_name, col_name)
-                    for opt in options:
-                        if opt.lower() in raw_filter:
-                            filters[col_name] = opt
-
             result = self.agg_agent.execute(
-                query, filters=filters, dimension=dimension, metrics=metrics
+                task, filters=filters, dimension=dimension, metrics=metrics
             )
             return {
                 "agent":  self.agg_agent.name,
@@ -462,22 +360,15 @@ class AgentOrchestrator:
                 "text":   self._format_compare_text(result),
             }
 
-        # ── 1. Parse Simulation queries ───────────────────────────────────────
-        elif any(kw in query_lower for kw in ("simulate", "predict", "run", "forecast")):
-            awd_match = re.search(r'(with awd|without awd)', query_lower)
-            awd       = awd_match.group(1).title() if awd_match else context.get("awd_adoption", "With AWD")
-
-            scenario_m = re.search(r'\b(business as usual|one million hectare rice)\b', query_lower)
-            scenario   = scenario_m.group(1).title() if scenario_m else context.get("scenario_group", "Business As Usual")
-
-            fert  = _extract_numeric(r'fertilizer\s*[:=]?\s*(\d+)', query_lower, context.get("fertilizer_usage", 100.0))
-            water = _extract_numeric(r'water\s*[:=]?\s*(\d+)', query_lower, context.get("water_usage", 600.0))
-            pest  = _extract_numeric(r'pesticide\s*[:=]?\s*(\d+)', query_lower, context.get("pesticide_usage", 5.0))
-
+        # ── Simulate ──────────────────────────────────────────────────────────
+        elif task == "simulate":
             result = self.model_agent.execute(
                 "simulate",
-                awd_adoption=awd, scenario_group=scenario, fertilizer_usage=fert,
-                pesticide_usage=pest, water_usage=water,
+                awd_adoption=context.get("awd_adoption", "With AWD"),
+                scenario_group=context.get("scenario_group", "Business As Usual"),
+                fertilizer_usage=context.get("fertilizer_usage", 100.0),
+                pesticide_usage=context.get("pesticide_usage", 5.0),
+                water_usage=context.get("water_usage", 600.0),
             )
 
             inputs = result["inputs"]
@@ -493,71 +384,9 @@ class AgentOrchestrator:
                 "text":   text_desc,
             }
 
-        # ── 2. Parse Optimization queries ─────────────────────────────────────
-        elif "optimize" in query_lower:
-            resource_keywords = {
-                "water": "water", "fertilizer": "fertilizer",
-                "pesticide": "pesticide", "awd": "awd",
-            }
-            resources_to_optimize = [
-                res for kw, res in resource_keywords.items() if kw in query_lower
-            ]
-            has_methane_target = bool(re.search(r'methane', query_lower))
-
-            if resources_to_optimize and not has_methane_target:
-                target_methane = _extract_numeric(
-                    r'methane\s*(?:below|under|<=|less than)?\s*(\d+)', 
-                    query_lower, 
-                    500.0
-                )
-
-                fixed_inputs = {
-                    "awd_adoption":     context.get("awd_adoption",     "With AWD"),
-                    "scenario_group":   context.get("scenario_group",   "Business As Usual"),
-                    "fertilizer_usage": context.get("fertilizer_usage", 100.0),
-                    "water_usage":      context.get("water_usage",      600.0),
-                    "pesticide_usage":  context.get("pesticide_usage",  5.0),
-                }
-                
-                for param, key in [("water", "water_usage"), ("fertilizer", "fertilizer_usage"), ("pesticide", "pesticide_usage")]:
-                    if param not in resources_to_optimize:
-                        fixed_inputs[key] = _extract_numeric(
-                            rf'{param}\s*(?:equal|to|=|at|:)?\s*(\d+)', 
-                            query_lower, 
-                            fixed_inputs[key]
-                        )
-
-                result = self.model_agent.execute(
-                    "optimize_resource",
-                    resources=resources_to_optimize,
-                    fixed_inputs=fixed_inputs,
-                    target_methane=target_methane,
-                )
-
-                inputs = result.get("optimized_inputs", {})
-                preds  = result.get("expected_outcomes", {})
-                label  = " + ".join(r.title() for r in resources_to_optimize)
-
-                if inputs:
-                    text_desc = (
-                        f"Optimal {label} Settings:\n{self._format_inputs(inputs)}\n\n"
-                        f"Expected Outcomes:\n{_format_predictions(preds)}"
-                    )
-                else:
-                    text_desc = f"Could not find an optimal {label} configuration."
-
-                return {
-                    "agent":  self.model_agent.name,
-                    "role":   self.model_agent.role,
-                    "result": result,
-                    "text":   text_desc,
-                }
-
-            target_methane = _extract_numeric(
-                r'methane\s*(?:below|under|<=|less than|equal|to|at)?\s*(\d+)', 
-                query_lower, 
-                context.get("target_methane", 200.0)
-            )
+        # ── Optimize ──────────────────────────────────────────────────────────
+        elif task == "optimize":
+            target_methane = context.get("target_methane", 200.0)
             pest_val       = context.get("pesticide_usage", 5.0)
             scenario_val   = context.get("scenario_group", "Business As Usual")
 
@@ -587,11 +416,11 @@ class AgentOrchestrator:
                 "text":   text_desc,
             }
 
-        # ── 3. Fallback Route ─────────────────────────────────────────────────
+        # ── Unknown Task ──────────────────────────────────────────────────────
         else:
             return {
                 "agent":  self.agg_agent.name,
                 "role":   self.agg_agent.role,
-                "result": {"error": f"Unrecognized query: '{query}'."},
-                "text":   f"Query not recognized: '{query}'. Expected 'compare X by Y', 'simulate', or 'optimize'.",
+                "result": {"error": f"Unrecognized task: '{task}'."},
+                "text":   f"Task not recognized: '{task}'. Supported tasks: 'compare', 'simulate', 'optimize'.",
             }

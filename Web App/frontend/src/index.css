@@ -166,7 +166,6 @@ header {
   align-items: center;
   gap: 0.5rem;
   color: rgb(0, 0, 0);
-  /* Chuyển tiêu đề panel sang màu xanh đậm để rõ chữ */
 }
 
 /* ── Metrics Cards ─────────────────────────────────────────────────────── */
@@ -237,7 +236,6 @@ header {
 
 .select-input {
   background: #ffffff;
-  /* Đổi sang nền trắng mịn */
   border: 1px solid var(--panel-border);
   border-color: #0f172a;
   padding: 0.75rem;
@@ -253,7 +251,6 @@ header {
 
 .select-input option {
   background: #ffffff;
-  /* Dropdown nền trắng sạch sẽ */
   color: var(--text-primary);
 }
 
@@ -283,7 +280,6 @@ header {
 .slider-label-row .value {
   font-weight: 600;
   color: var(--primary);
-  /* Chuyển màu giá trị slider sang xanh đậm dễ đọc */
 }
 
 .slider-item input[type="range"] {
@@ -340,14 +336,12 @@ td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-  /* Đổi sang viền sẫm nhạt */
 }
 
 th {
   color: var(--text-muted);
   font-weight: 600;
   background: rgba(15, 23, 42, 0.02);
-  /* Đổi sang nền xám mờ nhẹ */
 }
 
 td {
@@ -396,4 +390,252 @@ td {
 .initial-loading-screen p {
   font-size: 0.95rem;
   color: var(--text-muted);
+}
+
+.glass-panel.col-4 {
+  overflow: visible;
+}
+
+.filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.slider-label-row .name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Tooltip Styles ─────────────────────────────────────────────────────── */
+.info-tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.info-icon:hover {
+  background-color: var(--primary);
+  transform: scale(1.15);
+}
+
+.info-tooltip-content {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -10px;
+  width: 340px;
+  max-width: 85vw;
+  max-height: 320px;
+  overflow-y: auto;
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  font-size: 12.5px;
+  font-weight: normal;
+  line-height: 1.5;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  text-align: left;
+  transform: translateY(-6px);
+}
+
+.info-tooltip-content::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  right: 14px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #1e293b transparent;
+}
+
+.info-tooltip-container:hover .info-tooltip-content {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.tooltip-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tooltip-item {
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+}
+
+.tooltip-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.tooltip-title {
+  font-weight: bold;
+  color: #4ade80;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.tooltip-desc {
+  color: #cbd5e1;
+  font-size: 12.5px;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.app-footer {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--panel-border);
+  color: var(--text-muted);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.footer-about {
+  flex: 1 1 auto;
+  min-width: 260px;
+  text-align: left;
+}
+
+.footer-project-name {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+.footer-tagline {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.footer-description {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin: 0 0 0.75rem;
+  max-width: 100%;
+}
+
+.footer-about {
+  flex: 1 1 640px;
+}
+
+.footer-partof {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+.footer-links {
+  flex: 0 0 auto;
+  min-width: 160px;
+  text-align: right;
+}
+
+.footer-links h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.footer-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.footer-links a {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--panel-border);
+  font-size: 0.75rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.data-cta-panel {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.data-cta-text {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.data-cta-btn {
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+  }
+
+  .footer-links {
+    text-align: left;
+  }
+
+  .footer-links ul {
+    align-items: flex-start;
+  }
+
+  .footer-description {
+    max-width: 100%;
+  }
 }

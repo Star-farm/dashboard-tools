@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
     ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LabelList
 } from 'recharts';
 import { ReferenceLine } from 'recharts';
-import { useDashboardData, USD_TO_VND } from './useDashboardData';
+import { useDashboardData, USD_TO_VND, SCENARIO_COLORS, SCENARIO_KEYS } from './useDashboardData';
+
+const detectBrowserLang = (): 'vi' | 'en' => {
+    if (typeof navigator === 'undefined') return 'en';
+    const browserLang = navigator.language || (navigator as any).userLanguage || '';
+    return browserLang.toLowerCase().startsWith('vi') ? 'vi' : 'en';
+};
 export function Dashboard() {
-    const [lang, setLang] = useState<'vi' | 'en'>('vi');
+    const [lang, setLang] = useState<'vi' | 'en'>(detectBrowserLang());
     const getMetricLabel = (key: string) => {
         switch (key) {
             case 'Avg Yield': return t.avgYield;
@@ -15,33 +21,22 @@ export function Dashboard() {
             default: return key;
         }
     };
-
-    const formatXAxisTick = (tick: unknown) => {
-        const tickStr = String(tick ?? '');
-        if (!tickStr) return '';
-        if (tickStr.includes(t.simulatedLabel)) {
-            return isMobile ? t.simulatedLabel : tickStr;
-        }
-
-        switch (tickStr) {
-            case 'Business As Usual':
-                return isMobile ? (lang === 'vi' ? 'BAU' : 'BAU') : t.bau;
-            case 'One Million Hectare Rice':
-                return isMobile ? (lang === 'vi' ? 'OMHR' : 'OMHR') : t.omrh;
-            default:
-                return tickStr;
+    const getScenarioLabel = (key: string) => {
+        switch (key) {
+            case 'Business As Usual': return t.bau;
+            case 'One Million Hectare Rice': return t.omrh;
+            default: return t.simulatedLabel;
         }
     };
+    const formatIndicatorTick = (tick: unknown) => getMetricLabel(String(tick ?? ''));
     const {
         t, isInitialLoading,
         kpiChange, loadingKpi,
-        metricGroup, setMetricGroup, loadingBar,
+        loadingBar,
         simScenarioGroup, setSimScenarioGroup, simInputs, setSimInputs, simResults, loadingSim,
         isMobile,
-        left, right,
         isVndNetIncome,
-        combinedBarChartData,
-        leftDomain, leftTicks, rightDomain, rightTicks,
+        economicChart, environmentChart,
         KPI_CARDS,
         keyMessage,
         runSimulation,
@@ -73,8 +68,8 @@ export function Dashboard() {
                     {t.kpiChangeTitle}
                     {entry?.target_value != null && (() => {
                         const isVnd = lang === 'vi' && cfg.key === 'Net Income';
-                        const displayVal = isVnd ? Math.round(entry.target_value * USD_TO_VND) : entry.target_value;
-                        const displayUnit = isVnd ? 'đ/ha' : cfg.unit;
+                        const displayVal = isVnd ? Math.round(entry.target_value * USD_TO_VND / 1000000) : entry.target_value;
+                        const displayUnit = isVnd ? 'triệu VNĐ/ha' : cfg.unit;
                         return (
                             <> &middot; {t.kpiTargetYear}: {displayVal.toLocaleString(undefined, { maximumFractionDigits: 0 })} {displayUnit}</>
                         );
@@ -123,127 +118,168 @@ export function Dashboard() {
             )}
             <h2 style={{ marginBottom: '1rem' }}>{t.simulationSectionTitle}</h2>
             <div className="dashboard-grid">
-                <div className="glass-panel col-8" style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                        <h2>{t.impactComparison}</h2>
-                        <div className="metric-toggle">
-                            <button
-                                type="button"
-                                className={`btn ${metricGroup === 'economic' ? '' : 'btn-ghost'}`}
-                                style={{ padding: '0.3rem 0.8rem', fontSize: '1rem' }}
-                                onClick={() => setMetricGroup('economic')}
-                            >
-                                {t.economicGroup}
-                            </button>
-                            <button
-                                type="button"
-                                className={`btn ${metricGroup === 'environment' ? '' : 'btn-ghost'}`}
-                                style={{ padding: '0.3rem 0.8rem', fontSize: '1rem' }}
-                                onClick={() => setMetricGroup('environment')}
-                            >
-                                {t.environmentGroup}
-                            </button>
-                        </div>
-                    </div>
-                    {isVndNetIncome && (
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '-0.5rem', marginBottom: '0.75rem' }}>
-                            {t.exchangeRateNote}
-                        </p>
-                    )}
-                    <div className="chart-container-height" style={{ height: isMobile ? 600 : undefined, flex: isMobile ? 'none' : 1, minHeight: isMobile ? undefined : 450 }}>
-                        {loadingBar ? (
-                            <div className="centered-fallback">
-                                <span className="spinner-text">(o)</span>
-                                <span style={{ marginLeft: '0.5rem' }}>{t.loading}</span>
+                <div className="col-8" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {[
+                        { chart: economicChart, title: t.economicGroup },
+                        { chart: environmentChart, title: t.environmentGroup },
+                    ].map(({ chart, title }) => (
+                        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column' }} key={title}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                <h2>{title}</h2>
                             </div>
-                        ) : combinedBarChartData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    data={combinedBarChartData}
-                                    margin={{ top: 20, right: isMobile ? 10 : 20, left: isMobile ? 0 : 10, bottom: isMobile ? 100 : 10 }}
-                                >
-                                    <XAxis
-                                        dataKey="name"
-                                        stroke="#000000ff"
-                                        interval={0}
-                                        angle={isMobile ? 0 : 0}
-                                        textAnchor="middle"
-                                        height={isMobile ? 50 : 40}
-                                        tick={{ fontSize: isMobile ? 9 : 12 }}
-                                        tickFormatter={formatXAxisTick}
-                                    />
-                                    <YAxis
-                                        stroke={left.color}
-                                        yAxisId="left"
-                                        domain={leftDomain}
-                                        ticks={leftTicks}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                        width={isMobile ? 36 : 55}
-                                        label={isMobile ? undefined : { value: left.unit, angle: -90, position: 'insideLeft', fill: left.color, fontSize: 12, offset: 5 }}
-                                    />
-                                    <YAxis
-                                        stroke={right.color}
-                                        yAxisId="right"
-                                        orientation="right"
-                                        domain={rightDomain}
-                                        ticks={rightTicks}
-                                        tick={{ fontSize: isMobile ? 10 : 12 }}
-                                        width={isMobile ? 36 : 55}
-                                        label={isMobile ? undefined : { value: right.unit, angle: 90, position: 'insideRight', fill: right.color, fontSize: 12, offset: 5 }}
-                                    />
-                                    <ReferenceLine
-                                        yAxisId="right"
-                                        y={0}
-                                        stroke="#9ca3af"
-                                        strokeWidth={1.5}
-                                        strokeDasharray="4 4"
-                                    />
-                                    <Tooltip
-                                        contentStyle={{ background: '#FFFFFF', border: '1px solid var(--panel-border)', borderRadius: '8px' }}
-                                        labelFormatter={formatXAxisTick}
-                                        formatter={(value: unknown, name: unknown) => {
-                                            const numValue = Number(value ?? 0);
-                                            const nameStr = String(name ?? '');
-                                            const unit = nameStr === getMetricLabel(left.key) ? left.unit : nameStr === getMetricLabel(right.key) ? right.unit : '';
-                                            return [`${numValue.toLocaleString()} ${unit}`, nameStr];
-                                        }}
-                                    />
-                                    <Legend wrapperStyle={{ fontSize: isMobile ? '11px' : '13px', paddingTop: isMobile ? 8 : 0 }} />
-
-                                    <Bar
-                                        yAxisId="left"
-                                        dataKey={left.key}
-                                        name={getMetricLabel(left.key)}
-                                        fill={left.color}
-                                        radius={[4, 4, 0, 0]}
-                                    >
-                                        <LabelList dataKey={left.key} position="top" fill={left.color} style={{ fontSize: isMobile ? '9px' : '12px', fontWeight: 'bold' }}
-                                            formatter={(value: unknown) => Number(value ?? 0).toLocaleString()} />
-                                    </Bar>
-
-                                    <Bar
-                                        yAxisId="right"
-                                        dataKey={right.key}
-                                        name={getMetricLabel(right.key)}
-                                        fill={right.color}
-                                        radius={[4, 4, 0, 0]}
-                                    >
-                                        <LabelList dataKey={right.key} position="top" fill={right.color} style={{ fontSize: isMobile ? '9px' : '12px', fontWeight: 'bold' }}
-                                            formatter={(value: unknown) => Number(value ?? 0).toLocaleString()} />
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <div className="centered-fallback">{t.noData}</div>
-                        )}
-                    </div>
+                            {isVndNetIncome && chart === economicChart && (
+                                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '-0.5rem', marginBottom: '0.75rem' }}>
+                                    {t.exchangeRateNote}
+                                </p>
+                            )}
+                            <div className="chart-container-height" style={{ height: isMobile ? 420 : 380 }}>
+                                {loadingBar ? (
+                                    <div className="centered-fallback">
+                                        <span className="spinner-text">(o)</span>
+                                        <span style={{ marginLeft: '0.5rem' }}>{t.loading}</span>
+                                    </div>
+                                ) : (
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart
+                                            data={chart.data}
+                                            margin={{ top: 20, right: isMobile ? 10 : 20, left: isMobile ? 0 : 10, bottom: isMobile ? 40 : 10 }}
+                                        >
+                                            <XAxis
+                                                dataKey="indicator"
+                                                stroke="#000000ff"
+                                                interval={0}
+                                                textAnchor="middle"
+                                                height={isMobile ? 40 : 40}
+                                                tick={{ fontSize: isMobile ? 9 : 12 }}
+                                                tickFormatter={formatIndicatorTick}
+                                            />
+                                            <YAxis
+                                                yAxisId="left"
+                                                domain={chart.leftDomain}
+                                                ticks={chart.leftTicks}
+                                                tick={{ fontSize: isMobile ? 10 : 12 }}
+                                                width={isMobile ? 36 : 55}
+                                                label={isMobile ? undefined : { value: chart.left.unit, angle: -90, position: 'insideLeft', fontSize: 12, offset: 5 }}
+                                            />
+                                            <YAxis
+                                                yAxisId="right"
+                                                orientation="right"
+                                                domain={chart.rightDomain}
+                                                ticks={chart.rightTicks}
+                                                tick={{ fontSize: isMobile ? 10 : 12 }}
+                                                width={isMobile ? 36 : 55}
+                                                label={isMobile ? undefined : { value: chart.right.unit, angle: 90, position: 'insideRight', fontSize: 12, offset: 5 }}
+                                            />
+                                            <ReferenceLine yAxisId="right" y={0} stroke="#9ca3af" strokeWidth={1.5} strokeDasharray="4 4" />
+                                            <Tooltip
+                                                contentStyle={{ background: '#FFFFFF', border: '1px solid var(--panel-border)', borderRadius: '8px' }}
+                                                labelFormatter={formatIndicatorTick}
+                                                formatter={(value: unknown, name: unknown, item: any) => {
+                                                    const numValue = Number(value ?? 0);
+                                                    const nameStr = String(name ?? '');
+                                                    const dataKey = String(item?.dataKey ?? '');
+                                                    const unit = dataKey.endsWith('_right') ? chart.right.unit : chart.left.unit;
+                                                    return [`${numValue.toLocaleString()}${unit ? ` ${unit}` : ''}`, nameStr];
+                                                }}
+                                            />
+                                            <Legend wrapperStyle={{ fontSize: isMobile ? '11px' : '13px', paddingTop: isMobile ? 8 : 0 }} />
+                                            <Bar
+                                                yAxisId="right"
+                                                dataKey={`${SCENARIO_KEYS[1]}_right`}
+                                                name={getScenarioLabel(SCENARIO_KEYS[1])}
+                                                fill={SCENARIO_COLORS[SCENARIO_KEYS[1]]}
+                                                radius={[4, 4, 0, 0]}
+                                                legendType="none"
+                                                isAnimationActive={false}
+                                                stackId={SCENARIO_KEYS[1]}
+                                            >
+                                                <LabelList dataKey={`${SCENARIO_KEYS[1]}_right`} position="top" fill={SCENARIO_COLORS[SCENARIO_KEYS[1]]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }}
+                                                    formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
+                                            </Bar>
+                                            {SCENARIO_KEYS.map(scenario => (
+                                                <Bar
+                                                    key={`${scenario}_left`}
+                                                    yAxisId="left"
+                                                    dataKey={`${scenario}_left`}
+                                                    name={getScenarioLabel(scenario)}
+                                                    fill={SCENARIO_COLORS[scenario]}
+                                                    radius={[4, 4, 0, 0]}
+                                                    stackId={scenario}
+                                                >
+                                                    <LabelList dataKey={`${scenario}_left`} position="top" fill={SCENARIO_COLORS[scenario]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }}
+                                                        formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
+                                                </Bar>
+                                            ))}
+                                            <Bar
+                                                yAxisId="right"
+                                                dataKey={`${SCENARIO_KEYS[0]}_right`}
+                                                name={t.bau}
+                                                fill={SCENARIO_COLORS[SCENARIO_KEYS[0]]}
+                                                radius={[4, 4, 0, 0]}
+                                                legendType="none"
+                                                isAnimationActive={false}
+                                                stackId={SCENARIO_KEYS[0]}
+                                            >
+                                                <LabelList dataKey={`${SCENARIO_KEYS[0]}_right`} position="top" fill={SCENARIO_COLORS[SCENARIO_KEYS[0]]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }}
+                                                    formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
+                                            </Bar>
+                                            <Bar
+                                                yAxisId="right"
+                                                dataKey={`${SCENARIO_KEYS[2]}_right`}
+                                                name={t.simulatedLabel}
+                                                fill={SCENARIO_COLORS[SCENARIO_KEYS[2]]}
+                                                radius={[4, 4, 0, 0]}
+                                                legendType="none"
+                                                isAnimationActive={false}
+                                                stackId={SCENARIO_KEYS[2]}
+                                            >
+                                                <LabelList dataKey={`${SCENARIO_KEYS[2]}_right`} position="top" fill={SCENARIO_COLORS[SCENARIO_KEYS[2]]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }}
+                                                    formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                <div className="glass-panel col-4">
+                <div className="glass-panel col-4" style={{ display: 'flex', flexDirection: 'column' }}>
                     <h2>{t.inputSimulationControls}</h2>
                     <div className="slider-group" style={{ marginTop: '1rem' }}>
                         <div className="slider-item">
-                            <label className="filter-label">{t.simulatedGroup}</label>
+                            <label className="filter-label">
+                                {t.simulatedGroup}
+                                <div className="info-tooltip-container">
+                                    <span className="info-icon">?</span>
+                                    <div className="info-tooltip-content">
+                                        <ul className="tooltip-list">
+                                            <li className="tooltip-item">
+                                                <span className="tooltip-title">{t.bau}</span>
+                                                <span className="tooltip-desc">
+                                                    {t.bauTooltipDesc.map((line: string, i: number) => (
+                                                        <React.Fragment key={i}>
+                                                            • {line}
+                                                            {i < t.bauTooltipDesc.length - 1 && <br />}
+                                                        </React.Fragment>
+                                                    ))}
+                                                </span>
+                                            </li>
+                                            <li className="tooltip-item">
+                                                <span className="tooltip-title">{t.omrh}</span>
+                                                <span className="tooltip-desc">
+                                                    {t.omrhTooltipItems.map((line: string, i: number) => (
+                                                        <React.Fragment key={i}>
+                                                            • {line}
+                                                            {i < t.omrhTooltipItems.length - 1 && <br />}
+                                                        </React.Fragment>
+                                                    ))}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </label>
                             <select
                                 className="select-input"
                                 value={simScenarioGroup}
@@ -268,7 +304,15 @@ export function Dashboard() {
 
                         <div className="slider-item">
                             <div className="slider-label-row">
-                                <span className="name">{t.fertilizerUsage}</span>
+                                <span className="name">
+                                    {t.fertilizerUsage}
+                                    <div className="info-tooltip-container">
+                                        <span className="info-icon">?</span>
+                                        <div className="info-tooltip-content">
+                                            <span className="tooltip-desc">{t.fertilizerTooltipDesc}</span>
+                                        </div>
+                                    </div>
+                                </span>
                                 <span className="value">{simInputs.fertilizer_usage} kg/ha</span>
                             </div>
                             <input type="range" min="50" max="250" value={simInputs.fertilizer_usage}
@@ -277,7 +321,15 @@ export function Dashboard() {
 
                         <div className="slider-item">
                             <div className="slider-label-row">
-                                <span className="name">{t.pesticideUsage}</span>
+                                <span className="name">
+                                    {t.pesticideUsage}
+                                    <div className="info-tooltip-container">
+                                        <span className="info-icon">?</span>
+                                        <div className="info-tooltip-content">
+                                            <span className="tooltip-desc">{t.pesticideTooltipDesc}</span>
+                                        </div>
+                                    </div>
+                                </span>
                                 <span className="value">{simInputs.pesticide_usage} kg/ha</span>
                             </div>
                             <input type="range" min="1" max="15" value={simInputs.pesticide_usage}
@@ -286,7 +338,15 @@ export function Dashboard() {
 
                         <div className="slider-item">
                             <div className="slider-label-row">
-                                <span className="name">{t.waterUsage}</span>
+                                <span className="name">
+                                    {t.waterUsage}
+                                    <div className="info-tooltip-container">
+                                        <span className="info-icon">?</span>
+                                        <div className="info-tooltip-content">
+                                            <span className="tooltip-desc">{t.waterTooltipDesc}</span>
+                                        </div>
+                                    </div>
+                                </span>
                                 <span className="value">{simInputs.water_usage} m³/ha</span>
                             </div>
                             <input type="range" min="200" max="1200" value={simInputs.water_usage}
@@ -316,22 +376,50 @@ export function Dashboard() {
                             </div>
                         )}
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
 
-            <section className="glass-panel" style={{ textAlign: 'center' }}>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1rem', margin: 0 }}>
-                    {t.viewDetailedDataAt}
-                    <a
-                        href="https://datastudio.google.com/s/nC82cbYUx7Q"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--primary)', textDecoration: 'underline' }}
-                    >
-                        {t.dataVisualizationLinkText}
-                    </a>
-                </p>
+            <section className="glass-panel data-cta-panel">
+                <p className="data-cta-text">{t.viewDetailedDataAt}</p>
+
+                <a href="https://datastudio.google.com/s/nC82cbYUx7Q"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn data-cta-btn"
+                >
+                    {t.dataVisualizationLinkText}
+                </a>
             </section>
+            <footer className="app-footer">
+                <div className="footer-inner">
+                    <div className="footer-about">
+                        <h3 className="footer-project-name">{t.footerProjectName}</h3>
+                        <p className="footer-tagline">{t.footerTagline}</p>
+                        <p className="footer-description">{t.footerDescription}</p>
+                        <p className="footer-partof">{t.footerPartOf}</p>
+                    </div>
+
+                    <div className="footer-links">
+                        <h4>{t.footerLinks}</h4>
+                        <ul>
+                            <li>
+                                <a href="https://datastudio.google.com/s/nC82cbYUx7Q" target="_blank" rel="noopener noreferrer">
+                                    {t.footerDataVisualization}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/Star-farm/Star-farm-models" target="_blank" rel="noopener noreferrer">
+                                    {t.footerDocumentation}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="footer-bottom">
+                    <span>© {new Date().getFullYear()} {t.footerProjectName} · {t.footerRights}</span>
+                </div>
+            </footer>
         </div >
     );
 }

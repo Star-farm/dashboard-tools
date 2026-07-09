@@ -3,24 +3,34 @@ import type { ScenarioInfo, SimulationResult, KpiChangeResult } from './types';
 import { TRANSLATIONS } from './translations';
 import { API_BASE } from './config';
 
-
 export const USD_TO_VND = 26300;
 
 export type MetricGroupKey = 'economic' | 'environment';
 
 export const METRIC_GROUPS: Record<MetricGroupKey, {
-    left: { key: string; unit: string; color: string };
-    right: { key: string; unit: string; color: string };
+    left: { key: string; unit: string };
+    right: { key: string; unit: string };
 }> = {
     economic: {
-        left: { key: 'Avg Yield', unit: 't/ha', color: '#22c55e' },
-        right: { key: 'Net Income', unit: '$/ha', color: '#eab308' },
+        left: { key: 'Avg Yield', unit: 't/ha' },
+        right: { key: 'Net Income', unit: '$/ha' },
     },
     environment: {
-        left: { key: 'Methane Emissions', unit: 'kg/ha', color: '#ef4444' },
-        right: { key: 'Emission Intensity', unit: 'kg CH4/t', color: '#3b82f6' },
+        left: { key: 'Methane Emissions', unit: 'kg/ha' },
+        right: { key: 'Emission Intensity', unit: 'kg CH4/t' },
     },
 };
+
+// Màu cố định theo scenario — không còn đổi theo metric nữa.
+export const SCENARIO_COLORS: Record<string, string> = {
+    'Business As Usual': '#ef4444',        // đỏ
+    'One Million Hectare Rice': '#22c55e', // xanh lá
+    'Simulation': '#3b82f6',               // xanh dương
+};
+
+export const SCENARIO_KEYS = ['Business As Usual', 'One Million Hectare Rice', 'Simulation'] as const;
+
+const ALL_METRICS = ['Avg Yield', 'Net Income', 'Methane Emissions', 'Emission Intensity'];
 
 export const KPI_CARDS_CONFIG: { key: string; unit: string; lowerIsBetter?: boolean }[] = [
     { key: 'Avg Yield', unit: 't/ha' },
@@ -28,8 +38,6 @@ export const KPI_CARDS_CONFIG: { key: string; unit: string; lowerIsBetter?: bool
     { key: 'Net Income', unit: '$/ha' },
     { key: 'Profit Margin', unit: '%' },
 ];
-
-
 
 const niceStep = (rawStep: number): number => {
     if (rawStep <= 0) return 1;
@@ -46,15 +54,23 @@ const niceStep = (rawStep: number): number => {
     return niceNormalized * base;
 };
 
-const computeDomainAndTicks = (data: Record<string, string | number>[], key: string): { domain: [number, number]; ticks: number[] } => {
+// Tính domain/ticks dựa trên NHIỀU dataKey cùng lúc (3 scenario cho cùng 1 trục).
+const computeDomainAndTicksMulti = (
+    data: Record<string, string | number | null>[],
+    keys: string[]
+): { domain: [number, number]; ticks: number[] } => {
     let minVal = 0;
     let maxVal = 0;
     data.forEach(item => {
-        const val = Number(item[key]);
-        if (!isNaN(val)) {
-            minVal = Math.min(minVal, val);
-            maxVal = Math.max(maxVal, val);
-        }
+        keys.forEach(key => {
+            const raw = item[key];
+            if (raw === null || raw === undefined) return;
+            const val = Number(raw);
+            if (!isNaN(val)) {
+                minVal = Math.min(minVal, val);
+                maxVal = Math.max(maxVal, val);
+            }
+        });
     });
 
     if (maxVal === 0 && minVal === 0) {
@@ -81,8 +97,8 @@ export function useDashboardData(lang: 'vi' | 'en') {
     const [kpiChange, setKpiChange] = useState<KpiChangeResult | null>(null);
     const [loadingKpi, setLoadingKpi] = useState(false);
 
-    const [metricGroup, setMetricGroup] = useState<MetricGroupKey>('economic');
-    const [barChartData, setBarChartData] = useState<Record<string, string | number>[]>([]);
+    // Dữ liệu thô từ /api/compare: { "Business As Usual": { "Avg Yield": .., "Net Income": .. }, "One Million Hectare Rice": {...} }
+    const [scenarioMetricValues, setScenarioMetricValues] = useState<Record<string, Record<string, number>>>({});
     const [loadingBar, setLoadingBar] = useState(false);
 
     const [simScenarioGroup, setSimScenarioGroup] = useState<'Business As Usual' | 'One Million Hectare Rice'>('Business As Usual');
@@ -99,7 +115,7 @@ export function useDashboardData(lang: 'vi' | 'en') {
         typeof window !== 'undefined' ? window.matchMedia('(max-width: 640px)').matches : false
     );
 
-    const isFirstRender = useRef(true);
+    const hasLoadedOnce = useRef(false);
 
     // ── Fetchers ────────────────────────────────────────────────────────────
 
@@ -136,15 +152,15 @@ export function useDashboardData(lang: 'vi' | 'en') {
         }
     };
 
-    const fetchBarChartData = async (group: MetricGroupKey = metricGroup) => {
+    // Lấy 1 lần cả 4 metric (2 nhóm kinh tế + môi trường) cho BAU & OMRH năm 2050.
+    const fetchBarChartData = async () => {
         setLoadingBar(true);
         try {
-            const { left, right } = METRIC_GROUPS[group];
             const res = await fetch(`${API_BASE}/compare`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    metrics: [left.key, right.key],
+                    metrics: ALL_METRICS,
                     dimension: 'Scenario Group',
                     filters: { Year: '2050' }
                 })
@@ -153,23 +169,13 @@ export function useDashboardData(lang: 'vi' | 'en') {
             const data = await res.json();
 
             if (data.result && data.result.compare_breakdown) {
-                const breakdown = data.result.compare_breakdown as Record<string, Record<string, number>>;
-                const formatted = Object.entries(breakdown).map(([name, vals]) => {
-                    const rightRaw = Number(vals[right.key] ?? 0);
-                    const rightVal = isVndNetIncome ? Math.round(rightRaw * USD_TO_VND / 1000000) : rightRaw;
-                    return {
-                        name,
-                        [left.key]: parseFloat(Number(vals[left.key] ?? 0).toFixed(2)),
-                        [right.key]: isVndNetIncome ? rightVal : parseFloat(rightVal.toFixed(2)),
-                    };
-                });
-                setBarChartData(formatted);
+                setScenarioMetricValues(data.result.compare_breakdown as Record<string, Record<string, number>>);
             } else {
-                setBarChartData([]);
+                setScenarioMetricValues({});
             }
         } catch (e) {
             console.error("Error loading bar chart data", e);
-            setBarChartData([]);
+            setScenarioMetricValues({});
         } finally {
             setLoadingBar(false);
         }
@@ -195,25 +201,17 @@ export function useDashboardData(lang: 'vi' | 'en') {
     // ── Effects ─────────────────────────────────────────────────────────────
 
     useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
-        fetchBarChartData(metricGroup);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [metricGroup]);
-
-    useEffect(() => {
         const loadInitialData = async () => {
             try {
                 await fetchScenarios();
                 await fetchKpiChange();
                 await runSimulation();
-                await fetchBarChartData(metricGroup);
+                await fetchBarChartData();
             } catch (e) {
                 console.error("Error performing coordinated dashboard load", e);
             } finally {
                 setIsInitialLoading(false);
+                hasLoadedOnce.current = true;
             }
         };
         loadInitialData();
@@ -227,33 +225,67 @@ export function useDashboardData(lang: 'vi' | 'en') {
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    // ── Derived values ──────────────────────────────────────────────────────
+    // ── Xây dựng data cho 1 chart (economic | environment), group theo Indicator ──
 
-    const { left, right: rawRight } = METRIC_GROUPS[metricGroup];
-    const isVndNetIncome = lang === 'vi' && rawRight.key === 'Net Income';
-    const right = isVndNetIncome ? { ...rawRight, unit: 'triệu VNĐ/ha' } : rawRight;
+    const buildIndicatorChart = (group: MetricGroupKey) => {
+        const { left, right: rawRight } = METRIC_GROUPS[group];
+        const isVnd = lang === 'vi' && rawRight.key === 'Net Income';
+        const right = isVnd ? { ...rawRight, unit: 'triệu VNĐ/ha' } : rawRight;
 
-    const combinedBarChartData = useMemo(() => {
-        if (!simResults) return barChartData;
-        const rightRaw = Number(simResults.predictions[right.key as keyof typeof simResults.predictions] ?? 0);
-        const rightVal = isVndNetIncome ? Math.round(rightRaw * USD_TO_VND / 1000000) : rightRaw;
-        const simEntry = {
-            name: `${t.simulatedLabel} (${simScenarioGroup === 'Business As Usual' ? t.bau : t.omrh})`,
-            [left.key]: parseFloat((simResults.predictions[left.key as keyof typeof simResults.predictions] ?? 0).toFixed(2)),
-            [right.key]: isVndNetIncome ? rightVal : parseFloat(rightVal.toFixed(2)),
-        };
-        return [...barChartData, simEntry];
-    }, [barChartData, simResults, simScenarioGroup, t, left.key, right.key, isVndNetIncome]);
+        const convertRight = (val: number) =>
+            isVnd ? Math.round(val * USD_TO_VND / 1000000) : parseFloat(val.toFixed(2));
 
-    const { domain: leftDomain, ticks: leftTicks } = useMemo(
-        () => computeDomainAndTicks(combinedBarChartData, left.key),
-        [combinedBarChartData, left.key]
+        const leftRow: Record<string, string | number | null> = { indicator: left.key };
+        const rightRow: Record<string, string | number | null> = { indicator: right.key };
+
+        SCENARIO_KEYS.forEach(s => {
+            leftRow[`${s}_left`] = null;
+            leftRow[`${s}_right`] = null;
+            rightRow[`${s}_left`] = null;
+            rightRow[`${s}_right`] = null;
+        });
+
+        (['Business As Usual', 'One Million Hectare Rice'] as const).forEach(scenario => {
+            const vals = scenarioMetricValues[scenario];
+            if (vals) {
+                leftRow[`${scenario}_left`] = parseFloat(Number(vals[left.key] ?? 0).toFixed(2));
+                rightRow[`${scenario}_right`] = convertRight(Number(vals[right.key] ?? 0));
+            }
+        });
+
+        if (simResults) {
+            leftRow['Simulation_left'] = parseFloat(
+                (simResults.predictions[left.key as keyof typeof simResults.predictions] ?? 0).toFixed(2)
+            );
+            rightRow['Simulation_right'] = convertRight(
+                Number(simResults.predictions[right.key as keyof typeof simResults.predictions] ?? 0)
+            );
+        }
+
+        const data = [leftRow, rightRow];
+
+        const { domain: leftDomain, ticks: leftTicks } = computeDomainAndTicksMulti(
+            data,
+            SCENARIO_KEYS.map(s => `${s}_left`)
+        );
+        const { domain: rightDomain, ticks: rightTicks } = computeDomainAndTicksMulti(
+            data,
+            SCENARIO_KEYS.map(s => `${s}_right`)
+        );
+
+        return { data, left, right, leftDomain, leftTicks, rightDomain, rightTicks };
+    };
+
+    const economicChart = useMemo(
+        () => buildIndicatorChart('economic'),
+        [scenarioMetricValues, simResults, simScenarioGroup, lang]
+    );
+    const environmentChart = useMemo(
+        () => buildIndicatorChart('environment'),
+        [scenarioMetricValues, simResults, simScenarioGroup, lang]
     );
 
-    const { domain: rightDomain, ticks: rightTicks } = useMemo(
-        () => computeDomainAndTicks(combinedBarChartData, right.key),
-        [combinedBarChartData, right.key]
-    );
+    const isVndNetIncome = lang === 'vi';
 
     const KPI_CARDS = KPI_CARDS_CONFIG.map(cfg => ({
         ...cfg,
@@ -320,13 +352,12 @@ export function useDashboardData(lang: 'vi' | 'en') {
         isInitialLoading,
         scenariosInfo,
         kpiChange, loadingKpi,
-        metricGroup, setMetricGroup, barChartData, loadingBar,
+        loadingBar,
         simScenarioGroup, setSimScenarioGroup, simInputs, setSimInputs, simResults, loadingSim,
         isMobile,
-        left, right,
         isVndNetIncome,
-        combinedBarChartData,
-        leftDomain, leftTicks, rightDomain, rightTicks,
+        economicChart,
+        environmentChart,
         KPI_CARDS,
         keyMessage,
         runSimulation,

@@ -12,8 +12,8 @@ from sklearn.preprocessing import LabelEncoder
 # ── FastMCP Server Initialization ─────────────────────────────────────────────
 mcp = FastMCP("AI Agents Agricultural Modeling")
 DEFAULT_CSV_PATH = os.getenv("DEFAULT_CSV_PATH", "data/Simulation_Data.csv")
-MODEL_CACHE_DIR = os.getenv("MODEL_CACHE_DIR", "/tmp/model_cache")  # /tmp ghi được trên Cloud Run
-GCS_CACHE_BUCKET = os.getenv("GCS_CACHE_BUCKET", "")  # để trống = tắt GCS cache, chỉ dùng local
+MODEL_CACHE_DIR = os.getenv("MODEL_CACHE_DIR", "/tmp/model_cache")  # /tmp is writable on Google Cloud Run
+GCS_CACHE_BUCKET = os.getenv("GCS_CACHE_BUCKET", "")  # Empty string disables GCS cache, using local-only mode
 
 # ── Global State Storage ──────────────────────────────────────────────────────
 data: pd.DataFrame | None = None
@@ -81,20 +81,16 @@ REQUIRED_COLUMNS = sorted(set(
     CATEGORICAL_COLS + INPUT_FEATURES + PREDICTION_TARGETS + AGG_NUMERIC_COLS
 ))
 
-SAMPLE_COLUMN_ORDER = list(dict.fromkeys(
-    CATEGORICAL_COLS + INPUT_FEATURES + PREDICTION_TARGETS + AGG_NUMERIC_COLS
-))
-
 MIN_ROWS_PER_TARGET = 10
 
 
 # ── Shared Private Helpers ────────────────────────────────────────────────────
 
 def _dataset_fingerprint(csv_path: str) -> str:
-    """Mã định danh dựa trên nội dung thực sự của file, không đổi khi chỉ redeploy."""
+    """Generate a unique fingerprint based on actual file content to avoid cache invalidation during redeployments."""
     hasher = hashlib.md5()
     with open(csv_path, "rb") as f:
-        # Đọc theo chunk để tránh load cả file lớn vào RAM cùng lúc
+        # Read in chunks to avoid loading large files entirely into RAM
         for chunk in iter(lambda: f.read(8192), b""):
             hasher.update(chunk)
     return hasher.hexdigest()[:12]
@@ -105,7 +101,7 @@ def _gcs_blob_name(cache_key: str) -> str:
 
 
 def _try_download_cache_from_gcs(cache_key: str, local_path: str) -> bool:
-    """Thử tải cache từ GCS về local. Trả về True nếu tải thành công."""
+    """Attempt to download the model cache from GCS to local storage. Returns True if successful."""
     if not GCS_CACHE_BUCKET:
         return False
     try:
@@ -124,7 +120,7 @@ def _try_download_cache_from_gcs(cache_key: str, local_path: str) -> bool:
 
 
 def _try_upload_cache_to_gcs(cache_key: str, local_path: str) -> None:
-    """Upload cache vừa train lên GCS, để lần cold start sau dùng lại. Lỗi ở đây không làm fail request."""
+    """Upload the newly trained model cache to GCS for future cold starts. Failures are non-fatal."""
     if not GCS_CACHE_BUCKET:
         return
     try:
@@ -136,6 +132,7 @@ def _try_upload_cache_to_gcs(cache_key: str, local_path: str) -> None:
         print(f"[mcp_server] Uploaded model cache to GCS: gs://{GCS_CACHE_BUCKET}/{_gcs_blob_name(cache_key)}")
     except Exception as e:
         print(f"[mcp_server] GCS cache upload failed (non-fatal): {e}")
+
 
 def _agg_key(col: str) -> str:
     normalized = col.lower().replace(" ", "_")
@@ -158,7 +155,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
 
     cache_path = os.path.join(MODEL_CACHE_DIR, f"{cache_key}.joblib") if cache_key else None
 
-    # ── Lớp 1: cache local (trong vòng đời container hiện tại) ─────────────
+    # ── Level 1: Local cache (within current container lifecycle) ───────────
     if cache_path and os.path.exists(cache_path):
         try:
             cached = joblib.load(cache_path)
@@ -174,7 +171,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
         except Exception as e:
             print(f"[mcp_server] Local cache load failed ({e}), trying GCS/training.")
 
-    # ── Lớp 2: cache trên GCS (sống sót qua các lần cold start) ────────────
+    # ── Level 2: GCS cache (persists across container cold starts) ──────────
     if cache_path and cache_key and _try_download_cache_from_gcs(cache_key, cache_path):
         try:
             cached = joblib.load(cache_path)
@@ -190,7 +187,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
         except Exception as e:
             print(f"[mcp_server] GCS cache file corrupted ({e}), retraining from scratch.")
 
-    # ── Không có cache hợp lệ → train như cũ ───────────────────────────────
+    # ── No valid cache found -> train regression models ────────────────────
     new_label_encoders = {}
 
     le_awd = LabelEncoder()
@@ -234,7 +231,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
     models = new_models
     label_encoders = new_label_encoders
 
-    # ── Lưu cache: local trước, rồi upload GCS ──────────────────────────────
+    # ── Save cache: locally first, then upload to GCS ──────────────────────
     if cache_path and cache_key:
         try:
             os.makedirs(os.path.dirname(cache_path), exist_ok=True)
@@ -459,7 +456,7 @@ def _score_batch(preds: list[dict], target_methane: float) -> np.ndarray:
 
 @mcp.tool()
 def get_kpi_change(metrics: list[str], scenario_group: str = "Business As Usual",
-                    base_year: int = 2024, target_year: int = 2050) -> dict[str, Any]:
+                   base_year: int = 2024, target_year: int = 2050) -> dict[str, Any]:
     """Calculate KPI variance projections dynamically between specified years under chosen practices."""
     _require_data()
     assert data is not None
@@ -493,6 +490,7 @@ def get_kpi_change(metrics: list[str], scenario_group: str = "Business As Usual"
         "target_year": target_year,
         "kpis": result,
     }
+
 
 if __name__ == "__main__":
     mcp.run()

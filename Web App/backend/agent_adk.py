@@ -62,7 +62,6 @@ PRED_KEY_LABELS = {
 }
 
 
-
 # ── Shared Helper Functions ───────────────────────────────────────────────────
 
 def _fmt_val(val: float, fmt: str) -> str:
@@ -79,7 +78,6 @@ def _format_predictions(preds: dict) -> str:
             val = preds[col]
             lines.append(f"  {icon} {col}: {_fmt_val(val, fmt)} {unit}")
     return "\n".join(lines)
-
 
 
 # ── Agent Base Class ──────────────────────────────────────────────────────────
@@ -126,7 +124,7 @@ class AggregationAgent(Agent):
             year_filter_val = filters.get("Year")
             needs_year_col = (dimension == "Year") or (year_filter_val not in (None, ""))
 
-            # Inject a temporary 'Year' column if needed for dimension grouping or filtering
+            # Inject temporary 'Year' column if needed for dimension grouping or filtering
             if needs_year_col and "datetime" in working_data.columns:
                 working_data = working_data.copy()
                 working_data["Year"] = working_data["datetime"].dt.year

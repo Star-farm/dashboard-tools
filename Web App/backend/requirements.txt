@@ -1,0 +1,21 @@
+# ── Core API & Security ───────────────────────────────────────────────────────
+fastapi>=0.110.0
+uvicorn>=0.28.0
+pydantic>=2.6.0
+slowapi>=0.1.9
+
+# ── Data Science & Machine Learning ───────────────────────────────────────────
+pandas>=2.2.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+
+# ── Model Context Protocol (MCP) Integration ──────────────────────────────────
+mcp>=0.1.0
+
+# ── Utilities & Cloud Storage ─────────────────────────────────────────────────
+python-dotenv>=1.0.0
+google-cloud-storage
+
+# ── Development & Quality Assurance (only Local) ──
+# pytest>=8.0.0
+# ruff>=0.3.0

@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { useDashboardData } from '../useDashboardData'; // Removed unused USD_TO_VND import
+import { useDashboardData } from '../src/useDashboardData';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const mockScenarios = {
@@ -35,8 +35,6 @@ const mockSimulate = {
 
 describe('useDashboardData Custom Hook', () => {
     beforeEach(() => {
-        // FIX: Use vi.stubGlobal to safely mock the global 'fetch' API 
-        // without relying on Node's 'global' namespace.
         vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
             if (url.includes('/scenarios')) {
                 return Promise.resolve({ ok: true, json: () => Promise.resolve(mockScenarios) });

@@ -21,11 +21,11 @@ export const METRIC_GROUPS: Record<MetricGroupKey, {
     },
 };
 
-// Màu cố định theo scenario — không còn đổi theo metric nữa.
+// Fixed color by scenario — no longer changing by metric.
 export const SCENARIO_COLORS: Record<string, string> = {
-    'Business As Usual': '#ef4444',        // đỏ
-    'One Million Hectare Rice': '#22c55e', // xanh lá
-    'Simulation': '#3b82f6',               // xanh dương
+    'Business As Usual': '#ef4444',        // red
+    'One Million Hectare Rice': '#22c55e', // green
+    'Simulation': '#3b82f6',               // blue
 };
 
 export const SCENARIO_KEYS = ['Business As Usual', 'One Million Hectare Rice', 'Simulation'] as const;
@@ -75,7 +75,7 @@ const niceStep = (rawStep: number): number => {
     return niceNormalized * base;
 };
 
-// Tính domain/ticks dựa trên NHIỀU dataKey cùng lúc (3 scenario cho cùng 1 trục).
+// Compute domain/ticks based on MULTIPLE dataKeys at the same time (3 scenarios for the same axis).
 const computeDomainAndTicksMulti = (
     data: Record<string, string | number | null>[],
     keys: string[]
@@ -118,7 +118,7 @@ export function useDashboardData(lang: 'vi' | 'en') {
     const [kpiChange, setKpiChange] = useState<KpiChangeResult | null>(null);
     const [loadingKpi, setLoadingKpi] = useState(false);
 
-    // Dữ liệu thô từ /api/compare: { "Business As Usual": { "Avg Yield": .., "Net Income": .. }, "One Million Hectare Rice": {...} }
+    // Raw data from /api/compare: { "Business As Usual": { "Avg Yield": .., "Net Income": .. }, "One Million Hectare Rice": {...} }
     const [scenarioMetricValues, setScenarioMetricValues] = useState<Record<string, Record<string, number>>>({});
     const [loadingBar, setLoadingBar] = useState(false);
 
@@ -172,7 +172,7 @@ export function useDashboardData(lang: 'vi' | 'en') {
         }
     };
 
-    // Lấy 1 lần cả 4 metric (2 nhóm kinh tế + môi trường) cho BAU & OMRH năm 2050.
+    // Fetch all 4 metrics (2 economic + environmental groups) at once for BAU & OMRH in 2050.
     const fetchBarChartData = async () => {
         setLoadingBar(true);
         try {
@@ -243,7 +243,7 @@ export function useDashboardData(lang: 'vi' | 'en') {
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    // ── Xây dựng data cho 1 chart (economic | environment), group theo Indicator ──
+    // ── Build data for 1 chart (economic | environment), grouped by Indicator ──
 
     const buildIndicatorChart = (group: MetricGroupKey) => {
         const { left, right: rawRight } = METRIC_GROUPS[group];

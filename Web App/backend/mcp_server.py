@@ -456,7 +456,7 @@ def _score_batch(preds: list[dict], target_methane: float) -> np.ndarray:
 
 @mcp.tool()
 def get_kpi_change(metrics: list[str], scenario_group: str = "Business As Usual",
-                   base_year: int = 2024, target_year: int = 2050) -> dict[str, Any]:
+                    base_year: int = 2024, target_year: int = 2050) -> dict[str, Any]:
     """Calculate KPI variance projections dynamically between specified years under chosen practices."""
     _require_data()
     assert data is not None

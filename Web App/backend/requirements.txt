@@ -17,5 +17,7 @@ python-dotenv>=1.0.0
 google-cloud-storage
 
 # ── Development & Quality Assurance (only Local) ──
-# pytest>=8.0.0
-# ruff>=0.3.0
+pytest>=8.0.0
+pytest-cov>=4.1.0
+httpx>=0.25.0
+ruff>=0.3.0

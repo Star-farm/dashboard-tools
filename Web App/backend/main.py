@@ -17,6 +17,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field, field_validator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -144,17 +145,20 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Configure CORS based on ALLOWED_ORIGINS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS if ALLOWED_ORIGINS else ["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "X-Requested-With", "X-API-Key"],
-)
-
 
 # ── Custom Middlewares ────────────────────────────────────────────────────────
+# IMPORTANT — Starlette middleware ordering:
+# Each call to app.add_middleware() (including the @app.middleware("http")
+# decorator below) inserts at the FRONT of the middleware list, so the LAST
+# middleware registered ends up as the OUTERMOST layer (sees the request
+# first, sees the response last). CORSMiddleware is therefore registered at
+# the very end of this section (see below, after require_data_loaded), so it
+# wraps every other custom middleware. If CORS were registered first (as in
+# the original version of this file), any early-return response from a
+# custom middleware (401 from require_api_key, 409 from require_data_loaded,
+# 413 from limit_request_size) would never pass through CORS, and the
+# browser would report a misleading "blocked by CORS policy" error instead
+# of surfacing the real status code.
 
 @app.middleware("http")
 async def require_api_key(request: Request, call_next):
@@ -246,6 +250,20 @@ async def require_data_loaded(request: Request, call_next):
     return await call_next(request)
 
 
+# Configure CORS based on ALLOWED_ORIGINS.
+# Registered LAST so it becomes the OUTERMOST middleware (see note above the
+# custom middlewares section) — every response, including early 401/409/413
+# rejections from the middlewares above, now passes through this layer and
+# gets proper Access-Control-Allow-Origin headers before reaching the browser.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS if ALLOWED_ORIGINS else ["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "X-Requested-With", "X-API-Key"],
+)
+
+
 # ── Global Error Handlers ─────────────────────────────────────────────────────
 
 @app.exception_handler(Exception)
@@ -268,7 +286,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             status_code=400,
             content={"success": False, "message": "Cannot be optimized"},
         )
-    return JSONResponse(status_code=422, content={"detail": exc.errors()})
+    return JSONResponse(status_code=422, content={"detail": jsonable_encoder(exc.errors())})
 
 
 # ── Orchestrator Instance ─────────────────────────────────────────────────────

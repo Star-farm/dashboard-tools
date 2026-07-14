@@ -1,5 +1,12 @@
+# =============================================================================
+# Merged .gitignore - Python (Backend) + Node/Vite (Frontend)
+# =============================================================================
+
+# ==========================
+# === PYTHON / BACKEND ===
+# ==========================
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,venv
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -125,9 +132,10 @@ celerybeat.pid
 
 # Environments
 .env
-.venv
 .env.*
 !.env.development
+!.env.example
+.venv
 env/
 venv/
 ENV/
@@ -187,4 +195,37 @@ pyrightconfig.json
 pyvenv.cfg
 pip-selfcheck.json
 
-# End of https://www.toptal.com/developers/gitignore/api/python,venv
+# Test local caches
+.pytest_model_cache/
+model_cache/
+
+# ==========================
+# === NODE / FRONTEND ===
+# ==========================
+
+# Logs
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies & build output
+node_modules
+dist-ssr
+*.local
+
+# Deployment
+.vercel
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

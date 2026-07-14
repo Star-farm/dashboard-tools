@@ -412,6 +412,11 @@ export function Dashboard() {
                                     {t.footerDocumentation}
                                 </a>
                             </li>
+                            <li>
+                                <a href="https://across-lab.org/" target="_blank" rel="noopener noreferrer">
+                                    {t.aboutus}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

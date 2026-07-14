@@ -40,34 +40,21 @@ export const KPI_CARDS_CONFIG: { key: string; unit: string; lowerIsBetter?: bool
 ];
 
 // ── Centralized API client ──────────────────────────────────────────────────
-// Every request to the backend must carry X-API-Key now that the server
-// enforces API-key auth on all /api/* routes. Route every fetch through this
-// helper instead of calling fetch() directly, so the key only has to be
-// wired up in one place.
-
-const API_KEY = import.meta.env.VITE_API_KEY as string | undefined;
-
-if (!API_KEY) {
-    // Fail loudly in the console rather than silently sending unauthenticated
-    // requests that will all come back 401. Check your .env / Vercel env vars.
-    console.error(
-        '[useDashboardData] VITE_API_KEY is not set. All API requests will fail with 401. ' +
-        'Set VITE_API_KEY in your .env (local) or Vercel project environment variables.'
-    );
-}
+// Requests go to the same-origin BFF proxy (/api/proxy/*), which attaches
+// the real API key server-side before forwarding to Cloud Run. No key is
+// ever present in the browser bundle or Network tab anymore.
 
 async function apiFetch(path: string, options: RequestInit = {}): Promise<Response> {
     const response = await fetch(`${API_BASE}${path}`, {
         ...options,
         headers: {
             'Content-Type': 'application/json',
-            'X-API-Key': API_KEY ?? '',
             ...(options.headers || {}),
         },
     });
 
-    if (response.status === 401) {
-        console.error(`[useDashboardData] 401 Unauthorized on ${path} — check VITE_API_KEY.`);
+    if (response.status === 401 || response.status === 502) {
+        console.error(`[useDashboardData] ${response.status} on ${path} — check the proxy's env vars on Vercel.`);
     }
 
     return response;

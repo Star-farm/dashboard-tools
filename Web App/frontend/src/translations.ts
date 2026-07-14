@@ -63,12 +63,13 @@ export const TRANSLATIONS = {
         footerProjectName: 'STAR-FARM',
         footerTagline: 'Chuyển đổi Nông nghiệp Sinh thái Thông minh cho Hệ thống Canh tác hướng tới Khả năng Chống chịu và Phát triển Bền vững tại vùng Trung tâm và Ven biển Đồng bằng sông Cửu Long',
         footerDescription: 'Mục tiêu tổng thể của dự án STAR-FARM là thúc đẩy quá trình chuyển đổi nông nghiệp sinh thái thông minh cho các hệ thống canh tác nông nghiệp - thực phẩm tại Đồng bằng sông Cửu Long (ĐBSCL), đồng thời tăng cường khả năng chống chịu trước biến đổi khí hậu, suy thoái môi trường và các cú sốc bên ngoài khác. Các can thiệp của dự án dựa trên kết quả nghiên cứu nhằm tinh chỉnh công tác chẩn đoán và phục vụ thiết kế đổi mới, đồng thiết kế các giải pháp nông nghiệp sinh thái dựa trên cơ sở khoa học trong hệ thống canh tác và chuỗi giá trị; xây dựng các nền tảng đa bên nhằm huy động sự tham gia và đóng góp từ các đối tác và cơ quan Nhà nước khác nhau; cũng như xây dựng các chính sách theo hướng từ dưới lên, do Chính phủ dẫn dắt.',
-        footerPartOf: 'Một phần của sáng kiến nghiên cứu Phòng thí nghiệm Hỗn hợp Quốc tế ACROSS (IRD / TLU).',
+        footerPartOf: 'ACROSS – Advanced Computational Research On Sustainability Science',
         footerContact: 'Liên hệ',
         footerLinks: 'Liên kết',
         footerDataVisualization: 'Trực quan hóa dữ liệu',
         footerDocumentation: 'GitHub dự án',
         footerRights: 'Bảo lưu mọi quyền.',
+        aboutus: 'Về chúng tôi',
     },
     en: {
         title: "STAR-FARM Project",
@@ -134,11 +135,12 @@ export const TRANSLATIONS = {
         footerProjectName: 'STAR-FARM',
         footerTagline: 'Smart Agro-ecological Transformation of Farming Systems towards Resilience and Sustainability in Middle and Coastal Zones of the Viet Nam Mekong Delta',
         footerDescription: 'The overall objective of the STAR-FARM project is to facilitate smart agro-ecological transformation of agri-food farming systems of the Viet Nam’s Mekong Delta (VMD) and strengthen resilience to climate change, environmental degradation, and other external shocks. The project interventions will be based on research results to fine tune diagnosis and to be used for designing innovation, co-design of science-based agro-ecological innovations in farming system and value chain; establishment of multi-stakeholders’ platforms to mobilize the participation of and contribution from different partners and Government agencies; and the development of bottom-up, government led policies. ',
-        footerPartOf: 'Part of the ACROSS International Joint Laboratory (IRD / TLU) research initiative.',
+        footerPartOf: 'ACROSS – Advanced Computational Research On Sustainability Science',
         footerContact: 'Contact',
         footerLinks: 'Links',
         footerDataVisualization: 'Data Visualization',
         footerDocumentation: 'GitHub project',
         footerRights: 'All rights reserved.',
+        aboutus: 'About us'
     }
 };

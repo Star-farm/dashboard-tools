@@ -1,10 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Server-side only env vars — NOT prefixed with VITE_, so Vercel never bundles
-// them into client-side JS. Set these in Vercel Project Settings, not in
-// any VITE_* variable.
-const BACKEND_URL = process.env.BACKEND_API_URL;   // e.g. https://star-farm-api-828025724138.asia-southeast1.run.app/api
-const API_KEY = process.env.BACKEND_API_KEY;        // the Cloud Run API_KEYS value
+const BACKEND_URL = process.env.BACKEND_API_URL;
+const API_KEY = process.env.BACKEND_API_KEY;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!BACKEND_URL || !API_KEY) {
@@ -12,12 +9,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(500).json({ detail: 'Proxy misconfigured on the server.' });
     }
 
-    // req.query.path comes from the [...path].ts catch-all segment,
-    // e.g. /api/proxy/scenarios -> path = ['scenarios']
-    // req.query.path from the [...path] catch-all segment has been coming back
-    // empty on this deployment, so parse the path directly from the raw
-    // request URL instead — this doesn't depend on Vercel's query population
-    // and works regardless.
     const rawUrl = req.url ?? '';
     const afterProxyPrefix = rawUrl.split('/api/proxy/')[1] ?? '';
     const path = afterProxyPrefix.split('?')[0];

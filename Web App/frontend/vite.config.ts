@@ -5,10 +5,22 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
+      '/api/proxy': {
+        target: 'http://localhost:8080',
         changeOrigin: true,
+
+        rewrite: (path) =>
+          path.replace(/^\/api\/proxy/, '/api'),
+
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.setHeader(
+              'X-API-Key',
+              'test-key-123'
+            );
+          });
+        },
       },
     },
   },
-})
+});

@@ -1,6 +1,7 @@
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 // ── 1. PLACE MOCKS AT THE ABSOLUTE TOP OF THE FILE ───────────────────────────
+// This intercepts the module imports before Dashboard is evaluated.
 vi.mock('../src/useDashboardData', () => ({
     USD_TO_VND: 26300,
     SCENARIO_COLORS: {
@@ -12,13 +13,14 @@ vi.mock('../src/useDashboardData', () => ({
     useDashboardData: vi.fn(),
 }));
 
-// Upgraded Recharts mock to force-execute all null/undefined boundary paths
+// Upgraded Recharts mock to force-execute all null/undefined boundary paths (PVC)
 vi.mock('recharts', () => ({
     ResponsiveContainer: ({ children }: any) => <div>{children}</div>,
     BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
     Bar: ({ children }: any) => <div>{children}</div>,
     XAxis: ({ tickFormatter }: any) => {
         if (tickFormatter) {
+            // Covers all switch cases and null/undefined boundary fallbacks (PVC)
             tickFormatter('Avg Yield');
             tickFormatter('Methane Emissions');
             tickFormatter('Net Income');
@@ -32,6 +34,7 @@ vi.mock('recharts', () => ({
     YAxis: () => <div data-testid="y-axis" />,
     Tooltip: ({ formatter }: any) => {
         if (formatter) {
+            // Covers right, left, null values, null names, and null/empty item dataKeys
             formatter(100, 'Avg Yield', { dataKey: 'Simulation_right' });
             formatter(5, 'Avg Yield', { dataKey: 'Simulation_left' });
             formatter(null, 'Avg Yield', { dataKey: 'Simulation_left' });
@@ -55,10 +58,9 @@ vi.mock('recharts', () => ({
 
 // ── 2. STANDARD IMPORTS ──────────────────────────────────────────────────────
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Dashboard } from '../src/Dashboard';
+import { Dashboard, detectBrowserLang } from '../src/Dashboard';
 import { useDashboardData } from '../src/useDashboardData';
 
-// Structured English mock translations matching the bilingual requirements of Dashboard.tsx
 const mockTranslations = {
     title: "Star Farm Dashboard",
     subtitle: "Agricultural Modeling App",
@@ -92,7 +94,7 @@ const mockTranslations = {
     omrhTooltipItems: ["OMRH line 1", "OMRH line 2"],
     fertilizerTooltipDesc: "Fertilizer tooltip",
     pesticideTooltipDesc: "Pesticide tooltip",
-    waterTooltipDesc: "Water tooltip",
+    waterUsageDesc: "Water tooltip",
     footerProjectName: "Star Farm",
     footerTagline: "Tagline",
     footerDescription: "Desc",
@@ -104,7 +106,6 @@ const mockTranslations = {
     footerRights: "All Rights Reserved",
 };
 
-// Default mocked returns for the custom useDashboardData hook
 const defaultHookReturn = {
     t: mockTranslations,
     isInitialLoading: false,
@@ -126,7 +127,17 @@ const defaultHookReturn = {
         pesticide_usage: 5,
         water_usage: 600,
     },
-    setSimInputs: vi.fn(),
+    // Smart state setter mock to invoke and cover functional updaters
+    setSimInputs: vi.fn().mockImplementation((arg) => {
+        if (typeof arg === 'function') {
+            arg({
+                awd_adoption: 'With AWD',
+                fertilizer_usage: 100,
+                pesticide_usage: 5,
+                water_usage: 600,
+            });
+        }
+    }),
     simResults: {
         predictions: {
             'Avg Yield': 5.0,
@@ -186,6 +197,7 @@ describe('Dashboard Component UI', () => {
         const viBtn = screen.getByText('VI');
         const enBtn = screen.getByText('EN');
 
+        // Natural browser default (JSDOM) is English ('en') on startup
         expect(enBtn).toHaveClass('active');
         expect(viBtn).not.toHaveClass('active');
 
@@ -216,20 +228,21 @@ describe('Dashboard Component UI', () => {
         expect(mockSetSimScenarioGroup).toHaveBeenCalledWith('One Million Hectare Rice');
     });
 
-    it('should update fertilizer state when range slider is adjusted', () => {
-        const mockSetSimInputs = vi.fn();
-        vi.mocked(useDashboardData).mockReturnValue({
-            ...defaultHookReturn,
-            setSimInputs: mockSetSimInputs,
-        } as any);
+    it('should update fertilizer, pesticide, and water states when range sliders are adjusted', () => {
+        vi.mocked(useDashboardData).mockReturnValue(defaultHookReturn as any);
 
         render(<Dashboard />);
 
         const sliders = screen.getAllByRole('slider');
         const fertilizerSlider = sliders[0];
+        const pesticideSlider = sliders[1];
+        const waterSlider = sliders[2];
 
         fireEvent.change(fertilizerSlider, { target: { value: '150' } });
-        expect(mockSetSimInputs).toHaveBeenCalled();
+        fireEvent.change(pesticideSlider, { target: { value: '8' } });
+        fireEvent.change(waterSlider, { target: { value: '800' } });
+
+        expect(defaultHookReturn.setSimInputs).toHaveBeenCalled();
     });
 
     it('should execute simulation on run button click', () => {
@@ -265,7 +278,6 @@ describe('Dashboard Component UI', () => {
 
         render(<Dashboard />);
 
-        // CLICK THE VI BUTTON: To trigger setLang('vi') and update the local 'lang' state to 'vi'
         const viBtn = screen.getByText('VI');
         fireEvent.click(viBtn);
 
@@ -331,76 +343,24 @@ describe('Dashboard Component UI', () => {
     });
 });
 
-// ── 3. DEDICATED DYNAMIC MODULE RESOLUTION TO COVER detectBrowserLang ───────
-// ── 3. DEDICATED DYNAMIC MODULE RESOLUTION TO COVER detectBrowserLang ───────
-describe('detectBrowserLang isolated boundary branch coverage', () => {
-    const originalLanguage = window.navigator.language;
-    const originalUserLanguage = (window.navigator as any).userLanguage;
-
-    afterEach(() => {
-        // Restore original properties on window.navigator to prevent test pollution
-        Object.defineProperty(window.navigator, 'language', {
-            value: originalLanguage,
-            configurable: true,
-            writable: true,
-        });
-
-        if (originalUserLanguage !== undefined) {
-            Object.defineProperty(window.navigator, 'userLanguage', {
-                value: originalUserLanguage,
-                configurable: true,
-                writable: true,
-            });
-        } else {
-            try {
-                delete (window.navigator as any).userLanguage;
-            } catch (e) { }
-        }
-        vi.resetModules();
+// ── 3. DIRECT UNIT TESTS TO COVER detectBrowserLang 100% BRANCHES (C1, C2, PVC) ──
+describe('detectBrowserLang direct unit tests', () => {
+    it('should return "vi" when browser language starts with vi', () => {
+        const mockNav = { language: 'vi-VN' } as any;
+        expect(detectBrowserLang(mockNav)).toBe('vi');
     });
 
-    it('should detect vi language when browser default language is Vietnamese', async () => {
-        // FIX: Redefine the 'language' property getter directly on JSDOM's navigator
-        Object.defineProperty(window.navigator, 'language', {
-            value: 'vi-VN',
-            configurable: true,
-            writable: true,
-        });
-
-        const { Dashboard: TempDashboard } = await import('../src/Dashboard');
-        expect(TempDashboard).toBeDefined();
+    it('should return "en" when browser language does not start with vi', () => {
+        const mockNav = { language: 'en-US' } as any;
+        expect(detectBrowserLang(mockNav)).toBe('en');
     });
 
-    it('should detect vi language from legacy userLanguage IE fallback', async () => {
-        // Set language to falsy empty string to force evaluation of the userLanguage fallback
-        Object.defineProperty(window.navigator, 'language', {
-            value: '',
-            configurable: true,
-            writable: true,
-        });
-        Object.defineProperty(window.navigator, 'userLanguage', {
-            value: 'vi-VN',
-            configurable: true,
-            writable: true,
-        });
-
-        const { Dashboard: TempDashboard } = await import('../src/Dashboard');
-        expect(TempDashboard).toBeDefined();
+    it('should return "en" when navigator language evaluates to empty string', () => {
+        const mockNav = { language: '' } as any;
+        expect(detectBrowserLang(mockNav)).toBe('en');
     });
 
-    it('should fallback to en when both language fields evaluate to empty strings', async () => {
-        Object.defineProperty(window.navigator, 'language', {
-            value: '',
-            configurable: true,
-            writable: true,
-        });
-        Object.defineProperty(window.navigator, 'userLanguage', {
-            value: '',
-            configurable: true,
-            writable: true,
-        });
-
-        const { Dashboard: TempDashboard } = await import('../src/Dashboard');
-        expect(TempDashboard).toBeDefined();
+    it('should fallback to "en" when navigator is completely undefined (SSR path)', () => {
+        expect(detectBrowserLang(null)).toBe('en');
     });
 });

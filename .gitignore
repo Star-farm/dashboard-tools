@@ -13,7 +13,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+# SSH deploy keys (see CI_CD_SETUP.md)
+deploy_key
+deploy_key.pub
+*.pem
 # C extensions
 *.so
 

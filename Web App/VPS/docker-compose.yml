@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_mcp_api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./model_cache:/app/model_cache
+    restart: always

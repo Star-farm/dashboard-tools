@@ -270,8 +270,7 @@ export function useDashboardData(lang: 'vi' | 'en') {
                 rightRow[`${scenario}_right`] = convertRight(Number(vals[right.key] ?? 0));
             }
         });
-
-        if (simResults) {
+        if (simResults && simResults.predictions) {
             leftRow['Simulation_left'] = parseFloat(
                 (simResults.predictions[left.key as keyof typeof simResults.predictions] ?? 0).toFixed(2)
             );
@@ -279,7 +278,6 @@ export function useDashboardData(lang: 'vi' | 'en') {
                 Number(simResults.predictions[right.key as keyof typeof simResults.predictions] ?? 0)
             );
         }
-
         const data = [leftRow, rightRow];
 
         const { domain: leftDomain, ticks: leftTicks } = computeDomainAndTicksMulti(

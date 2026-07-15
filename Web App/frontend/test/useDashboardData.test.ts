@@ -35,6 +35,7 @@ const mockSimulate = {
 
 describe('useDashboardData Custom Hook', () => {
     beforeEach(() => {
+        // Intercept standard global fetch calls and return structured mock JSONs
         vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
             if (url.includes('/scenarios')) {
                 return Promise.resolve({ ok: true, json: () => Promise.resolve(mockScenarios) });
@@ -91,5 +92,47 @@ describe('useDashboardData Custom Hook', () => {
         expect(result.current.isVndNetIncome).toBe(true);
         // Verifies the key warning is properly composed in Vietnamese
         expect(result.current.keyMessage).toContain('phát thải khí methane có thể tăng 12.0%');
+    });
+
+    // ── NEW TEST CASE TO COVER 401 & 502 PROXY ERRORS IN apiFetch (C1, C2, PVC) ──
+    it('should log proxy error messages to console when API returns 401 or 502 status codes', async () => {
+        // Spy on console.error to assert output without cluttering the test logs
+        const spyConsoleError = vi.spyOn(console, 'error').mockImplementation(() => { });
+
+        // 1. Force fetch to return 401 Unauthorized for /scenarios initialization
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            status: 401,
+            ok: false,
+            json: () => Promise.resolve({ predictions: {} }), // Safe fallback payload
+        }));
+
+        renderHook(() => useDashboardData('en'));
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        expect(spyConsoleError).toHaveBeenCalledWith(
+            expect.stringContaining("[useDashboardData] 401 on /scenarios")
+        );
+
+        // 2. Force fetch to return 502 Bad Gateway to cover the second OR branch
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+            status: 502,
+            ok: false,
+            json: () => Promise.resolve({ predictions: {} }), // Safe fallback payload
+        }));
+
+        renderHook(() => useDashboardData('en'));
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        expect(spyConsoleError).toHaveBeenCalledWith(
+            expect.stringContaining("[useDashboardData] 502 on /scenarios")
+        );
+
+        spyConsoleError.mockRestore(); // Restore original console behavior
     });
 });

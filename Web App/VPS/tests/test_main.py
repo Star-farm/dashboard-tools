@@ -294,3 +294,195 @@ def test_missing_api_keys_restriction_on_startup():
     with pytest.raises(RuntimeError, match="No API_KEYS configured"):
         if not keys:
             raise RuntimeError("No API_KEYS configured.")
+
+def test_validate_metrics_invalid_raises_422(client):
+    # invalid branch: line 325-326 (unknown metric -> ValueError -> 422)
+    compare_data = {
+        "dimension": "Climate Type",
+        "metrics": ["Not A Real Metric"]
+    }
+    response = client.post(
+        "/api/compare",
+        headers={"X-API-Key": "test-key-123"},
+        json=compare_data
+    )
+    assert response.status_code == 422
+    assert "Unknown metric(s)" in str(response.json())
+
+
+def test_validate_metrics_empty_list_passes_validation(client):
+    # short-circuit branch: line 322-323 (empty list returns v unchanged, no raise)
+    compare_data = {
+        "dimension": "Climate Type",
+        "metrics": []
+    }
+    response = client.post(
+        "/api/compare",
+        headers={"X-API-Key": "test-key-123"},
+        json=compare_data
+    )
+    # This asserts CURRENT behavior — validator lets it through.
+    # If /api/compare is supposed to reject an empty metrics list,
+    # that's a business-logic check missing downstream, not here.
+    assert response.status_code != 422
+
+
+def test_validate_resources_invalid_raises_422(client):
+    # NOTE: /api/optimize/* routes appear to route validation errors through
+    # a custom handler that remaps 422 -> 400 (same as test_optimization_validation_error_returns_custom_400).
+    # Confirmed empirically: this endpoint returns 400, not raw 422.
+    opt_res_data = {
+        "resources": ["not_a_real_resource"],
+        "target_methane": 500.0
+    }
+    response = client.post(
+        "/api/optimize/resource",
+        headers={"X-API-Key": "test-key-123"},
+        json=opt_res_data
+    )
+    assert response.status_code == 400
+
+def test_kpi_change_validate_metrics_invalid_raises_422(client):
+    # KpiChangeRequest.validate_metrics invalid branch (line 398-399)
+    # Distinct from CompareRequest.validate_metrics tested earlier —
+    # same logic, different class/lines, so needs its own coverage.
+    response = client.post(
+        "/api/kpi-change",
+        headers={"X-API-Key": "test-key-123"},
+        json={"metrics": ["Not A Real Metric"]}
+    )
+    assert response.status_code == 422
+    assert "Unknown metric(s)" in str(response.json())
+
+@patch("main.get_data_status")
+def test_api_data_status_generic_exception_returns_500(mock_get_status, client):
+    mock_get_status.side_effect = Exception("boom")
+    response = client.get("/api/data-status", headers={"X-API-Key": "test-key-123"})
+    assert response.status_code == 500
+    assert "Failed to retrieve data status." in response.json()["detail"]
+
+
+@patch("main.get_scenarios")
+def test_api_scenarios_generic_exception_returns_500(mock_get_scenarios, client):
+    mock_get_scenarios.side_effect = Exception("boom")
+    response = client.get("/api/scenarios", headers={"X-API-Key": "test-key-123"})
+    assert response.status_code == 500
+    assert "Failed to retrieve scenarios." in response.json()["detail"]
+
+
+@patch("main.orchestrator.process_query")
+def test_api_compare_generic_exception_returns_500(mock_process_query, client):
+    # Non-HTTPException error inside the try block -> falls through to the
+    # generic except Exception branch (line 443-444), not the HTTPException re-raise.
+    mock_process_query.side_effect = Exception("boom")
+    response = client.post(
+        "/api/compare",
+        headers={"X-API-Key": "test-key-123"},
+        json={"dimension": "Climate Type", "metrics": ["Avg Yield"]}
+    )
+    assert response.status_code == 500
+    assert "Comparison failed." in response.json()["detail"]
+
+# ── Generic 500 branches (except Exception) ────────────────────────────────
+
+@patch("main.orchestrator.process_query")
+def test_api_optimize_generic_exception_returns_500(mock_process_query, client):
+    mock_process_query.side_effect = Exception("boom")
+    response = client.post(
+        "/api/optimize",
+        headers={"X-API-Key": "test-key-123"},
+        json={"target_methane": 300.0, "scenario_group": "Business As Usual", "pesticide_usage": 5.0}
+    )
+    assert response.status_code == 500
+    assert "Optimization failed." in response.json()["detail"]
+
+
+@patch("main.orchestrator.model_agent.execute")
+def test_api_optimize_resource_generic_exception_returns_500(mock_execute, client):
+    mock_execute.side_effect = Exception("boom")
+    response = client.post(
+        "/api/optimize/resource",
+        headers={"X-API-Key": "test-key-123"},
+        json={"resources": ["water"], "target_methane": 500.0}
+    )
+    assert response.status_code == 500
+    assert "Resource optimization failed." in response.json()["detail"]
+
+
+@patch("main.orchestrator.process_query")
+def test_api_simulate_generic_exception_returns_500(mock_process_query, client):
+    mock_process_query.side_effect = Exception("boom")
+    response = client.post(
+        "/api/simulate",
+        headers={"X-API-Key": "test-key-123"},
+        json={
+            "scenario_group": "Business As Usual",
+            "awd_adoption": "With AWD",
+            "fertilizer_usage": 100.0,
+            "pesticide_usage": 5.0,
+            "water_usage": 600.0
+        }
+    )
+    assert response.status_code == 500
+    assert "Simulation failed." in response.json()["detail"]
+
+
+# ── HTTPException re-raise branches (except HTTPException: raise) ──────────
+# These confirm an HTTPException surfaced from inside the orchestrator call
+# passes through untouched, instead of being caught/rewrapped by the
+# generic except Exception clause below it.
+
+from fastapi import HTTPException
+
+@patch("main.orchestrator.process_query")
+def test_api_compare_httpexception_passthrough(mock_process_query, client):
+    mock_process_query.side_effect = HTTPException(status_code=418, detail="teapot")
+    response = client.post(
+        "/api/compare",
+        headers={"X-API-Key": "test-key-123"},
+        json={"dimension": "Climate Type", "metrics": ["Avg Yield"]}
+    )
+    assert response.status_code == 418
+    assert response.json()["detail"] == "teapot"
+
+
+@patch("main.orchestrator.process_query")
+def test_api_optimize_httpexception_passthrough(mock_process_query, client):
+    mock_process_query.side_effect = HTTPException(status_code=418, detail="teapot")
+    response = client.post(
+        "/api/optimize",
+        headers={"X-API-Key": "test-key-123"},
+        json={"target_methane": 300.0, "scenario_group": "Business As Usual", "pesticide_usage": 5.0}
+    )
+    assert response.status_code == 418
+    assert response.json()["detail"] == "teapot"
+
+
+@patch("main.orchestrator.model_agent.execute")
+def test_api_optimize_resource_httpexception_passthrough(mock_execute, client):
+    mock_execute.side_effect = HTTPException(status_code=418, detail="teapot")
+    response = client.post(
+        "/api/optimize/resource",
+        headers={"X-API-Key": "test-key-123"},
+        json={"resources": ["water"], "target_methane": 500.0}
+    )
+    assert response.status_code == 418
+    assert response.json()["detail"] == "teapot"
+
+
+@patch("main.orchestrator.process_query")
+def test_api_simulate_httpexception_passthrough(mock_process_query, client):
+    mock_process_query.side_effect = HTTPException(status_code=418, detail="teapot")
+    response = client.post(
+        "/api/simulate",
+        headers={"X-API-Key": "test-key-123"},
+        json={
+            "scenario_group": "Business As Usual",
+            "awd_adoption": "With AWD",
+            "fertilizer_usage": 100.0,
+            "pesticide_usage": 5.0,
+            "water_usage": 600.0
+        }
+    )
+    assert response.status_code == 418
+    assert response.json()["detail"] == "teapot"

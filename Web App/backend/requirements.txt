@@ -4,7 +4,8 @@ uvicorn==0.51.0
 pydantic==2.13.4
 slowapi==0.1.10
 pandas==3.0.3
-numpy==2.5.1
+# Latest NumPy line that still publishes Python 3.11 wheels.
+numpy==2.4.6
 scikit-learn==1.9.0
 mcp==1.28.1
 python-dotenv==1.2.2

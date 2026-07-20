@@ -13,8 +13,8 @@ os.environ["GCS_CACHE_BUCKET"] = ""
 os.environ["TRUST_PROXY_HEADERS"] = "true"
 os.environ["ENABLE_DOCS"] = "false" 
 
-import pytest
-from fastapi.testclient import TestClient
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
 
 

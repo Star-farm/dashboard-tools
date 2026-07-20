@@ -1,6 +1,5 @@
 """Unit tests for agent classification and formatting behavior."""
 
-import pytest
 from agent_adk import (
     _fmt_val,
     _classify,

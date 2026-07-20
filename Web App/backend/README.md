@@ -15,7 +15,7 @@ FastAPI backend designed for Google Cloud Run. Runtime implementation lives unde
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 Copy-Item .env.example .env
 python main.py
 ```
@@ -86,7 +86,7 @@ Invoke-RestMethod -Method Post `
 | --- | --- | --- |
 | `API_KEYS` | required | Comma-separated API keys |
 | `DEFAULT_CSV_PATH` | `data/Simulation_Data.csv` | Simulation dataset |
-| `MODEL_CACHE_DIR` | `/tmp/model_cache` | Local model cache |
+| `MODEL_CACHE_DIR` | OS temporary directory | Local model cache |
 | `GCS_CACHE_BUCKET` | empty | Shared model-cache bucket |
 | `ALLOWED_ORIGINS` | restricted | Comma-separated CORS origins |
 | `RATE_LIMIT_PER_MIN` | source default | Requests allowed per client per minute |

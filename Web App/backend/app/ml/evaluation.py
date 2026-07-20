@@ -22,20 +22,24 @@ def build_groups(df):
     return df[cols].fillna("missing").astype(str).agg("|".join, axis=1) if cols else pd.Series(np.arange(len(df)), index=df.index)
 
 def profile_target(series):
-    values = pd.to_numeric(series, errors="coerce"); valid = values.dropna()
+    values = pd.to_numeric(series, errors="coerce")
+    valid = values.dropna()
     return {"rows": len(series), "missing": int(values.isna().sum()), "unique": int(valid.nunique()),
             "min": float(valid.min()), "max": float(valid.max()), "mean": float(valid.mean()),
             "std": float(valid.std(ddof=0))}
 
 def evaluate(model, X, y, groups):
     train, test = next(GroupShuffleSplit(n_splits=1, test_size=.2, random_state=42).split(X, y, groups))
-    candidate = clone(model).fit(X.iloc[train], y.iloc[train]); predicted = candidate.predict(X.iloc[test])
+    candidate = clone(model).fit(X.iloc[train], y.iloc[train])
+    predicted = candidate.predict(X.iloc[test])
     result = {"r2": float(r2_score(y.iloc[test], predicted)), "mae": float(mean_absolute_error(y.iloc[test], predicted)),
               "rmse": float(mean_squared_error(y.iloc[test], predicted) ** .5)}
-    scores=[]; folds=min(5, int(groups.nunique()))
+    scores = []
+    folds = min(5, int(groups.nunique()))
     if folds >= 2:
-        for a,b in GroupKFold(folds).split(X,y,groups):
-            fitted=clone(model).fit(X.iloc[a],y.iloc[a]); scores.append(r2_score(y.iloc[b], fitted.predict(X.iloc[b])))
+        for a, b in GroupKFold(folds).split(X, y, groups):
+            fitted = clone(model).fit(X.iloc[a], y.iloc[a])
+            scores.append(r2_score(y.iloc[b], fitted.predict(X.iloc[b])))
     result.update(cv_r2_mean=float(np.mean(scores)) if scores else result["r2"], cv_r2_std=float(np.std(scores)) if scores else 0.0)
     pi=permutation_importance(candidate, X.iloc[test], y.iloc[test], n_repeats=3, random_state=42, n_jobs=-1)
     importance=sorted(({"feature": n, "importance": float(v)} for n,v in zip(X.columns,pi.importances_mean)), key=lambda x:x["importance"], reverse=True)

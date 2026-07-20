@@ -359,6 +359,7 @@ def test_finite_float_and_gcs_disabled_helpers():
 def test_gcs_helpers_success_and_nonfatal_failure():
     blob = MagicMock()
     blob.exists.return_value = True
+    blob.download_to_filename.side_effect = lambda path: open(path, "wb").write(b"cache")
     bucket = MagicMock()
     bucket.blob.return_value = blob
     client = MagicMock()
@@ -371,7 +372,10 @@ def test_gcs_helpers_success_and_nonfatal_failure():
         with patch("mcp_server.GCS_CACHE_BUCKET", "bucket"), \
              patch.dict("sys.modules", {"google.cloud.storage": storage_module}):
             assert mcp_server._try_download_cache_from_gcs("key", target) is True
-            blob.download_to_filename.assert_called_once_with(target)
+            downloaded_path = blob.download_to_filename.call_args.args[0]
+            assert downloaded_path.endswith(".download")
+            assert os.path.exists(target)
+            assert not os.path.exists(downloaded_path)
             mcp_server._try_upload_cache_to_gcs("key", target)
             blob.upload_from_filename.assert_called_once_with(target)
 

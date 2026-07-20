@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest",
+    "test:coverage": "vitest --run --coverage",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,7 +24,7 @@
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vercel/node": "^3.0.1",
+    "@vercel/node": "^5.8.26",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^10.3.0",

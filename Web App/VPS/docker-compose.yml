@@ -7,7 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: fastapi_mcp_api
     ports:
-      - "8080:8080"
+      # Only the host's reverse proxy may reach the API container.
+      - "127.0.0.1:8080:8080"
     env_file:
       - .env
     volumes:

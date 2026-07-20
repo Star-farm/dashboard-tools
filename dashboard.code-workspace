@@ -14,14 +14,14 @@
         }
     ],
     "settings": {
-        "python.testing.pytestArgs": [
-            "--import-mode=importlib",
-            "--ignore=frontend",
-            "--ignore=node_modules"
-        ],
-        "python.testing.pytestEnabled": true,
         "python.testing.unittestEnabled": false,
-        "vitest.enable": true,
-        "vitest.workspaceConfigPath": "vitest.config.ts"
+        "vitest.enable": true
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "vitest.explorer"
+        ]
     }
 }

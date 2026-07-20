@@ -9,6 +9,7 @@ import pandas as pd
 from mcp.server.fastmcp import FastMCP
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder
+from app.ml.evaluation import build_groups, evaluate, gate_passed, metadata, profile_target
 
 
 # ── FastMCP Server Initialization ─────────────────────────────────────────────
@@ -17,7 +18,7 @@ mcp = FastMCP("AI Agents Agricultural Modeling")
 # VPS Config
 DEFAULT_CSV_PATH = os.getenv("DEFAULT_CSV_PATH", "/app/data/Simulation_Data.csv")
 MODEL_CACHE_DIR = os.getenv("MODEL_CACHE_DIR", "/app/model_cache") 
-MODEL_CACHE_VERSION = "v3_star_farm_hybrid_financials"
+MODEL_CACHE_VERSION = "v4_group_validated_financials"
 
 # Empirical calibration factors from the simulation CSV, not original GAMA constants.
 COST_FACTOR_BAU = 1.1599
@@ -27,6 +28,7 @@ COST_FACTOR_OMRH = 1.1044
 data: pd.DataFrame | None = None
 models: dict[str, RandomForestRegressor] = {}
 label_encoders: dict[str, LabelEncoder] = {}
+model_report: dict[str, Any] = {}
 
 # ── Feature & Label Schemas ───────────────────────────────────────────────────
 INPUT_FEATURES = [
@@ -156,7 +158,7 @@ def _calculate_financial_metrics(
 
 
 def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str, Any]:
-    global data, models, label_encoders
+    global data, models, label_encoders, model_report
 
     df = df.copy()
 
@@ -190,6 +192,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
             data = df
             models = cached["models"]
             label_encoders = cached["label_encoders"]
+            model_report = cached.get("model_report", {})
             print(f"[mcp_server] Loaded models from local VPS cache: {cache_path}")
             return {
                 "status": "success", "rows_loaded": len(df),
@@ -213,6 +216,8 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
     X_all = df[["AWD_encoded", "ScenarioGroup_encoded", "Fertilizer Usage", "Pesticide Usage", "Water Usage"]]
 
     new_models = {}
+    model_report = metadata(MODEL_CACHE_VERSION, cache_key, len(df))
+    model_report.update(targets={}, quality_gate_passed=True)
     trained, skipped = [], []
     for target in PREDICTION_TARGETS:
         if target not in df.columns:
@@ -228,6 +233,14 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
             continue
 
         model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+        try:
+            metrics, importance = evaluate(model, X_train, y_train, build_groups(df).loc[mask])
+            passed = gate_passed(target, metrics)
+            model_report["targets"][target] = {"metrics": metrics, "profile": profile_target(y_train), "quality_gate_passed": passed, "feature_importance": importance}
+            model_report["quality_gate_passed"] = model_report["quality_gate_passed"] and passed
+        except Exception as exc:
+            model_report["targets"][target] = {"evaluation_error": str(exc), "profile": profile_target(y_train), "quality_gate_passed": False}
+            model_report["quality_gate_passed"] = False
         model.fit(X_train, y_train)
         new_models[target] = model
         trained.append(target)
@@ -248,7 +261,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
         try:
             os.makedirs(os.path.dirname(cache_path), exist_ok=True)
             joblib.dump(
-                {"models": new_models, "label_encoders": new_label_encoders},
+                {"models": new_models, "label_encoders": new_label_encoders, "model_report": model_report},
                 cache_path,
                 compress=3,
             )

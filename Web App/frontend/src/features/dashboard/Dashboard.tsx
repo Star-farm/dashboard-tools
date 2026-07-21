@@ -3,7 +3,10 @@ import {
     ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LabelList
 } from 'recharts';
 import { ReferenceLine } from 'recharts';
-import { useDashboardData, USD_TO_VND, SCENARIO_COLORS, SCENARIO_KEYS } from '../../hooks/useDashboardData';
+import {
+    useDashboardData, USD_TO_VND, SCENARIO_COLORS, SCENARIO_KEYS,
+    SIMULATION_INPUT_LIMITS,
+} from '../../hooks/useDashboardData';
 
 export const detectBrowserLang = (nav = typeof navigator !== 'undefined' ? navigator : null): 'vi' | 'en' => {
     const browserLang = nav ? nav.language : '';
@@ -256,7 +259,11 @@ export function Dashboard() {
                         </span>
                         <span className="value">{simInputs.fertilizer_usage} kg/ha</span>
                     </div>
-                    <input type="range" min="50" max="250" value={simInputs.fertilizer_usage}
+                    <input type="range" aria-label={t.fertilizerUsage}
+                        min={SIMULATION_INPUT_LIMITS.fertilizer_usage.min}
+                        max={SIMULATION_INPUT_LIMITS.fertilizer_usage.max}
+                        step={SIMULATION_INPUT_LIMITS.fertilizer_usage.step}
+                        value={simInputs.fertilizer_usage}
                         onChange={(e) => setSimInputs(prev => ({ ...prev, fertilizer_usage: Number(e.target.value) }))} />
                 </div>
 
@@ -273,7 +280,11 @@ export function Dashboard() {
                         </span>
                         <span className="value">{simInputs.pesticide_usage} kg/ha</span>
                     </div>
-                    <input type="range" min="1" max="15" value={simInputs.pesticide_usage}
+                    <input type="range" aria-label={t.pesticideUsage}
+                        min={SIMULATION_INPUT_LIMITS.pesticide_usage.min}
+                        max={SIMULATION_INPUT_LIMITS.pesticide_usage.max}
+                        step={SIMULATION_INPUT_LIMITS.pesticide_usage.step}
+                        value={simInputs.pesticide_usage}
                         onChange={(e) => setSimInputs(prev => ({ ...prev, pesticide_usage: Number(e.target.value) }))} />
                 </div>
 
@@ -290,7 +301,11 @@ export function Dashboard() {
                         </span>
                         <span className="value">{simInputs.water_usage} m³/ha</span>
                     </div>
-                    <input type="range" min="200" max="1200" value={simInputs.water_usage}
+                    <input type="range" aria-label={t.waterUsage}
+                        min={SIMULATION_INPUT_LIMITS.water_usage.min}
+                        max={SIMULATION_INPUT_LIMITS.water_usage.max}
+                        step={SIMULATION_INPUT_LIMITS.water_usage.step}
+                        value={simInputs.water_usage}
                         onChange={(e) => setSimInputs(prev => ({ ...prev, water_usage: Number(e.target.value) }))} />
                 </div>
 

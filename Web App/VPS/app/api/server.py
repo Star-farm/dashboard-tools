@@ -8,7 +8,6 @@ All configuration is read from environment variables — no secrets in code.
 
 import os
 import hmac
-from typing import Any, Dict, List, Literal
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,13 +17,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field, field_validator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
 from agent_adk import AgentOrchestrator
 from mcp_server import mcp, get_scenarios, get_data_status
+from app.api.schemas import (
+    CompareRequest, KpiChangeRequest, OptimizationRequest,
+    ResourceOptimizationRequest, SimulationRequest,
+)
 
 # ── Configuration & Validation Constants ──────────────────────────────────────
 
@@ -83,28 +85,6 @@ _AUTH_EXEMPT_PATHS = {
 
 # Prefixes that require a valid API key on every request.
 _AUTH_PROTECTED_PREFIXES = ("/api/", "/mcp")
-
-# Valid value sets for Pydantic field validation
-_VALID_DIMENSIONS = {
-    "Climate Type", "Season Type", "Scenario Group",
-    "Scenario Name", "AWD Adoption", "Resource Scenario",
-    "Year",
-}
-
-_VALID_METRICS = {
-    "Avg Yield", "Methane Emissions", "Emission Intensity",
-    "Profit Margin", "Net Income", "Production Cost", "Straw Value",
-    "Water Usage", "Fertilizer Usage", "Pesticide Usage", "Salinity Exposure",
-    "Max Flood Continuous", "Flood Stress", "Drought Stress", "Salinity Stress",
-    "Biodiversity", "Resilient Varieties", "Water Reliability", "Labor Intensity",
-}
-
-_VALID_RESOURCES = {"water", "fertilizer", "pesticide", "awd", "scenario_group"}
-
-# Explicit Literal types to enforce strict validation
-ScenarioGroupType = Literal["Business As Usual", "One Million Hectare Rice"]
-AwdAdoptionType = Literal["With AWD", "Without AWD"]
-
 
 # ── Rate Limiter Helpers ──────────────────────────────────────────────────────
 
@@ -310,116 +290,7 @@ orchestrator = AgentOrchestrator()
 
 # ── Pydantic Request Schemas with Built-In Validation ─────────────────────────
 
-class CompareRequest(BaseModel):
-    metrics: List[str] = Field(
-        default=[],
-        description="List of metric column names to compare. If empty, default metrics will be used."
-    )
-    dimension: str = Field(
-        description="DataFrame column to group by, e.g., Climate Type, AWD Adoption."
-    )
-    filters: Dict[str, Any] = Field(
-        default={},
-        description="Optional dictionary filtering parameters, e.g., {'AWD Adoption': 'With AWD'}."
-    )
-
-    @field_validator("dimension")
-    @classmethod
-    def validate_dimension(cls, v: str) -> str:
-        if v not in _VALID_DIMENSIONS:
-            raise ValueError(f"Invalid dimension. Valid options: {sorted(_VALID_DIMENSIONS)}")
-        return v
-
-    @field_validator("metrics")
-    @classmethod
-    def validate_metrics(cls, v: List[str]) -> List[str]:
-        if not v:
-            return v
-        invalid = [m for m in v if m not in _VALID_METRICS]
-        if invalid:
-            raise ValueError(f"Unknown metric(s): {invalid}. Valid options: {sorted(_VALID_METRICS)}")
-        return v
-
-
-class SimulationRequest(BaseModel):
-    scenario_group: ScenarioGroupType = Field(
-        default="Business As Usual",
-        description="Scenario Group. Either 'Business As Usual' or 'One Million Hectare Rice'."
-    )
-    awd_adoption: AwdAdoptionType = Field(
-        description="AWD Adoption state. Must be 'With AWD' or 'Without AWD'."
-    )
-    fertilizer_usage: float = Field(
-        ge=50.0, le=250.0,
-        description="Applied fertilizer usage amount (kg/ha). Valid range: 50.0 to 250.0."
-    )
-    pesticide_usage: float = Field(
-        ge=0.5, le=15.0,
-        description="Applied pesticide usage amount (kg/ha). Valid range: 0.5 to 15.0."
-    )
-    water_usage: float = Field(
-        ge=100.0, le=1500.0,
-        description="Irrigation water usage (m³/ha). Valid range: 100.0 to 1500.0."
-    )
-
-
-class OptimizationRequest(BaseModel):
-    target_methane: float = Field(
-        ge=50.0, le=2000.0,
-        description="Upper limit target of Methane Emissions (kg/ha)."
-    )
-    scenario_group: ScenarioGroupType = Field(
-        default="Business As Usual",
-        description="Fixed Scenario Group used as a constraint."
-    )
-    pesticide_usage: float = Field(
-        default=5.0, ge=0.5, le=15.0,
-        description="Fixed pesticide usage level constraint."
-    )
-
-
-class ResourceOptimizationRequest(BaseModel):
-    resources: List[str] = Field(
-        description="The subset list of resource labels to optimize."
-    )
-    fixed_inputs: Dict[str, Any] = Field(
-        default={},
-        description="Key-value mapping of parameters held constant during grid search."
-    )
-    target_methane: float = Field(
-        default=500.0, ge=50.0, le=2000.0,
-        description="Methane emissions upper cap (kg/ha). Default is 500.0."
-    )
-
-    @field_validator("resources")
-    @classmethod
-    def validate_resources(cls, v: List[str]) -> List[str]:
-        invalid = [r for r in v if r not in _VALID_RESOURCES]
-        if invalid:
-            raise ValueError(f"Unknown resource(s): {invalid}. Valid options: {sorted(_VALID_RESOURCES)}")
-        return v
-
-
-class KpiChangeRequest(BaseModel):
-    metrics: List[str] = Field(
-        default=["Avg Yield", "Methane Emissions", "Net Income", "Profit Margin"]
-    )
-
-    @field_validator("metrics")
-    @classmethod
-    def validate_metrics(cls, v: List[str]) -> List[str]:
-        invalid = [m for m in v if m not in _VALID_METRICS]
-        if invalid:
-            raise ValueError(f"Unknown metric(s): {invalid}. Valid options: {sorted(_VALID_METRICS)}")
-        return v
-
-
 # ── API Endpoints ─────────────────────────────────────────────────────────────
-
-from app.api.schemas import (
-    CompareRequest, KpiChangeRequest, OptimizationRequest,
-    ResourceOptimizationRequest, SimulationRequest,
-)
 
 @app.get("/health")
 def health_check():

@@ -10,6 +10,11 @@ vi.mock('../../src/hooks/useDashboardData', () => ({
         'Simulation': '#3b82f6',
     },
     SCENARIO_KEYS: ['Business As Usual', 'One Million Hectare Rice', 'Simulation'],
+    SIMULATION_INPUT_LIMITS: {
+        fertilizer_usage: { min: 80, max: 145, step: 5 },
+        pesticide_usage: { min: 4, max: 7.5, step: 0.5 },
+        water_usage: { min: 0, max: 850, step: 25 },
+    },
     useDashboardData: vi.fn(),
 }));
 
@@ -248,9 +253,19 @@ describe('Dashboard Component UI', () => {
         const pesticideSlider = sliders[1];
         const waterSlider = sliders[2];
 
-        fireEvent.change(fertilizerSlider, { target: { value: '150' } });
-        fireEvent.change(pesticideSlider, { target: { value: '8' } });
-        fireEvent.change(waterSlider, { target: { value: '800' } });
+        expect(fertilizerSlider).toHaveAttribute('min', '80');
+        expect(fertilizerSlider).toHaveAttribute('max', '145');
+        expect(fertilizerSlider).toHaveAttribute('step', '5');
+        expect(pesticideSlider).toHaveAttribute('min', '4');
+        expect(pesticideSlider).toHaveAttribute('max', '7.5');
+        expect(pesticideSlider).toHaveAttribute('step', '0.5');
+        expect(waterSlider).toHaveAttribute('min', '0');
+        expect(waterSlider).toHaveAttribute('max', '850');
+        expect(waterSlider).toHaveAttribute('step', '25');
+
+        fireEvent.change(fertilizerSlider, { target: { value: '145' } });
+        fireEvent.change(pesticideSlider, { target: { value: '7.5' } });
+        fireEvent.change(waterSlider, { target: { value: '850' } });
 
         expect(defaultHookReturn.setSimInputs).toHaveBeenCalled();
     });

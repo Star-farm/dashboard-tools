@@ -205,7 +205,7 @@ def test_api_validation_errors(client):
     response = client.post("/api/compare", headers=headers, json=compare_data)
     assert response.status_code == 422
 
-    # Out-of-range data parameter (maximum fertilizer_usage is 250)
+    # Out-of-range data parameter (maximum fertilizer_usage is 145)
     simulate_data = {
         "scenario_group": "Business As Usual",
         "awd_adoption": "With AWD",
@@ -215,6 +215,22 @@ def test_api_validation_errors(client):
     }
     response = client.post("/api/simulate", headers=headers, json=simulate_data)
     assert response.status_code == 422
+
+    for field, value in [
+        ("fertilizer_usage", 79.9),
+        ("pesticide_usage", 7.6),
+        ("water_usage", 850.1),
+    ]:
+        invalid = {
+            "scenario_group": "Business As Usual",
+            "awd_adoption": "With AWD",
+            "fertilizer_usage": 100.0,
+            "pesticide_usage": 5.0,
+            "water_usage": 600.0,
+        }
+        invalid[field] = value
+        response = client.post("/api/simulate", headers=headers, json=invalid)
+        assert response.status_code == 422
 
 
 @patch("main.get_data_status")

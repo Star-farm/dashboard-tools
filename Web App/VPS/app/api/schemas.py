@@ -33,9 +33,9 @@ class CompareRequest(BaseModel):
 class SimulationRequest(BaseModel):
     scenario_group: ScenarioGroup = "Business As Usual"
     awd_adoption: AwdAdoption
-    fertilizer_usage: float = Field(ge=50.0, le=250.0)
-    pesticide_usage: float = Field(ge=0.5, le=15.0)
-    water_usage: float = Field(ge=100.0, le=1500.0)
+    fertilizer_usage: float = Field(ge=80.0, le=145.0)
+    pesticide_usage: float = Field(ge=4.0, le=7.5)
+    water_usage: float = Field(ge=0.0, le=850.0)
 
 class OptimizationRequest(BaseModel):
     target_methane: float = Field(ge=50.0, le=2000.0)

@@ -24,7 +24,14 @@ MODEL_CACHE_DIR = os.getenv(
     "MODEL_CACHE_DIR", str(Path(tempfile.gettempdir()) / "model_cache")
 )
 GCS_CACHE_BUCKET = os.getenv("GCS_CACHE_BUCKET", "")  # Empty string disables GCS cache, using local-only mode
-MODEL_CACHE_VERSION = "v4_group_validated_financials"
+MODEL_CACHE_VERSION = "v7_direct_net_income_2050"
+DEFAULT_SIMULATION_YEAR = 2050
+AVERAGED_DIMENSIONS = ["Resource Scenario", "Season Type", "Climate Type"]
+SIMULATION_INPUT_LIMITS = {
+    "Fertilizer Usage": (80.0, 145.0),
+    "Pesticide Usage": (4.0, 7.5),
+    "Water Usage": (0.0, 850.0),
+}
 logger = logging.getLogger(__name__)
 
 # Empirical calibration factors from the simulation CSV, not original GAMA constants.
@@ -41,6 +48,10 @@ model_report: dict[str, Any] = {}
 INPUT_FEATURES = [
     "AWD Adoption",
     "Scenario Group",
+    "Year",
+    "Resource Scenario",
+    "Season Type",
+    "Climate Type",
     "Fertilizer Usage",
     "Pesticide Usage",
     "Water Usage",
@@ -50,14 +61,7 @@ PREDICTION_TARGETS = [
     "Avg Yield",
     "Methane Emissions",
     "Revenue",
-    "Straw Value",
-    "Water Reliability",
-    "Biodiversity",
-    "Resilient Varieties",
-    "Labor Intensity",
-    "Flood Stress",
-    "Drought Stress",
-    "Salinity Stress",
+    "Net Income",
 ]
 
 AGG_NUMERIC_COLS = [
@@ -93,7 +97,8 @@ CATEGORICAL_COLS = [
 
 REQUIRED_COLUMNS = sorted(set(
     CATEGORICAL_COLS
-    + INPUT_FEATURES
+    + [feature for feature in INPUT_FEATURES if feature != "Year"]
+    + ["datetime"]
     + [target for target in PREDICTION_TARGETS if target != "Revenue"]
     + AGG_NUMERIC_COLS
 ))
@@ -250,6 +255,13 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
 
     if "datetime" in df.columns:
         df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
+        df["Year"] = df["datetime"].dt.year
+
+    if "Year" not in df.columns or df["Year"].isna().any():
+        return {
+            "status": "error",
+            "message": "The datetime column must contain a valid date for every simulation row.",
+        }
 
     for col in CATEGORICAL_COLS:
         if col in df.columns:
@@ -264,10 +276,8 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
     if cache_path and os.path.exists(cache_path):
         try:
             cached = joblib.load(cache_path)
-            required_models = {
-                "Avg Yield", "Methane Emissions", "Revenue", "Labor Intensity"
-            }
-            if not required_models.issubset(cached.get("models", {})):
+            required_models = set(PREDICTION_TARGETS)
+            if set(cached.get("models", {})) != required_models:
                 raise ValueError("cache is missing required hybrid models")
             data = df
             models = cached["models"]
@@ -293,10 +303,8 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
     if cache_path and cache_key and _try_download_cache_from_gcs(cache_key, cache_path):
         try:
             cached = joblib.load(cache_path)
-            required_models = {
-                "Avg Yield", "Methane Emissions", "Revenue", "Labor Intensity"
-            }
-            if not required_models.issubset(cached.get("models", {})):
+            required_models = set(PREDICTION_TARGETS)
+            if set(cached.get("models", {})) != required_models:
                 raise ValueError("cache is missing required hybrid models")
             data = df
             models = cached["models"]
@@ -329,7 +337,23 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
     df["ScenarioGroup_encoded"] = le_scenario.fit_transform(df["Scenario Group"])
     new_label_encoders["Scenario Group"] = le_scenario
 
-    X_all = df[["AWD_encoded", "ScenarioGroup_encoded", "Fertilizer Usage", "Pesticide Usage", "Water Usage"]]
+    encoded_dimension_columns = []
+    for dimension in AVERAGED_DIMENSIONS:
+        encoder = LabelEncoder()
+        encoded_col = f"{dimension}_encoded"
+        df[encoded_col] = encoder.fit_transform(df[dimension])
+        new_label_encoders[dimension] = encoder
+        encoded_dimension_columns.append(encoded_col)
+
+    X_all = df[[
+        "AWD_encoded",
+        "ScenarioGroup_encoded",
+        "Year",
+        *encoded_dimension_columns,
+        "Fertilizer Usage",
+        "Pesticide Usage",
+        "Water Usage",
+    ]]
 
     new_models = {}
     model_report = metadata(MODEL_CACHE_VERSION, cache_key, len(df))
@@ -415,7 +439,10 @@ def validate_csv_schema(df: pd.DataFrame) -> tuple[bool, list[str]]:
     if missing:
         errors.append(f"Missing {len(missing)} required columns: {missing}")
 
-    numeric_cols = [c for c in REQUIRED_COLUMNS if c not in CATEGORICAL_COLS]
+    numeric_cols = [
+        c for c in REQUIRED_COLUMNS
+        if c not in CATEGORICAL_COLS and c != "datetime"
+    ]
     for col in numeric_cols:
         if col not in df.columns:
             continue
@@ -427,6 +454,13 @@ def validate_csv_schema(df: pd.DataFrame) -> tuple[bool, list[str]]:
     for col in CATEGORICAL_COLS:
         if col in df.columns and df[col].dropna().astype(str).str.strip().eq("").all():
             errors.append(f"Column '{col}' does not contain any valid entries.")
+
+    if "datetime" in df.columns:
+        invalid_dates = pd.to_datetime(df["datetime"], errors="coerce").isna()
+        if invalid_dates.any():
+            errors.append(
+                f"Column 'datetime' contains {int(invalid_dates.sum())} invalid date values."
+            )
 
     if "AWD Adoption" in df.columns:
         vals = set(df["AWD Adoption"].dropna().astype(str).str.strip().unique())
@@ -570,29 +604,72 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
     """
     _require_data()
 
-    awd_strings      = [c[0] for c in combos]
-    scenario_strings = [c[1] for c in combos]
+    for combo in combos:
+        for label, value in zip(
+            SIMULATION_INPUT_LIMITS,
+            (combo[2], combo[3], combo[4]),
+        ):
+            lower, upper = SIMULATION_INPUT_LIMITS[label]
+            if not lower <= float(value) <= upper:
+                raise ValueError(
+                    f"{label} must be between {lower} and {upper}. Received {value}."
+                )
 
-    try:
-        awd_encoded = label_encoders["AWD Adoption"].transform(awd_strings)
-    except Exception:
-        awd_encoded = np.array([1 if a == "With AWD" else 0 for a in awd_strings])
+    assert data is not None
 
-    try:
-        scenario_encoded = label_encoders["Scenario Group"].transform(scenario_strings)
-    except Exception:
-        known = list(label_encoders["Scenario Group"].classes_) if "Scenario Group" in label_encoders else []
-        scenario_encoded = np.array([
-            label_encoders["Scenario Group"].transform([s])[0] if s in known else 0
-            for s in scenario_strings
-        ])
+    def encode(column: str, values: list[str]) -> np.ndarray:
+        encoder = label_encoders.get(column)
+        if encoder is not None:
+            known = set(encoder.classes_)
+            return np.array([
+                encoder.transform([value])[0] if value in known else 0
+                for value in values
+            ])
+        classes = sorted(data[column].dropna().astype(str).unique())
+        mapping = {value: index for index, value in enumerate(classes)}
+        return np.array([mapping.get(value, 0) for value in values])
+
+    available = data[
+        (data["Year"] == DEFAULT_SIMULATION_YEAR)
+        & data["Scenario Group"].isin([combo[1] for combo in combos])
+    ]
+    valid_by_scenario = {
+        scenario: group[AVERAGED_DIMENSIONS].drop_duplicates().to_dict(orient="records")
+        for scenario, group in available.groupby("Scenario Group")
+    }
+
+    expanded: list[tuple[int, tuple, dict[str, str]]] = []
+    for combo_index, combo in enumerate(combos):
+        dimension_combos = valid_by_scenario.get(combo[1], [])
+        if not dimension_combos:
+            raise ValueError(
+                f"No valid Resource Scenario, Season Type, and Climate Type combinations "
+                f"exist for '{combo[1]}' in {DEFAULT_SIMULATION_YEAR}."
+            )
+        expanded.extend(
+            (combo_index, combo, dimension_combo)
+            for dimension_combo in dimension_combos
+        )
+
+    awd_strings = [item[1][0] for item in expanded]
+    scenario_strings = [item[1][1] for item in expanded]
 
     raw = {
-        "AWD_encoded":            awd_encoded,
-        "ScenarioGroup_encoded":  scenario_encoded,
-        "Fertilizer Usage":       [c[2] for c in combos],
-        "Pesticide Usage":        [c[3] for c in combos],
-        "Water Usage":            [c[4] for c in combos],
+        "AWD_encoded": encode("AWD Adoption", awd_strings),
+        "ScenarioGroup_encoded": encode("Scenario Group", scenario_strings),
+        "Year": [DEFAULT_SIMULATION_YEAR] * len(expanded),
+        "Resource Scenario_encoded": encode(
+            "Resource Scenario", [item[2]["Resource Scenario"] for item in expanded]
+        ),
+        "Season Type_encoded": encode(
+            "Season Type", [item[2]["Season Type"] for item in expanded]
+        ),
+        "Climate Type_encoded": encode(
+            "Climate Type", [item[2]["Climate Type"] for item in expanded]
+        ),
+        "Fertilizer Usage": [item[1][2] for item in expanded],
+        "Pesticide Usage": [item[1][3] for item in expanded],
+        "Water Usage": [item[1][4] for item in expanded],
     }
 
     first_model = next(iter(models.values()))
@@ -605,18 +682,15 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
 
     result_df = pd.DataFrame(results)
 
-    for index, combo in enumerate(combos):
-        _, scenario_group, fertilizer, pesticide, water = combo
-        financials = _calculate_financial_metrics(
-            scenario_group=scenario_group,
-            fertilizer_usage=fertilizer,
-            pesticide_usage=pesticide,
-            water_usage=water,
-            labor_intensity=result_df.at[index, "Labor Intensity"],
-            revenue=result_df.at[index, "Revenue"],
+    for index, _ in enumerate(expanded):
+        revenue = float(result_df.at[index, "Revenue"])
+        net_income = float(result_df.at[index, "Net Income"])
+        if not np.isfinite(revenue) or not np.isfinite(net_income):
+            raise ValueError("Simulation produced a non-finite Revenue or Net Income value.")
+        result_df.at[index, "Production Cost"] = float(max(0.0, revenue - net_income))
+        result_df.at[index, "Profit Margin"] = float(
+            net_income / max(1.0, revenue) * 100.0
         )
-        for metric, value in financials.items():
-            result_df.at[index, metric] = float(value)
 
         avg_yield = max(0.0, _finite_float(result_df.at[index, "Avg Yield"]))
         methane = max(0.0, _finite_float(result_df.at[index, "Methane Emissions"]))
@@ -626,8 +700,13 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
             methane / max(1.0, avg_yield * 1000.0)
         )
 
+    result_df["_combo_index"] = [item[0] for item in expanded]
     result_df.drop(columns=["Revenue"], errors="ignore", inplace=True)
-    return result_df.to_dict(orient="records")
+    return (
+        result_df.groupby("_combo_index", sort=True)
+        .mean(numeric_only=True)
+        .to_dict(orient="records")
+    )
 
 
 def _score_batch(preds: list[dict], target_methane: float) -> np.ndarray:

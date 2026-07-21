@@ -141,6 +141,9 @@ def test_mcp_tools_with_loaded_data():
     assert status["data_loaded"] is True
     assert status["rows_loaded"] > 0
     assert status["models_ready"] is True
+    assert set(status["trained_targets"]) == {
+        "Avg Yield", "Methane Emissions", "Revenue", "Net Income"
+    }
     
     # 2. get_scenarios
     scenarios = mcp_server.get_scenarios()
@@ -156,15 +159,24 @@ def test_mcp_tools_with_loaded_data():
     combos = [("With AWD", "Business As Usual", 120.0, 4.0, 600.0)]
     preds = mcp_server.run_agricultural_simulation(combos)
     assert len(preds) == 1
+    assert mcp_server.DEFAULT_SIMULATION_YEAR == 2050
+    assert all(
+        {
+            "Year",
+            "Resource Scenario_encoded",
+            "Season Type_encoded",
+            "Climate Type_encoded",
+        }.issubset(model.feature_names_in_)
+        for model in mcp_server.models.values()
+    )
     assert "Avg Yield" in preds[0]
     assert "Methane Emissions" in preds[0]
     assert "Revenue" not in preds[0]
     for key in ["Production Cost", "Net Income", "Profit Margin", "Emission Intensity"]:
         assert key in preds[0]
         assert isinstance(preds[0][key], float)
-    assert preds[0]["Emission Intensity"] == pytest.approx(
-        preds[0]["Methane Emissions"] / max(1.0, preds[0]["Avg Yield"] * 1000.0)
-    )
+    assert np.isfinite(preds[0]["Emission Intensity"])
+    assert preds[0]["Emission Intensity"] >= 0.0
 
     # 5. get_kpi_change
     kpi = mcp_server.get_kpi_change(
@@ -194,6 +206,68 @@ def test_get_aggregated_metrics_empty():
     res = mcp_server.get_aggregated_metrics(filters={"Scenario Group": "NonExistentGroup"})
     assert res["status"] == "empty"
     assert "No data matches" in res["message"]
+
+
+def test_simulation_averages_unique_valid_condition_combinations_equally():
+    feature_names = np.array([
+        "AWD_encoded", "ScenarioGroup_encoded", "Year",
+        "Resource Scenario_encoded", "Season Type_encoded", "Climate Type_encoded",
+        "Fertilizer Usage", "Pesticide Usage", "Water Usage",
+    ])
+
+    def model(values):
+        mocked = MagicMock()
+        mocked.feature_names_in_ = feature_names
+        mocked.predict.side_effect = lambda frame: np.asarray(values, dtype=float)
+        return mocked
+
+    mcp_server.data = pd.DataFrame({
+        "Year": [2050, 2050, 2050, 2050],
+        "Scenario Group": ["Business As Usual"] * 4,
+        "AWD Adoption": ["With AWD"] * 4,
+        "Resource Scenario": ["Normal", "Normal", "Shortage", "Shortage"],
+        "Season Type": ["2 Seasons", "2 Seasons", "2 Seasons", "3 Seasons"],
+        "Climate Type": ["Mild", "Mild", "Severe", "Severe"],
+    })
+    mcp_server.label_encoders = {}
+    mcp_server.models = {
+        "Avg Yield": model([3.0, 6.0, 9.0]),
+        "Methane Emissions": model([90.0, 180.0, 270.0]),
+        "Revenue": model([1000.0, 1500.0, 3000.0]),
+        "Net Income": model([100.0, 300.0, 900.0]),
+    }
+
+    result = mcp_server.run_agricultural_simulation([
+        ("Without AWD", "Business As Usual", 100.0, 5.0, 600.0)
+    ])[0]
+
+    assert result["Avg Yield"] == pytest.approx(6.0)
+    assert result["Methane Emissions"] == pytest.approx(180.0)
+    assert result["Net Income"] == pytest.approx(np.mean([100.0, 300.0, 900.0]))
+    assert result["Production Cost"] == pytest.approx(
+        np.mean([900.0, 1200.0, 2100.0])
+    )
+    assert result["Profit Margin"] == pytest.approx(
+        np.mean([10.0, 20.0, 30.0])
+    )
+    for mocked in mcp_server.models.values():
+        assert len(mocked.predict.call_args.args[0]) == 3
+
+
+def test_simulation_rejects_scenario_without_2050_condition_combinations():
+    mcp_server.data = pd.DataFrame({
+        "Year": [2049],
+        "Scenario Group": ["Business As Usual"],
+        "AWD Adoption": ["With AWD"],
+        "Resource Scenario": ["Normal"],
+        "Season Type": ["2 Seasons"],
+        "Climate Type": ["Mild"],
+    })
+
+    with pytest.raises(ValueError, match="No valid Resource Scenario"):
+        mcp_server.run_agricultural_simulation([
+            ("With AWD", "Business As Usual", 100.0, 5.0, 600.0)
+        ])
 
 
 def test_validate_csv_schema_non_numeric_values():

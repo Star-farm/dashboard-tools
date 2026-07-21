@@ -30,6 +30,12 @@ export const SCENARIO_COLORS: Record<string, string> = {
 
 export const SCENARIO_KEYS = ['Business As Usual', 'One Million Hectare Rice', 'Simulation'] as const;
 
+export const SIMULATION_INPUT_LIMITS = {
+    fertilizer_usage: { min: 80, max: 145, step: 5 },
+    pesticide_usage: { min: 4, max: 7.5, step: 0.5 },
+    water_usage: { min: 0, max: 850, step: 25 },
+} as const;
+
 const ALL_METRICS = ['Avg Yield', 'Net Income', 'Methane Emissions', 'Emission Intensity'];
 
 export const KPI_CARDS_CONFIG: { key: string; unit: string; lowerIsBetter?: boolean }[] = [

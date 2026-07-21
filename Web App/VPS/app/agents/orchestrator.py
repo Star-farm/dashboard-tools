@@ -196,9 +196,9 @@ def _classify(task: str) -> TaskType:
 class ModelingAgent(Agent):
     AWD_OPTIONS      = ["With AWD", "Without AWD"]
     SCENARIO_OPTIONS = ["Business As Usual", "One Million Hectare Rice"]
-    FERT_GRID        = [50.0, 75.0, 100.0, 125.0, 150.0, 175.0, 200.0, 225.0, 250.0]
-    WATER_GRID       = [200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1100.0, 1200.0]
-    PEST_GRID        = [1.0, 3.0, 5.0, 7.0, 10.0, 13.0, 15.0]
+    FERT_GRID        = [float(value) for value in range(80, 146, 5)]
+    WATER_GRID       = [float(value) for value in range(0, 851, 25)]
+    PEST_GRID        = [4.0 + 0.5 * value for value in range(8)]
 
     def __init__(self):
         super().__init__(

@@ -1,6 +1,6 @@
 # Frontend
 
-React and TypeScript dashboard for KPI summaries, comparison charts, and simulation results. Production is designed for Vercel with a serverless proxy that protects the backend API key.
+React and TypeScript dashboard for KPI summaries, comparison charts, and simulation results. Simulation bars render backend-provided P90 prediction intervals in a distinct color. Production is designed for Vercel with a serverless proxy that protects the backend API key.
 
 ## Technology
 
@@ -96,6 +96,8 @@ tests/unit/                Hook and utility unit tests
 | Simulation | `POST /api/simulate` |
 
 A new route must be deliberately added to the proxy allowlist and covered by tests. Otherwise, the proxy returns `404`.
+
+The meaning and calculation of the simulated values and P90 ranges are documented in [Model Documentation](../MODEL.md).
 
 ## Testing and Building
 

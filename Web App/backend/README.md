@@ -5,8 +5,9 @@ FastAPI backend designed for Google Cloud Run. Runtime implementation lives unde
 ## Technology and Model
 
 - FastAPI, Uvicorn, and Pydantic.
-- Random Forest for KPIs predicted from simulation data.
-- STAR-FARM formulas for financial metrics and emission intensity.
+- Separate Random Forest regressors for average yield, methane emissions, revenue, and production cost.
+- Derived formulas for net income, profit margin, and emission intensity.
+- Group-aware validation and residual-based P90 prediction intervals.
 - Local or Google Cloud Storage model cache.
 - API-key authentication, CORS allowlist, rate limiting, and request-body limiting.
 
@@ -101,6 +102,8 @@ Never commit `.env`, GCP credentials, or model-cache files.
 ## Model Cache
 
 The cache is versioned and automatically invalidated when model logic changes. Set `GCS_CACHE_BUCKET` to reuse models between Cloud Run instances; otherwise, `/tmp` storage is ephemeral.
+
+The complete feature list, prediction flow, formulas, aggregation behavior, and P90 calculation are documented in [Model Documentation](../MODEL.md).
 
 ## Testing and Auditing
 

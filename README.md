@@ -24,6 +24,7 @@ Service-specific documentation:
 - [Backend Service](./Web%20App/backend/README.md)
 - [VPS Service](./Web%20App/VPS/README.md)
 - [Frontend](./Web%20App/frontend/README.md)
+- [Model formulas and prediction flow](./Web%20App/MODEL.md)
 
 ## Production Architecture
 

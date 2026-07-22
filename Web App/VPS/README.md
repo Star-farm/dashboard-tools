@@ -102,6 +102,10 @@ Main routes:
 - The default CSV is `data/Simulation_Data.csv` and is copied into the image.
 - `model_cache` is mounted as a volume so it survives container recreation.
 - The cache version in the source code separates stale models after model-logic changes.
+- Model v12 predicts average yield, methane emissions, revenue, and production cost; financial and emission ratios are derived afterward.
+- Simulation outputs include validation-based P90 intervals.
+
+See [Model Documentation](../MODEL.md) for the complete input schema, formulas, context aggregation, evaluation, and interval calculation.
 
 ## Testing
 

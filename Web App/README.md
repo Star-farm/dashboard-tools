@@ -18,8 +18,10 @@ An agricultural dashboard that simulates how farming scenarios affect yield, emi
 Browser -> /api/proxy/* -> Backend API -> Agent -> Hybrid model -> JSON
 ```
 
-- Random Forest predicts KPIs such as yield, methane emissions, and labor intensity.
-- STAR-FARM formulas calculate production cost, net income, profit margin, and emission intensity.
+- Random Forest models predict average yield, methane emissions, revenue, and production cost.
+- Net income, profit margin, and emission intensity are derived from those predictions.
+- Simulation outputs use 2050 data and average equally across the unique valid resource, season, and climate combinations for the selected scenario.
+- Validation residuals provide P90 prediction intervals for the simulation chart.
 - The dashboard's default KPI comparison is 2022 to 2050.
 
 ## Local Development
@@ -95,6 +97,7 @@ The backend requires `API_KEYS`. See each service README for the complete config
 ## Detailed Documentation
 
 - [Repository structure](./STRUCTURE.md)
+- [Model inputs, formulas, evaluation, and P90 intervals](./MODEL.md)
 - [Backend/Cloud Run](./backend/README.md)
 - [Backend/VPS](./VPS/README.md)
 - [Frontend/Vercel](./frontend/README.md)

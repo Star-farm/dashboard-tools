@@ -30,6 +30,10 @@ const mockSimulate = {
         'Methane Emissions': 350.0,
         'Profit Margin': 38.0,
         'Net Income': 1700.0
+    },
+    prediction_intervals: {
+        'Avg Yield': { lower: 4.8, upper: 5.2, level: 0.9 },
+        'Net Income': { lower: 1500.0, upper: 1900.0, level: 0.9 }
     }
 };
 
@@ -65,6 +69,11 @@ describe('useDashboardData Custom Hook', () => {
         expect(result.current.scenariosInfo).toEqual(mockScenarios);
         expect(result.current.kpiChange).toEqual(mockKpiChange);
         expect(result.current.simResults).toEqual(mockSimulate);
+        const yieldError = result.current.economicChart.data[0]['Simulation_left_error'] as number[];
+        expect(yieldError[0]).toBeCloseTo(0.2);
+        expect(yieldError[1]).toBeCloseTo(0.2);
+        expect(result.current.economicChart.data[1]['Simulation_right_error']).toEqual([200, 200]);
+        expect(result.current.economicChart.leftDomain[1]).toBeGreaterThanOrEqual(5.2);
     });
 
     it('should generate the correct dynamic key message based on negative KPI shifts', async () => {

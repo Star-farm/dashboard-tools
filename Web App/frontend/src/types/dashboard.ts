@@ -53,4 +53,9 @@ export interface SimulationResult {
         'Profit Margin': number;
         'Net Income': number;
     };
+    prediction_intervals?: Partial<Record<keyof SimulationResult['predictions'], {
+        lower: number;
+        upper: number;
+        level: number;
+    }>>;
 }

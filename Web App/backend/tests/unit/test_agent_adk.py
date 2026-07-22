@@ -62,6 +62,7 @@ def test_modeling_agent():
     assert "inputs" in res_simulate
     assert res_simulate["inputs"]["AWD Adoption"] == "With AWD"
     assert "predictions" in res_simulate
+    assert "prediction_intervals" in res_simulate
     assert "Avg Yield" in res_simulate["predictions"]
 
     # Test OPTIMIZE task

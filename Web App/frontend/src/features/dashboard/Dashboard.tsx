@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-    ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LabelList
+    ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LabelList, ErrorBar
 } from 'recharts';
 import { ReferenceLine } from 'recharts';
 import {
     useDashboardData, USD_TO_VND, SCENARIO_COLORS, SCENARIO_KEYS,
-    SIMULATION_INPUT_LIMITS,
+    SIMULATION_INPUT_LIMITS, PREDICTION_INTERVAL_COLOR,
 } from '../../hooks/useDashboardData';
 
 export const detectBrowserLang = (nav = typeof navigator !== 'undefined' ? navigator : null): 'vi' | 'en' => {
@@ -145,7 +145,13 @@ export function Dashboard() {
                                             const nameStr = String(name ?? '');
                                             const dataKey = String(item?.dataKey ?? '');
                                             const unit = dataKey.endsWith('_right') ? chart.right.unit : chart.left.unit;
-                                            return [`${numValue.toLocaleString()}${unit ? ` ${unit}` : ''}`, nameStr];
+                                            const lower = item?.payload?.[`${dataKey}_lower`];
+                                            const upper = item?.payload?.[`${dataKey}_upper`];
+                                            const level = item?.payload?.[`${dataKey}_level`];
+                                            const range = Number.isFinite(Number(lower)) && Number.isFinite(Number(upper))
+                                                ? ` (${Math.round(Number(level) * 100)}%: ${Number(lower).toLocaleString()}–${Number(upper).toLocaleString()}${unit ? ` ${unit}` : ''})`
+                                                : '';
+                                            return [`${numValue.toLocaleString()}${unit ? ` ${unit}` : ''}${range}`, nameStr];
                                         }}
                                     />
                                     <Legend wrapperStyle={{ fontSize: isMobile ? '11px' : '13px', paddingTop: isMobile ? 8 : 0 }} />
@@ -159,6 +165,15 @@ export function Dashboard() {
                                                 radius={[4, 4, 0, 0]}
                                                 stackId={scenario}
                                             >
+                                                {scenario === 'Simulation' && (
+                                                    <ErrorBar
+                                                        dataKey="Simulation_left_error"
+                                                        direction="y"
+                                                        width={8}
+                                                        stroke={PREDICTION_INTERVAL_COLOR}
+                                                        strokeWidth={2}
+                                                    />
+                                                )}
                                                 <LabelList dataKey={`${scenario}_left`} position="top" fill={SCENARIO_COLORS[scenario]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }}
                                                     formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
                                             </Bar>
@@ -172,6 +187,15 @@ export function Dashboard() {
                                                 isAnimationActive={false}
                                                 stackId={scenario}
                                             >
+                                                {scenario === 'Simulation' && (
+                                                    <ErrorBar
+                                                        dataKey="Simulation_right_error"
+                                                        direction="y"
+                                                        width={8}
+                                                        stroke={PREDICTION_INTERVAL_COLOR}
+                                                        strokeWidth={2}
+                                                    />
+                                                )}
                                                 <LabelList dataKey={`${scenario}_right`} position="top" fill={SCENARIO_COLORS[scenario]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }}
                                                     formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
                                             </Bar>

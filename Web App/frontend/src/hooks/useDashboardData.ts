@@ -28,6 +28,8 @@ export const SCENARIO_COLORS: Record<string, string> = {
     'Simulation': '#3b82f6',               // blue
 };
 
+export const PREDICTION_INTERVAL_COLOR = '#f59e0b'; // amber, distinct from the blue simulation bar
+
 export const SCENARIO_KEYS = ['Business As Usual', 'One Million Hectare Rice', 'Simulation'] as const;
 
 export const SIMULATION_INPUT_LIMITS = {
@@ -83,7 +85,7 @@ const niceStep = (rawStep: number): number => {
 
 // Compute domain/ticks based on MULTIPLE dataKeys at the same time (3 scenarios for the same axis).
 const computeDomainAndTicksMulti = (
-    data: Record<string, string | number | null>[],
+    data: Record<string, unknown>[],
     keys: string[]
 ): { domain: [number, number]; ticks: number[] } => {
     let minVal = 0;
@@ -259,8 +261,8 @@ export function useDashboardData(lang: 'vi' | 'en') {
         const convertRight = (val: number) =>
             isVnd ? Math.round(val * USD_TO_VND / 1000000) : parseFloat(val.toFixed(2));
 
-        const leftRow: Record<string, string | number | null> = { indicator: left.key };
-        const rightRow: Record<string, string | number | null> = { indicator: right.key };
+        const leftRow: Record<string, unknown> = { indicator: left.key };
+        const rightRow: Record<string, unknown> = { indicator: right.key };
 
         SCENARIO_KEYS.forEach(s => {
             leftRow[`${s}_left`] = null;
@@ -277,22 +279,47 @@ export function useDashboardData(lang: 'vi' | 'en') {
             }
         });
         if (simResults && simResults.predictions) {
-            leftRow['Simulation_left'] = parseFloat(
-                (simResults.predictions[left.key as keyof typeof simResults.predictions] ?? 0).toFixed(2)
-            );
-            rightRow['Simulation_right'] = convertRight(
-                Number(simResults.predictions[right.key as keyof typeof simResults.predictions] ?? 0)
-            );
+            const leftPrediction = Number(simResults.predictions[left.key as keyof typeof simResults.predictions] ?? 0);
+            const rightPrediction = Number(simResults.predictions[right.key as keyof typeof simResults.predictions] ?? 0);
+            leftRow['Simulation_left'] = parseFloat(leftPrediction.toFixed(2));
+            rightRow['Simulation_right'] = convertRight(rightPrediction);
+
+            const leftInterval = simResults.prediction_intervals?.[left.key as keyof typeof simResults.predictions];
+            if (leftInterval) {
+                const lower = parseFloat(leftInterval.lower.toFixed(2));
+                const upper = parseFloat(leftInterval.upper.toFixed(2));
+                leftRow['Simulation_left_lower'] = lower;
+                leftRow['Simulation_left_upper'] = upper;
+                leftRow['Simulation_left_level'] = leftInterval.level;
+                leftRow['Simulation_left_error'] = [
+                    Math.max(0, leftPrediction - leftInterval.lower),
+                    Math.max(0, leftInterval.upper - leftPrediction),
+                ];
+            }
+
+            const rightInterval = simResults.prediction_intervals?.[right.key as keyof typeof simResults.predictions];
+            if (rightInterval) {
+                const lower = convertRight(rightInterval.lower);
+                const upper = convertRight(rightInterval.upper);
+                const displayedPrediction = convertRight(rightPrediction);
+                rightRow['Simulation_right_lower'] = lower;
+                rightRow['Simulation_right_upper'] = upper;
+                rightRow['Simulation_right_level'] = rightInterval.level;
+                rightRow['Simulation_right_error'] = [
+                    Math.max(0, displayedPrediction - lower),
+                    Math.max(0, upper - displayedPrediction),
+                ];
+            }
         }
         const data = [leftRow, rightRow];
 
         const { domain: leftDomain, ticks: leftTicks } = computeDomainAndTicksMulti(
             data,
-            SCENARIO_KEYS.map(s => `${s}_left`)
+            [...SCENARIO_KEYS.map(s => `${s}_left`), 'Simulation_left_lower', 'Simulation_left_upper']
         );
         const { domain: rightDomain, ticks: rightTicks } = computeDomainAndTicksMulti(
             data,
-            SCENARIO_KEYS.map(s => `${s}_right`)
+            [...SCENARIO_KEYS.map(s => `${s}_right`), 'Simulation_right_lower', 'Simulation_right_upper']
         );
 
         return { data, left, right, leftDomain, leftTicks, rightDomain, rightTicks };

@@ -32,8 +32,13 @@ def evaluate(model, X, y, groups):
     train, test = next(GroupShuffleSplit(n_splits=1, test_size=.2, random_state=42).split(X, y, groups))
     candidate = clone(model).fit(X.iloc[train], y.iloc[train])
     predicted = candidate.predict(X.iloc[test])
+    absolute_errors = np.abs(np.asarray(y.iloc[test], dtype=float) - predicted)
+    # The "higher" method keeps the reported 90% validation range conservative
+    # instead of interpolating between two observed residuals.
+    interval_error = float(np.quantile(absolute_errors, .90, method="higher"))
     result = {"r2": float(r2_score(y.iloc[test], predicted)), "mae": float(mean_absolute_error(y.iloc[test], predicted)),
-              "rmse": float(mean_squared_error(y.iloc[test], predicted) ** .5)}
+              "rmse": float(mean_squared_error(y.iloc[test], predicted) ** .5),
+              "prediction_interval": {"level": .90, "absolute_error": interval_error}}
     scores = []
     folds = min(5, int(groups.nunique()))
     if folds >= 2:

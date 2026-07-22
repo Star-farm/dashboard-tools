@@ -8,6 +8,9 @@ import numpy as np
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.base import clone
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import GroupShuffleSplit
 from sklearn.preprocessing import LabelEncoder
 from app.ml.evaluation import build_groups, evaluate, gate_passed, metadata, profile_target
 
@@ -18,7 +21,7 @@ mcp = FastMCP("AI Agents Agricultural Modeling")
 # VPS Config
 DEFAULT_CSV_PATH = os.getenv("DEFAULT_CSV_PATH", "/app/data/Simulation_Data.csv")
 MODEL_CACHE_DIR = os.getenv("MODEL_CACHE_DIR", "/app/model_cache") 
-MODEL_CACHE_VERSION = "v7_direct_net_income_2050"
+MODEL_CACHE_VERSION = "v11_derived_financials_p90_2050"
 DEFAULT_SIMULATION_YEAR = 2050
 AVERAGED_DIMENSIONS = ["Resource Scenario", "Season Type", "Climate Type"]
 SIMULATION_INPUT_LIMITS = {
@@ -54,7 +57,7 @@ PREDICTION_TARGETS = [
     "Avg Yield",
     "Methane Emissions",
     "Revenue",
-    "Net Income",
+    "Labor Intensity",
 ]
 
 AGG_NUMERIC_COLS = [
@@ -160,6 +163,42 @@ def _calculate_financial_metrics(
         "Net Income": float(net_income),
         "Profit Margin": float(profit_margin),
     }
+
+
+def _evaluate_derived_financials(
+    df: pd.DataFrame, X: pd.DataFrame,
+    fitted_models: dict[str, RandomForestRegressor],
+) -> dict[str, Any]:
+    """Evaluate formula-derived financial metrics on a group-aware holdout."""
+    groups = build_groups(df)
+    if groups.nunique() < 2:
+        return {}
+    train, test = next(GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42).split(X, groups=groups))
+    revenue_predictions = clone(fitted_models["Revenue"]).fit(X.iloc[train], df["Revenue"].iloc[train]).predict(X.iloc[test])
+    labor_predictions = clone(fitted_models["Labor Intensity"]).fit(X.iloc[train], df["Labor Intensity"].iloc[train]).predict(X.iloc[test])
+    predicted = {"Production Cost": [], "Net Income": [], "Profit Margin": []}
+    holdout = df.iloc[test]
+    for row, revenue, labor in zip(holdout.to_dict(orient="records"), revenue_predictions, labor_predictions):
+        financials = _calculate_financial_metrics(
+            scenario_group=row["Scenario Group"], fertilizer_usage=row["Fertilizer Usage"],
+            pesticide_usage=row["Pesticide Usage"], water_usage=row["Water Usage"],
+            labor_intensity=labor, revenue=revenue,
+        )
+        for metric in predicted:
+            predicted[metric].append(financials[metric])
+    report = {}
+    for metric, values in predicted.items():
+        actual = holdout[metric].to_numpy(dtype=float)
+        values_array = np.asarray(values, dtype=float)
+        absolute_errors = np.abs(actual - values_array)
+        report[metric] = {"metrics": {
+            "r2": float(r2_score(actual, values_array)),
+            "mae": float(mean_absolute_error(actual, values_array)),
+            "rmse": float(mean_squared_error(actual, values_array) ** 0.5),
+            "bias": float(np.mean(values_array - actual)),
+            "prediction_interval": {"level": 0.90, "absolute_error": float(np.quantile(absolute_errors, 0.90, method="higher"))},
+        }, "profile": profile_target(holdout[metric])}
+    return report
 
 
 def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str, Any]:
@@ -277,6 +316,9 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
             "message": "Failed to train any regression models due to insufficient row data per target column.",
             "skipped": skipped,
         }
+
+    if {"Revenue", "Labor Intensity"}.issubset(new_models):
+        model_report["derived_targets"] = _evaluate_derived_financials(df, X_all, new_models)
 
     data = df
     models = new_models
@@ -548,15 +590,22 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
 
     result_df = pd.DataFrame(results)
 
-    for index, _ in enumerate(expanded):
+    for index, (_, combo, _) in enumerate(expanded):
+        _, scenario_group, fertilizer, pesticide, water = combo
         revenue = float(result_df.at[index, "Revenue"])
-        net_income = float(result_df.at[index, "Net Income"])
-        if not np.isfinite(revenue) or not np.isfinite(net_income):
-            raise ValueError("Simulation produced a non-finite Revenue or Net Income value.")
-        result_df.at[index, "Production Cost"] = float(max(0.0, revenue - net_income))
-        result_df.at[index, "Profit Margin"] = float(
-            net_income / max(1.0, revenue) * 100.0
+        labor = float(result_df.at[index, "Labor Intensity"])
+        if not np.isfinite(revenue) or not np.isfinite(labor):
+            raise ValueError("Simulation produced a non-finite Revenue or Labor Intensity value.")
+        financials = _calculate_financial_metrics(
+            scenario_group=scenario_group,
+            fertilizer_usage=fertilizer,
+            pesticide_usage=pesticide,
+            water_usage=water,
+            labor_intensity=labor,
+            revenue=revenue,
         )
+        for metric, value in financials.items():
+            result_df.at[index, metric] = float(value)
 
         avg_yield = max(0.0, _finite_float(result_df.at[index, "Avg Yield"]))
         methane = max(0.0, _finite_float(result_df.at[index, "Methane Emissions"]))
@@ -573,6 +622,99 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
         .mean(numeric_only=True)
         .to_dict(orient="records")
     )
+
+
+def get_prediction_intervals(
+    prediction: dict[str, float],
+    *,
+    scenario_group: str,
+    fertilizer_usage: float,
+    pesticide_usage: float,
+    water_usage: float,
+) -> dict[str, dict[str, float]]:
+    """Build validation-based P90 ranges, including formula-derived financials."""
+    intervals: dict[str, dict[str, float]] = {}
+
+    def target_interval(target: str, value: float, *, non_negative: bool = False):
+        details = model_report.get("targets", {}).get(target, {})
+        config = details.get("metrics", {}).get("prediction_interval", {})
+        error = config.get("absolute_error")
+        level = config.get("level")
+        if error is None or level is None:
+            return None
+        lower = float(value) - float(error)
+        upper = float(value) + float(error)
+        if non_negative:
+            lower = max(0.0, lower)
+        return {"lower": float(lower), "upper": float(upper), "level": float(level)}
+
+    def derived_interval(target: str, value: float, *, non_negative: bool = False):
+        details = model_report.get("derived_targets", {}).get(target, {})
+        config = details.get("metrics", {}).get("prediction_interval", {})
+        error = config.get("absolute_error")
+        level = config.get("level")
+        if error is None or level is None:
+            return None
+        lower = float(value) - float(error)
+        if non_negative:
+            lower = max(0.0, lower)
+        return {"lower": lower, "upper": float(value) + float(error), "level": float(level)}
+
+    for target, non_negative in (("Avg Yield", True), ("Methane Emissions", True)):
+        if target in prediction:
+            interval = target_interval(target, prediction[target], non_negative=non_negative)
+            if interval:
+                intervals[target] = interval
+
+    revenue = float(prediction.get("Net Income", 0.0) + prediction.get("Production Cost", 0.0))
+    revenue_interval = target_interval("Revenue", revenue, non_negative=True)
+    labor = float(prediction.get("Labor Intensity", 0.0))
+    labor_interval = target_interval("Labor Intensity", labor, non_negative=True)
+    if revenue_interval and labor_interval:
+        cost_at_low_labor = _calculate_financial_metrics(
+            scenario_group=scenario_group,
+            fertilizer_usage=fertilizer_usage,
+            pesticide_usage=pesticide_usage,
+            water_usage=water_usage,
+            labor_intensity=labor_interval["lower"],
+            revenue=revenue,
+        )["Production Cost"]
+        cost_at_high_labor = _calculate_financial_metrics(
+            scenario_group=scenario_group,
+            fertilizer_usage=fertilizer_usage,
+            pesticide_usage=pesticide_usage,
+            water_usage=water_usage,
+            labor_intensity=labor_interval["upper"],
+            revenue=revenue,
+        )["Production Cost"]
+        level = min(revenue_interval["level"], labor_interval["level"])
+        intervals["Production Cost"] = {"lower": float(cost_at_low_labor), "upper": float(cost_at_high_labor), "level": level}
+        net_interval = {"lower": float(revenue_interval["lower"] - cost_at_high_labor), "upper": float(revenue_interval["upper"] - cost_at_low_labor), "level": level}
+        intervals["Net Income"] = net_interval
+        revenue_lower = max(1.0, revenue_interval["lower"])
+        revenue_upper = max(1.0, revenue_interval["upper"])
+        intervals["Profit Margin"] = {
+            "lower": float(net_interval["lower"] / revenue_upper * 100.0),
+            "upper": float(net_interval["upper"] / revenue_lower * 100.0),
+            "level": level,
+        }
+        for metric, non_negative in (("Production Cost", True), ("Net Income", False), ("Profit Margin", False)):
+            preferred = derived_interval(metric, prediction[metric], non_negative=non_negative)
+            if preferred:
+                intervals[metric] = preferred
+
+    yield_interval = intervals.get("Avg Yield")
+    methane_interval = intervals.get("Methane Emissions")
+    if yield_interval and methane_interval:
+        yield_lower = max(1e-9, yield_interval["lower"])
+        yield_upper = max(1e-9, yield_interval["upper"])
+        intervals["Emission Intensity"] = {
+            "lower": float(methane_interval["lower"] / (yield_upper * 1000.0)),
+            "upper": float(methane_interval["upper"] / (yield_lower * 1000.0)),
+            "level": min(yield_interval["level"], methane_interval["level"]),
+        }
+
+    return intervals
 
 
 def _score_batch(preds: list[dict], target_methane: float) -> np.ndarray:

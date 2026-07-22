@@ -142,7 +142,7 @@ def test_mcp_tools_with_loaded_data():
     assert status["rows_loaded"] > 0
     assert status["models_ready"] is True
     assert set(status["trained_targets"]) == {
-        "Avg Yield", "Methane Emissions", "Revenue", "Net Income"
+        "Avg Yield", "Methane Emissions", "Revenue", "Labor Intensity"
     }
     
     # 2. get_scenarios
@@ -234,7 +234,7 @@ def test_simulation_averages_unique_valid_condition_combinations_equally():
         "Avg Yield": model([3.0, 6.0, 9.0]),
         "Methane Emissions": model([90.0, 180.0, 270.0]),
         "Revenue": model([1000.0, 1500.0, 3000.0]),
-        "Net Income": model([100.0, 300.0, 900.0]),
+        "Labor Intensity": model([10.0, 20.0, 30.0]),
     }
 
     result = mcp_server.run_agricultural_simulation([
@@ -243,13 +243,16 @@ def test_simulation_averages_unique_valid_condition_combinations_equally():
 
     assert result["Avg Yield"] == pytest.approx(6.0)
     assert result["Methane Emissions"] == pytest.approx(180.0)
-    assert result["Net Income"] == pytest.approx(np.mean([100.0, 300.0, 900.0]))
-    assert result["Production Cost"] == pytest.approx(
-        np.mean([900.0, 1200.0, 2100.0])
-    )
-    assert result["Profit Margin"] == pytest.approx(
-        np.mean([10.0, 20.0, 30.0])
-    )
+    financials = [
+        mcp_server._calculate_financial_metrics(
+            scenario_group="Business As Usual", fertilizer_usage=100.0,
+            pesticide_usage=5.0, water_usage=600.0,
+            labor_intensity=labor, revenue=revenue,
+        )
+        for labor, revenue in zip([10.0, 20.0, 30.0], [1000.0, 1500.0, 3000.0])
+    ]
+    for metric in ["Net Income", "Production Cost", "Profit Margin"]:
+        assert result[metric] == pytest.approx(np.mean([row[metric] for row in financials]))
     for mocked in mcp_server.models.values():
         assert len(mocked.predict.call_args.args[0]) == 3
 
@@ -268,6 +271,52 @@ def test_simulation_rejects_scenario_without_2050_condition_combinations():
         mcp_server.run_agricultural_simulation([
             ("With AWD", "Business As Usual", 100.0, 5.0, 600.0)
         ])
+
+
+def test_prediction_intervals_include_direct_and_derived_metrics(monkeypatch):
+    monkeypatch.setattr(mcp_server, "model_report", {"targets": {
+        "Avg Yield": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 0.5}}},
+        "Methane Emissions": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 20.0}}},
+        "Revenue": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 100.0}}},
+        "Labor Intensity": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 5.0}}},
+    }})
+    prediction = {
+        "Avg Yield": 5.0, "Methane Emissions": 300.0, "Labor Intensity": 20.0,
+        "Net Income": 570.837, "Production Cost": 429.163,
+        "Profit Margin": 57.0837, "Emission Intensity": 0.06,
+    }
+    intervals = mcp_server.get_prediction_intervals(
+        prediction, scenario_group="Business As Usual",
+        fertilizer_usage=100.0, pesticide_usage=5.0, water_usage=600.0,
+    )
+    assert intervals["Avg Yield"] == {"lower": 4.5, "upper": 5.5, "level": 0.9}
+    assert intervals["Methane Emissions"] == {"lower": 280.0, "upper": 320.0, "level": 0.9}
+    assert intervals["Net Income"]["lower"] <= prediction["Net Income"] <= intervals["Net Income"]["upper"]
+    assert intervals["Production Cost"]["lower"] <= prediction["Production Cost"] <= intervals["Production Cost"]["upper"]
+    assert intervals["Emission Intensity"]["lower"] == pytest.approx(280.0 / 5500.0)
+    assert intervals["Emission Intensity"]["upper"] == pytest.approx(320.0 / 4500.0)
+
+
+def test_prediction_intervals_prefer_derived_validation_p90(monkeypatch):
+    monkeypatch.setattr(mcp_server, "model_report", {
+        "targets": {
+            "Revenue": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 100.0}}},
+            "Labor Intensity": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 5.0}}},
+        },
+        "derived_targets": {
+            "Net Income": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 221.0}}},
+            "Production Cost": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 146.0}}},
+            "Profit Margin": {"metrics": {"prediction_interval": {"level": 0.9, "absolute_error": 9.4}}},
+        },
+    })
+    prediction = {"Labor Intensity": 20.0, "Net Income": 570.0, "Production Cost": 430.0, "Profit Margin": 57.0}
+    intervals = mcp_server.get_prediction_intervals(
+        prediction, scenario_group="Business As Usual",
+        fertilizer_usage=100.0, pesticide_usage=5.0, water_usage=600.0,
+    )
+    assert intervals["Net Income"] == {"lower": 349.0, "upper": 791.0, "level": 0.9}
+    assert intervals["Production Cost"] == {"lower": 284.0, "upper": 576.0, "level": 0.9}
+    assert intervals["Profit Margin"] == {"lower": 47.6, "upper": 66.4, "level": 0.9}
 
 
 def test_validate_csv_schema_non_numeric_values():

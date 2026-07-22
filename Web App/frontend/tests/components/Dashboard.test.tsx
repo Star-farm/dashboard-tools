@@ -10,6 +10,7 @@ vi.mock('../../src/hooks/useDashboardData', () => ({
         'Simulation': '#3b82f6',
     },
     SCENARIO_KEYS: ['Business As Usual', 'One Million Hectare Rice', 'Simulation'],
+    PREDICTION_INTERVAL_COLOR: '#f59e0b',
     SIMULATION_INPUT_LIMITS: {
         fertilizer_usage: { min: 80, max: 145, step: 5 },
         pesticide_usage: { min: 4, max: 7.5, step: 0.5 },
@@ -23,6 +24,7 @@ vi.mock('recharts', () => ({
     ResponsiveContainer: ({ children }: any) => <div>{children}</div>,
     BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
     Bar: ({ children, dataKey }: any) => <div data-testid="bar" data-key={dataKey}>{children}</div>,
+    ErrorBar: ({ dataKey }: any) => <div data-testid="error-bar" data-key={dataKey} />,
     XAxis: ({ tickFormatter }: any) => {
         if (tickFormatter) {
             // Covers all switch cases and null/undefined boundary fallbacks (PVC)

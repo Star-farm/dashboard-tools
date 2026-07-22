@@ -8,6 +8,7 @@ import mcp_server
 from mcp_server import (
     get_aggregated_metrics,
     run_agricultural_simulation,
+    get_prediction_intervals,
     _score_batch
 )
 
@@ -256,6 +257,13 @@ class ModelingAgent(Agent):
                         "Water Usage":      combo[0][4],
                     },
                     "predictions": preds[0],
+                    "prediction_intervals": get_prediction_intervals(
+                        preds[0],
+                        scenario_group=combo[0][1],
+                        fertilizer_usage=combo[0][2],
+                        pesticide_usage=combo[0][3],
+                        water_usage=combo[0][4],
+                    ),
                 }
 
             case TaskType.OPTIMIZE_RES:

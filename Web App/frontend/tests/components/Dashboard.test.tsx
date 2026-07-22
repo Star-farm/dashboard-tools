@@ -308,7 +308,7 @@ describe('Dashboard Component UI', () => {
         const viBtn = screen.getByText('VI');
         fireEvent.click(viBtn);
 
-        expect(screen.getByText(/47 triệu VNĐ\/ha/i)).toBeInTheDocument();
+        expect(screen.getByText(/44,7 triệu VNĐ\/ha/i)).toBeInTheDocument();
         expect(screen.getByText(/— 0.0%/i)).toBeInTheDocument();
         expect(screen.getByText(/▲ 5.0%/i)).toBeInTheDocument();
     });

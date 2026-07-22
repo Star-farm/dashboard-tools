@@ -71,10 +71,15 @@ export function Dashboard() {
                     {t.kpiChangeTitle}
                     {entry?.target_value != null && (() => {
                         const isVnd = lang === 'vi' && cfg.key === 'Net Income';
-                        const displayVal = isVnd ? Math.round(entry.target_value * USD_TO_VND / 1000000) : entry.target_value;
+                        const displayVal = isVnd
+                            ? Number((entry.target_value * USD_TO_VND / 1000000).toFixed(1))
+                            : entry.target_value;
                         const displayUnit = isVnd ? 'triệu VNĐ/ha' : cfg.unit;
                         return (
-                            <> &middot; {t.kpiTargetYear}: {displayVal.toLocaleString(undefined, { maximumFractionDigits: 0 })} {displayUnit}</>
+                            <> &middot; {t.kpiTargetYear}: {displayVal.toLocaleString(undefined, {
+                                minimumFractionDigits: isVnd ? 1 : 0,
+                                maximumFractionDigits: isVnd ? 1 : 0,
+                            })} {displayUnit}</>
                         );
                     })()}
                 </span>
@@ -348,7 +353,7 @@ export function Dashboard() {
                                 {t.netIncomeColonLabel}{' '}
                                 <strong>
                                     {lang === 'vi'
-                                        ? `${Math.round((simResults.predictions['Net Income'] ?? 0) * USD_TO_VND / 1000000).toLocaleString()} triệu VNĐ/ha`
+                                        ? `${((simResults.predictions['Net Income'] ?? 0) * USD_TO_VND / 1000000).toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} triệu VNĐ/ha`
                                         : `${simResults.predictions['Net Income']?.toFixed(0)} $/ha`}
                                 </strong>
                             </div>

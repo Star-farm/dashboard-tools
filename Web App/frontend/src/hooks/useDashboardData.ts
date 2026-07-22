@@ -132,10 +132,10 @@ export function useDashboardData(lang: 'vi' | 'en') {
 
     const [simScenarioGroup, setSimScenarioGroup] = useState<'Business As Usual' | 'One Million Hectare Rice'>('Business As Usual');
     const [simInputs, setSimInputs] = useState({
-        awd_adoption: 'With AWD',
-        fertilizer_usage: 100,
-        pesticide_usage: 5,
-        water_usage: 600,
+        awd_adoption: 'Without AWD',
+        fertilizer_usage: 105,
+        pesticide_usage: 6,
+        water_usage: 350,
     });
     const [simResults, setSimResults] = useState<SimulationResult | null>(null);
     const [loadingSim, setLoadingSim] = useState(false);
@@ -259,7 +259,9 @@ export function useDashboardData(lang: 'vi' | 'en') {
         const right = isVnd ? { ...rawRight, unit: 'triệu VNĐ/ha' } : rawRight;
 
         const convertRight = (val: number) =>
-            isVnd ? Math.round(val * USD_TO_VND / 1000000) : parseFloat(val.toFixed(2));
+            isVnd
+                ? Number((val * USD_TO_VND / 1000000).toFixed(1))
+                : parseFloat(val.toFixed(2));
 
         const leftRow: Record<string, unknown> = { indicator: left.key };
         const rightRow: Record<string, unknown> = { indicator: right.key };

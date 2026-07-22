@@ -21,7 +21,7 @@ mcp = FastMCP("AI Agents Agricultural Modeling")
 # VPS Config
 DEFAULT_CSV_PATH = os.getenv("DEFAULT_CSV_PATH", "/app/data/Simulation_Data.csv")
 MODEL_CACHE_DIR = os.getenv("MODEL_CACHE_DIR", "/app/model_cache") 
-MODEL_CACHE_VERSION = "v11_derived_financials_p90_2050"
+MODEL_CACHE_VERSION = "v12_production_cost_model_p90_2050"
 DEFAULT_SIMULATION_YEAR = 2050
 AVERAGED_DIMENSIONS = ["Resource Scenario", "Season Type", "Climate Type"]
 SIMULATION_INPUT_LIMITS = {
@@ -57,7 +57,7 @@ PREDICTION_TARGETS = [
     "Avg Yield",
     "Methane Emissions",
     "Revenue",
-    "Labor Intensity",
+    "Production Cost",
 ]
 
 AGG_NUMERIC_COLS = [
@@ -175,17 +175,13 @@ def _evaluate_derived_financials(
         return {}
     train, test = next(GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42).split(X, groups=groups))
     revenue_predictions = clone(fitted_models["Revenue"]).fit(X.iloc[train], df["Revenue"].iloc[train]).predict(X.iloc[test])
-    labor_predictions = clone(fitted_models["Labor Intensity"]).fit(X.iloc[train], df["Labor Intensity"].iloc[train]).predict(X.iloc[test])
-    predicted = {"Production Cost": [], "Net Income": [], "Profit Margin": []}
+    cost_predictions = clone(fitted_models["Production Cost"]).fit(X.iloc[train], df["Production Cost"].iloc[train]).predict(X.iloc[test])
+    predicted = {"Net Income": [], "Profit Margin": []}
     holdout = df.iloc[test]
-    for row, revenue, labor in zip(holdout.to_dict(orient="records"), revenue_predictions, labor_predictions):
-        financials = _calculate_financial_metrics(
-            scenario_group=row["Scenario Group"], fertilizer_usage=row["Fertilizer Usage"],
-            pesticide_usage=row["Pesticide Usage"], water_usage=row["Water Usage"],
-            labor_intensity=labor, revenue=revenue,
-        )
-        for metric in predicted:
-            predicted[metric].append(financials[metric])
+    for revenue, production_cost in zip(revenue_predictions, cost_predictions):
+        net_income = float(revenue - production_cost)
+        predicted["Net Income"].append(net_income)
+        predicted["Profit Margin"].append(net_income / max(1.0, float(revenue)) * 100.0)
     report = {}
     for metric, values in predicted.items():
         actual = holdout[metric].to_numpy(dtype=float)
@@ -317,7 +313,7 @@ def _load_and_train(df: pd.DataFrame, cache_key: str | None = None) -> dict[str,
             "skipped": skipped,
         }
 
-    if {"Revenue", "Labor Intensity"}.issubset(new_models):
+    if {"Revenue", "Production Cost"}.issubset(new_models):
         model_report["derived_targets"] = _evaluate_derived_financials(df, X_all, new_models)
 
     data = df
@@ -593,19 +589,14 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
     for index, (_, combo, _) in enumerate(expanded):
         _, scenario_group, fertilizer, pesticide, water = combo
         revenue = float(result_df.at[index, "Revenue"])
-        labor = float(result_df.at[index, "Labor Intensity"])
-        if not np.isfinite(revenue) or not np.isfinite(labor):
-            raise ValueError("Simulation produced a non-finite Revenue or Labor Intensity value.")
-        financials = _calculate_financial_metrics(
-            scenario_group=scenario_group,
-            fertilizer_usage=fertilizer,
-            pesticide_usage=pesticide,
-            water_usage=water,
-            labor_intensity=labor,
-            revenue=revenue,
-        )
-        for metric, value in financials.items():
-            result_df.at[index, metric] = float(value)
+        production_cost = float(result_df.at[index, "Production Cost"])
+        if not np.isfinite(revenue) or not np.isfinite(production_cost):
+            raise ValueError("Simulation produced a non-finite Revenue or Production Cost value.")
+        production_cost = max(0.0, production_cost)
+        net_income = revenue - production_cost
+        result_df.at[index, "Production Cost"] = production_cost
+        result_df.at[index, "Net Income"] = net_income
+        result_df.at[index, "Profit Margin"] = net_income / max(1.0, revenue) * 100.0
 
         avg_yield = max(0.0, _finite_float(result_df.at[index, "Avg Yield"]))
         methane = max(0.0, _finite_float(result_df.at[index, "Methane Emissions"]))
@@ -617,11 +608,7 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
 
     result_df["_combo_index"] = [item[0] for item in expanded]
     result_df.drop(columns=["Revenue"], errors="ignore", inplace=True)
-    return (
-        result_df.groupby("_combo_index", sort=True)
-        .mean(numeric_only=True)
-        .to_dict(orient="records")
-    )
+    return result_df.groupby("_combo_index", sort=True).mean(numeric_only=True).to_dict(orient="records")
 
 
 def get_prediction_intervals(
@@ -668,28 +655,12 @@ def get_prediction_intervals(
 
     revenue = float(prediction.get("Net Income", 0.0) + prediction.get("Production Cost", 0.0))
     revenue_interval = target_interval("Revenue", revenue, non_negative=True)
-    labor = float(prediction.get("Labor Intensity", 0.0))
-    labor_interval = target_interval("Labor Intensity", labor, non_negative=True)
-    if revenue_interval and labor_interval:
-        cost_at_low_labor = _calculate_financial_metrics(
-            scenario_group=scenario_group,
-            fertilizer_usage=fertilizer_usage,
-            pesticide_usage=pesticide_usage,
-            water_usage=water_usage,
-            labor_intensity=labor_interval["lower"],
-            revenue=revenue,
-        )["Production Cost"]
-        cost_at_high_labor = _calculate_financial_metrics(
-            scenario_group=scenario_group,
-            fertilizer_usage=fertilizer_usage,
-            pesticide_usage=pesticide_usage,
-            water_usage=water_usage,
-            labor_intensity=labor_interval["upper"],
-            revenue=revenue,
-        )["Production Cost"]
-        level = min(revenue_interval["level"], labor_interval["level"])
-        intervals["Production Cost"] = {"lower": float(cost_at_low_labor), "upper": float(cost_at_high_labor), "level": level}
-        net_interval = {"lower": float(revenue_interval["lower"] - cost_at_high_labor), "upper": float(revenue_interval["upper"] - cost_at_low_labor), "level": level}
+    cost_interval = target_interval("Production Cost", prediction.get("Production Cost", 0.0), non_negative=True)
+    if cost_interval:
+        intervals["Production Cost"] = cost_interval
+    if revenue_interval and cost_interval:
+        level = min(revenue_interval["level"], cost_interval["level"])
+        net_interval = {"lower": float(revenue_interval["lower"] - cost_interval["upper"]), "upper": float(revenue_interval["upper"] - cost_interval["lower"]), "level": level}
         intervals["Net Income"] = net_interval
         revenue_lower = max(1.0, revenue_interval["lower"])
         revenue_upper = max(1.0, revenue_interval["upper"])
@@ -698,7 +669,7 @@ def get_prediction_intervals(
             "upper": float(net_interval["upper"] / revenue_lower * 100.0),
             "level": level,
         }
-        for metric, non_negative in (("Production Cost", True), ("Net Income", False), ("Profit Margin", False)):
+        for metric, non_negative in (("Net Income", False), ("Profit Margin", False)):
             preferred = derived_interval(metric, prediction[metric], non_negative=non_negative)
             if preferred:
                 intervals[metric] = preferred

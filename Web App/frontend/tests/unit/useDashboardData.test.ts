@@ -2,10 +2,6 @@ import { renderHook, act } from '@testing-library/react';
 import { useDashboardData } from '../../src/hooks/useDashboardData';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
-const mockScenarios = {
-    scenario_groups: ['Business As Usual', 'One Million Hectare Rice']
-};
-
 const mockKpiChange = {
     kpis: {
         'Avg Yield': { pct_change: -5.0, target_value: 4.5 },
@@ -41,9 +37,6 @@ describe('useDashboardData Custom Hook', () => {
     beforeEach(() => {
         // Intercept standard global fetch calls and return structured mock JSONs
         vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
-            if (url.includes('/scenarios')) {
-                return Promise.resolve({ ok: true, json: () => Promise.resolve(mockScenarios) });
-            }
             if (url.includes('/kpi-change')) {
                 return Promise.resolve({ ok: true, json: () => Promise.resolve(mockKpiChange) });
             }
@@ -66,7 +59,6 @@ describe('useDashboardData Custom Hook', () => {
         });
 
         expect(result.current.isInitialLoading).toBe(false);
-        expect(result.current.scenariosInfo).toEqual(mockScenarios);
         expect(result.current.kpiChange).toEqual(mockKpiChange);
         expect(result.current.simResults).toEqual(mockSimulate);
         const yieldError = result.current.economicChart.data[0]['Simulation_left_error'] as number[];
@@ -103,12 +95,69 @@ describe('useDashboardData Custom Hook', () => {
         expect(result.current.keyMessage).toContain('phát thải khí methane có thể tăng 12.0%');
     });
 
-    // ── NEW TEST CASE TO COVER 401 & 502 PROXY ERRORS IN apiFetch (C1, C2, PVC) ──
+    it('should rerun simulation with the latest inputs', async () => {
+        const { result } = renderHook(() => useDashboardData('en'));
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        await act(async () => {
+            await result.current.runSimulation();
+        });
+
+        expect(result.current.simResults).toEqual(mockSimulate);
+        expect(result.current.loadingSim).toBe(false);
+        expect(result.current.requestError).toBeNull();
+    });
+
+    it('should expose a simulation error without replacing the previous result', async () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+        const { result } = renderHook(() => useDashboardData('en'));
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+        await act(async () => {
+            await result.current.runSimulation();
+        });
+
+        expect(result.current.requestError).toBe('simulation-failed');
+        expect(result.current.simResults).toEqual(mockSimulate);
+        expect(result.current.loadingSim).toBe(false);
+        consoleSpy.mockRestore();
+    });
+
+    it('should return no warning when all KPI changes are favorable', async () => {
+        const favorableKpis = {
+            kpis: {
+                'Avg Yield': { pct_change: 5, target_value: 5 },
+                'Methane Emissions': { pct_change: -5, target_value: 300 },
+                'Net Income': { pct_change: 5, target_value: 1800 },
+                'Profit Margin': { pct_change: 5, target_value: 40 },
+            },
+        };
+        vi.stubGlobal('fetch', vi.fn().mockImplementation((url: string) => {
+            if (url.includes('/kpi-change')) return Promise.resolve({ ok: true, json: () => Promise.resolve(favorableKpis) });
+            if (url.includes('/compare')) return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+            return Promise.resolve({ ok: true, json: () => Promise.resolve(mockSimulate) });
+        }));
+
+        const { result } = renderHook(() => useDashboardData('en'));
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        expect(result.current.keyMessage).toBe('');
+        expect(result.current.economicChart.leftDomain[1]).toBeGreaterThanOrEqual(5);
+    });
+
+    // ── PROXY ERROR HANDLING ──
     it('should log proxy error messages to console when API returns 401 or 502 status codes', async () => {
         // Spy on console.error to assert output without cluttering the test logs
         const spyConsoleError = vi.spyOn(console, 'error').mockImplementation(() => { });
 
-        // 1. Force fetch to return 401 Unauthorized for /scenarios initialization
+        // Force all initial requests to return 401 Unauthorized.
         vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
             status: 401,
             ok: false,
@@ -122,7 +171,7 @@ describe('useDashboardData Custom Hook', () => {
         });
 
         expect(spyConsoleError).toHaveBeenCalledWith(
-            expect.stringContaining("[useDashboardData] 401 on /scenarios")
+            expect.stringContaining("[dashboardApi] 401 on /kpi-change")
         );
 
         // 2. Force fetch to return 502 Bad Gateway to cover the second OR branch
@@ -139,7 +188,7 @@ describe('useDashboardData Custom Hook', () => {
         });
 
         expect(spyConsoleError).toHaveBeenCalledWith(
-            expect.stringContaining("[useDashboardData] 502 on /scenarios")
+            expect.stringContaining("[dashboardApi] 502 on /kpi-change")
         );
 
         spyConsoleError.mockRestore(); // Restore original console behavior

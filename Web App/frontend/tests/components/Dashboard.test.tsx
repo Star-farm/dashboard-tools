@@ -65,7 +65,8 @@ vi.mock('recharts', () => ({
 
 // ── 2. STANDARD IMPORTS ──────────────────────────────────────────────────────
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Dashboard, detectBrowserLang } from '../../src/features/dashboard/Dashboard';
+import { Dashboard } from '../../src/features/dashboard/Dashboard';
+import { detectBrowserLang } from '../../src/utils/language';
 import { useDashboardData } from '../../src/hooks/useDashboardData';
 
 const mockTranslations = {
@@ -97,11 +98,19 @@ const mockTranslations = {
     viewDetailedDataAt: "View details at:",
     dataVisualizationLinkText: "Data Studio Link",
     loading: "Loading...",
+    notAvailable: "N/A",
+    fertilizerUnit: "kg/ha",
+    pesticideUnit: "kg/ha",
+    waterUnit: "m³/ha",
+    yieldUnit: "t/ha",
+    methaneUnit: "kg",
+    netIncomeUsdUnit: "$/ha",
+    netIncomeVndUnit: "triệu VNĐ/ha",
     bauTooltipDesc: ["BAU line 1", "BAU line 2"],
     omrhTooltipItems: ["OMRH line 1", "OMRH line 2"],
     fertilizerTooltipDesc: "Fertilizer tooltip",
     pesticideTooltipDesc: "Pesticide tooltip",
-    waterUsageDesc: "Water tooltip",
+    waterTooltipDesc: "Water tooltip",
     footerProjectName: "Star Farm",
     footerTagline: "Tagline",
     footerDescription: "Desc",

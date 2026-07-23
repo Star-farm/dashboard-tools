@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TRANSLATIONS } from '../i18n';
 
 interface ErrorBoundaryState { hasError: boolean; message: string; }
 
@@ -16,15 +17,17 @@ export class ErrorBoundary extends Component<React.PropsWithChildren, ErrorBound
     }
     render() {
         if (this.state.hasError) {
+            const browserLanguage = typeof navigator !== 'undefined' ? navigator.language : '';
+            const t = TRANSLATIONS[browserLanguage.toLowerCase().startsWith('vi') ? 'vi' : 'en'];
             return (
                 <div className="error-boundary-container" style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
-                    <h2>Something went wrong</h2>
-                    <p>{this.state.message || 'An unexpected rendering error occurred.'}</p>
+                    <h2>{t.errorTitle}</h2>
+                    <p>{this.state.message || t.errorDefaultMessage}</p>
                     <button
                         onClick={() => this.setState({ hasError: false, message: '' })}
                         style={{ marginTop: '1rem', padding: '0.5rem 1rem', background: '#22c55e', border: 'none', borderRadius: '4px', cursor: 'pointer', color: '#000' }}
                     >
-                        Try again
+                        {t.errorRetry}
                     </button>
                 </div>
             );

@@ -30,10 +30,6 @@ SIMULATION_INPUT_LIMITS = {
     "Water Usage": (0.0, 850.0),
 }
 
-# Empirical calibration factors from the simulation CSV, not original GAMA constants.
-COST_FACTOR_BAU = 1.1599
-COST_FACTOR_OMRH = 1.1044
-
 # ── Global State Storage ──────────────────────────────────────────────────────
 data: pd.DataFrame | None = None
 models: dict[str, RandomForestRegressor] = {}
@@ -127,42 +123,6 @@ def _finite_float(value: Any, default: float = 0.0) -> float:
     except (TypeError, ValueError):
         return float(default)
     return result if np.isfinite(result) else float(default)
-
-
-def _calculate_financial_metrics(
-    *,
-    scenario_group: str,
-    fertilizer_usage: float,
-    pesticide_usage: float,
-    water_usage: float,
-    labor_intensity: float,
-    revenue: float,
-) -> dict[str, float]:
-    fertilizer = max(0.0, _finite_float(fertilizer_usage))
-    pesticide = max(0.0, _finite_float(pesticide_usage))
-    water = max(0.0, _finite_float(water_usage))
-    labor = max(0.0, _finite_float(labor_intensity))
-    safe_revenue = _finite_float(revenue)
-
-    scenario = str(scenario_group).strip().lower()
-    is_omrh = "one million" in scenario or "omrh" in scenario
-    mechanization_cost = 150.0 + 15.0 * pesticide if is_omrh else 30.0
-    base_cost = (
-        labor * 2.0
-        + fertilizer * 0.8
-        + pesticide * 8.0
-        + water * 0.3
-        + mechanization_cost
-    )
-    production_cost = base_cost * (COST_FACTOR_OMRH if is_omrh else COST_FACTOR_BAU)
-    net_income = safe_revenue - production_cost
-    profit_margin = net_income / max(1.0, safe_revenue) * 100.0
-
-    return {
-        "Production Cost": float(production_cost),
-        "Net Income": float(net_income),
-        "Profit Margin": float(profit_margin),
-    }
 
 
 def _evaluate_derived_financials(
@@ -586,8 +546,7 @@ def run_agricultural_simulation(combos: list[tuple]) -> list[dict[str, float]]:
 
     result_df = pd.DataFrame(results)
 
-    for index, (_, combo, _) in enumerate(expanded):
-        _, scenario_group, fertilizer, pesticide, water = combo
+    for index, _ in enumerate(expanded):
         revenue = float(result_df.at[index, "Revenue"])
         production_cost = float(result_df.at[index, "Production Cost"])
         if not np.isfinite(revenue) or not np.isfinite(production_cost):

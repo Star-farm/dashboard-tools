@@ -52,31 +52,6 @@ def test_score_batch():
     assert scores[1] == -456.0
 
 
-def test_financial_metrics_bau_and_omrh():
-    bau = mcp_server._calculate_financial_metrics(
-        scenario_group="Business As Usual", fertilizer_usage=100,
-        pesticide_usage=4, water_usage=500, labor_intensity=20, revenue=1000,
-    )
-    omrh = mcp_server._calculate_financial_metrics(
-        scenario_group="OMRH", fertilizer_usage=100,
-        pesticide_usage=4, water_usage=500, labor_intensity=20, revenue=1000,
-    )
-    assert bau["Production Cost"] == pytest.approx((40 + 80 + 32 + 150 + 30) * 1.1599)
-    assert omrh["Production Cost"] == pytest.approx((40 + 80 + 32 + 150 + 210) * 1.1044)
-    assert bau["Net Income"] == pytest.approx(1000 - bau["Production Cost"])
-    assert bau["Profit Margin"] == pytest.approx(bau["Net Income"] / 1000 * 100)
-
-
-@pytest.mark.parametrize("revenue", [0.0, -10.0, np.nan])
-def test_financial_metrics_handles_non_positive_or_nan_revenue(revenue):
-    result = mcp_server._calculate_financial_metrics(
-        scenario_group="BAU", fertilizer_usage=-1, pesticide_usage=-1,
-        water_usage=-1, labor_intensity=-1, revenue=revenue,
-    )
-    assert all(np.isfinite(value) for value in result.values())
-    assert result["Production Cost"] == pytest.approx(30 * 1.1599)
-
-
 def test_validate_csv_schema_valid():
     # Initialize minimal valid DataFrame
     data_dict = {}

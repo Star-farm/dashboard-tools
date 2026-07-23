@@ -14,11 +14,69 @@ An agricultural dashboard that simulates how farming scenarios affect yield, emi
 
 ## Data Flow
 
-```text
-Browser -> /api/proxy/* -> Backend API -> Agent -> Hybrid model -> JSON
+### Production architecture
+
+```mermaid
+flowchart TB
+    subgraph Startup[Backend startup]
+        Start[Cloud Run starts]
+        CSV[Read simulation CSV]
+        Fingerprint[Calculate dataset fingerprint]
+        Local[Check local temporary cache]
+        GCS[Private GCS artifact bucket]
+        Load[Load and validate ModelBundle]
+        Fail[Stop startup with clear error]
+        Bundle[Models, encoders, report and fingerprint]
+
+        Start --> CSV
+        CSV --> Fingerprint
+        Fingerprint --> Local
+        Local -->|matching artifact| Load
+        Local -->|cache miss| GCS
+        GCS -->|matching v13 artifact| Load
+        GCS -->|missing or invalid| Fail
+        Load --> Bundle
+    end
+
+    subgraph Frontend[Frontend on Vercel]
+        Browser[Browser]
+        React[React dashboard]
+        Proxy[Vercel serverless proxy]
+        VercelEnv[BACKEND_API_URL and BACKEND_API_KEY]
+
+        Browser --> React
+        React -->|/api/proxy/*| Proxy
+        VercelEnv -. server-side config .-> Proxy
+    end
+
+    subgraph Backend[Backend request processing]
+        Security[FastAPI security middleware]
+        Routes[REST and MCP routes]
+        Agent[Agent orchestrator]
+        MCP[MCP agricultural tools]
+        Runtime[Serving state and inference]
+        Derived[Derived financial and emission metrics]
+        JSON[JSON response]
+
+        Security --> Routes
+        Routes --> Agent
+        Agent --> MCP
+        MCP --> Runtime
+        Runtime --> Derived
+        Derived --> JSON
+    end
+
+    Bundle --> Ready[Backend ready]
+    Ready --> Browser
+    Bundle -. model state .-> Runtime
+    Proxy -->|HTTPS and X-API-Key| Security
+    JSON --> Dashboard[Dashboard updated]
 ```
 
+The browser never receives the backend API key. The React application calls the same-origin Vercel proxy, which reads `BACKEND_API_KEY` server-side and forwards it as `X-API-Key`. Cloud Run compares that value with `API_KEYS` before requests reach the agent and MCP layers.
+
 - Random Forest models predict average yield, methane emissions, revenue, and production cost.
+- Training is an explicit offline command; each serving variant loads a packaged `ModelBundle` and fails startup when it is unavailable or invalid.
 - Net income, profit margin, and emission intensity are derived from those predictions.
 - Simulation outputs use 2050 data and average equally across the unique valid resource, season, and climate combinations for the selected scenario.
 - Validation residuals provide P90 prediction intervals for the simulation chart.
@@ -34,6 +92,7 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 Copy-Item .env.example .env
+python -m app.ml.train
 python main.py
 ```
 
@@ -56,7 +115,9 @@ Open the Vite URL shown in the terminal. The development proxy forwards `/api/pr
 ```powershell
 cd VPS
 Copy-Item .env.example .env
-docker compose up -d --build
+docker compose build api
+docker compose run --rm api python -m app.ml.train
+docker compose up -d
 docker compose ps
 Invoke-RestMethod http://127.0.0.1:8080/health
 ```

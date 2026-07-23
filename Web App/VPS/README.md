@@ -24,7 +24,9 @@ On a Linux VPS:
 ```bash
 cp .env.example .env
 chmod 600 .env
-docker compose up -d --build
+docker compose build api
+docker compose run --rm api python -m app.ml.train
+docker compose up -d
 docker compose ps
 curl http://127.0.0.1:8080/health
 ```
@@ -35,7 +37,15 @@ View logs:
 docker compose logs -f --tail=200
 ```
 
-Rebuild after updating the source code:
+Train the model artifact before the first start and whenever the CSV or model code changes:
+
+```bash
+docker compose build api
+docker compose run --rm api python -m app.ml.train
+docker compose up -d
+```
+
+Rebuild after updating serving-only source code (an existing matching artifact remains valid):
 
 ```bash
 docker compose up -d --build
@@ -97,12 +107,15 @@ Main routes:
 - `POST /api/optimize/resource`
 - `POST /api/kpi-change`
 
-## Data and Model Cache
+## Training and Serving
 
 - The default CSV is `data/Simulation_Data.csv` and is copied into the image.
-- `model_cache` is mounted as a volume so it survives container recreation.
-- The cache version in the source code separates stale models after model-logic changes.
-- Model v12 predicts average yield, methane emissions, revenue, and production cost; financial and emission ratios are derived afterward.
+- Training runs only through `python -m app.ml.train`; serving never trains.
+- Models, encoders, validation report, model version, and CSV fingerprint are stored together in one `ModelBundle`.
+- `model_cache` is mounted at `/app/model_cache`, so the artifact survives container recreation.
+- Serving requires `/app/model_cache/v13_model_bundle_<csv-fingerprint>.joblib` and stops at startup if it is absent or invalid.
+- Only the existing `DEFAULT_CSV_PATH` and `MODEL_CACHE_DIR` variables are used. VPS does not use GCS and requires no new environment variable.
+- Model v13 predicts average yield, methane emissions, revenue, and production cost; financial and emission ratios are derived afterward.
 - Simulation outputs include validation-based P90 intervals.
 
 See [Model Documentation](../MODEL.md) for the complete input schema, formulas, context aggregation, evaluation, and interval calculation.
@@ -126,7 +139,7 @@ curl -H "X-API-Key: YOUR_KEY" http://127.0.0.1:8080/api/scenarios
 - Allow only SSH, HTTP, and HTTPS through the firewall; do not open `8080`.
 - Use SSH keys and install operating-system updates regularly.
 - Never commit `.env` or include keys in images or logs.
-- Back up required CSV data; model cache can be regenerated.
+- Back up required CSV data and the matching model artifact. Regenerate it manually before restarting serving when either changes.
 - Rotate API keys if exposure is suspected.
 - Monitor Docker logs, disk usage, and `/health`.
 
@@ -144,3 +157,4 @@ curl -v http://127.0.0.1:8080/health
 - `413`: the request exceeds the frontend or backend body limit.
 - `429`: the client exceeded the rate limit.
 - `502/504`: check the container, reverse proxy, DNS, and timeout settings.
+- Container restart loop with `Model artifact not found` or `is invalid`: run `docker compose run --rm api python -m app.ml.train`, then start the service again.

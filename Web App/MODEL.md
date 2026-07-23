@@ -1,6 +1,6 @@
 # Model Documentation
 
-This document describes the model implemented by both `backend` and `VPS`. The current cache version is `v12_production_cost_model_p90_2050`.
+This document describes the model implemented by both `backend` and `VPS`. The current artifact version is `v13_model_bundle`.
 
 ## Prediction flow
 
@@ -65,7 +65,7 @@ Revenue is reconstructed in the training frame from the source financial columns
 Revenue = Net Income + Production Cost
 ```
 
-Production Cost is predicted directly in v12. The older labor-based cost formula remains as a private legacy helper for compatibility, but it is not used by the current simulation prediction path.
+Production Cost is predicted directly. Net Income is then calculated as Revenue minus Production Cost; there is no labor-based cost calibration in the serving path.
 
 ## Derived output formulas
 

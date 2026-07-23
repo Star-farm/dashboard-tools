@@ -12,8 +12,19 @@ os.environ["MODEL_CACHE_DIR"] = os.path.join(backend_dir, ".pytest_model_cache")
 os.environ["TRUST_PROXY_HEADERS"] = "true"
 os.environ["ENABLE_DOCS"] = "false" 
 
-import pytest
-from fastapi.testclient import TestClient
+from app.ml.artifacts import artifact_path, save_bundle  # noqa: E402
+from app.ml.data import load_dataset  # noqa: E402
+from app.ml.training import train_model_bundle  # noqa: E402
+
+_test_data, _test_fingerprint = load_dataset(os.environ["DEFAULT_CSV_PATH"])
+if not artifact_path(os.environ["MODEL_CACHE_DIR"], _test_fingerprint).exists():
+    save_bundle(
+        train_model_bundle(_test_data, _test_fingerprint),
+        os.environ["MODEL_CACHE_DIR"],
+    )
+
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
 
 

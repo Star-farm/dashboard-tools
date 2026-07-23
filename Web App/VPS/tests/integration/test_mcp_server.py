@@ -5,17 +5,12 @@ import tempfile
 import pandas as pd
 import pytest
 import numpy as np
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import mcp_server
-from mcp_server import (
-    validate_csv_schema,
-    _dataset_fingerprint,
-    _agg_key,
-    _score_batch,
-    REQUIRED_COLUMNS,
-    CATEGORICAL_COLS
-)
+from app.ml.data import dataset_fingerprint as _dataset_fingerprint, validate_csv_schema
+from app.ml.model_config import CATEGORICAL_COLS, REQUIRED_COLUMNS
+from mcp_server import _agg_key, _score_batch
 
 
 # ── 1. Original Test Cases from Your System ───────────────────────────────────
@@ -321,56 +316,6 @@ def test_validate_csv_schema_empty_categorical():
     valid, errors = validate_csv_schema(df)
     assert valid is False
     assert any("does not contain any valid entries" in err for err in errors)
-
-
-def test_load_simulation_csv_not_found():
-    res = mcp_server.load_simulation_csv("non_existent_file.csv")
-    assert res["status"] == "error"
-    assert "not found" in res["message"]
-
-
-@patch("mcp_server.joblib.load")
-def test_load_and_train_local_cache_corrupted(mock_load):
-    # Simulate cache file loading throwing an exception due to corrupted content
-    mock_load.side_effect = Exception("Corrupt file content")
-    
-    with tempfile.TemporaryDirectory() as tmpdir:
-        # Temporarily redirect the server's MODEL_CACHE_DIR to a temporary directory
-        with patch("mcp_server.MODEL_CACHE_DIR", tmpdir):
-            
-            # Create a realistic dummy cache file so that os.path.exists naturally returns True
-            cache_file_path = os.path.join(
-                tmpdir, f"{mcp_server.MODEL_CACHE_VERSION}_dummy_key.joblib"
-            )
-            with open(cache_file_path, "w") as f:
-                f.write("corrupt_binary_data")
-            
-            # Prepare valid input data to train the fallback model
-            data_dict = {}
-            for col in REQUIRED_COLUMNS:
-                if col in CATEGORICAL_COLS:
-                    data_dict[col] = ["With AWD"] * 11 if col == "AWD Adoption" else ["Val"] * 11
-                else:
-                    data_dict[col] = [100.0] * 11
-            df = pd.DataFrame(data_dict)
-            
-            result = mcp_server._load_and_train(df, cache_key="dummy_key")
-            assert result["status"] == "success"
-            assert result["from_cache"] is None
-
-
-def test_load_and_train_insufficient_rows():
-    data_dict = {}
-    for col in REQUIRED_COLUMNS:
-        if col in CATEGORICAL_COLS:
-            data_dict[col] = ["With AWD"] * 5 if col == "AWD Adoption" else ["Val"] * 5
-        else:
-            data_dict[col] = [1.0] * 5
-    df = pd.DataFrame(data_dict)
-    
-    result = mcp_server._load_and_train(df)
-    assert result["status"] == "error"
-    assert "insufficient row data" in result["message"]
 
 
 def test_get_scenarios_without_optional_columns():

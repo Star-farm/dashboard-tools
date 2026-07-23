@@ -5,17 +5,12 @@ import tempfile
 import pandas as pd
 import pytest
 import numpy as np
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import mcp_server
-from mcp_server import (
-    validate_csv_schema,
-    _dataset_fingerprint,
-    _agg_key,
-    _score_batch,
-    REQUIRED_COLUMNS,
-    CATEGORICAL_COLS
-)
+from app.ml.data import dataset_fingerprint as _dataset_fingerprint, validate_csv_schema
+from app.ml.model_config import CATEGORICAL_COLS, REQUIRED_COLUMNS
+from mcp_server import _agg_key, _score_batch
 
 
 # ── 1. Original Test Cases from Your System ───────────────────────────────────
@@ -321,56 +316,6 @@ def test_validate_csv_schema_empty_categorical():
     assert any("does not contain any valid entries" in err for err in errors)
 
 
-def test_load_simulation_csv_not_found():
-    res = mcp_server.load_simulation_csv("non_existent_file.csv")
-    assert res["status"] == "error"
-    assert "not found" in res["message"]
-
-
-@patch("mcp_server.joblib.load")
-def test_load_and_train_local_cache_corrupted(mock_load):
-    # Simulate cache file loading throwing an exception due to corrupted content
-    mock_load.side_effect = Exception("Corrupt file content")
-    
-    with tempfile.TemporaryDirectory() as tmpdir:
-        # Temporarily redirect the server's MODEL_CACHE_DIR to a temporary directory
-        with patch("mcp_server.MODEL_CACHE_DIR", tmpdir):
-            
-            # Create a realistic dummy cache file so that os.path.exists naturally returns True
-            cache_file_path = os.path.join(
-                tmpdir, f"{mcp_server.MODEL_CACHE_VERSION}_dummy_key.joblib"
-            )
-            with open(cache_file_path, "w") as f:
-                f.write("corrupt_binary_data")
-            
-            # Prepare valid input data to train the fallback model
-            data_dict = {}
-            for col in REQUIRED_COLUMNS:
-                if col in CATEGORICAL_COLS:
-                    data_dict[col] = ["With AWD"] * 11 if col == "AWD Adoption" else ["Val"] * 11
-                else:
-                    data_dict[col] = [100.0] * 11
-            df = pd.DataFrame(data_dict)
-            
-            result = mcp_server._load_and_train(df, cache_key="dummy_key")
-            assert result["status"] == "success"
-            assert result["from_cache"] is None
-
-
-def test_load_and_train_insufficient_rows():
-    data_dict = {}
-    for col in REQUIRED_COLUMNS:
-        if col in CATEGORICAL_COLS:
-            data_dict[col] = ["With AWD"] * 5 if col == "AWD Adoption" else ["Val"] * 5
-        else:
-            data_dict[col] = [1.0] * 5
-    df = pd.DataFrame(data_dict)
-    
-    result = mcp_server._load_and_train(df)
-    assert result["status"] == "error"
-    assert "insufficient row data" in result["message"]
-
-
 def test_get_scenarios_without_optional_columns():
     original_data = mcp_server.data
     if original_data is not None and "Scenario Name" in original_data.columns:
@@ -436,58 +381,9 @@ def test_get_kpi_change_non_existent_metric():
         mcp_server.data = original_data
 
 
-def test_finite_float_and_gcs_disabled_helpers():
+def test_finite_float_helpers():
     assert mcp_server._finite_float("bad", 7) == 7.0
     assert mcp_server._finite_float(float("inf"), 8) == 8.0
-    assert mcp_server._gcs_blob_name("abc").endswith("_abc.joblib")
-    with patch("mcp_server.GCS_CACHE_BUCKET", ""):
-        assert mcp_server._try_download_cache_from_gcs("abc", "unused") is False
-        assert mcp_server._try_upload_cache_to_gcs("abc", "unused") is None
-
-
-def test_gcs_helpers_success_and_nonfatal_failure():
-    blob = MagicMock()
-    blob.exists.return_value = True
-    blob.download_to_filename.side_effect = lambda path: open(path, "wb").write(b"cache")
-    bucket = MagicMock()
-    bucket.blob.return_value = blob
-    client = MagicMock()
-    client.bucket.return_value = bucket
-    storage_module = MagicMock()
-    storage_module.Client.return_value = client
-    with tempfile.TemporaryDirectory() as temp_dir:
-        target = os.path.join(temp_dir, "nested", "cache.joblib")
-
-        with patch("mcp_server.GCS_CACHE_BUCKET", "bucket"), \
-             patch.dict("sys.modules", {"google.cloud.storage": storage_module}):
-            assert mcp_server._try_download_cache_from_gcs("key", target) is True
-            downloaded_path = blob.download_to_filename.call_args.args[0]
-            assert downloaded_path.endswith(".download")
-            assert os.path.exists(target)
-            assert not os.path.exists(downloaded_path)
-            mcp_server._try_upload_cache_to_gcs("key", target)
-            blob.upload_from_filename.assert_called_once_with(target)
-
-        storage_module.Client.side_effect = RuntimeError("gcs unavailable")
-        with patch("mcp_server.GCS_CACHE_BUCKET", "bucket"), \
-             patch.dict("sys.modules", {"google.cloud.storage": storage_module}):
-            assert mcp_server._try_download_cache_from_gcs("key", target) is False
-            assert mcp_server._try_upload_cache_to_gcs("key", target) is None
-
-
-def test_load_csv_read_and_schema_failures():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        path = os.path.join(temp_dir, "input.csv")
-        with open(path, "w", encoding="utf-8") as handle:
-            handle.write("broken")
-        with patch("mcp_server.pd.read_csv", side_effect=ValueError("bad csv")):
-            result = mcp_server.load_simulation_csv(path)
-            assert result["status"] == "error"
-            assert "Failed to read" in result["message"]
-        with patch("mcp_server.pd.read_csv", return_value=pd.DataFrame({"wrong": [1]})):
-            result = mcp_server.load_simulation_csv(path)
-            assert result["status"] == "invalid_template"
-            assert result["errors"]
 
 
 def test_simulation_falls_back_for_unknown_encoder_values():

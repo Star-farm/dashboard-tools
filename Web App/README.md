@@ -7,7 +7,7 @@ An agricultural dashboard that simulates how farming scenarios affect yield, emi
 | Service | Technology | Purpose |
 | --- | --- | --- |
 | [`frontend`](./frontend/) | React 19, TypeScript, Vite, Recharts | Dashboard and Vercel API proxy |
-| [`backend`](./backend/) | Python, FastAPI, Random Forest, STAR-FARM | Cloud Run backend |
+| [`backend`](./backend/) | Python, FastAPI, Random Forest | Cloud Run backend |
 | [`VPS`](./VPS/) | Python, FastAPI, Docker Compose | VPS backend variant |
 
 `backend` and `VPS` are two deployment variants of the same API. A production environment normally needs only one of them.
@@ -18,38 +18,56 @@ An agricultural dashboard that simulates how farming scenarios affect yield, emi
 
 ```mermaid
 flowchart TB
-    subgraph Startup[Backend startup]
-        Start[Cloud Run starts]
-        CSV[Read simulation CSV]
-        Fingerprint[Calculate dataset fingerprint]
-        Local[Check local temporary cache]
+    subgraph Request[1. User request from Vercel frontend]
+        direction TB
+        UserAction[User changes simulation inputs]
+        ReactRequest[React dashboard sends request]
+        ProxyRequest[Vercel serverless proxy]
+        VercelEnv[BACKEND_API_URL<br/>BACKEND_API_KEY]
+
+        UserAction --> ReactRequest
+        ReactRequest -->|/api/proxy/*| ProxyRequest
+        VercelEnv -. server-side config .-> ProxyRequest
+    end
+
+    ProxyRequest -->|HTTPS and X-API-Key| Target{2. Selected deployment}
+
+    subgraph CloudRun[Cloud Run and GCS]
+        direction TB
+        CRTrain[Offline training]
+        CRStart[Cloud Run startup]
+        CRLocal[Temporary local cache]
         GCS[Private GCS artifact bucket]
-        Load[Load and validate ModelBundle]
-        Fail[Stop startup with clear error]
-        Bundle[Models, encoders, report and fingerprint]
+        CRLoad[Validate matching ModelBundle]
+        CRAPI[Cloud Run API]
 
-        Start --> CSV
-        CSV --> Fingerprint
-        Fingerprint --> Local
-        Local -->|matching artifact| Load
-        Local -->|cache miss| GCS
-        GCS -->|matching v13 artifact| Load
-        GCS -->|missing or invalid| Fail
-        Load --> Bundle
+        CRTrain -->|upload artifact| GCS
+        CRStart --> CRLocal
+        CRLocal -->|matching artifact| CRLoad
+        CRLocal -->|cache miss| GCS
+        GCS -->|download matching artifact| CRLoad
+        CRLoad -. enables .-> CRAPI
     end
 
-    subgraph Frontend[Frontend on Vercel]
-        Browser[Browser]
-        React[React dashboard]
-        Proxy[Vercel serverless proxy]
-        VercelEnv[BACKEND_API_URL and BACKEND_API_KEY]
+    subgraph VPSDeployment[VPS and persistent volume]
+        direction TB
+        VPSTrain[Offline training on VPS]
+        VPSStart[VPS container startup]
+        Volume[Persistent model_cache volume]
+        VPSLoad[Validate matching ModelBundle]
+        VPSAPI[VPS API]
 
-        Browser --> React
-        React -->|/api/proxy/*| Proxy
-        VercelEnv -. server-side config .-> Proxy
+        VPSTrain -->|save artifact| Volume
+        VPSStart --> Volume
+        Volume -->|load matching artifact| VPSLoad
+        VPSLoad -. enables .-> VPSAPI
     end
 
-    subgraph Backend[Backend request processing]
+    Target -->|Cloud Run| CRAPI
+    Target -->|VPS| VPSAPI
+
+    subgraph API[3. Request processing in selected backend]
+        direction TB
         Security[FastAPI security middleware]
         Routes[REST and MCP routes]
         Agent[Agent orchestrator]
@@ -66,14 +84,63 @@ flowchart TB
         Derived --> JSON
     end
 
-    Bundle --> Ready[Backend ready]
-    Ready --> Browser
-    Bundle -. model state .-> Runtime
-    Proxy -->|HTTPS and X-API-Key| Security
-    JSON --> Dashboard[Dashboard updated]
+    CRAPI --> Security
+    VPSAPI --> Security
+    CRLoad -. model state .-> Runtime
+    VPSLoad -. model state .-> Runtime
+
+    subgraph Response[4. Response to Vercel frontend]
+        direction TB
+        ProxyResponse[Vercel proxy receives HTTPS response]
+        ReactResponse[React updates dashboard state]
+        UserResult[User sees updated dashboard]
+
+        ProxyResponse --> ReactResponse
+        ReactResponse --> UserResult
+    end
+
+    JSON --> ProxyResponse
 ```
 
-The browser never receives the backend API key. The React application calls the same-origin Vercel proxy, which reads `BACKEND_API_KEY` server-side and forwards it as `X-API-Key`. Cloud Run compares that value with `API_KEYS` before requests reach the agent and MCP layers.
+### Request sequence
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant React as React dashboard
+    participant Proxy as Vercel proxy
+    participant Backend as Selected FastAPI backend
+    participant Storage as Model storage
+    participant MCP as Agent and MCP tools
+    participant Runtime as ML runtime
+
+    Note over Backend,Storage: Backend startup before serving traffic
+    alt Cloud Run deployment
+        Backend->>Storage: Check temporary local cache
+        opt Local cache miss
+            Backend->>Storage: Download matching ModelBundle from GCS
+        end
+    else VPS deployment
+        Backend->>Storage: Load ModelBundle from persistent volume
+    end
+    Storage-->>Backend: Validated model state
+
+    User->>React: Change simulation inputs
+    React->>Proxy: POST /api/proxy/*
+    Note right of Proxy: Reads BACKEND_API_URL<br/>and BACKEND_API_KEY
+    Proxy->>Backend: HTTPS request with X-API-Key
+    Backend->>Backend: Authenticate and rate-limit request
+    Backend->>MCP: Route simulation request
+    MCP->>Runtime: Run inference
+    Runtime-->>MCP: Predictions and intervals
+    MCP-->>Backend: Derived KPI and chart data
+    Backend-->>Proxy: JSON response
+    Proxy-->>React: Response data
+    React-->>User: Render updated dashboard
+```
+
+The browser never receives the backend API key. The React application calls the same-origin Vercel proxy, which reads `BACKEND_API_KEY` server-side and forwards it as `X-API-Key`. `BACKEND_API_URL` selects either the Cloud Run or VPS deployment; the selected FastAPI service compares the forwarded key with `API_KEYS` before requests reach the agent and MCP layers.
 
 - Random Forest models predict average yield, methane emissions, revenue, and production cost.
 - Training is an explicit offline command; each serving variant loads a packaged `ModelBundle` and fails startup when it is unavailable or invalid.

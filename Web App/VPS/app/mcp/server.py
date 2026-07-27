@@ -70,24 +70,6 @@ def get_data_status() -> dict[str, Any]:
 
 
 @mcp.tool()
-def get_scenarios() -> dict[str, Any]:
-    """List unique categorical groups, seasons, climates, and AWD practice options available."""
-    _require_data()
-    assert data is not None
-
-    result = {
-        "scenario_groups":    data["Scenario Group"].dropna().unique().tolist(),
-        "season_types":       data["Season Type"].dropna().unique().tolist(),
-        "climate_types":      data["Climate Type"].dropna().unique().tolist(),
-        "resource_scenarios": data["Resource Scenario"].dropna().unique().tolist(),
-        "awd_options":        data["AWD Adoption"].dropna().unique().tolist(),
-    }
-    if "Scenario Name" in data.columns:
-        result["scenario_names"] = data["Scenario Name"].dropna().unique().tolist()
-    return result
-
-
-@mcp.tool()
 def get_aggregated_metrics(filters: dict[str, Any] = None) -> dict[str, Any]:
     """Aggregate all metrics and run sub-group segment comparisons based on given criteria filters."""
     _require_data()
@@ -311,17 +293,6 @@ def get_prediction_intervals(
         }
 
     return intervals
-
-
-def _score_batch(preds: list[dict], target_methane: float) -> np.ndarray:
-    yields   = np.array([p["Avg Yield"]        for p in preds])
-    margins  = np.array([p["Profit Margin"]     for p in preds])
-    methanes = np.array([p["Methane Emissions"] for p in preds])
-
-    scores  = yields * 2.0 + margins
-    overage = methanes - target_methane
-    scores -= np.maximum(overage, 0) * 10.0
-    return scores
 
 
 @mcp.tool()

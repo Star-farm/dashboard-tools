@@ -325,17 +325,6 @@ def get_prediction_intervals(
     return intervals
 
 
-def _score_batch(preds: list[dict], target_methane: float) -> np.ndarray:
-    yields   = np.array([p["Avg Yield"]        for p in preds])
-    margins  = np.array([p["Profit Margin"]     for p in preds])
-    methanes = np.array([p["Methane Emissions"] for p in preds])
-
-    scores  = yields * 2.0 + margins
-    overage = methanes - target_methane
-    scores -= np.maximum(overage, 0) * 10.0
-    return scores
-
-
 @mcp.tool()
 def get_kpi_change(metrics: list[str], scenario_group: str = "Business As Usual",
                     base_year: int = 2022, target_year: int = 2050) -> dict[str, Any]:

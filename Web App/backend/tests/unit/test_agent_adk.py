@@ -1,6 +1,9 @@
 """Unit tests for agent classification and formatting behavior."""
 
+import pytest
+
 from agent_adk import (
+    Agent,
     _fmt_val,
     _classify,
     TaskType,
@@ -16,9 +19,30 @@ def test_fmt_val():
 
 def test_classify():
     assert _classify("please simulate crop outcomes") == TaskType.SIMULATE
-    assert _classify("optimize fertilizer and water usage") == TaskType.OPTIMIZE
-    assert _classify("optimize_resource water") == TaskType.OPTIMIZE_RES
+    assert _classify("optimize fertilizer and water usage") == TaskType.UNKNOWN
     assert _classify("what is the weather like?") == TaskType.UNKNOWN
+
+
+def test_removed_agent_paths_are_rejected_cleanly():
+    with pytest.raises(NotImplementedError):
+        Agent("base", "base", "base").execute("simulate")
+
+    model = ModelingAgent()
+    assert "error" in model.execute("optimize")
+
+    aggregation = AggregationAgent()
+    missing_dimension = aggregation.execute(
+        "compare", dimension="Removed Dimension", metrics=["Avg Yield"]
+    )
+    assert "compare_error" in missing_dimension
+
+    invalid_year = aggregation.execute(
+        "compare",
+        dimension="Year",
+        metrics=["Avg Yield"],
+        filters={"Year": "not-a-year"},
+    )
+    assert invalid_year["compare_dimension"] == "Year"
 
 def test_aggregation_agent():
     agent = AggregationAgent()
@@ -65,27 +89,6 @@ def test_modeling_agent():
     assert "prediction_intervals" in res_simulate
     assert "Avg Yield" in res_simulate["predictions"]
 
-    # Test OPTIMIZE task
-    res_optimize = agent.execute(
-        task="optimize",
-        target_methane=400.0,
-        pesticide_usage=5.0,
-        scenario_group="Business As Usual"
-    )
-    assert "optimized_inputs" in res_optimize
-    assert "expected_outcomes" in res_optimize
-    assert res_optimize["best_score"] is not None
-
-    # Test OPTIMIZE_RESOURCE task
-    res_opt_res = agent.execute(
-        task="optimize_resource",
-        resources=["water", "fertilizer"],
-        fixed_inputs={"awd_adoption": "With AWD", "scenario_group": "Business As Usual", "pesticide_usage": 5.0},
-        target_methane=500.0
-    )
-    assert "optimized_inputs" in res_opt_res
-    assert "expected_outcomes" in res_opt_res
-
 def test_agent_orchestrator():
     orch = AgentOrchestrator()
     
@@ -113,16 +116,6 @@ def test_agent_orchestrator():
     )
     assert res_simulate["agent"] == orch.model_agent.name
     assert "predictions" in res_simulate["result"]
-
-    # Optimize query
-    res_optimize = orch.process_query(
-        "optimize",
-        context={
-            "target_methane": 300.0
-        }
-    )
-    assert res_optimize["agent"] == orch.model_agent.name
-    assert "optimized_inputs" in res_optimize["result"]
 
     # Unknown task query
     res_unknown = orch.process_query("invalid_task")

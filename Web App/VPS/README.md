@@ -90,7 +90,7 @@ TLS certificate configuration depends on Certbot, Caddy, or your infrastructure 
 
 ## Authentication and Endpoints
 
-`/health` is public. `/api/*` and `/mcp` require:
+`/health` is public. `/api/*` routes require:
 
 ```http
 X-API-Key: your-production-key
@@ -100,11 +100,8 @@ The production frontend does not send this key from the browser. The Vercel serv
 
 Main routes:
 
-- `GET /api/scenarios`
 - `POST /api/compare`
 - `POST /api/simulate`
-- `POST /api/optimize`
-- `POST /api/optimize/resource`
 - `POST /api/kpi-change`
 
 ## Training and Serving
@@ -131,7 +128,8 @@ python -m pytest
 API smoke test:
 
 ```bash
-curl -H "X-API-Key: YOUR_KEY" http://127.0.0.1:8080/api/scenarios
+curl -X POST -H "X-API-Key: YOUR_KEY" -H "Content-Type: application/json" \
+  -d '{"metrics":["Avg Yield"]}' http://127.0.0.1:8080/api/kpi-change
 ```
 
 ## Secure Operations

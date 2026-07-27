@@ -38,7 +38,7 @@ docker run --rm -p 8080:8080 --env-file .env star-farm-backend
 
 ## Authentication
 
-All `/api/*` and `/mcp` routes require either:
+All `/api/*` routes require either:
 
 ```http
 X-API-Key: your-api-key
@@ -50,21 +50,16 @@ or:
 Authorization: Bearer your-api-key
 ```
 
-`/` and `/health` are public. `/api/data-status` still requires an API key.
+`/health` is public.
 
 ## REST API
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | `GET` | `/health` | Health check |
-| `GET` | `/api/data-status` | Data and model status |
-| `GET` | `/api/scenarios` | Available filter values |
 | `POST` | `/api/compare` | Compare KPIs by a data dimension |
 | `POST` | `/api/simulate` | Simulate one input set |
-| `POST` | `/api/optimize` | Optimize inputs for a methane target |
-| `POST` | `/api/optimize/resource` | Optimize selected resources |
 | `POST` | `/api/kpi-change` | Calculate KPI changes from 2022 to 2050 |
-| `*` | `/mcp` | MCP SSE endpoint |
 
 Example simulation request:
 

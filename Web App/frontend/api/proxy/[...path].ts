@@ -6,7 +6,6 @@ const MAX_PROXY_BODY_BYTES = 32 * 1024;
 const BACKEND_TIMEOUT_MS = 15_000;
 
 const ALLOWED_ROUTES: Readonly<Record<string, readonly string[]>> = {
-    scenarios: ['GET'],
     'kpi-change': ['POST'],
     compare: ['POST'],
     simulate: ['POST'],

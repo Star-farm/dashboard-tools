@@ -1,31 +1,3 @@
-export interface ScenarioInfo {
-    scenario_groups: string[];
-    season_types: string[];
-    climate_types: string[];
-    resource_scenarios: string[];
-    awd_options: string[];
-}
-
-export interface SummaryMetrics {
-    status?: string;
-    message?: string;
-    total_records: number;
-    avg_yield: number;
-    avg_methane_emissions: number;
-    avg_profit_margin: number;
-    avg_net_income: number;
-    avg_water_usage: number;
-    avg_fertilizer_usage: number;
-    avg_pesticide_usage: number;
-    avg_salinity_exposure: number;
-    awd_comparison?: Record<string, {
-        'Avg Yield': number;
-        'Methane Emissions': number;
-        'Profit Margin': number;
-    }>;
-}
-
-
 export interface KpiChangeResult {
     scenario_group: string;
     base_year: number;

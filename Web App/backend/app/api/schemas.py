@@ -15,7 +15,6 @@ VALID_METRICS = {
     "Max Flood Continuous", "Flood Stress", "Drought Stress", "Salinity Stress",
     "Biodiversity", "Resilient Varieties", "Water Reliability", "Labor Intensity",
 }
-VALID_RESOURCES = {"water", "fertilizer", "pesticide", "awd", "scenario_group"}
 ScenarioGroup = Literal["Business As Usual", "One Million Hectare Rice"]
 AwdAdoption = Literal["With AWD", "Without AWD"]
 
@@ -51,26 +50,6 @@ class SimulationRequest(BaseModel):
     fertilizer_usage: float = Field(ge=80.0, le=145.0)
     pesticide_usage: float = Field(ge=4.0, le=7.5)
     water_usage: float = Field(ge=0.0, le=850.0)
-
-
-class OptimizationRequest(BaseModel):
-    target_methane: float = Field(ge=50.0, le=2000.0)
-    scenario_group: ScenarioGroup = "Business As Usual"
-    pesticide_usage: float = Field(default=5.0, ge=0.5, le=15.0)
-
-
-class ResourceOptimizationRequest(BaseModel):
-    resources: list[str]
-    fixed_inputs: dict[str, Any] = Field(default_factory=dict)
-    target_methane: float = Field(default=500.0, ge=50.0, le=2000.0)
-
-    @field_validator("resources")
-    @classmethod
-    def validate_resources(cls, value: list[str]) -> list[str]:
-        invalid = [resource for resource in value if resource not in VALID_RESOURCES]
-        if invalid:
-            raise ValueError(f"Unknown resource(s): {invalid}. Valid options: {sorted(VALID_RESOURCES)}")
-        return value
 
 
 class KpiChangeRequest(BaseModel):

@@ -4,8 +4,8 @@ import { extractProxyPath, resolveProxyRoute } from '../../api/proxy/[...path]';
 
 describe('frontend API proxy allowlist', () => {
     it('extracts a Vercel catch-all route from req.url when req.query.path is absent', () => {
-        const route = extractProxyPath(undefined, '/api/proxy/scenarios?ignored=true');
-        expect(resolveProxyRoute(route, 'GET')).toEqual({ route: 'scenarios', method: 'GET' });
+        const route = extractProxyPath(undefined, '/api/proxy/kpi-change?ignored=true');
+        expect(resolveProxyRoute(route, 'POST')).toEqual({ route: 'kpi-change', method: 'POST' });
     });
 
     it('prefers the Vercel query route when it is available', () => {
@@ -19,7 +19,6 @@ describe('frontend API proxy allowlist', () => {
     });
 
     it.each([
-        ['scenarios', 'GET'],
         ['kpi-change', 'POST'],
         ['compare', 'POST'],
         ['simulate', 'POST'],
@@ -33,6 +32,7 @@ describe('frontend API proxy allowlist', () => {
         [['../mcp'], 'POST'],
         [['simulate', '..', 'mcp'], 'POST'],
         [['data-status'], 'GET'],
+        [['scenarios'], 'GET'],
         [undefined, 'GET'],
     ])('blocks a route or method outside the dashboard surface', (route, method) => {
         expect(resolveProxyRoute(route, method)).toBeNull();
@@ -105,19 +105,19 @@ describe('frontend API proxy handler', () => {
     it('rejects invalid URLs and non-HTTPS production URLs', async () => {
         let handler = await loadHandler('not a url');
         let res = responseMock();
-        await handler({ query: { path: 'scenarios' }, method: 'GET' } as unknown as VercelRequest, res);
+        await handler({ query: { path: 'kpi-change' }, method: 'POST' } as unknown as VercelRequest, res);
         expect(res.statusCode).toBe(500);
 
         vi.stubEnv('NODE_ENV', 'production');
         handler = await loadHandler('http://backend.example');
         vi.stubEnv('NODE_ENV', 'production');
         res = responseMock();
-        await handler({ query: { path: 'scenarios' }, method: 'GET' } as unknown as VercelRequest, res);
+        await handler({ query: { path: 'kpi-change' }, method: 'POST' } as unknown as VercelRequest, res);
         expect(res.statusCode).toBe(500);
     });
 
     it.each([
-        ['scenarios', 'GET', undefined],
+        ['kpi-change', 'POST', undefined],
         ['simulate', 'POST', { water_usage: 600 }],
     ])('forwards %s securely', async (path, method, body) => {
         const fetchMock = vi.fn().mockResolvedValue({
@@ -133,7 +133,7 @@ describe('frontend API proxy handler', () => {
         expect(res.sentBody).toBe('{"ok":true}');
         expect(res.headers['Cache-Control']).toBe('no-store');
         expect(fetchMock.mock.calls[0][1].headers['X-API-Key']).toBe('secret');
-        expect(fetchMock.mock.calls[0][1].body).toBe(method === 'GET' ? undefined : JSON.stringify(body));
+        expect(fetchMock.mock.calls[0][1].body).toBe(JSON.stringify(body ?? {}));
     });
 
     it.each([
@@ -143,7 +143,7 @@ describe('frontend API proxy handler', () => {
         vi.stubGlobal('fetch', vi.fn().mockRejectedValue(error));
         const handler = await loadHandler();
         const res = responseMock();
-        await handler({ query: { path: 'scenarios' }, method: 'GET' } as unknown as VercelRequest, res);
+        await handler({ query: { path: 'kpi-change' }, method: 'POST' } as unknown as VercelRequest, res);
         expect(res.statusCode).toBe(status);
         expect(JSON.stringify(res.jsonBody)).not.toContain(error.message);
     });

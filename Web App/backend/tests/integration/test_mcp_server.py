@@ -10,7 +10,7 @@ from unittest.mock import MagicMock
 import mcp_server
 from app.ml.data import dataset_fingerprint as _dataset_fingerprint, validate_csv_schema
 from app.ml.model_config import CATEGORICAL_COLS, REQUIRED_COLUMNS
-from mcp_server import _agg_key, _score_batch
+from mcp_server import _agg_key
 
 
 # ── 1. Original Test Cases from Your System ───────────────────────────────────
@@ -32,19 +32,6 @@ def test_agg_key():
     assert _agg_key("Methane Emissions") == "avg_methane_emissions"
     assert _agg_key("avg_profit") == "avg_profit"
     assert _agg_key("net income") == "avg_net_income"
-
-
-def test_score_batch():
-    preds = [
-        {"Avg Yield": 5.0, "Profit Margin": 40.0, "Methane Emissions": 150.0},
-        {"Avg Yield": 4.5, "Profit Margin": 35.0, "Methane Emissions": 250.0},
-    ]
-    scores = _score_batch(preds, target_methane=200.0)
-    # Score 1: 5.0 * 2.0 + 40.0 - max(150 - 200, 0)*10 = 50.0 - 0 = 50.0
-    # Score 2: 4.5 * 2.0 + 35.0 - max(250 - 200, 0)*10 = 44.0 - 50*10 = -456.0
-    assert len(scores) == 2
-    assert scores[0] == 50.0
-    assert scores[1] == -456.0
 
 
 def test_validate_csv_schema_valid():

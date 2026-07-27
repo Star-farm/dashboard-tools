@@ -10,41 +10,6 @@
   text-align: center;
 }
 
-.error-boundary-title {
-  color: #ef4444;
-  margin-bottom: 1rem;
-}
-
-.error-boundary-msg {
-  color: #9ca3af;
-  margin-bottom: 1.5rem;
-  max-width: 480px;
-}
-
-.error-boundary-btn {
-  padding: 0.6rem 1.4rem;
-  border-radius: 0.5rem;
-  background: #22c55e;
-  color: #000;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text-muted);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-weight: 500;
-}
-
-.btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-primary);
-  box-shadow: none;
-  transform: none;
-}
-
 .filter-label {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -72,33 +37,6 @@
   color: var(--text-muted);
 }
 
-.optimizer-desc {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-}
-
-.optimizer-form-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.optimizer-results-box {
-  font-size: 0.85rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
 .results-grid-small {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -111,35 +49,6 @@
   padding: 1rem;
   background: rgb(255, 255, 255);
   border-radius: 0.5rem;
-}
-
-.trends-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.trends-desc {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-.metric-toggle {
-  display: flex;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.25rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.line-chart-container {
-  height: 360px;
-  width: 100%;
 }
 
 .lang-toggle-container {
@@ -233,18 +142,10 @@
     height: 300px;
   }
 
-  .metric-toggle {
-    flex-wrap: wrap;
-  }
-
   .slider-group {
     gap: 1rem;
   }
 
-  .trends-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 .key-message-panel {

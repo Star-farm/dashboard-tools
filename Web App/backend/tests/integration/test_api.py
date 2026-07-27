@@ -30,28 +30,28 @@ def test_health_check(client):
 
 def test_require_api_key_missing(client):
     # Do not send any API Key header
-    response = client.get("/api/data-status")
+    response = client.post("/api/compare", json={})
     assert response.status_code == 401
     assert "Missing or invalid API key" in response.json()["detail"]
 
 
 def test_require_api_key_invalid(client):
     # Send an invalid API Key in Header
-    response = client.get("/api/data-status", headers={"X-API-Key": "wrong-key"})
+    response = client.post("/api/compare", headers={"X-API-Key": "wrong-key"}, json={})
     assert response.status_code == 401
     
     # Send an invalid API Key as Bearer Token
-    response = client.get("/api/data-status", headers={"Authorization": "Bearer wrong-key"})
+    response = client.post("/api/compare", headers={"Authorization": "Bearer wrong-key"}, json={})
     assert response.status_code == 401
 
 
 def test_require_api_key_valid(client):
     # Use a colon (:) to define the exact Key-Value pair for the header
-    response = client.get("/api/data-status", headers={"X-API-Key": "test-key-123"})
+    response = client.post("/api/kpi-change", headers={"X-API-Key": "test-key-123"}, json={})
     assert response.status_code == 200
     
     # Send a valid API Key as Bearer Token
-    response = client.get("/api/data-status", headers={"Authorization": "Bearer another-key"})
+    response = client.post("/api/kpi-change", headers={"Authorization": "Bearer another-key"}, json={})
     assert response.status_code == 200
 
 
@@ -109,10 +109,10 @@ def test_invalid_content_length_header(client):
 def test_request_size_bypass_for_get_requests(client):
     # GET requests do not enforce payload size limits
     response = client.get(
-        "/api/scenarios",
+        "/api/not-found",
         headers={"X-API-Key": "test-key-123", "Content-Length": "99999999"}
     )
-    assert response.status_code == 200
+    assert response.status_code == 404
 
 
 @patch.dict(os.environ, {"ENFORCE_HTTPS": "true"})
@@ -126,29 +126,17 @@ def test_security_headers_with_hsts_enabled(client):
 # ── 3. Core Business API Integration Tests ────────────────────────────────────
 
 @patch("main.orchestrator.process_query")
-@patch("main.orchestrator.model_agent.execute")
 @patch("mcp_server.get_kpi_change")  # Patched at the source in mcp_server
-def test_api_endpoints_success(mock_kpi, mock_agent_execute, mock_process_query, client):
+def test_api_endpoints_success(mock_kpi, mock_process_query, client):
     headers = {"X-API-Key": "test-key-123"}
     
     # Mock responses for AI model processing layers to avoid real model execution
     mock_process_query.side_effect = lambda query_type, context: {
         "result": {"compare_dimension": "Climate Type", "predictions": [], "optimized_inputs": {}}
     }
-    mock_agent_execute.return_value = {"optimized_inputs": {}}
     mock_kpi.return_value = {"kpis": {}}
     
-    # 1. /api/data-status
-    response = client.get("/api/data-status", headers=headers)
-    assert response.status_code == 200
-    assert response.json()["data_loaded"] is True
-
-    # 2. /api/scenarios
-    with patch("main.get_scenarios", return_value={"scenario_groups": []}):
-        response = client.get("/api/scenarios", headers=headers)
-        assert response.status_code == 200
-
-    # 3. /api/compare
+    # 1. /api/compare
     compare_data = {
         "dimension": "Climate Type",
         "metrics": ["Avg Yield"]
@@ -156,7 +144,7 @@ def test_api_endpoints_success(mock_kpi, mock_agent_execute, mock_process_query,
     response = client.post("/api/compare", headers=headers, json=compare_data)
     assert response.status_code == 200
 
-    # 4. /api/simulate
+    # 2. /api/simulate
     simulate_data = {
         "scenario_group": "Business As Usual",
         "awd_adoption": "With AWD",
@@ -167,24 +155,7 @@ def test_api_endpoints_success(mock_kpi, mock_agent_execute, mock_process_query,
     response = client.post("/api/simulate", headers=headers, json=simulate_data)
     assert response.status_code == 200
 
-    # 5. /api/optimize
-    optimize_data = {
-        "target_methane": 300.0,
-        "scenario_group": "Business As Usual",
-        "pesticide_usage": 5.0
-    }
-    response = client.post("/api/optimize", headers=headers, json=optimize_data)
-    assert response.status_code == 200
-
-    # 6. /api/optimize/resource
-    opt_res_data = {
-        "resources": ["water"],
-        "target_methane": 500.0
-    }
-    response = client.post("/api/optimize/resource", headers=headers, json=opt_res_data)
-    assert response.status_code == 200
-
-    # 7. /api/kpi-change
+    # 3. /api/kpi-change
     kpi_data = {
         "metrics": ["Avg Yield"]
     }
@@ -238,7 +209,11 @@ def test_require_data_loaded_returns_409_conflict(mock_get_status, client):
     # Test scenario where no simulation data has been loaded on the server
     mock_get_status.return_value = {"data_loaded": False, "required_columns": ["col1"]}
     
-    response = client.get("/api/scenarios", headers={"X-API-Key": "test-key-123"})
+    response = client.post(
+        "/api/compare",
+        headers={"X-API-Key": "test-key-123"},
+        json={"dimension": "Climate Type", "metrics": ["Avg Yield"]},
+    )
     assert response.status_code == 409
     assert response.json()["code"] == "NO_DATA_LOADED"
 
@@ -260,19 +235,6 @@ def test_generic_exception_handler_returns_clean_500(mock_get_status, client):
     assert response.status_code == 500
     # Verify the system returns a generic security message from generic_exception_handler
     assert "An internal server error occurred. Please try again later." in response.json()["detail"]
-
-
-def test_optimization_validation_error_returns_custom_400(client):
-    # Validation handler overrides 422 into a structured 400 error for the optimization API
-    bad_optimize_data = {
-        "target_methane": -1.0,
-        "scenario_group": "Business As Usual",
-        "pesticide_usage": 5.0
-    }
-    response = client.post("/api/optimize", headers={"X-API-Key": "test-key-123"}, json=bad_optimize_data)
-    assert response.status_code == 400
-    assert response.json()["success"] is False
-    assert response.json()["message"] == "Cannot be optimized"
 
 
 @patch("mcp_server.get_kpi_change")  # Patched directly inside mcp_server module
@@ -339,20 +301,9 @@ def test_metric_validation_rejects_unknown_metrics(client, path, payload, messag
     assert message in str(response.json())
 
 
-def test_resource_validation_rejects_unknown_resource(client):
-    response = client.post(
-        "/api/optimize/resource",
-        headers={"X-API-Key": "test-key-123"},
-        json={"resources": ["not_a_resource"], "target_methane": 500},
-    )
-    assert response.status_code == 400
-
-
 @pytest.mark.parametrize("path,patch_target,payload,detail", [
     ("/api/compare", "main.orchestrator.process_query", {"dimension": "Climate Type", "metrics": ["Avg Yield"]}, "Comparison failed."),
     ("/api/simulate", "main.orchestrator.process_query", {"scenario_group": "Business As Usual", "awd_adoption": "With AWD", "fertilizer_usage": 100, "pesticide_usage": 5, "water_usage": 600}, "Simulation failed."),
-    ("/api/optimize", "main.orchestrator.process_query", {"target_methane": 300, "scenario_group": "Business As Usual", "pesticide_usage": 5}, "Optimization failed."),
-    ("/api/optimize/resource", "main.orchestrator.model_agent.execute", {"resources": ["water"], "target_methane": 500}, "Resource optimization failed."),
 ])
 def test_business_endpoints_map_unexpected_errors(client, path, patch_target, payload, detail):
     with patch(patch_target, side_effect=RuntimeError("internal secret")):
@@ -365,8 +316,6 @@ def test_business_endpoints_map_unexpected_errors(client, path, patch_target, pa
 @pytest.mark.parametrize("path,patch_target,payload", [
     ("/api/compare", "main.orchestrator.process_query", {"dimension": "Climate Type", "metrics": ["Avg Yield"]}),
     ("/api/simulate", "main.orchestrator.process_query", {"scenario_group": "Business As Usual", "awd_adoption": "With AWD", "fertilizer_usage": 100, "pesticide_usage": 5, "water_usage": 600}),
-    ("/api/optimize", "main.orchestrator.process_query", {"target_methane": 300, "scenario_group": "Business As Usual", "pesticide_usage": 5}),
-    ("/api/optimize/resource", "main.orchestrator.model_agent.execute", {"resources": ["water"], "target_methane": 500}),
 ])
 def test_business_endpoints_preserve_http_exceptions(client, path, patch_target, payload):
     from fastapi import HTTPException
@@ -374,15 +323,3 @@ def test_business_endpoints_preserve_http_exceptions(client, path, patch_target,
         response = client.post(path, headers={"X-API-Key": "test-key-123"}, json=payload)
     assert response.status_code == 418
     assert response.json()["detail"] == "teapot"
-
-
-def test_status_and_scenarios_map_internal_errors(client):
-    headers = {"X-API-Key": "test-key-123"}
-    with patch("main.get_data_status", side_effect=RuntimeError("boom")):
-        response = client.get("/api/data-status", headers=headers)
-        assert response.status_code == 500
-        assert response.json()["detail"] == "Failed to retrieve data status."
-    with patch("main.get_scenarios", side_effect=RuntimeError("boom")):
-        response = client.get("/api/scenarios", headers=headers)
-        assert response.status_code == 500
-        assert response.json()["detail"] == "Failed to retrieve scenarios."

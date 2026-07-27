@@ -1,15 +1,12 @@
 """Agent classification, modeling, and orchestration implementation."""
 
-import itertools
 from enum import Enum
-import numpy as np
 
 import mcp_server
 from mcp_server import (
     get_aggregated_metrics,
     run_agricultural_simulation,
     get_prediction_intervals,
-    _score_batch
 )
 
 
@@ -178,29 +175,17 @@ class AggregationAgent(Agent):
 
 class TaskType(Enum):
     SIMULATE     = "simulate"
-    OPTIMIZE_RES = "optimize_resource"
-    OPTIMIZE     = "optimize"
     UNKNOWN      = "unknown"
 
 
 def _classify(task: str) -> TaskType:
     t = task.lower()
-    if "optimize_resource" in t:
-        return TaskType.OPTIMIZE_RES
-    if "optimize" in t:
-        return TaskType.OPTIMIZE
     if any(kw in t for kw in ("simulate", "run", "predict")):
         return TaskType.SIMULATE
     return TaskType.UNKNOWN
 
 
 class ModelingAgent(Agent):
-    AWD_OPTIONS      = ["With AWD", "Without AWD"]
-    SCENARIO_OPTIONS = ["Business As Usual", "One Million Hectare Rice"]
-    FERT_GRID        = [float(value) for value in range(80, 146, 5)]
-    WATER_GRID       = [float(value) for value in range(0, 851, 25)]
-    PEST_GRID        = [4.0 + 0.5 * value for value in range(8)]
-
     def __init__(self):
         super().__init__(
             name="Agricultural Yield & Emission Predictor",
@@ -210,31 +195,6 @@ class ModelingAgent(Agent):
                 "water/fertilizer/pesticide/AWD/scenario-group inputs to meet user-defined targets."
             )
         )
-
-    def _build_combos(self, resources: list, fixed: dict) -> list[tuple]:
-        """Generate grid search combinations: (awd, scenario_group, fert, pest, water)."""
-        awd      = self.AWD_OPTIONS      if "awd"            in resources else [fixed.get("awd_adoption",   "With AWD")]
-        scenario = self.SCENARIO_OPTIONS if "scenario_group" in resources else [fixed.get("scenario_group", "Business As Usual")]
-        fert     = self.FERT_GRID        if "fertilizer"     in resources else [fixed.get("fertilizer_usage", 100.0)]
-        pest     = self.PEST_GRID        if "pesticide"      in resources else [fixed.get("pesticide_usage",   5.0)]
-        water    = self.WATER_GRID       if "water"          in resources else [fixed.get("water_usage",     600.0)]
-        return list(itertools.product(awd, scenario, fert, pest, water))
-
-    def _best_from_combos(self, combos: list[tuple], target_methane: float) -> tuple[dict, float]:
-        preds = run_agricultural_simulation(combos)
-        scores = _score_batch(preds, target_methane)
-        best_idx = int(np.argmax(scores))
-        best_combo = combos[best_idx]
-        return {
-            "inputs": {
-                "AWD Adoption":     best_combo[0],
-                "Scenario Group":   best_combo[1],
-                "Fertilizer Usage": best_combo[2],
-                "Pesticide Usage":  best_combo[3],
-                "Water Usage":      best_combo[4],
-            },
-            "predictions": preds[best_idx],
-        }, float(scores[best_idx])
 
     def execute(self, task: str, **kwargs) -> dict:
         match _classify(task):
@@ -264,35 +224,6 @@ class ModelingAgent(Agent):
                         pesticide_usage=combo[0][3],
                         water_usage=combo[0][4],
                     ),
-                }
-
-            case TaskType.OPTIMIZE_RES:
-                resources      = kwargs.get("resources", [])
-                fixed          = kwargs.get("fixed_inputs", {})
-                target_methane = kwargs.get("target_methane", 500.0)
-                combos         = self._build_combos(resources, fixed)
-                best_sim, best_score = self._best_from_combos(combos, target_methane)
-                label = " + ".join(r.title() for r in resources) or "All Inputs"
-                return {
-                    "optimization_target": f"Optimal {label} (Methane ceiling: {target_methane} kg/ha)",
-                    "best_score":          best_score,
-                    "optimized_inputs":    best_sim["inputs"],
-                    "expected_outcomes":   best_sim["predictions"],
-                }
-
-            case TaskType.OPTIMIZE:
-                target_methane = kwargs.get("target_methane", 200.0)
-                fixed = {
-                    "pesticide_usage": kwargs.get("pesticide_usage", 5.0),
-                    "scenario_group":  kwargs.get("scenario_group", "Business As Usual"),
-                }
-                combos = self._build_combos(["awd", "fertilizer", "water"], fixed)
-                best_sim, best_score = self._best_from_combos(combos, target_methane)
-                return {
-                    "optimization_target": f"Maximize performance with Methane Emissions <= {target_methane}",
-                    "best_score":          best_score,
-                    "optimized_inputs":    best_sim["inputs"],
-                    "expected_outcomes":   best_sim["predictions"],
                 }
 
             case _:
@@ -339,7 +270,7 @@ class AgentOrchestrator:
         """Route an explicit task to the appropriate agent.
 
         Args:
-            task: One of 'compare', 'simulate', or 'optimize'.
+            task: One of 'compare' or 'simulate'.
             context: Structured parameters for the task.
         """
         context = context or {}
@@ -393,42 +324,11 @@ class AgentOrchestrator:
             }
 
         # ── Optimize ──────────────────────────────────────────────────────────
-        elif task == "optimize":
-            target_methane = context.get("target_methane", 200.0)
-            pest_val       = context.get("pesticide_usage", 5.0)
-            scenario_val   = context.get("scenario_group", "Business As Usual")
-
-            result = self.model_agent.execute(
-                "optimize",
-                target_methane=target_methane,
-                pesticide_usage=pest_val,
-                scenario_group=scenario_val,
-            )
-
-            inputs = result.get("optimized_inputs", {})
-            preds  = result.get("expected_outcomes", {})
-
-            if inputs:
-                text_desc = (
-                    f"Optimized for Methane ≤ {target_methane} kg/ha:\n"
-                    f"{self._format_inputs(inputs)}\n\n"
-                    f"Expected Outcomes:\n{_format_predictions(preds)}"
-                )
-            else:
-                text_desc = f"Could not find an allocation meeting Methane ≤ {target_methane} kg/ha."
-
-            return {
-                "agent":  self.model_agent.name,
-                "role":   self.model_agent.role,
-                "result": result,
-                "text":   text_desc,
-            }
-
         # ── Unknown Task ──────────────────────────────────────────────────────
         else:
             return {
                 "agent":  self.agg_agent.name,
                 "role":   self.agg_agent.role,
                 "result": {"error": f"Unrecognized task: '{task}'."},
-                "text":   f"Task not recognized: '{task}'. Supported tasks: 'compare', 'simulate', 'optimize'.",
+                "text":   f"Task not recognized: '{task}'. Supported tasks: 'compare', 'simulate'.",
             }

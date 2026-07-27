@@ -22,12 +22,10 @@ from slowapi.errors import RateLimitExceeded
 import app.config  # noqa: F401 - loads .env before importing service modules
 import app.logging_config  # noqa: F401 - configures structured logging
 from agent_adk import AgentOrchestrator
-from mcp_server import mcp, get_scenarios, get_data_status
+from mcp_server import get_data_status
 from app.api.schemas import (
     CompareRequest,
     KpiChangeRequest,
-    OptimizationRequest,
-    ResourceOptimizationRequest,
     SimulationRequest,
 )
 
@@ -72,7 +70,6 @@ if not API_KEYS:
     )
 
 _DATA_GATE_EXEMPT_PATHS = {
-    "/api/data-status",
     "/docs",
     "/openapi.json",
     "/redoc",
@@ -89,7 +86,7 @@ _AUTH_EXEMPT_PATHS = {
 }
 
 # Prefixes that require a valid API key on every request.
-_AUTH_PROTECTED_PREFIXES = ("/api/", "/mcp")
+_AUTH_PROTECTED_PREFIXES = ("/api/",)
 
 # ── Rate Limiter Helpers ──────────────────────────────────────────────────────
 
@@ -283,12 +280,6 @@ async def generic_exception_handler(request: Request, exc: Exception):
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    optimization_paths = {"/api/optimize", "/api/optimize/resource"}
-    if request.url.path in optimization_paths:
-        return JSONResponse(
-            status_code=400,
-            content={"success": False, "message": "Cannot be optimized"},
-        )
     return JSONResponse(status_code=422, content={"detail": jsonable_encoder(exc.errors())})
 
 
@@ -306,24 +297,6 @@ def health_check():
     """Unauthenticated liveness probe for uptime monitors / keep-alive pings.
     Deliberately returns no dataset information."""
     return {"status": "ok"}
-
-
-@app.get("/api/data-status")
-@limiter.limit(RATE_LIMIT)
-def api_get_data_status(request: Request):
-    try:
-        return get_data_status()
-    except Exception:
-        raise HTTPException(status_code=500, detail="Failed to retrieve data status.")
-
-
-@app.get("/api/scenarios")
-@limiter.limit(RATE_LIMIT)
-def api_get_scenarios(request: Request):
-    try:
-        return get_scenarios()
-    except Exception:
-        raise HTTPException(status_code=500, detail="Failed to retrieve scenarios.")
 
 
 @app.post("/api/compare")
@@ -364,42 +337,6 @@ def api_run_simulation(request: Request, req: SimulationRequest):
         raise HTTPException(status_code=500, detail="Simulation failed.")
 
 
-@app.post("/api/optimize")
-@limiter.limit(RATE_LIMIT)
-def api_optimize(request: Request, req: OptimizationRequest):
-    try:
-        result = orchestrator.process_query(
-            "optimize",
-            context={
-                "target_methane":  req.target_methane,
-                "scenario_group":  req.scenario_group,
-                "pesticide_usage": req.pesticide_usage,
-            },
-        )
-        return result["result"]
-    except HTTPException:
-        raise
-    except Exception:
-        raise HTTPException(status_code=500, detail="Optimization failed.")
-
-
-@app.post("/api/optimize/resource")
-@limiter.limit(RATE_LIMIT)
-def api_run_resource_optimization(request: Request, req: ResourceOptimizationRequest):
-    try:
-        result = orchestrator.model_agent.execute(
-            "optimize_resource",
-            resources=req.resources,
-            fixed_inputs=req.fixed_inputs,
-            target_methane=req.target_methane,
-        )
-        return result
-    except HTTPException:
-        raise
-    except Exception:
-        raise HTTPException(status_code=500, detail="Resource optimization failed.")
-
-
 @app.post("/api/kpi-change")
 @limiter.limit(RATE_LIMIT)
 def api_get_kpi_change(request: Request, req: KpiChangeRequest):
@@ -413,21 +350,6 @@ def api_get_kpi_change(request: Request, req: KpiChangeRequest):
 
 
 # ── MCP SSE Mount Endpoint ────────────────────────────────────────────────────
-# NOTE: this mount is now covered by require_api_key above (path startswith "/mcp"),
-# so every SSE connection must present a valid API key before reaching FastMCP.
-# It is intentionally NOT covered by the slowapi @limiter.limit decorators (those
-# only apply to the individual @app.get/@app.post routes above); if you need
-# per-request throttling on MCP traffic too, add a dedicated rate-limit check
-# inside require_api_key or require_data_loaded for paths starting with "/mcp".
-
-try:
-    sse_app = mcp.sse_app()
-    app.mount("/mcp", sse_app)
-    logger.info("Mounted MCP SSE application", extra={"event": "mcp_mounted", "path": "/mcp"})
-except Exception:
-    logger.exception("Could not mount MCP SSE application", extra={"event": "mcp_mount_failed"})
-
-
 if __name__ == "__main__":
     import uvicorn
     import os

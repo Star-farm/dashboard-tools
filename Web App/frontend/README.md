@@ -34,7 +34,6 @@ The Vite development proxy forwards `/api/proxy/*` to the local backend on port 
 The browser only calls same-origin paths:
 
 ```text
-/api/proxy/scenarios
 /api/proxy/kpi-change
 /api/proxy/compare
 /api/proxy/simulate
@@ -90,7 +89,6 @@ tests/unit/                Hook and utility unit tests
 
 | Request | Backend route |
 | --- | --- |
-| Filter options | `GET /api/scenarios` |
 | 2022–2050 KPIs | `POST /api/kpi-change` |
 | Chart comparison | `POST /api/compare` |
 | Simulation | `POST /api/simulate` |
@@ -119,7 +117,7 @@ A full `npm audit` may report advisories in build or test tooling. Evaluate thos
 1. Import the `frontend` directory as the Vercel project's Root Directory.
 2. Configure `BACKEND_API_URL` and `BACKEND_API_KEY` for the appropriate Production and Preview environments.
 3. Use `npm run build` with `dist` as the output directory.
-4. Deploy, then verify `/api/proxy/scenarios` and the dashboard.
+4. Deploy, then verify `/api/proxy/kpi-change` and the dashboard.
 
 ## Common Problems
 

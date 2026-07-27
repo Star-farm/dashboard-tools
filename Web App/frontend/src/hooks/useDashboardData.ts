@@ -12,16 +12,6 @@ import {
 import { buildIndicatorChart } from '../features/dashboard/chartTransformers';
 import { buildKeyMessage, buildKpiCards } from '../features/dashboard/kpiFormatters';
 
-export {
-    KPI_CARDS_CONFIG,
-    METRIC_GROUPS,
-    PREDICTION_INTERVAL_COLOR,
-    SCENARIO_COLORS,
-    SCENARIO_KEYS,
-    SIMULATION_INPUT_LIMITS,
-    USD_TO_VND,
-} from '../features/dashboard/dashboardConfig';
-
 const DEFAULT_SCENARIO: ScenarioGroup = 'Business As Usual';
 const DEFAULT_INPUTS: SimulationInputs = {
     awd_adoption: 'Without AWD',

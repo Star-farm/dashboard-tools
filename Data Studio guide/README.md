@@ -13,9 +13,35 @@ A step-by-step guide to automating a geospatial data pipeline that ingests GeoTI
 - **QGIS (v3.12 or later)** — Open-source GIS software for desktop data preparation.
 - **GAMA Platform** — *(Optional)* For advanced spatial simulation modeling.
 
+### Google Cloud APIs
+
+Enable these APIs in the project before deploying:
+
+- BigQuery API
+- Cloud Storage API
+- Cloud Run Admin API and Cloud Build API
+- Eventarc API
+- Cloud Scheduler API
+- Google Drive API
+
+### Location Strategy
+
+This guide uses `us-central1` as a conservative compatibility baseline. Do not assume that every Google Cloud product is available in every region, and do not blindly assign one location to every resource.
+
+| Resource | Location used in this guide | Rule |
+|----------|-----------------------------|------|
+| BigQuery dataset | `us-central1` | Confirm that BigQuery and the required raster functions are supported before choosing another location. |
+| Cloud Storage bucket | `us-central1` | Keep the raster bucket colocated with the BigQuery dataset where possible to reduce transfer cost and latency. |
+| Eventarc Storage trigger | `us-central1` | Must match the Cloud Storage bucket location. |
+| Cloud Run functions | `us-central1` | May technically differ from the Eventarc trigger, but colocation is recommended. |
+| Cloud Scheduler jobs | `us-central1` | The job region does not determine the cron timezone; configure the timezone separately. |
+| Looker Studio / Earth Engine | Managed service | These are not configured by assigning the pipeline's Cloud Run region. |
+
+If organizational policy requires an Asia region, verify every row above against the current Google Cloud location documentation before replacing `us-central1`. A split-region deployment is possible, but it can add latency, transfer charges, and data-residency considerations.
+
 ### Data Assets
 
-- **Base Spatial Boundary Dataset** — A CSV file with at least an `ID` column and an `Area` column in Polygon format (WKT or GeoJSON).
+- **Base Spatial Boundary Dataset** — A CSV file with at least an `id` column and an `Area` column in Polygon format (WKT or GeoJSON). Keep the lowercase `id` name because the supplied SQL references it directly.
 - **Source Raster Files** — GeoTIFF maps representing regional metrics across time (e.g., `sowing_date.zip` or `cropping_intensity.zip` from [VietSco](https://www.vietsco.org/)).
 
 ---
@@ -38,12 +64,13 @@ A step-by-step guide to automating a geospatial data pipeline that ingests GeoTI
 #### BigQuery Dataset
 
 1. Open the BigQuery console and create a new dataset.
-2. Set the dataset location to `us-west` (keep all services in the same region).
+2. Set the dataset location to `us-central1`, or to another location that you have verified for every required BigQuery feature.
 3. Create a new table and import your base spatial `.CSV` boundaries file.
+4. Confirm that `id` is an integer and `Area` is a valid `GEOGRAPHY` polygon. If `Area` was imported as text, convert it with `ST_GEOGFROMTEXT` or `ST_GEOGFROMGEOJSON` before running the raster pipeline.
 
 #### Cloud Storage Bucket
 
-1. Create a standard Cloud Storage bucket in the same region (`us-west`).
+1. Create a standard Cloud Storage bucket in `us-central1`. If you choose another location, use that exact bucket location for the Eventarc Storage trigger.
 2. Upload the pipeline status file to the root of your bucket:
 
 📄 [`pipeline_status.json`](pipeline_status.json)
@@ -52,20 +79,30 @@ A step-by-step guide to automating a geospatial data pipeline that ingests GeoTI
 
 ### Step 3: Raster Processing Cloud Function
 
-This function detects new COG files uploaded to your storage bucket, reads their data against your BigQuery spatial boundaries via `ST_REGIONSTATS`, and updates your reporting table.
+This service receives Cloud Storage finalize events through Eventarc, reads each new COG against the BigQuery spatial boundaries with `ST_REGIONSTATS`, and updates the reporting table. The supplied entry point is HTTP-based because it also exposes the `/reset` route.
 
 **Setup:**
 
-1. Create a new Cloud Function named `raster-pipeline`.
-2. Configure a **Cloud Storage Trigger** on your bucket (Event type: *Finalizing / On Upload*).
-3. Set the request timeout to **3600 seconds**.
-4. Deploy the following files into the function:
+1. Deploy `raster_file` as a second-generation Cloud Run function named `raster-pipeline`.
+2. Set the runtime entry point to `main_router` and the trigger type to **HTTP**.
+3. Set the request timeout to **3600 seconds** and require authentication.
+4. Deploy the following files:
 
 📄 [`requirements.txt`](raster_file/requirements.txt)
 
 📄 [`main.py`](raster_file/main.py)
 
 > **Before deploying:** replace `BUCKET_NAME` at the top of `main.py` with your actual bucket name, and update the BigQuery project/dataset/table references in the `CREATE TABLE` and `MERGE` queries.
+
+After deployment, create an Eventarc trigger that routes `google.cloud.storage.object.v1.finalized` events from the bucket to the `raster-pipeline` service. Grant the trigger's service account permission to invoke the service.
+
+The raster service account needs, at minimum, permission to:
+
+- Read the source COGs and read/write `pipeline_status.json` and retry state in the bucket.
+- Read the boundary table and create/update the reporting table in BigQuery.
+- Run BigQuery jobs.
+
+> File naming requirement: each `.tif` or `.tiff` name must contain a four-digit year. Names containing `sowing` are classified as **Sowing Date**; all other raster names are currently classified as **Cropping Intensity**. Update `metric_type` in `main.py` before introducing another raster category.
 
 ---
 
@@ -74,31 +111,47 @@ This function detects new COG files uploaded to your storage bucket, reads their
 Automatically recovers the pipeline from daily quota locks.
 
 1. Open **Cloud Scheduler** and create a new job.
-2. Select your matching Cloud Region.
-3. Set the Cron Schedule: `5 0 * * *` *(runs daily at 12:05 AM — Vietnam Timezone / ICT)*.
+2. Select `us-central1` (or any Cloud Scheduler region allowed by your organization) and set the timezone to `Asia/Ho_Chi_Minh`.
+3. Set the Cron Schedule to `5 0 * * *` *(runs daily at 12:05 AM ICT)*.
 4. Set Target Type to **HTTP**.
 5. Set the URL to your Cloud Function URL appended with `/reset`:
    ```
    https://[your-function-url].run.app/reset
    ```
+6. Use the `GET` method and attach an OIDC token from a service account that has permission to invoke `raster-pipeline`.
+
+> The reset endpoint clears the lock and retry counters. It does not retry previously failed rasters automatically; re-upload or re-trigger the affected object after investigating the error.
 
 ---
 
 ### Step 5: Google Drive Synchronization Cloud Function
 
-This function scans a shared Google Drive folder for new files and moves them to your Cloud Storage bucket to trigger processing.
+This function scans a Google Drive folder for new or modified TIFF files and **copies** them to Cloud Storage. It does not delete or move the source files in Drive.
 
 **Setup:**
 
 1. Create a Cloud Function named `drive-to-gcs-sync`.
 2. Set the trigger type to **HTTP**.
-3. Deploy the following files:
+3. Set the runtime entry point to `sync_drive_to_gcs` and require authentication.
+4. Deploy the following files:
 
 📄 [`drive_sync/requirements.txt`](drive_sync/requirements.txt)
 
 📄 [`drive_sync/main.py`](drive_sync/main.py)
 
 > **Before deploying:** replace `DRIVE_FOLDER_ID` and `BUCKET_NAME` at the top of `main.py` with your actual values.
+
+Share the source Drive folder with the function's service-account email as a Viewer. Give that service account permission to create objects and read/write `sync_checkpoint.txt` in the destination bucket.
+
+Create a second Cloud Scheduler job to invoke this function periodically, for example:
+
+- Schedule: `*/15 * * * *`
+- Timezone: `Asia/Ho_Chi_Minh`
+- Method: `GET`
+- URL: the deployed `drive-to-gcs-sync` service URL
+- Authentication: OIDC token from a service account allowed to invoke the service
+
+> The supplied implementation reads at most 100 matching files per scan. Add Drive API pagination before using it with larger folders. For a Google Shared Drive, also add `supportsAllDrives`, `includeItemsFromAllDrives`, `corpora`, and `driveId` to the Drive API request.
 
 ---
 
@@ -133,6 +186,8 @@ GAMA exports per-agent tabular data as CSV files with simulation metrics across 
 - **Average** `Biodiversity`, `Resilient Varieties`, `Water Reliability`, `AWD Adoption`.
 - **Max** `Flood Stress`, `Drought Stress`, `Salinity Stress` (binary flags — useful for seeing if any agent experienced stress).
 
+> Only configure metrics that exist in your exported schema. The sample table above contains `Fertilizer Usage`, `Water Usage`, `Flood Stress`, `Drought Stress`, `Biodiversity`, and `Emission Intensity`. Add the other fields to the GAMA export first, or omit their scorecards and filters.
+
 **Time Series Charts** — track metrics over the simulation period:
 
 - X-axis → `datetime`
@@ -152,15 +207,15 @@ GAMA exports per-agent tabular data as CSV files with simulation metrics across 
 
 ### Path B — Via BigQuery *(if the CSV is too large for Google Sheets)*
 
-If your simulation output exceeds ~200k rows or 10 MB, load it into BigQuery and connect from there instead.
+If the sheet becomes slow, exceeds Google Sheets limits, or needs reliable scheduled ingestion, store the output in a native BigQuery table and connect Looker Studio to that table.
 
-1. In BigQuery, open your dataset (`map_data_us`) → **Create Table**.
-2. Source: **Google Drive** → paste your Google Sheets URL. File format: **Google Sheets**.
-3. Table name: `gama_output`. Enable **Auto-detect schema** → **Create Table**.
+1. In BigQuery, open your dataset → **Create Table**.
+2. Upload the CSV from your computer or first place it in Cloud Storage and select that object as the source.
+3. Select **CSV**, set the table name to `gama_output`, enable schema auto-detection, review the detected types, and create the table.
 
-> BigQuery does not allow spaces in column names. Rename columns in Sheets first if needed (e.g. `Flood Stress` → `Flood_Stress`).
+> Prefer portable column names containing letters, numbers, and underscores (for example, `Flood_Stress`). BigQuery supports some flexible column names, but spaces can require quoting and may not work consistently across connectors and external tables.
 
-4. In Looker Studio, connect to **BigQuery** → `map_data_us` → `gama_output` instead of Google Sheets.
+4. In Looker Studio, connect to **BigQuery** → your dataset → `gama_output` instead of Google Sheets.
 5. Build the same KPI and chart panels as above.
 
 ---
@@ -183,11 +238,14 @@ Once the cloud pipeline is running, the `datastudio_output` table populates with
 
 1. Click **Add a chart** → **Google Maps** (or *Filled Map*).
 2. Configure chart fields:
-   - **Location** → `Area` column (detected as GEOGRAPHY — polygon boundaries).
+   - **Location** → `id` column (a unique identifier for each polygon).
+   - **Geospatial field** → `Area` column (detected as BigQuery `GEOGRAPHY`).
    - **Tooltip** → `id` column.
    - **Color Metric** → `AverageValue` (shades polygons by raster-extracted value).
 3. Add a **Drop-down list control** with dimension `Index` — lets viewers switch between *Sowing Date* and *Cropping Intensity* layers.
 4. Add a **Slider control** using `Year` to scrub through historical trends.
+
+> Looker Studio Google Maps has a polygon-vertex limit. If polygons are missing, increase **Max number of polygon vertices** in the chart style settings, apply filters, or simplify the geometry in BigQuery with `ST_SIMPLIFY`.
 
 ### Dashboard B — GAMA Simulation KPIs & Charts
 
@@ -209,8 +267,8 @@ While Looker Studio handles vector shapes well, rendering dense pixel-level rast
 ### Workflow Overview
 
 1. **Host COGs** — Store your processed GeoTIFF files on Google Earth Engine Cloud Assets.
-2. **Import into GEE** — Reference the public or service-account-accessible COG URLs inside the Code Editor.
-3. **Set Permissions** — Ensure the underlying assets or cloud buckets are shared publicly.
+2. **Import into GEE** — Import the rasters as Earth Engine assets or reference storage objects using an access method supported by Earth Engine.
+3. **Set Permissions** — Grant only the access required by the deployed Earth Engine App. Do not make the source bucket public unless public data access is intentional.
 4. **Build the GEE App** — Deploy the visualization script as an official Earth Engine App.
 5. **Embed** — Paste the GEE App URL into a **URL Embed** widget inside Looker Studio.
 
@@ -218,7 +276,7 @@ While Looker Studio handles vector shapes well, rendering dense pixel-level rast
 
 Open the [Google Earth Engine Code Editor](https://code.earthengine.google.com/) and paste the script below. It sets up a clean baseline map, handles smooth crossfade transitions between years, manages an interactive polygon inspector on click, and renders a continuous legend.
 
-> **Note:** Define `image` through `image7` at the top of your script pointing to your Cloud Assets. Make sure `table` is set to your imported CSV polygon FeatureCollection.
+> **Required assets:** the current script expects `table` to be an Earth Engine polygon `FeatureCollection` and expects raster variables through `image21`: `image`–`image7` for Cropping Intensity (2018–2024), `image8`–`image13` for Flooding Duration (2015–2020), and `image14`–`image21` for Sowing Date (2018–2025). Remove unused modes or define every referenced variable before running the script.
 
 📄 [`gee_visualization.js`](gee_visualization.js)
 

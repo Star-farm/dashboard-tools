@@ -8,7 +8,7 @@ from google.cloud import storage
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 BUCKET_NAME    = 'xxxxxx'  # TODO: Replace with your bucket name
-STATUS_FILE    = '../pipeline_status.json'
+STATUS_FILE    = 'pipeline_status.json'
 RETRY_FILE     = 'pipeline_retry_counts.json'
 MAX_RETRIES    = 3
 

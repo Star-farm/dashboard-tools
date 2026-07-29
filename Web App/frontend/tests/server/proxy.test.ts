@@ -102,18 +102,28 @@ describe('frontend API proxy handler', () => {
         expect(res.statusCode).toBe(413);
     });
 
-    it('rejects invalid URLs and non-HTTPS production URLs', async () => {
+    it('rejects invalid URLs and allows HTTP production URLs', async () => {
         let handler = await loadHandler('not a url');
         let res = responseMock();
         await handler({ query: { path: 'kpi-change' }, method: 'POST' } as unknown as VercelRequest, res);
         expect(res.statusCode).toBe(500);
 
+        const fetchMock = vi.fn().mockResolvedValue({
+            status: 200,
+            headers: { get: () => 'application/json' },
+            text: async () => '{"ok":true}',
+        });
+        vi.stubGlobal('fetch', fetchMock);
         vi.stubEnv('NODE_ENV', 'production');
         handler = await loadHandler('http://backend.example');
         vi.stubEnv('NODE_ENV', 'production');
         res = responseMock();
         await handler({ query: { path: 'kpi-change' }, method: 'POST' } as unknown as VercelRequest, res);
-        expect(res.statusCode).toBe(500);
+        expect(res.statusCode).toBe(200);
+        expect(fetchMock).toHaveBeenCalledWith(
+            new URL('http://backend.example/kpi-change'),
+            expect.any(Object),
+        );
     });
 
     it.each([

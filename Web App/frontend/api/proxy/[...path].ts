@@ -69,8 +69,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let targetUrl: URL;
     try {
         const backendBase = new URL(BACKEND_URL.endsWith('/') ? BACKEND_URL : `${BACKEND_URL}/`);
-        if (backendBase.protocol !== 'https:' && process.env.NODE_ENV === 'production') {
-            throw new Error('Production backend URL must use HTTPS.');
+        if (!['http:', 'https:'].includes(backendBase.protocol)) {
+            throw new Error('Backend URL must use HTTP or HTTPS.');
         }
         targetUrl = new URL(route, backendBase);
     } catch {

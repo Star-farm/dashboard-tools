@@ -25,6 +25,9 @@ On a Linux VPS:
 cp .env.example .env
 chmod 600 .env
 docker compose build api
+# Create caching folder with proper user permission
+mkdir -p ./model_cache
+sudo chown -R 8888:8888 ./model_cache
 docker compose run --rm api python -m app.ml.train
 docker compose up -d
 docker compose ps

@@ -38,7 +38,9 @@ async function apiFetchJson<T>(path: string, options: RequestInit = {}): Promise
 export function fetchKpiChange(signal?: AbortSignal): Promise<KpiChangeResult> {
     return apiFetchJson('/kpi-change', {
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+            metrics: ['Avg Yield', 'Labor Intensity', 'Net Income', 'Profit Margin'],
+        }),
         signal,
     });
 }

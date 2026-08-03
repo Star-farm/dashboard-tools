@@ -1,11 +1,24 @@
 import type { Translation } from '../../i18n';
+import type { Language } from '../../utils/language';
 
-export function DashboardFooter({ t }: { t: Translation }) {
+type DashboardFooterProps = {
+    t: Translation;
+    language: Language;
+};
+
+const DATA_STUDIO_LINKS: Record<Language, string> = {
+    vi: 'https://datastudio.google.com/s/l24a4_jwBNI',
+    en: 'https://datastudio.google.com/s/nC82cbYUx7Q',
+};
+
+export function DashboardFooter({ t, language }: DashboardFooterProps) {
+    const dataStudioLink = DATA_STUDIO_LINKS[language];
+
     return (
         <>
             <section className="glass-panel data-cta-panel">
                 <p className="data-cta-text">{t.viewDetailedDataAt}</p>
-                <a href="https://datastudio.google.com/s/nC82cbYUx7Q" target="_blank" rel="noopener noreferrer" className="btn data-cta-btn">
+                <a href={dataStudioLink} target="_blank" rel="noopener noreferrer" className="btn data-cta-btn">
                     {t.dataVisualizationLinkText}
                 </a>
             </section>
@@ -20,7 +33,7 @@ export function DashboardFooter({ t }: { t: Translation }) {
                     <div className="footer-links">
                         <h4>{t.footerLinks}</h4>
                         <ul>
-                            <li><a href="https://datastudio.google.com/s/nC82cbYUx7Q" target="_blank" rel="noopener noreferrer">{t.footerDataVisualization}</a></li>
+                            <li><a href={dataStudioLink} target="_blank" rel="noopener noreferrer">{t.footerDataVisualization}</a></li>
                             <li><a href="https://github.com/Star-farm/Star-farm-models" target="_blank" rel="noopener noreferrer">{t.footerDocumentation}</a></li>
                             <li><a href="https://across-lab.org/" target="_blank" rel="noopener noreferrer">{t.aboutus}</a></li>
                         </ul>

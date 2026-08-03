@@ -128,7 +128,7 @@ const defaultHookReturn = {
     kpiChange: {
         kpis: {
             'Avg Yield': { pct_change: -5.0, target_value: 4.5 },
-            'Methane Emissions': { pct_change: 12.0, target_value: 400.0 },
+            'Labor Intensity': { pct_change: 12.0, target_value: 400.0 },
             'Net Income': { pct_change: -10.0, target_value: 1500.0 },
             'Profit Margin': { pct_change: -3.0, target_value: 35.0 },
         },
@@ -169,11 +169,11 @@ const defaultHookReturn = {
     environmentChart: { data: [], leftDomain: [0, 5], leftTicks: [0, 5], rightDomain: [0, 5], rightTicks: [0, 5], left: { unit: 'kg/ha' }, right: { unit: 'kg CH4/t' } },
     KPI_CARDS: [
         { key: 'Avg Yield', label: 'Average Yield', unit: 't/ha' },
-        { key: 'Methane Emissions', label: 'Methane Emissions', unit: 'kg/ha', lowerIsBetter: true },
+        { key: 'Labor Intensity', label: 'Labour Intensity', unit: 'hours/ha', lowerIsBetter: true },
         { key: 'Net Income', label: 'Net Income', unit: '$/ha' },
         { key: 'Profit Margin', label: 'Profit Margin', unit: '%' },
     ],
-    keyMessage: 'Methane emissions could rise by 12.0%',
+    keyMessage: 'Labour intensity could rise by 12.0%',
     runSimulation: vi.fn(),
 };
 
@@ -199,10 +199,11 @@ describe('Dashboard Component UI', () => {
 
         expect(screen.getByText('Star Farm Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Agricultural Modeling App')).toBeInTheDocument();
-        expect(screen.getByText('Methane emissions could rise by 12.0%')).toBeInTheDocument();
+        expect(screen.getByText('Labour intensity could rise by 12.0%')).toBeInTheDocument();
 
         const charts = screen.getAllByTestId('bar-chart');
         expect(charts.length).toBe(2);
+        expect(screen.queryByText(/P90/i)).not.toBeInTheDocument();
 
         const firstChartBars = Array.from(charts[0].querySelectorAll('[data-testid="bar"]'));
         expect(firstChartBars.map(bar => bar.getAttribute('data-key'))).toEqual([
@@ -303,7 +304,7 @@ describe('Dashboard Component UI', () => {
             kpiChange: {
                 kpis: {
                     'Avg Yield': { pct_change: 5.0, target_value: 5.5 },
-                    'Methane Emissions': { pct_change: -12.0, target_value: 300.0 },
+                    'Labor Intensity': { pct_change: -12.0, target_value: 300.0 },
                     'Net Income': { pct_change: 10.0, target_value: 1800.0 },
                     'Profit Margin': { pct_change: 0.0, target_value: 35.0 },
                 },
@@ -340,7 +341,7 @@ describe('Dashboard Component UI', () => {
             kpiChange: {
                 kpis: {
                     'Avg Yield': { pct_change: null, target_value: null },
-                    'Methane Emissions': { pct_change: null, target_value: null },
+                    'Labor Intensity': { pct_change: null, target_value: null },
                     'Net Income': { pct_change: null, target_value: null },
                     'Profit Margin': { pct_change: null, target_value: null },
                 },

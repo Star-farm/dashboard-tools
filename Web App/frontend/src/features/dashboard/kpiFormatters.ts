@@ -6,11 +6,11 @@ export function buildKpiCards(t: Translation) {
     return KPI_CARDS_CONFIG.map((config) => ({
         ...config,
         unit: config.key === 'Avg Yield' ? t.yieldUnit
-            : config.key === 'Methane Emissions' ? t.methanePerHectareUnit
+            : config.key === 'Labor Intensity' ? t.laborIntensityUnit
                 : config.key === 'Net Income' ? t.netIncomeUsdUnit
                     : config.unit,
         label: config.key === 'Avg Yield' ? t.avgYield
-            : config.key === 'Methane Emissions' ? t.methaneEmissions
+            : config.key === 'Labor Intensity' ? t.laborIntensity
                 : config.key === 'Net Income' ? t.netIncome
                     : t.profitMargin,
     }));
@@ -22,13 +22,13 @@ export function buildKeyMessage(
 ): string {
     if (!kpiChange?.kpis) return '';
     const yieldChange = kpiChange.kpis['Avg Yield']?.pct_change;
-    const methaneChange = kpiChange.kpis['Methane Emissions']?.pct_change;
+    const laborChange = kpiChange.kpis['Labor Intensity']?.pct_change;
     const incomeChange = kpiChange.kpis['Net Income']?.pct_change;
     const profitChange = kpiChange.kpis['Profit Margin']?.pct_change;
     const parts: string[] = [];
 
-    if (methaneChange != null && methaneChange > 0) {
-        parts.push(t.methaneIncreaseMessage.replace('{value}', methaneChange.toFixed(1)));
+    if (laborChange != null && laborChange > 0) {
+        parts.push(t.laborIntensityIncreaseMessage.replace('{value}', laborChange.toFixed(1)));
     }
     if (yieldChange != null && yieldChange < 0) {
         parts.push(t.yieldDecreaseMessage.replace('{value}', Math.abs(yieldChange).toFixed(1)));

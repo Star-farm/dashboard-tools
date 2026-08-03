@@ -19,8 +19,6 @@ export const SCENARIO_COLORS: Record<string, string> = {
     Simulation: '#3b82f6',
 };
 
-export const PREDICTION_INTERVAL_COLOR = '#f59e0b';
-
 export const SCENARIO_KEYS = [
     'Business As Usual',
     'One Million Hectare Rice',
@@ -46,7 +44,7 @@ export const KPI_CARDS_CONFIG: {
     lowerIsBetter?: boolean;
 }[] = [
     { key: 'Avg Yield', unit: 't/ha' },
-    { key: 'Methane Emissions', unit: 'kg/ha', lowerIsBetter: true },
+    { key: 'Labor Intensity', unit: 'hours/ha', lowerIsBetter: true },
     { key: 'Net Income', unit: '$/ha' },
     { key: 'Profit Margin', unit: '%' },
 ];

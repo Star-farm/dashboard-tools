@@ -22,12 +22,8 @@ export interface SimulationResult {
         'Avg Yield': number;
         'Methane Emissions': number;
         'Emission Intensity': number;
+        'Labor Intensity': number;
         'Profit Margin': number;
         'Net Income': number;
     };
-    prediction_intervals?: Partial<Record<keyof SimulationResult['predictions'], {
-        lower: number;
-        upper: number;
-        level: number;
-    }>>;
 }

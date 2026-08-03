@@ -70,7 +70,7 @@ export function Dashboard() {
             <div className="dashboard-grid">
                 {dashboard.isMobile ? <>{controls}{charts}</> : <>{charts}{controls}</>}
             </div>
-            <DashboardFooter t={dashboard.t} />
+            <DashboardFooter t={dashboard.t} language={language} />
         </div>
     );
 }

@@ -107,42 +107,14 @@ export function buildIndicatorChart(
         leftRow.Simulation_left = Number(leftPrediction.toFixed(2));
         rightRow.Simulation_right = convertRight(rightPrediction);
 
-        const leftInterval = simulation.prediction_intervals?.[leftKey];
-        if (leftInterval) {
-            leftRow.Simulation_left_lower = Number(leftInterval.lower.toFixed(2));
-            leftRow.Simulation_left_upper = Number(leftInterval.upper.toFixed(2));
-            leftRow.Simulation_left_level = leftInterval.level;
-            leftRow.Simulation_left_error = [
-                Math.max(0, leftPrediction - leftInterval.lower),
-                Math.max(0, leftInterval.upper - leftPrediction),
-            ];
-        }
-
-        const rightInterval = simulation.prediction_intervals?.[rightKey];
-        if (rightInterval) {
-            const lower = convertRight(rightInterval.lower);
-            const upper = convertRight(rightInterval.upper);
-            const displayedPrediction = convertRight(rightPrediction);
-            rightRow.Simulation_right_lower = lower;
-            rightRow.Simulation_right_upper = upper;
-            rightRow.Simulation_right_level = rightInterval.level;
-            rightRow.Simulation_right_error = [
-                Math.max(0, displayedPrediction - lower),
-                Math.max(0, upper - displayedPrediction),
-            ];
-        }
     }
 
     const data = [leftRow, rightRow];
     const leftScale = computeDomainAndTicks(data, [
         ...SCENARIO_KEYS.map((scenario) => `${scenario}_left`),
-        'Simulation_left_lower',
-        'Simulation_left_upper',
     ]);
     const rightScale = computeDomainAndTicks(data, [
         ...SCENARIO_KEYS.map((scenario) => `${scenario}_right`),
-        'Simulation_right_lower',
-        'Simulation_right_upper',
     ]);
 
     return {

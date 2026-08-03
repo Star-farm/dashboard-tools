@@ -1,6 +1,6 @@
 # Frontend
 
-React and TypeScript dashboard for KPI summaries, comparison charts, and simulation results. Simulation bars render backend-provided P90 prediction intervals in a distinct color. Production is designed for Vercel with a serverless proxy that protects the backend API key.
+React and TypeScript dashboard for KPI summaries, comparison charts, and simulation results. Production is designed for Vercel with a serverless proxy that protects the backend API key.
 
 ## Technology
 
@@ -8,7 +8,7 @@ React and TypeScript dashboard for KPI summaries, comparison charts, and simulat
 - Vite.
 - Recharts.
 - Vitest and Testing Library.
-- Vercel Functions through `@vercel/node`.
+- Vercel Functions using Web-standard `Request` and `Response` APIs.
 
 ## Local Development
 
@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-The Vite development proxy forwards `/api/proxy/*` to the local backend on port `8080`. Start the Backend or VPS Service first.
+The Vite development proxy forwards `/api/proxy/*` to the local backend on port `8080`. Start the Backend or VPS Service first, and set `BACKEND_API_KEY` in the ignored `.env.local` file. The development server fails closed instead of using a repository-wide default key.
 
 ## Scripts
 
@@ -46,7 +46,7 @@ The Vercel function at `api/proxy/[...path].ts`:
 - Limits request bodies to 32 KB.
 - Applies a timeout to backend requests.
 - Disables caching for API responses.
-- Requires an HTTPS backend in production.
+- Can fail closed on a non-HTTPS backend when `REQUIRE_HTTPS_BACKEND=true`.
 
 Do not call the backend directly from a component, and never place an API key in a `VITE_*` variable.
 
@@ -55,20 +55,42 @@ Do not call the backend directly from a component, and never place an API key in
 Create `.env.local` when needed locally, or configure these values in Vercel:
 
 ```dotenv
-BACKEND_API_URL=https://api.example.com
+BACKEND_API_URL=https://api.example.com/api/
 BACKEND_API_KEY=replace-with-a-strong-secret
-VITE_CSP_CONNECT='self' https://api.example.com
+REQUIRE_HTTPS_BACKEND=true
+VITE_CSP_CONNECT='self'
 VITE_CSP_SCRIPT='self'
 ```
 
 | Name | Scope | Purpose |
 | --- | --- | --- |
-| `BACKEND_API_URL` | Server only | HTTPS URL for Cloud Run or the VPS |
+| `BACKEND_API_URL` | Server only | Backend API base URL ending in `/api/` |
 | `BACKEND_API_KEY` | Server only | Key shared by the proxy and backend |
-| `VITE_CSP_CONNECT` | Build/client | Additional `connect-src` values if needed |
+| `REQUIRE_HTTPS_BACKEND` | Server only | Set to `true` after the backend has TLS to reject plaintext key transport |
+| `VITE_CSP_CONNECT` | Build/client | Browser `connect-src`; remains same-origin for the server-side proxy |
 | `VITE_CSP_SCRIPT` | Build/client | `script-src` values |
 
-The local backend may use HTTP. The production proxy rejects backend URLs that do not use HTTPS.
+HTTP remains supported for the current VPS deployment. In that mode, traffic between Vercel and the backend, including the API key, is not protected by transport encryption. After TLS is configured on the backend URL, switch it to `https://` and set `REQUIRE_HTTPS_BACKEND=true`.
+
+## Edge Rate Limiting
+
+The backend's in-memory, IP-based limiter is not a complete control when calls
+arrive through serverless proxy egress addresses. Configure a Vercel Firewall
+rate-limit rule for request paths beginning with `/api/proxy/`, keyed by the
+original client IP. Start the rule in log mode, compare it with expected
+dashboard traffic, and then publish the `429` action. The current backend
+policy is `60` requests per `60` seconds; change that value only after a
+capacity and usage review.
+
+Verify the live rule after publishing rather than relying on repository
+configuration:
+
+```powershell
+npx vercel firewall rules ls
+```
+
+Vercel's dashboard procedure is documented at
+<https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting>.
 
 ## Key Files
 
@@ -95,7 +117,7 @@ tests/unit/                Hook and utility unit tests
 
 A new route must be deliberately added to the proxy allowlist and covered by tests. Otherwise, the proxy returns `404`.
 
-The meaning and calculation of the simulated values and P90 ranges are documented in [Model Documentation](../MODEL.md).
+The meaning and calculation of the simulated values is documented in [Model Documentation](../MODEL.md).
 
 ## Testing and Building
 
@@ -115,7 +137,7 @@ A full `npm audit` may report advisories in build or test tooling. Evaluate thos
 ## Vercel Deployment
 
 1. Import the `frontend` directory as the Vercel project's Root Directory.
-2. Configure `BACKEND_API_URL` and `BACKEND_API_KEY` for the appropriate Production and Preview environments.
+2. Configure `BACKEND_API_URL`, `BACKEND_API_KEY`, and `REQUIRE_HTTPS_BACKEND` for the appropriate Production and Preview environments.
 3. Use `npm run build` with `dist` as the output directory.
 4. Deploy, then verify `/api/proxy/kpi-change` and the dashboard.
 

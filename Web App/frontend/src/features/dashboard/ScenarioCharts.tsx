@@ -2,7 +2,6 @@ import React from 'react';
 import {
     Bar,
     BarChart,
-    ErrorBar,
     LabelList,
     Legend,
     ReferenceLine,
@@ -14,7 +13,6 @@ import {
 import type { Translation } from '../../i18n';
 import type { IndicatorChart } from './chartTransformers';
 import {
-    PREDICTION_INTERVAL_COLOR,
     SCENARIO_COLORS,
     SCENARIO_KEYS,
 } from './dashboardConfig';
@@ -26,14 +24,6 @@ interface ScenarioChartsProps {
     loading: boolean;
     isMobile: boolean;
     showVndNote: boolean;
-}
-
-function payloadValue(item: unknown, key: string): unknown {
-    if (!item || typeof item !== 'object') return undefined;
-    const payload = (item as Record<string, unknown>).payload;
-    return payload && typeof payload === 'object'
-        ? (payload as Record<string, unknown>)[key]
-        : undefined;
 }
 
 function dataKeyOf(item: unknown): string {
@@ -98,24 +88,16 @@ export function ScenarioCharts({
                                             const numericValue = Number(value ?? 0);
                                             const dataKey = dataKeyOf(item);
                                             const unit = dataKey.endsWith('_right') ? chart.right.unit : chart.left.unit;
-                                            const lower = payloadValue(item, `${dataKey}_lower`);
-                                            const upper = payloadValue(item, `${dataKey}_upper`);
-                                            const level = payloadValue(item, `${dataKey}_level`);
-                                            const range = Number.isFinite(Number(lower)) && Number.isFinite(Number(upper))
-                                                ? ` (${Math.round(Number(level) * 100)}%: ${Number(lower).toLocaleString()}–${Number(upper).toLocaleString()}${unit ? ` ${unit}` : ''})`
-                                                : '';
-                                            return [`${numericValue.toLocaleString()}${unit ? ` ${unit}` : ''}${range}`, String(name ?? '')];
+                                            return [`${numericValue.toLocaleString()}${unit ? ` ${unit}` : ''}`, String(name ?? '')];
                                         }}
                                     />
                                     <Legend wrapperStyle={{ fontSize: isMobile ? '11px' : '13px', paddingTop: isMobile ? 8 : 0 }} />
                                     {SCENARIO_KEYS.map((scenario) => (
                                         <React.Fragment key={scenario}>
                                             <Bar yAxisId="left" dataKey={`${scenario}_left`} name={scenarioLabel(scenario)} fill={SCENARIO_COLORS[scenario]} radius={[4, 4, 0, 0]} stackId={scenario}>
-                                                {scenario === 'Simulation' && <ErrorBar dataKey="Simulation_left_error" direction="y" width={8} stroke={PREDICTION_INTERVAL_COLOR} strokeWidth={2} />}
                                                 <LabelList dataKey={`${scenario}_left`} position="top" fill={SCENARIO_COLORS[scenario]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }} formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
                                             </Bar>
                                             <Bar yAxisId="right" dataKey={`${scenario}_right`} name={scenarioLabel(scenario)} fill={SCENARIO_COLORS[scenario]} radius={[4, 4, 0, 0]} legendType="none" isAnimationActive={false} stackId={scenario}>
-                                                {scenario === 'Simulation' && <ErrorBar dataKey="Simulation_right_error" direction="y" width={8} stroke={PREDICTION_INTERVAL_COLOR} strokeWidth={2} />}
                                                 <LabelList dataKey={`${scenario}_right`} position="top" fill={SCENARIO_COLORS[scenario]} style={{ fontSize: isMobile ? '9px' : '11px', fontWeight: 'bold' }} formatter={(value: unknown) => value != null && Number(value) !== 0 ? Number(value).toLocaleString() : ''} />
                                             </Bar>
                                         </React.Fragment>

@@ -5,7 +5,7 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 const mockKpiChange = {
     kpis: {
         'Avg Yield': { pct_change: -5.0, target_value: 4.5 },
-        'Methane Emissions': { pct_change: 12.0, target_value: 400.0 },
+        'Labor Intensity': { pct_change: 12.0, target_value: 400.0 },
         'Net Income': { pct_change: -10.0, target_value: 1500.0 },
         'Profit Margin': { pct_change: -3.0, target_value: 35.0 }
     }
@@ -61,10 +61,8 @@ describe('useDashboardData Custom Hook', () => {
         expect(result.current.isInitialLoading).toBe(false);
         expect(result.current.kpiChange).toEqual(mockKpiChange);
         expect(result.current.simResults).toEqual(mockSimulate);
-        const yieldError = result.current.economicChart.data[0]['Simulation_left_error'] as number[];
-        expect(yieldError[0]).toBeCloseTo(0.2);
-        expect(yieldError[1]).toBeCloseTo(0.2);
-        expect(result.current.economicChart.data[1]['Simulation_right_error']).toEqual([200, 200]);
+        expect(result.current.economicChart.data[0]).not.toHaveProperty('Simulation_left_error');
+        expect(result.current.economicChart.data[1]).not.toHaveProperty('Simulation_right_error');
         expect(result.current.economicChart.leftDomain[1]).toBeGreaterThanOrEqual(5.2);
     });
 
@@ -75,9 +73,9 @@ describe('useDashboardData Custom Hook', () => {
             await new Promise((resolve) => setTimeout(resolve, 0));
         });
 
-        // The mock state contains declines in yield, net income, profit margins, and increased methane
+        // The mock state contains declines in yield, net income, profit margins, and increased labour intensity
         const message = result.current.keyMessage;
-        expect(message).toContain('methane emissions could rise by 12.0%');
+        expect(message).toContain('labour intensity could rise by 12.0%');
         expect(message).toContain('average yield could drop 5.0%');
         expect(message).toContain('net income could fall 10.0%');
         expect(message).toContain('profit margin could shrink 3.0%');
@@ -92,7 +90,7 @@ describe('useDashboardData Custom Hook', () => {
 
         expect(result.current.isVndNetIncome).toBe(true);
         // Verifies the key warning is properly composed in Vietnamese
-        expect(result.current.keyMessage).toContain('phát thải khí methane có thể tăng 12.0%');
+        expect(result.current.keyMessage).toContain('cường độ lao động có thể tăng 12.0%');
     });
 
     it('should rerun simulation with the latest inputs', async () => {
@@ -132,7 +130,7 @@ describe('useDashboardData Custom Hook', () => {
         const favorableKpis = {
             kpis: {
                 'Avg Yield': { pct_change: 5, target_value: 5 },
-                'Methane Emissions': { pct_change: -5, target_value: 300 },
+                'Labor Intensity': { pct_change: -5, target_value: 300 },
                 'Net Income': { pct_change: 5, target_value: 1800 },
                 'Profit Margin': { pct_change: 5, target_value: 40 },
             },

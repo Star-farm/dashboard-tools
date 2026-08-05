@@ -1,6 +1,6 @@
 import React, { type Dispatch, type SetStateAction } from 'react';
 import type { Translation } from '../../i18n';
-import type { SimulationResult } from '../../types/dashboard';
+import type { KpiChangeResult, SimulationResult } from '../../types/dashboard';
 import type { ScenarioGroup, SimulationInputs } from '../../api/dashboardApi';
 import { SIMULATION_INPUT_LIMITS, USD_TO_VND } from './dashboardConfig';
 
@@ -12,6 +12,7 @@ interface SimulationControlsProps {
     inputs: SimulationInputs;
     setInputs: Dispatch<SetStateAction<SimulationInputs>>;
     results: SimulationResult | null;
+    currentKpis: KpiChangeResult | null;
     loading: boolean;
     runSimulation: () => Promise<void>;
 }
@@ -33,6 +34,7 @@ export function SimulationControls({
     inputs,
     setInputs,
     results,
+    currentKpis,
     loading,
     runSimulation,
 }: SimulationControlsProps) {
@@ -85,16 +87,44 @@ export function SimulationControls({
                     <div className="simulation-estimates-box">
                         <h4 className="text-success" style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>{t.simulationEstimates}</h4>
                         <div className="results-grid-small">
-                            <div>{t.yieldColonLabel}<strong>{results.predictions['Avg Yield']?.toFixed(2)} {t.yieldUnit}</strong></div>
-                            <div className="text-danger">{t.methaneColonLabel} <strong>{results.predictions['Methane Emissions']?.toFixed(1)} {t.methaneUnit}</strong></div>
-                            <div>{t.profitMarginColonLabel}<strong>{results.predictions['Profit Margin']?.toFixed(1)}%</strong></div>
-                            <div>{t.netIncomeColonLabel}{' '}<strong>{language === 'vi'
+                            <SimulationEstimate label={t.yieldColonLabel} metric="Avg Yield" value={results.predictions['Avg Yield']} currentKpis={currentKpis} displayValue={`${results.predictions['Avg Yield']?.toFixed(2)} ${t.yieldUnit}`} />
+                            <SimulationEstimate label={t.methaneColonLabel} metric="Methane Emissions" value={results.predictions['Methane Emissions']} currentKpis={currentKpis} lowerIsBetter displayValue={`${results.predictions['Methane Emissions']?.toFixed(1)} ${t.methaneUnit}`} />
+                            <SimulationEstimate label={t.profitMarginColonLabel} metric="Profit Margin" value={results.predictions['Profit Margin']} currentKpis={currentKpis} displayValue={`${results.predictions['Profit Margin']?.toFixed(1)}%`} />
+                            <SimulationEstimate label={t.netIncomeColonLabel} metric="Net Income" value={results.predictions['Net Income']} currentKpis={currentKpis} displayValue={language === 'vi'
                                 ? `${((results.predictions['Net Income'] ?? 0) * USD_TO_VND / 1_000_000).toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${t.netIncomeVndUnit}`
-                                : `${results.predictions['Net Income']?.toFixed(0)} ${t.netIncomeUsdUnit}`}</strong></div>
+                                : `${results.predictions['Net Income']?.toFixed(0)} ${t.netIncomeUsdUnit}`} />
                         </div>
                     </div>
                 )}
             </div>
+        </div>
+    );
+}
+
+interface SimulationEstimateProps {
+    label: string;
+    metric: keyof SimulationResult['predictions'];
+    value: number | undefined;
+    displayValue: string;
+    currentKpis: KpiChangeResult | null;
+    lowerIsBetter?: boolean;
+}
+
+function SimulationEstimate({ label, metric, value, displayValue, currentKpis, lowerIsBetter = false }: SimulationEstimateProps) {
+    const currentValue = currentKpis?.kpis?.[metric]?.base_value;
+    const percentage = value != null && currentValue != null && currentValue !== 0
+        ? ((value - currentValue) / currentValue) * 100
+        : null;
+    const isGood = percentage != null && (lowerIsBetter ? percentage < 0 : percentage > 0);
+    const colorClass = percentage == null || percentage === 0 ? '' : isGood ? 'text-success' : 'text-danger';
+    const sign = percentage != null && percentage > 0 ? '+' : '';
+
+    return (
+        <div className={colorClass}>
+            {label}<strong>{displayValue}</strong>
+            {percentage != null && (
+                <span className="simulation-change">({sign}{percentage.toFixed(1)}%)</span>
+            )}
         </div>
     );
 }

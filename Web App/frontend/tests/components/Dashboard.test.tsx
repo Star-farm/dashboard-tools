@@ -297,6 +297,27 @@ describe('Dashboard Component UI', () => {
         expect(mockRunSimulation).toHaveBeenCalledTimes(1);
     });
 
+    it('should color simulation changes by favorable direction and show change versus current values', () => {
+        vi.mocked(useDashboardData).mockReturnValue({
+            ...defaultHookReturn,
+            kpiChange: {
+                kpis: {
+                    'Avg Yield': { base_value: 4, pct_change: null, target_value: null },
+                    'Methane Emissions': { base_value: 400, pct_change: null, target_value: null },
+                    'Profit Margin': { base_value: 40, pct_change: null, target_value: null },
+                    'Net Income': { base_value: 2000, pct_change: null, target_value: null },
+                },
+            },
+        } as any);
+
+        render(<Dashboard />);
+
+        expect(screen.getByText('(+25.0%)').closest('div')).toHaveClass('text-success');
+        expect(screen.getByText('(-12.5%)').closest('div')).toHaveClass('text-success');
+        expect(screen.getByText('(-5.0%)').closest('div')).toHaveClass('text-danger');
+        expect(screen.getByText('(-15.0%)').closest('div')).toHaveClass('text-danger');
+    });
+
     it('should render correct VND currency formatting and positive KPI cards in Vietnamese mode', () => {
         const positiveHookReturn = {
             ...defaultHookReturn,

@@ -39,7 +39,7 @@ export function fetchKpiChange(signal?: AbortSignal): Promise<KpiChangeResult> {
     return apiFetchJson('/kpi-change', {
         method: 'POST',
         body: JSON.stringify({
-            metrics: ['Avg Yield', 'Labor Intensity', 'Net Income', 'Profit Margin'],
+            metrics: ['Avg Yield', 'Labor Intensity', 'Net Income', 'Profit Margin', 'Methane Emissions'],
         }),
         signal,
     });

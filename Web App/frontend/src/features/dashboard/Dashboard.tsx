@@ -39,6 +39,7 @@ export function Dashboard() {
             inputs={dashboard.simInputs}
             setInputs={dashboard.setSimInputs}
             results={dashboard.simResults}
+            currentKpis={dashboard.kpiChange}
             loading={dashboard.loadingSim}
             runSimulation={dashboard.runSimulation}
         />

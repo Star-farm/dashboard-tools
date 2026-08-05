@@ -148,6 +148,13 @@
 
 }
 
+.simulation-change {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .key-message-panel {
   border-color: rgb(0, 0, 0) !important;
   background: rgba(239, 68, 68, 0.06) !important;

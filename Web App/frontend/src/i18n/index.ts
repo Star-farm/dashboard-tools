@@ -1,7 +1,7 @@
 export const TRANSLATIONS = {
     vi: {
         title: "Dự án STAR-FARM",
-        subtitle: "Hệ thống hỗ trợ ra quyết định mô phỏng tác động tới nông nghiệp vào năm 2050",
+        subtitle: "Hệ thống mô phỏng tác động của các yếu tố đầu vào tới canh tấc lúa ở Đồng Tháp vào năm 2050",
         avgYield: "Năng suất trung bình",
         methaneEmissions: "Phát thải khí Methane",
         profitMargin: "Biên lợi nhuận",
@@ -36,7 +36,7 @@ export const TRANSLATIONS = {
         environmentGroup: "Môi trường",
         viewDetailedDataAt: "Xem chi tiết dữ liệu tại: ",
         dataVisualizationLinkText: "Khám phá dữ liệu của dự án STAR-FARM",
-        kpiSectionTitle: "Các chỉ số vào năm 2050",
+        kpiSectionTitle: "Kết quả các chỉ số vào năm 2050 nếu tiếp tục canh tác như hiện tại",
         simulationSectionTitle: "Mô phỏng tác động của đầu vào tới kết quả vào năm 2050",
         exchangeRateNote: "Tỷ giá quy đổi: 1 USD = 26.300 VNĐ",
         initialLoadingMessage: "Đang khởi động hệ thống, có thể mất vài giây nếu lâu chưa sử dụng...",
@@ -85,7 +85,7 @@ export const TRANSLATIONS = {
     },
     en: {
         title: "STAR-FARM Project",
-        subtitle: "Decision Support System for Simulating Agricultural Impacts in 2050",
+        subtitle: "Simulating the impact of input factors on rice farming in Dong Thap by 2050",
         avgYield: "Average Yield",
         methaneEmissions: "Methane Emissions",
         profitMargin: "Profit Margin",
@@ -120,7 +120,7 @@ export const TRANSLATIONS = {
         environmentGroup: "Environment",
         viewDetailedDataAt: "View detailed data at: ",
         dataVisualizationLinkText: "STAR-FARM Data Explorer",
-        kpiSectionTitle: "Key Indicators for 2050",
+        kpiSectionTitle: "2050 KPI Outcomes if Current Practices Continue",
         simulationSectionTitle: "Simulating the Impact of Inputs on 2050 Outcomes",
         exchangeRateNote: "Exchange rate: 1 USD = 26,300 VND",
         initialLoadingMessage: "Starting up the system, this may take a few seconds if idle for a while...",

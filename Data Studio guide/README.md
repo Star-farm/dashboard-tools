@@ -1,10 +1,31 @@
-# Building a Raster Processing Pipeline with BigQuery & Google Looker Studio
+# GAMA CSV and Google Looker Studio Guide
 
-A step-by-step guide to automating a geospatial data pipeline that ingests GeoTIFF files from Google Drive, syncs them to Google Cloud Storage (GCS), extracts regional statistics using BigQuery, and serves the finalized dataset to Looker Studio for interactive visualization.
+This guide explains the required workflow for merging GAMA CSV files, importing the merged data, and building charts in Google Looker Studio. It also documents an optional geospatial extension for teams that need raster processing, maps, Google Cloud, or Google Earth Engine.
+
+## What Is Required?
+
+Only the following workflow is required for the standard simulation dashboard:
+
+1. Merge and enrich the GAMA CSV files with the desktop app.
+2. Import the merged CSV into Google Sheets or BigQuery.
+3. Connect the imported data to Looker Studio and build KPI cards, charts, and filters.
+
+The following features are **optional** and can be skipped completely when the dashboard only uses GAMA simulation CSV data:
+
+- Google Cloud infrastructure and APIs;
+- Google Drive-to-Cloud Storage synchronization;
+- Cloud Run functions and Cloud Scheduler;
+- raster and GeoTIFF processing;
+- spatial maps and BigQuery `GEOGRAPHY` data;
+- Google Earth Engine applications.
+
+> If you only need the standard CSV dashboard, start at **Required Step 1** and continue through **Required Step 3**. You do not need to configure Google Cloud, raster data, maps, or GEE.
 
 ---
 
-## 1. Prerequisites & System Requirements
+## Optional A. Geospatial Prerequisites and System Requirements
+
+> **Optional:** Skip this entire section unless you need the raster/map pipeline.
 
 ### Software & Platforms
 
@@ -46,7 +67,9 @@ If organizational policy requires an Asia region, verify every row above against
 
 ---
 
-## 2. Technical Implementation
+## Optional B. Google Cloud Raster Pipeline
+
+> **Optional:** This infrastructure is not required for merging CSV files or building the standard Looker Studio simulation dashboard.
 
 ### Step 1: Desktop GIS Pre-processing (QGIS)
 
@@ -155,7 +178,75 @@ Create a second Cloud Scheduler job to invoke this function periodically, for ex
 
 ---
 
-## 3. Connecting GAMA Simulation Output (CSV) to Looker Studio
+## Required Step 1. Merge and Enrich GAMA CSV Files
+
+Before uploading GAMA data to Google Sheets or BigQuery, use the desktop merge tool to create one consistent, Looker Studio-ready CSV file.
+
+Application files:
+
+- [`App/main.py`](App/main.py) — application entry point;
+- [`App/gui.py`](App/gui.py) — desktop interface;
+- [`App/processor.py`](App/processor.py) — merge and enrichment logic;
+- [`App/requirement.txt`](App/requirement.txt) — Python dependency list.
+
+The app automatically:
+
+- combines all selected CSV rows;
+- converts `year`, `month`, and `day` into `datetime`;
+- renames `id_sim` to `id`;
+- converts numeric `AWD Adoption` values to `With AWD` or `Without AWD`;
+- derives `Scenario Group`, `Season Type`, `Climate Type`, `Resource Scenario`, and `Scenario Name` from each source filename;
+- sets the fixed `Currency Ratio` to `26300` for every output row;
+- creates missing template columns with blank values and shows a warning listing them;
+- orders all 29 dashboard columns exactly as shown below while preserving any additional columns at the end.
+
+```text
+id, datetime, seed, Fertilizer Usage, Pesticide Usage, Water Usage,
+Salinity Exposure, Max Flood Continuous, Flood Stress, Drought Stress,
+Salinity Stress, Biodiversity, Resilient Varieties, Water Reliability,
+Emission Intensity, AWD Adoption, Methane Emissions, Labor Intensity,
+Profit Margin, Currency Ratio, Net Income, Production Cost, Straw Value,
+Avg Yield, Scenario Group, Season Type, Climate Type, Resource Scenario,
+Scenario Name
+```
+
+Use filenames in this form so the scenario fields can be detected correctly:
+
+```text
+seasonal_data_BAU-2seasons-optimistic-standard.csv
+seasonal_data_OMRH-awd-pessimistic-resource-crisis.csv
+```
+
+### Install and run
+
+Python 3.9 or later is recommended. Tkinter is included with the standard Windows Python installer; ensure the optional Tcl/Tk component is enabled.
+
+```powershell
+cd "Data Studio guide\App"
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirement.txt
+python main.py
+```
+
+In the application:
+
+1. Select **Add CSV files** and choose one or more input files.
+2. Select **Merge and enrich** to process the data and preview up to 1,000 rows.
+3. Review any missing-column warning. Missing template columns are created with blank values, and the warning identifies which columns were absent from each source file.
+4. Select **Export CSV** and choose the output location. The file is written as UTF-8 with BOM for compatibility with spreadsheet tools.
+
+The exported file is the input used in **Required Step 2** below. Columns not included in the standard template are retained after the 29 standard columns so that source data is not discarded.
+
+To run the processor tests:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+---
+
+## Required Step 2. Import the Merged CSV
 
 GAMA exports per-agent tabular data as CSV files with simulation metrics across time. This data is used purely for **KPI scorecards and charts** in Looker Studio.
 
@@ -164,20 +255,20 @@ GAMA exports per-agent tabular data as CSV files with simulation metrics across 
 | 279 | 2/19/2026 | 132 | 4.69 | 876.60 | 0 | 0 | 1 | 0.0391 |
 | 262 | 2/18/2026 | 100 | 6.22 | 799.26 | 0 | 0 | 1 | 0.0383 |
 
-### Step 1: Upload the CSV to Google Sheets
+### Option A: Import into Google Sheets
 
 1. Open [Google Sheets](https://sheets.google.com) and create a new spreadsheet (e.g. `GAMA_Simulation_Output`).
 2. Go to **File > Import**, upload your `.csv` file, choose **Replace spreadsheet**, separator: **Comma**.
 3. If you have multiple simulation runs, append all rows into one sheet — use the `seed` column to identify each run and `datetime` to track timesteps.
 
-### Step 2: Connect Google Sheets to Looker Studio
+### Connect Google Sheets to Looker Studio
 
 1. Open [Looker Studio](https://lookerstudio.google.com/) → **Blank Report**.
 2. Under *Connect to data*, select **Google Sheets**.
 3. Choose your `GAMA_Simulation_Output` spreadsheet and the relevant sheet tab. Enable **Use first row as headers**.
 4. Click **Add**.
 
-### Step 3: Build KPI and Chart Panels
+## Required Step 3. Build KPI and Chart Panels in Looker Studio
 
 **Scorecards (KPIs)** — add a Scorecard chart for each key metric:
 
@@ -205,7 +296,7 @@ GAMA exports per-agent tabular data as CSV files with simulation metrics across 
 - **Drop-down list** → `seed` (switch between simulation runs / scenarios)
 - **Drop-down list** → `Flood Stress` / `Drought Stress` / `Salinity Stress` (filter to stressed agents only)
 
-### Path B — Via BigQuery *(if the CSV is too large for Google Sheets)*
+### Option B: Import into BigQuery *(if the CSV is too large for Google Sheets)*
 
 If the sheet becomes slow, exceeds Google Sheets limits, or needs reliable scheduled ingestion, store the output in a native BigQuery table and connect Looker Studio to that table.
 
@@ -220,11 +311,13 @@ If the sheet becomes slow, exceeds Google Sheets limits, or needs reliable sched
 
 ---
 
-## 4. Looker Studio Visualization Setup
+## Looker Studio Data-Source Setup
 
-Two separate dashboards — one for the **raster pipeline output** (spatial map), one for **GAMA simulation output** (KPIs and charts). Build them as separate pages inside the same Looker Studio report.
+The **GAMA simulation dashboard** is required. The raster map dashboard is an optional extension and should only be added when the optional geospatial pipeline is deployed.
 
-### Dashboard A — Raster Pipeline Map
+### Optional: Raster Pipeline Map
+
+> Skip this subsection unless you have completed **Optional A** and **Optional B**.
 
 Once the cloud pipeline is running, the `datastudio_output` table populates with geographic shapes and aggregated raster values.
 
@@ -247,7 +340,7 @@ Once the cloud pipeline is running, the `datastudio_output` table populates with
 
 > Looker Studio Google Maps has a polygon-vertex limit. If polygons are missing, increase **Max number of polygon vertices** in the chart style settings, apply filters, or simplify the geometry in BigQuery with `ST_SIMPLIFY`.
 
-### Dashboard B — GAMA Simulation KPIs & Charts
+### Required: GAMA Simulation KPIs and Charts
 
 Add a second page and connect it to the GAMA Google Sheet (or BigQuery table if using Path B).
 
@@ -260,7 +353,9 @@ Then build Scorecards, Time Series charts, Bar charts, and Controls exactly as d
 
 ---
 
-## 5. Alternative: Time-Series Map App with Google Earth Engine (GEE)
+## Optional C. Time-Series Map App with Google Earth Engine (GEE)
+
+> **Optional:** Google Earth Engine is not required for the CSV merge, data import, or standard Looker Studio dashboard.
 
 While Looker Studio handles vector shapes well, rendering dense pixel-level raster data over multiple years can impact dashboard performance. An alternative is to host your Cloud Optimized GeoTIFFs in **Google Earth Engine**, build a custom app, and embed it into Looker Studio via **URL Embed**.
 
@@ -276,7 +371,7 @@ While Looker Studio handles vector shapes well, rendering dense pixel-level rast
 
 Open the [Google Earth Engine Code Editor](https://code.earthengine.google.com/) and paste the script below. It sets up a clean baseline map, handles smooth crossfade transitions between years, manages an interactive polygon inspector on click, and renders a continuous legend.
 
-> **Required assets:** the current script expects `table` to be an Earth Engine polygon `FeatureCollection` and expects raster variables through `image21`: `image`–`image7` for Cropping Intensity (2018–2024), `image8`–`image13` for Flooding Duration (2015–2020), and `image14`–`image21` for Sowing Date (2018–2025). Remove unused modes or define every referenced variable before running the script.
+> **Assets needed only for this optional GEE feature:** the current script expects `table` to be an Earth Engine polygon `FeatureCollection` and expects raster variables through `image21`: `image`–`image7` for Cropping Intensity (2018–2024), `image8`–`image13` for Flooding Duration (2015–2020), and `image14`–`image21` for Sowing Date (2018–2025). Remove unused modes or define every referenced variable before running the script.
 
 📄 [`gee_visualization.js`](gee_visualization.js)
 

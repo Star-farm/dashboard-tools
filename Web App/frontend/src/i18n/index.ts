@@ -1,7 +1,7 @@
 export const TRANSLATIONS = {
     vi: {
         title: "Dự án STAR-FARM",
-        subtitle: "Hệ thống mô phỏng tác động của các yếu tố đầu vào tới canh tấc lúa ở Đồng Tháp vào năm 2050",
+        subtitle: "Hệ thống mô phỏng tác động của các yếu tố đầu vào tới canh tác lúa ở Đồng Tháp vào năm 2050",
         avgYield: "Năng suất trung bình",
         methaneEmissions: "Phát thải khí Methane",
         profitMargin: "Biên lợi nhuận",

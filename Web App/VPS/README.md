@@ -114,7 +114,7 @@ Main routes:
 - Models, encoders, validation report, model version, and CSV fingerprint are stored together in one `ModelBundle`.
 - `model_cache` is mounted at `/app/model_cache`, so the artifact survives container recreation.
 - Serving requires `/app/model_cache/v13_model_bundle_<csv-fingerprint>.joblib` and stops at startup if it is absent or invalid.
-- Only the existing `DEFAULT_CSV_PATH` and `MODEL_CACHE_DIR` variables are used. VPS does not use GCS and requires no new environment variable.
+- By default, only `DEFAULT_CSV_PATH` and `MODEL_CACHE_DIR` are used; optional GCS support requires the implementation described below.
 - Model v13 predicts average yield, methane emissions, revenue, and production cost; financial and emission ratios are derived afterward.
 - Simulation outputs include validation-based P90 intervals.
 

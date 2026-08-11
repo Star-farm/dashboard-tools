@@ -1,158 +1,50 @@
 # Star Farm Web App
 
-Google Cloud Storage configuration is documented in [GCS Setup](GCS_SETUP.md).
-
-An agricultural dashboard that simulates how farming scenarios affect yield, emissions, and financial performance.
+An agricultural dashboard that simulates how farming inputs affect yield, emissions, and financial performance. The repository currently contains one FastAPI backend in `VPS` and one React frontend in `frontend`.
 
 ## Project Structure
 
 | Service | Technology | Purpose |
 | --- | --- | --- |
-| [`frontend`](./frontend/) | React 19, TypeScript, Vite, Recharts | Dashboard and Vercel API proxy |
-| [`VPS`](./VPS/) | Python, FastAPI, Docker Compose | VPS backend variant |
+| [`VPS`](./VPS/) | Python, FastAPI, Docker Compose | Model training, authenticated API, MCP tools, and inference |
+| [`frontend`](./frontend/) | React 19, TypeScript, Vite, Recharts | Dashboard and authenticated Vercel API proxy |
 
-The Cloud Run backend source is no longer stored in this directory. Its preserved GCS configuration is in [GCS Setup](GCS_SETUP.md).
+The repository uses the VPS service as its backend. [GCS Setup](./GCS_SETUP.md) documents optional storage provisioning, but the current VPS code remains local-artifact-only until the optional integration in the [VPS guide](./VPS/README.md#optional-use-google-cloud-storage) is implemented.
 
-## Data Flow
-
-### Production architecture
+## Production Data Flow
 
 ```mermaid
-flowchart TB
-    subgraph Request[1. User request from Vercel frontend]
-        direction TB
-        UserAction[User changes simulation inputs]
-        ReactRequest[React dashboard sends request]
-        ProxyRequest[Vercel serverless proxy]
-        VercelEnv[BACKEND_API_URL<br/>BACKEND_API_KEY]
-
-        UserAction --> ReactRequest
-        ReactRequest -->|/api/proxy/*| ProxyRequest
-        VercelEnv -. server-side config .-> ProxyRequest
-    end
-
-    ProxyRequest -->|HTTPS and X-API-Key| Target{2. Selected deployment}
-
-    subgraph CloudRun[Cloud Run and GCS]
-        direction TB
-        CRTrain[Offline training]
-        CRStart[Cloud Run startup]
-        CRLocal[Temporary local cache]
-        GCS[Private GCS artifact bucket]
-        CRLoad[Validate matching ModelBundle]
-        CRAPI[Cloud Run API]
-
-        CRTrain -->|upload artifact| GCS
-        CRStart --> CRLocal
-        CRLocal -->|matching artifact| CRLoad
-        CRLocal -->|cache miss| GCS
-        GCS -->|download matching artifact| CRLoad
-        CRLoad -. enables .-> CRAPI
-    end
-
-    subgraph VPSDeployment[VPS and persistent volume]
-        direction TB
-        VPSTrain[Offline training on VPS]
-        VPSStart[VPS container startup]
-        Volume[Persistent model_cache volume]
-        VPSLoad[Validate matching ModelBundle]
-        VPSAPI[VPS API]
-
-        VPSTrain -->|save artifact| Volume
-        VPSStart --> Volume
-        Volume -->|load matching artifact| VPSLoad
-        VPSLoad -. enables .-> VPSAPI
-    end
-
-    Target -->|Cloud Run| CRAPI
-    Target -->|VPS| VPSAPI
-
-    subgraph API[3. Request processing in selected backend]
-        direction TB
-        Security[FastAPI security middleware]
-        Routes[REST and MCP routes]
-        Agent[Agent orchestrator]
-        MCP[MCP agricultural tools]
-        Runtime[Serving state and inference]
-        Derived[Derived financial and emission metrics]
-        JSON[JSON response]
-
-        Security --> Routes
-        Routes --> Agent
-        Agent --> MCP
-        MCP --> Runtime
-        Runtime --> Derived
-        Derived --> JSON
-    end
-
-    CRAPI --> Security
-    VPSAPI --> Security
-    CRLoad -. model state .-> Runtime
-    VPSLoad -. model state .-> Runtime
-
-    subgraph Response[4. Response to Vercel frontend]
-        direction TB
-        ProxyResponse[Vercel proxy receives HTTPS response]
-        ReactResponse[React updates dashboard state]
-        UserResult[User sees updated dashboard]
-
-        ProxyResponse --> ReactResponse
-        ReactResponse --> UserResult
-    end
-
-    JSON --> ProxyResponse
+flowchart LR
+    User[Browser] -->|same-origin /api/proxy/*| Proxy[Vercel serverless proxy]
+    Env[BACKEND_API_URL and BACKEND_API_KEY] -. server-side only .-> Proxy
+    Proxy -->|HTTPS and X-API-Key| API[VPS reverse proxy and FastAPI]
+    API --> Agent[Agent orchestrator]
+    Agent --> MCP[MCP agricultural tools]
+    MCP --> Runtime[ML runtime]
+    Volume[(Persistent model_cache)] --> Runtime
+    Runtime --> API
+    API --> Proxy
+    Proxy --> User
 ```
 
-### Request sequence
+The browser never receives the backend API key. The Vercel proxy reads it from server-side configuration and forwards it to the VPS API. In production, the VPS container binds to loopback and is exposed only through an HTTPS reverse proxy.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant React as React dashboard
-    participant Proxy as Vercel proxy
-    participant Backend as Selected FastAPI backend
-    participant Storage as Model storage
-    participant MCP as Agent and MCP tools
-    participant Runtime as ML runtime
+## Model and Dashboard Behavior
 
-    Note over Backend,Storage: Backend startup before serving traffic
-    alt Cloud Run deployment
-        Backend->>Storage: Check temporary local cache
-        opt Local cache miss
-            Backend->>Storage: Download matching ModelBundle from GCS
-        end
-    else VPS deployment
-        Backend->>Storage: Load ModelBundle from persistent volume
-    end
-    Storage-->>Backend: Validated model state
-
-    User->>React: Change simulation inputs
-    React->>Proxy: POST /api/proxy/*
-    Note right of Proxy: Reads BACKEND_API_URL<br/>and BACKEND_API_KEY
-    Proxy->>Backend: HTTPS request with X-API-Key
-    Backend->>Backend: Authenticate and rate-limit request
-    Backend->>MCP: Route simulation request
-    MCP->>Runtime: Run inference
-    Runtime-->>MCP: Predictions and intervals
-    MCP-->>Backend: Derived KPI and chart data
-    Backend-->>Proxy: JSON response
-    Proxy-->>React: Response data
-    React-->>User: Render updated dashboard
-```
-
-The browser never receives the backend API key. The React application calls the same-origin Vercel proxy, which reads `BACKEND_API_KEY` server-side and forwards it as `X-API-Key`. `BACKEND_API_URL` selects either the Cloud Run or VPS deployment; the selected FastAPI service compares the forwarded key with `API_KEYS` before requests reach the agent and MCP layers.
-
+- Offline training produces a fingerprinted `ModelBundle`; serving never trains.
+- Startup fails if the local artifact is missing, invalid, or does not match the CSV fingerprint and model version.
 - Random Forest models predict average yield, methane emissions, revenue, and production cost.
-- Training is an explicit offline command; each serving variant loads a packaged `ModelBundle` and fails startup when it is unavailable or invalid.
 - Net income, profit margin, and emission intensity are derived from those predictions.
-- Simulation outputs use 2050 data and average equally across the unique valid resource, season, and climate combinations for the selected scenario.
-- Validation residuals provide P90 prediction intervals for the simulation chart.
-- The dashboard's default KPI comparison is 2022 to 2050.
+- Simulations use 2050 data and average equally across unique resource, season, and climate combinations for the selected scenario.
+- Validation residuals provide P90 intervals for simulation charts.
+- KPI changes compare 2050 with 2022; the KPI panel displays only unfavorable changes.
+- Simulation Estimates explicitly state that 2050 results are compared with 2022.
+
+See [Model Documentation](./MODEL.md) for formulas and evaluation details.
 
 ## Local Development
 
-### 1. Start the backend
+### Start the backend
 
 ```powershell
 cd VPS
@@ -164,9 +56,9 @@ python -m app.ml.train
 python main.py
 ```
 
-The backend is available at `http://127.0.0.1:8080` by default.
+The API is available at `http://127.0.0.1:8080` by default.
 
-### 2. Start the frontend
+### Start the frontend
 
 Open another terminal:
 
@@ -176,9 +68,9 @@ npm install
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal. The development proxy forwards `/api/proxy/*` to the local backend.
+The development proxy forwards `/api/proxy/*` to the local API.
 
-### Run the VPS variant with Docker
+### Run the VPS deployment with Docker
 
 ```powershell
 cd VPS
@@ -203,27 +95,29 @@ npm run build
 
 ## Production Environment
 
-The Vercel frontend requires at least:
+Vercel requires:
 
 ```dotenv
-BACKEND_API_URL=https://api.example.com
+BACKEND_API_URL=https://api.example.com/api/
 BACKEND_API_KEY=replace-with-a-strong-secret
+REQUIRE_HTTPS_BACKEND=true
 ```
 
-The backend requires `API_KEYS`. See each service README for the complete configuration. Never store secrets in variables prefixed with `VITE_`, because those values may be included in the client bundle.
+The VPS API requires the matching `API_KEYS` value. Never store secrets in `VITE_*` variables because those may be included in the browser bundle.
 
 ## Deployment Principles
 
-- The production backend endpoint must use HTTPS.
-- Cloud Run stores model cache in `/tmp` or Google Cloud Storage.
-- The VPS container must bind to loopback and accept traffic only through a trusted reverse proxy.
-- Enable `TRUST_PROXY_HEADERS` only when the proxy is controlled by you and direct backend access is impossible.
+- Use HTTPS for the production backend endpoint.
+- Bind the VPS container to `127.0.0.1:8080` and place it behind Nginx or Caddy.
+- Enable `TRUST_PROXY_HEADERS` only behind a controlled proxy that overwrites forwarded headers.
+- Keep model artifacts in the persistent `model_cache` volume unless optional GCS support has been implemented.
 - `/health` is public; `/api/*` and `/mcp` require authentication.
 
-## Detailed Documentation
+## Documentation
 
 - [Repository structure](./STRUCTURE.md)
 - [Model inputs, formulas, evaluation, and P90 intervals](./MODEL.md)
-- [Google Cloud Storage setup](./GCS_SETUP.md)
-- [Backend/VPS](./VPS/README.md)
-- [Frontend/Vercel](./frontend/README.md)
+- [VPS deployment](./VPS/README.md)
+- [Frontend and Vercel](./frontend/README.md)
+- [Optional GCS setup](./GCS_SETUP.md)
+- [Data Studio and optional geospatial pipeline](../Data%20Studio%20guide/README.md)

@@ -1,8 +1,15 @@
-# Google Cloud Storage Setup
+# Optional Google Cloud Storage Setup
 
-The optional geospatial workflow in [Data Studio Guide](../Data%20Studio%20guide/README.md) also uses GCS for raster files, pipeline state, and Drive synchronization. Prefer a separate private bucket for that data so model-runtime and geospatial service accounts can receive only the permissions they need. If one bucket is shared, keep model artifacts under `model-cache/` and geospatial objects under separate prefixes, then scope IAM permissions carefully.
+Google Cloud Storage is optional. The repository uses it in two distinct workflows:
 
-## Authenticate and define values
+1. **VPS model artifacts:** optional remote backup/recovery for fingerprinted `ModelBundle` files. The current VPS code does not implement this integration by default.
+2. **Data Studio geospatial pipeline:** optional storage for raster files, pipeline state, and Google Drive synchronization, as documented in the [Data Studio Guide](../Data%20Studio%20guide/README.md).
+
+Use separate private buckets when possible so each service account receives only the access it needs. If one bucket is shared, keep model artifacts under `model-cache/` and geospatial data under separate prefixes.
+
+## 1. Authenticate and define values
+
+Install Google Cloud CLI, then run:
 
 ```powershell
 gcloud auth login
@@ -11,62 +18,75 @@ gcloud auth application-default login
 $env:GCP_PROJECT = "<gcp-project-id>"
 $env:GCP_REGION = "<gcp-region>"
 $env:MODEL_BUCKET = "<globally-unique-model-artifact-bucket>"
-$env:CLOUD_RUN_SA_NAME = "<runtime-service-account-name>"
-$env:CLOUD_RUN_SA = "${env:CLOUD_RUN_SA_NAME}@${env:GCP_PROJECT}.iam.gserviceaccount.com"
-$env:GCLOUD_ACCOUNT = (gcloud config get-value account)
+$env:RASTER_BUCKET = "<globally-unique-raster-pipeline-bucket>"
 gcloud config set project $env:GCP_PROJECT
 ```
 
-The bucket name must be globally unique. These variables exist only in the current PowerShell session.
+These PowerShell variables exist only in the current terminal session. Bucket names must be globally unique.
 
-## Enable APIs and create storage
+## 2. Enable required APIs
+
+For optional model-artifact storage, enable Cloud Storage:
 
 ```powershell
-gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com storage.googleapis.com secretmanager.googleapis.com
+gcloud services enable storage.googleapis.com
+```
 
+For the optional Data Studio raster pipeline, also enable the APIs listed in the [Data Studio Guide](../Data%20Studio%20guide/README.md#google-cloud-apis), including BigQuery, Cloud Run, Cloud Build, Eventarc, Cloud Scheduler, and Google Drive.
+
+## 3. Create private buckets
+
+Create only the buckets required by your workflow:
+
+```powershell
 gcloud storage buckets create "gs://$env:MODEL_BUCKET" --project $env:GCP_PROJECT --location $env:GCP_REGION --uniform-bucket-level-access --pap
+
+gcloud storage buckets create "gs://$env:RASTER_BUCKET" --project $env:GCP_PROJECT --location $env:GCP_REGION --uniform-bucket-level-access --pap
 ```
 
-## Configure the runtime identity
+Keep the raster bucket colocated with the BigQuery dataset and Eventarc trigger. Confirm product availability before choosing a region other than the one used in the Data Studio guide.
+
+## 4. Optional VPS model-artifact integration
+
+The default VPS deployment reads and writes `/app/model_cache` only. Setting `GCS_CACHE_BUCKET` alone does nothing until GCS support is implemented.
+
+Required implementation work:
+
+1. Add `google-cloud-storage` to `VPS/requirements.txt`.
+2. Extend `VPS/app/ml/artifacts.py` to upload trained artifacts to `model-cache/` and download the matching fingerprinted artifact on a local cache miss.
+3. Pass `GCS_CACHE_BUCKET` through `VPS/app/ml/train.py`, `VPS/app/ml/runtime.py`, and `VPS/app/mcp/server.py`.
+4. Add tests for upload, download, missing objects, invalid artifacts, and local-cache fallback.
+5. Configure `GCS_CACHE_BUCKET=<bucket-name>` only after that implementation is deployed.
+
+Grant the training identity object-creation access and the serving identity `Storage Object Viewer`. Prefer an attached workload/runtime identity. If a VPS must use a service-account credential file, store it outside the repository and container image, restrict its filesystem permissions, and rotate it according to your security policy.
+
+After training, verify the artifact:
 
 ```powershell
-gcloud iam service-accounts create $env:CLOUD_RUN_SA_NAME --project $env:GCP_PROJECT --display-name "Cloud Run application runtime"
-
-gcloud iam service-accounts add-iam-policy-binding $env:CLOUD_RUN_SA --project $env:GCP_PROJECT --member "user:$env:GCLOUD_ACCOUNT" --role "roles/iam.serviceAccountUser"
-
-gcloud storage buckets add-iam-policy-binding "gs://$env:MODEL_BUCKET" --member "serviceAccount:$env:CLOUD_RUN_SA" --role "roles/storage.objectViewer"
-```
-
-Cloud Run receives read-only artifact access. The local account used for training must separately have permission to upload objects.
-
-## Upload and verify an artifact
-
-From a checkout that contains the backend training code and dataset:
-
-```powershell
-$env:DEFAULT_CSV_PATH = "data/Simulation_Data.csv"
-$env:GCS_CACHE_BUCKET = $env:MODEL_BUCKET
-python -m app.ml.train
-
 gcloud storage ls "gs://$env:MODEL_BUCKET/model-cache/v13_model_bundle_*.joblib"
 ```
 
-Serving checks `MODEL_CACHE_DIR` first and downloads the matching artifact from `gs://<bucket>/model-cache/` on a cache miss. Artifact names include the dataset fingerprint; do not modify `Simulation_Data.csv` between training and deployment.
+Test startup with an empty local cache before relying on remote recovery. Do not modify `Simulation_Data.csv` between training and deployment because its content fingerprint is part of the artifact identity.
 
-## Configure Cloud Run
+See [VPS Optional GCS](./VPS/README.md#optional-use-google-cloud-storage) for the service-specific checklist.
 
-Configure the revision with the runtime service account above and these variables:
+## 5. Optional Data Studio geospatial pipeline
 
-| Name | Value |
-| --- | --- |
-| `GCS_CACHE_BUCKET` | Private model-artifact bucket name |
-| `DEFAULT_CSV_PATH` | `data/Simulation_Data.csv` |
-| `ALLOWED_ORIGINS` | Production frontend origin |
-| `ENFORCE_HTTPS` | `true` |
-| `ENABLE_DOCS` | `false` |
-| `RATE_LIMIT_PER_MIN` | `60` |
-| `TRUST_PROXY_HEADERS` | `true` |
+The geospatial workflow uses its bucket for:
 
-The runtime identity needs `Storage Object Viewer` on the bucket. Do not set `GOOGLE_APPLICATION_CREDENTIALS`; Cloud Run uses its assigned identity. Do not add `PORT`; Cloud Run supplies it automatically. Store API keys in Secret Manager, not as plain environment variables, and retain the previous artifact until the new revision starts successfully.
+- GeoTIFF/COG input files;
+- `pipeline_status.json` and retry state;
+- `sync_checkpoint.txt` for Google Drive synchronization;
+- Eventarc object-finalized events consumed by the raster service.
 
-Official references: [Cloud Storage bucket creation](https://cloud.google.com/storage/docs/creating-buckets), [Cloud Run environment variables](https://cloud.google.com/run/docs/configuring/services/environment-variables), and [Secret Manager setup](https://cloud.google.com/secret-manager/docs/create-secret-quickstart).
+Follow [Optional A: Geospatial Prerequisites](../Data%20Studio%20guide/README.md#optional-a-geospatial-prerequisites-and-system-requirements) for the complete deployment. Configure the raster and Drive-sync service accounts separately and grant only the object and BigQuery permissions each component requires.
+
+## Security Rules
+
+- Keep buckets private and enable uniform bucket-level access.
+- Do not commit `.env` files, service-account keys, bucket secrets, or generated model artifacts.
+- Do not make a source bucket public unless public data access is intentional.
+- Retain the previous production model artifact until the new deployment has passed health checks.
+- Review IAM bindings periodically and remove unused identities.
+
+Official references: [Cloud Storage bucket creation](https://cloud.google.com/storage/docs/creating-buckets), [Cloud Storage IAM](https://cloud.google.com/storage/docs/access-control/iam), and [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc).

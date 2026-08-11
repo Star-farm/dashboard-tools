@@ -1,6 +1,6 @@
 # Model Documentation
 
-This document describes the model implemented by both `backend` and `VPS`. The current artifact version is `v13_model_bundle`.
+This document describes the model implemented by the `VPS` service. The current artifact version is `v13_model_bundle`.
 
 ## Prediction flow
 
@@ -81,7 +81,7 @@ Profit Margin (%) = Net Income / max(1, predicted Revenue) * 100
 Emission Intensity = Methane Emissions / max(1, Avg Yield * 1000)
 ```
 
-With yield expressed in tonnes per hectare and methane in kilograms per hectare, emission intensity is reported as kilograms of methane per kilogram of product by the backend calculation. The frontend currently labels it `kg CH4/t`; that display unit should be reviewed separately if a per-tonne value is intended, because the code includes the `1000` conversion in the denominator.
+With yield expressed in tonnes per hectare and methane in kilograms per hectare, emission intensity is reported as kilograms of methane per kilogram of product by the service calculation. The frontend currently labels it `kg CH4/t`; that display unit should be reviewed separately if a per-tonne value is intended, because the code includes the `1000` conversion in the denominator.
 
 ## Context aggregation
 
@@ -151,11 +151,11 @@ P90 is an empirical validation-error range, not a guarantee that every future ob
 
 ## Implementation locations
 
-| Concern | Backend | VPS |
-| --- | --- | --- |
-| Training, prediction, formulas, aggregation, intervals | `backend/app/mcp/server.py` | `VPS/app/mcp/server.py` |
-| Evaluation and residual quantile | `backend/app/ml/evaluation.py` | `VPS/app/ml/evaluation.py` |
-| API response | `backend/app/api/server.py` | `VPS/app/api/server.py` |
-| Frontend interval rendering | `frontend/src/hooks/useDashboardData.ts` | Shared frontend |
+| Concern | Location |
+| --- | --- |
+| Training, prediction, formulas, aggregation, intervals | `VPS/app/mcp/server.py` |
+| Evaluation and residual quantile | `VPS/app/ml/evaluation.py` |
+| API response | `VPS/app/api/server.py` |
+| Frontend interval rendering | `frontend/src/hooks/useDashboardData.ts` |
 
-Whenever targets, features, formulas, aggregation, model hyperparameters, or interval logic change, increment the cache version and update this document together with both service variants.
+Whenever targets, features, formulas, aggregation, model hyperparameters, or interval logic change, increment the cache version and update this document together with the VPS implementation.

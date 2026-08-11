@@ -48,6 +48,7 @@ The frontend only calls its same-origin proxy. The server-side proxy attaches th
 - Configure `BACKEND_API_KEY` only in Vercel's server-side environment.
 - Always use HTTPS in production.
 - Bind the VPS application to `127.0.0.1:8080` and place it behind Nginx or Caddy.
+- Treat GCS as optional; the default VPS runtime uses its persistent local model cache.
 
 ## Demo
 

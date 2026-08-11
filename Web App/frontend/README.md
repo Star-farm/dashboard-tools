@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-The Vite development proxy forwards `/api/proxy/*` to the local backend on port `8080`. Start the Backend or VPS Service first, and set `BACKEND_API_KEY` in the ignored `.env.local` file. The development server fails closed instead of using a repository-wide default key.
+The Vite development proxy forwards `/api/proxy/*` to the local VPS service on port `8080`. Start the VPS service first, and set `BACKEND_API_KEY` in the ignored `.env.local` file. The development server fails closed instead of using a repository-wide default key.
 
 ## Scripts
 
@@ -70,7 +70,7 @@ VITE_CSP_SCRIPT='self'
 | `VITE_CSP_CONNECT` | Build/client | Browser `connect-src`; remains same-origin for the server-side proxy |
 | `VITE_CSP_SCRIPT` | Build/client | `script-src` values |
 
-HTTP remains supported for the current VPS deployment. In that mode, traffic between Vercel and the backend, including the API key, is not protected by transport encryption. After TLS is configured on the backend URL, switch it to `https://` and set `REQUIRE_HTTPS_BACKEND=true`.
+HTTP is supported only for local development. Production traffic between Vercel and the VPS, including the API key, must use HTTPS with `REQUIRE_HTTPS_BACKEND=true`.
 
 ## Edge Rate Limiting
 

@@ -1,17 +1,39 @@
-__pycache__/
-*.pyc
-.env
+# Version control and local configuration
 .git/
+.gitignore
+.env*
+.vscode/
+.idea/
+
+# Python environments and caches
 .venv/
 venv/
-node_modules/
-.ruff_cache/
+__pycache__/
+*.py[cod]
 .pytest_cache/
-.DS_Store
-Thumbs.db
-*.log
-model_cache/
 .pytest_model_cache/
-*.joblib
+.ruff_cache/
+.mypy_cache/
+
+# Tests, reports, and local tooling
+tests/
+pytest.ini
 coverage/
 htmlcov/
+.coverage*
+*.log
+
+# Generated artifacts mounted at runtime
+model_cache/
+*.joblib
+
+# Deployment files not needed inside the image
+.dockerignore
+docker-compose.yml
+setup_vps.sh
+README.md
+
+# Cross-platform noise
+node_modules/
+.DS_Store
+Thumbs.db

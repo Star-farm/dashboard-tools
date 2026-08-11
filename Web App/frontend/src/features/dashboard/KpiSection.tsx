@@ -18,11 +18,18 @@ interface KpiSectionProps {
 }
 
 export function KpiSection({ t, language, cards, changes, loading }: KpiSectionProps) {
+    const visibleCards = loading
+        ? cards
+        : cards.filter((card) => {
+            const percentage = changes?.kpis?.[card.key]?.pct_change;
+            return percentage != null && (card.lowerIsBetter ? percentage > 0 : percentage < 0);
+        });
+
     return (
         <section className="glass-panel">
             <h2>{t.kpiSectionTitle}</h2>
             <div className="metrics-row">
-                {cards.map((card) => {
+                {visibleCards.map((card) => {
                     const entry = changes?.kpis?.[card.key];
                     const percentage = entry?.pct_change;
                     const isGood = percentage != null && (card.lowerIsBetter ? percentage < 0 : percentage > 0);

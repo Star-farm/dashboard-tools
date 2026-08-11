@@ -105,7 +105,7 @@
   }
 
   .metrics-row {
-    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
   }
 
   .chart-container-height {
@@ -130,6 +130,7 @@
   }
 
   .metrics-row {
+    display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
   }

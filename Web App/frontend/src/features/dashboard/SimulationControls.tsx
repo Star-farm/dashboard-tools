@@ -38,6 +38,10 @@ export function SimulationControls({
     loading,
     runSimulation,
 }: SimulationControlsProps) {
+    const simulationEstimatesTitle = t.simulationEstimates
+        .replace('{targetYear}', String(currentKpis?.target_year ?? 2050))
+        .replace('{baseYear}', String(currentKpis?.base_year ?? 2022));
+
     return (
         <div className="glass-panel col-4" style={{ display: 'flex', flexDirection: 'column' }}>
             <h2>{t.inputSimulationControls}</h2>
@@ -85,7 +89,7 @@ export function SimulationControls({
 
                 {results && (
                     <div className="simulation-estimates-box">
-                        <h4 style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#000' }}>{t.simulationEstimates}</h4>
+                        <h4 style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#000' }}>{simulationEstimatesTitle}</h4>
                         <div className="results-grid-small">
                             <SimulationEstimate label={t.yieldColonLabel} metric="Avg Yield" value={results.predictions['Avg Yield']} currentKpis={currentKpis} displayValue={`${results.predictions['Avg Yield']?.toFixed(2)} ${t.yieldUnit}`} />
                             <SimulationEstimate label={t.methaneColonLabel} metric="Methane Emissions" value={results.predictions['Methane Emissions']} currentKpis={currentKpis} lowerIsBetter displayValue={`${results.predictions['Methane Emissions']?.toFixed(1)} ${t.methaneUnit}`} />

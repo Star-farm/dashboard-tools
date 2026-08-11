@@ -90,7 +90,7 @@ const mockTranslations = {
     pesticideUsage: "Pesticide",
     waterUsage: "Water",
     simulateButton: "Run Simulation",
-    simulationEstimates: "Simulation Projections",
+    simulationEstimates: "{targetYear} Simulation Projections (compared with {baseYear})",
     yieldColonLabel: "Yield: ",
     methaneColonLabel: "Methane: ",
     profitMarginColonLabel: "Profit Margin: ",
@@ -126,6 +126,8 @@ const defaultHookReturn = {
     t: mockTranslations,
     isInitialLoading: false,
     kpiChange: {
+        base_year: 2022,
+        target_year: 2050,
         kpis: {
             'Avg Yield': { pct_change: -5.0, target_value: 4.5 },
             'Labor Intensity': { pct_change: 12.0, target_value: 400.0 },
@@ -199,6 +201,7 @@ describe('Dashboard Component UI', () => {
 
         expect(screen.getByText('Star Farm Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Agricultural Modeling App')).toBeInTheDocument();
+        expect(screen.getByText('2050 Simulation Projections (compared with 2022)')).toBeInTheDocument();
         expect(screen.getByText('Labour intensity could rise by 12.0%')).toBeInTheDocument();
 
         const charts = screen.getAllByTestId('bar-chart');
@@ -318,7 +321,7 @@ describe('Dashboard Component UI', () => {
         expect(screen.getByText('(-15.0%)').closest('div')).toHaveClass('text-danger');
     });
 
-    it('should render correct VND currency formatting and positive KPI cards in Vietnamese mode', () => {
+    it('should hide favorable and unchanged KPI cards', () => {
         const positiveHookReturn = {
             ...defaultHookReturn,
             isVndNetIncome: true,
@@ -339,9 +342,10 @@ describe('Dashboard Component UI', () => {
         const viBtn = screen.getByText('VI');
         fireEvent.click(viBtn);
 
-        expect(screen.getByText(/44,7 triệu VNĐ\/ha/i)).toBeInTheDocument();
-        expect(screen.getByText(/— 0.0%/i)).toBeInTheDocument();
-        expect(screen.getByText(/▲ 5.0%/i)).toBeInTheDocument();
+        expect(screen.queryByText(/— 0.0%/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/▲ 5.0%/i)).not.toBeInTheDocument();
+        expect(screen.queryByText('Average Yield')).not.toBeInTheDocument();
+        expect(screen.queryByText('Labour Intensity')).not.toBeInTheDocument();
     });
 
     it('should render loading placeholders inside KPI cards when loadingKpi is true', () => {
@@ -356,7 +360,7 @@ describe('Dashboard Component UI', () => {
         expect(loadingElements.length).toBeGreaterThan(0);
     });
 
-    it('should render correct empty "N/A" placeholders when KPI metrics are null', () => {
+    it('should hide KPI cards whose change is unavailable', () => {
         const nullKpiHookReturn = {
             ...defaultHookReturn,
             kpiChange: {
@@ -373,8 +377,9 @@ describe('Dashboard Component UI', () => {
 
         render(<Dashboard />);
 
-        const naElements = screen.getAllByText('N/A');
-        expect(naElements.length).toBeGreaterThan(0);
+        expect(screen.queryByText('N/A')).not.toBeInTheDocument();
+        expect(screen.queryByText('Average Yield')).not.toBeInTheDocument();
+        expect(screen.queryByText('Labour Intensity')).not.toBeInTheDocument();
     });
 
     it('should render the loading spinner inside the chart container when loadingBar is true', () => {

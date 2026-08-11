@@ -120,6 +120,20 @@ Main routes:
 
 See [Model Documentation](../MODEL.md) for the complete input schema, formulas, context aggregation, evaluation, and interval calculation.
 
+## Optional: Use Google Cloud Storage
+
+The default VPS deployment stores model artifacts in the local `model_cache` Docker volume. If remote artifact storage in GCS is required:
+
+1. Create a private GCS bucket and a service account with `Storage Object Viewer` access. The account that trains the model also needs permission to upload objects.
+2. Install `google-cloud-storage` in the application environment.
+3. Add `GCS_CACHE_BUCKET=<bucket-name>` to the server configuration.
+4. Extend `app/ml/artifacts.py` so training uploads artifacts to `model-cache/` in the bucket and serving downloads the matching artifact when it is absent from the local cache.
+5. Pass `GCS_CACHE_BUCKET` through `app/ml/train.py`, `app/ml/runtime.py`, and `app/mcp/server.py` to the artifact storage functions.
+6. Provide credentials through the runtime identity where possible. Do not commit service-account keys or place them in the container image.
+7. Train the model, verify that the fingerprinted artifact exists in GCS, and test a startup with an empty local cache before using it in production.
+
+See [GCS Setup](../GCS_SETUP.md) for bucket creation, IAM commands, environment variables, artifact verification, and Cloud Run identity configuration. The [Data Studio Guide](../../Data%20Studio%20guide/README.md) documents the separate optional GCS raster and Drive-sync workflow. Setting `GCS_CACHE_BUCKET` alone is not sufficient until the optional model-artifact integration described above has been implemented.
+
 ## Testing
 
 Run outside the container:

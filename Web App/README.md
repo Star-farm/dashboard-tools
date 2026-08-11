@@ -1,5 +1,7 @@
 # Star Farm Web App
 
+Google Cloud Storage configuration is documented in [GCS Setup](GCS_SETUP.md).
+
 An agricultural dashboard that simulates how farming scenarios affect yield, emissions, and financial performance.
 
 ## Project Structure
@@ -7,10 +9,9 @@ An agricultural dashboard that simulates how farming scenarios affect yield, emi
 | Service | Technology | Purpose |
 | --- | --- | --- |
 | [`frontend`](./frontend/) | React 19, TypeScript, Vite, Recharts | Dashboard and Vercel API proxy |
-| [`backend`](./backend/) | Python, FastAPI, Random Forest | Cloud Run backend |
 | [`VPS`](./VPS/) | Python, FastAPI, Docker Compose | VPS backend variant |
 
-`backend` and `VPS` are two deployment variants of the same API. A production environment normally needs only one of them.
+The Cloud Run backend source is no longer stored in this directory. Its preserved GCS configuration is in [GCS Setup](GCS_SETUP.md).
 
 ## Data Flow
 
@@ -154,7 +155,7 @@ The browser never receives the backend API key. The React application calls the 
 ### 1. Start the backend
 
 ```powershell
-cd backend
+cd VPS
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -192,10 +193,7 @@ Invoke-RestMethod http://127.0.0.1:8080/health
 ## Testing
 
 ```powershell
-cd backend
-python -m pytest
-
-cd ..\VPS
+cd VPS
 python -m pytest
 
 cd ..\frontend
@@ -226,6 +224,6 @@ The backend requires `API_KEYS`. See each service README for the complete config
 
 - [Repository structure](./STRUCTURE.md)
 - [Model inputs, formulas, evaluation, and P90 intervals](./MODEL.md)
-- [Backend/Cloud Run](./backend/README.md)
+- [Google Cloud Storage setup](./GCS_SETUP.md)
 - [Backend/VPS](./VPS/README.md)
 - [Frontend/Vercel](./frontend/README.md)

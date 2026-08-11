@@ -2,6 +2,8 @@
 
 This guide explains the required workflow for merging GAMA CSV files, importing the merged data, and building charts in Google Looker Studio. It also documents an optional geospatial extension for teams that need raster processing, maps, Google Cloud, or Google Earth Engine.
 
+For shared Google Cloud authentication, bucket creation, and IAM setup, see [Google Cloud Storage Setup](../Web%20App/GCS_SETUP.md). That guide uses GCS for model artifacts, while this guide uses GCS for raster files, pipeline state, and Google Drive synchronization. You may use separate private buckets (recommended for simpler permissions) or separate prefixes in one bucket with carefully scoped IAM roles.
+
 ## What Is Required?
 
 Only the following workflow is required for the standard simulation dashboard:

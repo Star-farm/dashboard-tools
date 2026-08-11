@@ -9,9 +9,8 @@ This workspace contains the source code and documentation for the Star Farm agri
 | [`Web App`](./Web%20App/) | Complete dashboard application |
 | [`Data Studio guide`](./Data%20Studio%20guide/) | Data dashboard documentation and resources |
 
-The `Web App` directory contains three services:
+The `Web App` directory contains two source services:
 
-- `backend`: FastAPI service designed for Google Cloud Run.
 - `VPS`: FastAPI service packaged with Docker Compose for VPS deployment.
 - `frontend`: React, TypeScript, and Vite application deployed on Vercel.
 
@@ -21,7 +20,7 @@ See [`Web App/README.md`](./Web%20App/README.md) to choose a deployment model an
 
 Service-specific documentation:
 
-- [Backend Service](./Web%20App/backend/README.md)
+- [Google Cloud Storage Setup](./Web%20App/GCS_SETUP.md)
 - [VPS Service](./Web%20App/VPS/README.md)
 - [Frontend](./Web%20App/frontend/README.md)
 - [Model formulas and prediction flow](./Web%20App/MODEL.md)
@@ -34,9 +33,11 @@ Browser
   v
 Vercel Frontend + /api/proxy/*
   |
-  +--> Cloud Run Backend
+  v
+VPS reverse proxy
   |
-  `--> VPS reverse proxy --> Docker/FastAPI
+  v
+Docker/FastAPI
 ```
 
 The frontend only calls its same-origin proxy. The server-side proxy attaches the production API key, so the key is never exposed to the browser or client bundle.

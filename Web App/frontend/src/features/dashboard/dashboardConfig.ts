@@ -28,7 +28,7 @@ export const SCENARIO_KEYS = [
 export const SIMULATION_INPUT_LIMITS = {
     fertilizer_usage: { min: 80, max: 145, step: 5 },
     pesticide_usage: { min: 4, max: 7.5, step: 0.5 },
-    water_usage: { min: 0, max: 850, step: 25 },
+    water_usage: { min: 150, max: 850, step: 25 },
 } as const;
 
 export const ALL_METRICS = [

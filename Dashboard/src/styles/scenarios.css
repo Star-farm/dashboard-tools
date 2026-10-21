@@ -1,0 +1,47 @@
+.scenario-page { padding-bottom: 64px; }
+.scenario-page h1 { font-size: clamp(27px, 3vw, 38px); line-height: 1.3; letter-spacing: -.9px; }
+.scenario-selector { display: grid; grid-template-columns: minmax(210px, .7fr) minmax(0, 2fr); gap: 24px; align-items: center; padding: 24px 0; border-block: 1px solid #dce2d3; }
+.scenario-selector label { font-size: 13px; color: #344e32; line-height: 1.7; font-weight: 600; }
+.scenario-selector select { display: block; width: 100%; min-width: 0; min-height: 46px; padding: 12px 38px 12px 15px; border: 1px solid #c5d1bc; border-radius: 6px; background: #fffefa; color: #3b5434; font: inherit; font-size: 13px; text-overflow: ellipsis; cursor: pointer; }
+.scenario-selector select:focus-visible { outline: 3px solid #759b7f; outline-offset: 3px; }
+.scenario-summary { margin-top: 26px; padding: 23px 26px; border-left: 3px solid #9ea966; background: #edf1e4; }
+.scenario-summary p { color: #485d3e; font-size: 13px; line-height: 1.9; margin: 0; }
+.scenario-section { padding-top: 28px; }
+.scenario-section h2 { font-size: 20px; font-weight: 600; letter-spacing: -.3px; line-height: 1.5; margin: 0 0 21px; color: #30472d; }
+.scenario-section h2 > span { color: #85996a; margin-right: 5px; }
+.scenario-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.economic-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.scenario-kpi { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #d2ddc7; border-radius: 5px; background: #fffefa; }
+.scenario-kpi dt { padding: 6px 12px; border-bottom: 1px solid #e0e6d7; background: #f4f6ec; color: #455b3d; font-size: 13px; font-weight: 700; line-height: 1.5; margin: 0; }
+.scenario-kpi dd { margin: 0; }
+.scenario-kpi-value { display: flex; align-items: baseline; align-content: center; flex-wrap: wrap; flex: 1; min-height: 44px; padding: 7px 12px; gap: 3px 6px; font-variant-numeric: tabular-nums; }
+.scenario-kpi-value strong { font-size: 22px; font-weight: 500; line-height: 1.3; color: #2e4b32; letter-spacing: -.4px; overflow-wrap: anywhere; }
+.scenario-kpi-value > span { color: #526847; font-size: 14px; font-weight: 700; line-height: 1.6; }
+.scenario-kpi .scenario-kpi-change { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 6px; padding: 6px 12px; border-top: 1px solid #dce4d1; background: #edf2e5; color: #637357; font-size: 13px; font-weight: 600; line-height: 1.5; }
+.scenario-change { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.scenario-change.good { color: #2f8050; }
+.scenario-change.bad { color: #b34e45; }
+.scenario-change.neutral { color: #718063; }
+.scenario-awd-value { display: flex; align-items: center; flex: 1; min-height: 44px; padding: 7px 12px; color: #2f8050; font-size: 18px; line-height: 1.6; font-weight: 500; }
+.scenario-awd-value.without { color: #b34e45; }
+
+@media (max-width: 1100px) {
+  .scenario-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 800px) {
+  .scenario-selector { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .scenario-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+
+@media (max-width: 520px) {
+  .scenario-page { padding-bottom: 40px; }
+  .scenario-page h1 { font-size: 27px; }
+  .scenario-selector { padding-block: 20px; }
+  .scenario-selector select { font-size: 16px; padding-left: 12px; }
+  .scenario-summary { padding: 20px 18px; margin-top: 22px; }
+  .scenario-summary p { font-size: 12px; }
+  .scenario-section { padding-top: 28px; }
+  .scenario-section h2 { font-size: 18px; margin-bottom: 16px; }
+  .scenario-kpis { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}

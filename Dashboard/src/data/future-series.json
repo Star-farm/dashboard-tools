@@ -1,0 +1,614 @@
+{
+  "startYear": 2027,
+  "endYear": 2050,
+  "sources": {
+    "USD": "STAR_FARM CSV - Master file.csv",
+    "VND": "STAR_FARM CSV - Dữ liệu tổng.csv"
+  },
+  "recordCounts": {
+    "master": 18984,
+    "combined": 18984
+  },
+  "annual": [
+    {
+      "year": 2027,
+      "incomeUsd": {
+        "first": 979.1609597606245,
+        "second": 642.9015953725841
+      },
+      "incomeVnd": {
+        "first": 25773474.78287501,
+        "second": 16921548.736245636
+      },
+      "labor": {
+        "first": 299.4973538274999,
+        "second": 283.175761079081
+      },
+      "methane": {
+        "first": 306.5978487846191,
+        "second": 485.5823558141063
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2028,
+      "incomeUsd": {
+        "first": 1002.56770603375,
+        "second": 639.5684827689379
+      },
+      "incomeVnd": {
+        "first": 26389587.157812495,
+        "second": 16834721.603443727
+      },
+      "labor": {
+        "first": 299.60567036250023,
+        "second": 284.7389656055474
+      },
+      "methane": {
+        "first": 326.2125793602535,
+        "second": 496.7762201894212
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2029,
+      "incomeUsd": {
+        "first": 1011.8411627662502,
+        "second": 642.5853258993662
+      },
+      "incomeVnd": {
+        "first": 26633683.08618749,
+        "second": 16914130.948342323
+      },
+      "labor": {
+        "first": 298.35170110999996,
+        "second": 283.7500910616488
+      },
+      "methane": {
+        "first": 309.79756042715724,
+        "second": 477.4451502662479
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2030,
+      "incomeUsd": {
+        "first": 1016.0402249437504,
+        "second": 633.213053477495
+      },
+      "incomeVnd": {
+        "first": 26744210.80093751,
+        "second": 16667433.993587926
+      },
+      "labor": {
+        "first": 295.60409526375014,
+        "second": 282.5726141950871
+      },
+      "methane": {
+        "first": 306.29825757842644,
+        "second": 469.2549448183894
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2031,
+      "incomeUsd": {
+        "first": 1023.9048770856249,
+        "second": 630.6715357705233
+      },
+      "incomeVnd": {
+        "first": 26951224.174574994,
+        "second": 16600536.164429484
+      },
+      "labor": {
+        "first": 295.3716229912501,
+        "second": 281.6606177469096
+      },
+      "methane": {
+        "first": 312.5735733779697,
+        "second": 465.96363714231813
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2032,
+      "incomeUsd": {
+        "first": 1002.2221076393756,
+        "second": 613.7045024776553
+      },
+      "incomeVnd": {
+        "first": 26380490.317143746,
+        "second": 16153929.914034866
+      },
+      "labor": {
+        "first": 292.23981854749985,
+        "second": 280.4602637269415
+      },
+      "methane": {
+        "first": 292.2233689720811,
+        "second": 448.43088611486166
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2033,
+      "incomeUsd": {
+        "first": 1017.2286432687503,
+        "second": 601.3564729656575
+      },
+      "incomeVnd": {
+        "first": 26775492.348406248,
+        "second": 15828905.081551502
+      },
+      "labor": {
+        "first": 292.1909652162498,
+        "second": 279.8060793803489
+      },
+      "methane": {
+        "first": 296.67362048527866,
+        "second": 441.63429377783314
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2034,
+      "incomeUsd": {
+        "first": 1014.2416700006254,
+        "second": 592.0353100166406
+      },
+      "incomeVnd": {
+        "first": 26696869.237724997,
+        "second": 15583553.430331234
+      },
+      "labor": {
+        "first": 290.9203503050001,
+        "second": 279.4688825946112
+      },
+      "methane": {
+        "first": 291.70620220766494,
+        "second": 438.3216607075566
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2035,
+      "incomeUsd": {
+        "first": 1017.2103249349999,
+        "second": 578.5089414015379
+      },
+      "incomeVnd": {
+        "first": 26775010.173406266,
+        "second": 15227512.355444703
+      },
+      "labor": {
+        "first": 288.45863154874985,
+        "second": 278.48037708954047
+      },
+      "methane": {
+        "first": 293.01847464507625,
+        "second": 432.04189723526514
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2036,
+      "incomeUsd": {
+        "first": 996.49476638,
+        "second": 565.7561419222644
+      },
+      "incomeVnd": {
+        "first": 26229735.241437502,
+        "second": 14891833.167698245
+      },
+      "labor": {
+        "first": 287.5326234874997,
+        "second": 277.60900196434255
+      },
+      "methane": {
+        "first": 289.5405657246192,
+        "second": 425.0961632680112
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2037,
+      "incomeUsd": {
+        "first": 986.2496748656255,
+        "second": 546.7622508948969
+      },
+      "incomeVnd": {
+        "first": 25960063.942218747,
+        "second": 14391875.967992244
+      },
+      "labor": {
+        "first": 285.88961693625004,
+        "second": 277.6612360047546
+      },
+      "methane": {
+        "first": 286.9894819062441,
+        "second": 412.2996168098258
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2038,
+      "incomeUsd": {
+        "first": 1012.3536874762497,
+        "second": 548.8156583594374
+      },
+      "incomeVnd": {
+        "first": 26647173.761393744,
+        "second": 14445925.759512577
+      },
+      "labor": {
+        "first": 285.1394279224998,
+        "second": 277.0124881792395
+      },
+      "methane": {
+        "first": 289.7313970342637,
+        "second": 414.861082521664
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2039,
+      "incomeUsd": {
+        "first": 1008.44221380875,
+        "second": 541.419210803978
+      },
+      "incomeVnd": {
+        "first": 26544215.95232501,
+        "second": 14251236.4669333
+      },
+      "labor": {
+        "first": 283.388810485,
+        "second": 275.77385007163315
+      },
+      "methane": {
+        "first": 281.88532033984774,
+        "second": 409.17580951662603
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2040,
+      "incomeUsd": {
+        "first": 1024.9423836031253,
+        "second": 535.3798363509984
+      },
+      "incomeVnd": {
+        "first": 26978533.421250027,
+        "second": 14092268.052564561
+      },
+      "labor": {
+        "first": 281.23400957625006,
+        "second": 274.61277542107734
+      },
+      "methane": {
+        "first": 276.97254019685334,
+        "second": 399.9313488057938
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2041,
+      "incomeUsd": {
+        "first": 993.3959798087495,
+        "second": 502.20563620045436
+      },
+      "incomeVnd": {
+        "first": 26148168.980962515,
+        "second": 13219056.755935954
+      },
+      "labor": {
+        "first": 280.44848790375016,
+        "second": 273.97726982313765
+      },
+      "methane": {
+        "first": 278.60209261573596,
+        "second": 395.1202572607059
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2042,
+      "incomeUsd": {
+        "first": 986.4894527731254,
+        "second": 485.4451620037715
+      },
+      "incomeVnd": {
+        "first": 25966375.3763125,
+        "second": 12777887.554290615
+      },
+      "labor": {
+        "first": 279.3014616975,
+        "second": 272.74280775958783
+      },
+      "methane": {
+        "first": 276.22959632766475,
+        "second": 393.9701009826198
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2043,
+      "incomeUsd": {
+        "first": 991.3833117549999,
+        "second": 474.015155615474
+      },
+      "incomeVnd": {
+        "first": 26095191.53306877,
+        "second": 12477026.92619738
+      },
+      "labor": {
+        "first": 278.00529234000015,
+        "second": 271.5881073947702
+      },
+      "methane": {
+        "first": 275.65536131192863,
+        "second": 389.04651704206515
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2044,
+      "incomeUsd": {
+        "first": 953.9618110385621,
+        "second": 446.87472551977174
+      },
+      "incomeVnd": {
+        "first": 25110182.789849997,
+        "second": 11762636.525069721
+      },
+      "labor": {
+        "first": 276.2994203612502,
+        "second": 271.1542578386687
+      },
+      "methane": {
+        "first": 270.99033813487296,
+        "second": 384.6769302765755
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2045,
+      "incomeUsd": {
+        "first": 968.770244718687,
+        "second": 448.2541115072631
+      },
+      "incomeVnd": {
+        "first": 25499970.38135625,
+        "second": 11798944.723158957
+      },
+      "labor": {
+        "first": 275.51278981875,
+        "second": 270.08249035277333
+      },
+      "methane": {
+        "first": 276.9707618332488,
+        "second": 380.77061748539165
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2046,
+      "incomeUsd": {
+        "first": 953.8354175940005,
+        "second": 419.6683162729922
+      },
+      "incomeVnd": {
+        "first": 25106855.861718733,
+        "second": 11046509.42079542
+      },
+      "labor": {
+        "first": 273.10045362875,
+        "second": 269.6665990350245
+      },
+      "methane": {
+        "first": 272.1109727850256,
+        "second": 377.2819035279604
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2047,
+      "incomeUsd": {
+        "first": 937.2445994906253,
+        "second": 403.20146014490945
+      },
+      "incomeVnd": {
+        "first": 24670152.347843755,
+        "second": 10613068.834076544
+      },
+      "labor": {
+        "first": 271.4872731787501,
+        "second": 268.4211137597462
+      },
+      "methane": {
+        "first": 267.81032586695386,
+        "second": 374.94893988564274
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2048,
+      "incomeUsd": {
+        "first": 933.8641826775627,
+        "second": 384.5903775259466
+      },
+      "incomeVnd": {
+        "first": 24581173.017018758,
+        "second": 10123187.91714882
+      },
+      "labor": {
+        "first": 269.3819808475,
+        "second": 267.42876929873154
+      },
+      "methane": {
+        "first": 266.1315212769035,
+        "second": 369.4340239095722
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2049,
+      "incomeUsd": {
+        "first": 932.8901058416877,
+        "second": 372.30913709078146
+      },
+      "incomeVnd": {
+        "first": 24555533.365200005,
+        "second": 9799921.106586462
+      },
+      "labor": {
+        "first": 267.93325353000006,
+        "second": 265.7959188557842
+      },
+      "methane": {
+        "first": 266.8693241530461,
+        "second": 365.17628192518924
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    },
+    {
+      "year": 2050,
+      "incomeUsd": {
+        "first": 906.4812524158127,
+        "second": 346.7608007415378
+      },
+      "incomeVnd": {
+        "first": 23860399.526440635,
+        "second": 9127437.796984004
+      },
+      "labor": {
+        "first": 267.3286668312502,
+        "second": 265.4392221774953
+      },
+      "methane": {
+        "first": 264.38404920299433,
+        "second": 364.89704509269444
+      },
+      "counts": {
+        "oneMha": 160,
+        "bau": 631,
+        "withAwd": 394,
+        "withoutAwd": 397
+      }
+    }
+  ]
+}

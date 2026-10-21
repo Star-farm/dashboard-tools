@@ -1,0 +1,24 @@
+[
+  {
+    "id": "combined",
+    "filename": "STAR_FARM CSV - Dữ liệu tổng.csv",
+    "language": "vi",
+    "rows": 19404,
+    "columns": 29,
+    "yearStart": 2016,
+    "yearEnd": 2050,
+    "scenarios": 17,
+    "bytes": 6606156
+  },
+  {
+    "id": "master",
+    "filename": "STAR_FARM CSV - Master file.csv",
+    "language": "en",
+    "rows": 19404,
+    "columns": 30,
+    "yearStart": 2016,
+    "yearEnd": 2050,
+    "scenarios": 17,
+    "bytes": 6151208
+  }
+]

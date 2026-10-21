@@ -7,7 +7,7 @@ type DashboardFooterProps = {
 };
 
 const DATA_STUDIO_LINKS: Record<Language, string> = {
-    vi: 'https://datastudio.google.com/s/l24a4_jwBNI',
+    vi: 'https://datastudio.google.com/s/iQluHi5iSE0',
     en: 'https://datastudio.google.com/s/nC82cbYUx7Q',
 };
 

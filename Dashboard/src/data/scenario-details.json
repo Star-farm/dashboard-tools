@@ -1,0 +1,788 @@
+{
+  "period": {
+    "start": 2027,
+    "end": 2050
+  },
+  "baselinePeriod": {
+    "start": 2016,
+    "end": 2022
+  },
+  "baseline": {
+    "USD": {
+      "count": 420,
+      "withAwd": 0,
+      "withoutAwd": 420,
+      "values": {
+        "income": 550.5559928033331,
+        "straw": 43.829212528999975,
+        "cost": 865.4905724692866,
+        "labor": 277.60227272523815,
+        "yield": 6.535083748202385,
+        "margin": 38.64419610138091,
+        "roi": 64.05344074434076,
+        "water": 533.1054308523802,
+        "fertilizer": 108.61904761904762,
+        "pesticides": 5.377597402592854,
+        "methane": 458.48363006000255,
+        "intensity": 0.07179816356169046
+      }
+    },
+    "VND": {
+      "count": 420,
+      "withAwd": 0,
+      "withoutAwd": 420,
+      "values": {
+        "income": 14491734.84254761,
+        "straw": 1153672.532198095,
+        "cost": 22781442.848785706,
+        "labor": 277.60227272523815,
+        "yield": 6.535083748202383,
+        "margin": 38.64419610138093,
+        "roi": 64.05344074377325,
+        "water": 533.1054308523796,
+        "fertilizer": 108.61904761904758,
+        "pesticides": 5.377597402592865,
+        "methane": 458.4836300600005,
+        "intensity": 0.07179816356169047
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "code": "BAU-3V-KN-BT",
+      "family": "threeSeasons",
+      "name": {
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, kinh tế bình thường",
+        "en": "Business As Usual 3 Seasons Severe Climate Normal Economy"
+      },
+      "USD": {
+        "count": 1440,
+        "withAwd": 0,
+        "withoutAwd": 1440,
+        "values": {
+          "income": 539.9301954852492,
+          "straw": 42.92589985234722,
+          "cost": 862.4751352186798,
+          "labor": 276.6519405241664,
+          "yield": 6.026918282380558,
+          "margin": 37.47070742886111,
+          "roi": 62.58843185704637,
+          "water": 364.4931945136743,
+          "fertilizer": 105.61513888888892,
+          "pesticides": 5.934971438162501,
+          "methane": 426.22328609451256,
+          "intensity": 0.07167356045180556
+        }
+      },
+      "VND": {
+        "count": 1440,
+        "withAwd": 0,
+        "withoutAwd": 1440,
+        "values": {
+          "income": 14212042.605450023,
+          "straw": 1129895.5359198605,
+          "cost": 22702070.509069458,
+          "labor": 276.65194052416683,
+          "yield": 6.026918282380549,
+          "margin": 37.47070742886113,
+          "roi": 62.588431856936374,
+          "water": 364.4931945136747,
+          "fertilizer": 105.61513888888884,
+          "pesticides": 5.934971438162507,
+          "methane": 426.2232860945143,
+          "intensity": 0.07167356045180569
+        }
+      }
+    },
+    {
+      "code": "BAU-3V-KN-TH",
+      "family": "threeSeasons",
+      "name": {
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, thiếu tài nguyên",
+        "en": "Business As Usual 3 Seasons Severe Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 1440,
+        "withAwd": 0,
+        "withoutAwd": 1440,
+        "values": {
+          "income": 324.28712774847173,
+          "straw": 42.925899852347214,
+          "cost": 1078.1182029531244,
+          "labor": 276.6519405241664,
+          "yield": 6.026918282380558,
+          "margin": 22.16958349674126,
+          "roi": 33.601121407051416,
+          "water": 364.4931945136743,
+          "fertilizer": 105.61513888888892,
+          "pesticides": 5.934971438162501,
+          "methane": 426.22328609451245,
+          "intensity": 0.07167356045180556
+        }
+      },
+      "VND": {
+        "count": 1440,
+        "withAwd": 0,
+        "withoutAwd": 1440,
+        "values": {
+          "income": 8535885.776592316,
+          "straw": 1129895.5359198605,
+          "cost": 28378227.338187505,
+          "labor": 276.65194052416683,
+          "yield": 6.026918282380549,
+          "margin": 22.169583496741225,
+          "roi": 33.60112140690034,
+          "water": 364.4931945136746,
+          "fertilizer": 105.61513888888884,
+          "pesticides": 5.934971438162507,
+          "methane": 426.2232860945143,
+          "intensity": 0.07167356045180569
+        }
+      }
+    },
+    {
+      "code": "BAU-3V-OH-BT",
+      "family": "threeSeasons",
+      "name": {
+        "vi": "Thường lệ, 3 vụ, ôn hòa, kinh tế bình thường",
+        "en": "Business As Usual 3 Seasons Mild Climate Normal Economy"
+      },
+      "USD": {
+        "count": 1440,
+        "withAwd": 0,
+        "withoutAwd": 1440,
+        "values": {
+          "income": 644.8933441468054,
+          "straw": 47.32180982293056,
+          "cost": 918.2406599186112,
+          "labor": 293.18405367916654,
+          "yield": 6.626382335544463,
+          "margin": 40.343753899708304,
+          "roi": 70.51425147741806,
+          "water": 418.0310275247572,
+          "fertilizer": 112.89104166666665,
+          "pesticides": 5.490144069228469,
+          "methane": 574.833278635899,
+          "intensity": 0.08909401588865963
+        }
+      },
+      "VND": {
+        "count": 1440,
+        "withAwd": 0,
+        "withoutAwd": 1440,
+        "values": {
+          "income": 16974882.604575016,
+          "straw": 1245604.6781673606,
+          "cost": 24169930.650590286,
+          "labor": 293.1840536791672,
+          "yield": 6.626382335544436,
+          "margin": 40.343753899708354,
+          "roi": 70.51425147673885,
+          "water": 418.03102752475615,
+          "fertilizer": 112.89104166666657,
+          "pesticides": 5.490144069228462,
+          "methane": 574.8332786359023,
+          "intensity": 0.08909401588865973
+        }
+      }
+    },
+    {
+      "code": "BAU-3V-OH-TH",
+      "family": "threeSeasons",
+      "name": {
+        "vi": "Thường lệ, 3 vụ, ôn hòa, thiếu tài nguyên",
+        "en": "Business As Usual 3 Seasons Mild Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 1368,
+        "withAwd": 0,
+        "withoutAwd": 1368,
+        "values": {
+          "income": 408.28379670657944,
+          "straw": 47.32588443296055,
+          "cost": 1156.7357407860375,
+          "labor": 293.17986582733903,
+          "yield": 6.626969082900595,
+          "margin": 25.84762136919163,
+          "roi": 42.427841358460455,
+          "water": 418.1377689038934,
+          "fertilizer": 112.98135964912277,
+          "pesticides": 5.489701235627921,
+          "methane": 575.1769557817942,
+          "intensity": 0.08914113986208326
+        }
+      },
+      "VND": {
+        "count": 1368,
+        "withAwd": 0,
+        "withoutAwd": 1368,
+        "values": {
+          "income": 10746846.096970027,
+          "straw": 1245711.9300548239,
+          "cost": 30447598.16876461,
+          "labor": 293.17986582733977,
+          "yield": 6.6269690829005805,
+          "margin": 25.84762136919162,
+          "roi": 42.42784135883657,
+          "water": 418.1377689038928,
+          "fertilizer": 112.9813596491229,
+          "pesticides": 5.489701235627916,
+          "methane": 575.1769557817984,
+          "intensity": 0.08914113986208333
+        }
+      }
+    },
+    {
+      "code": "BAU-2V-KN-BT",
+      "family": "twoSeasons",
+      "name": {
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, kinh tế bình thường",
+        "en": "Business As Usual 2 Seasons Severe Climate Normal Economy"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 652.859830439167,
+          "straw": 41.46259183759378,
+          "cost": 820.587424723438,
+          "labor": 242.46133337583322,
+          "yield": 6.3340343176041705,
+          "margin": 43.53430101946876,
+          "roi": 79.2717215436935,
+          "water": 443.65835859468746,
+          "fertilizer": 107.49322916666635,
+          "pesticides": 6.1175791750625,
+          "methane": 286.8251041666665,
+          "intensity": 0.0455860480244271
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 17184576.456749987,
+          "straw": 1091378.3423492718,
+          "cost": 21599502.193479203,
+          "labor": 242.46133337583308,
+          "yield": 6.334034317604176,
+          "margin": 43.534301019468735,
+          "roi": 79.27172154361894,
+          "water": 443.6583585946874,
+          "fertilizer": 107.49322916666756,
+          "pesticides": 6.117579175062499,
+          "methane": 286.8251041666667,
+          "intensity": 0.04558604802442704
+        }
+      }
+    },
+    {
+      "code": "BAU-2V-KN-TH",
+      "family": "twoSeasons",
+      "name": {
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, thiếu tài nguyên",
+        "en": "Business As Usual 2 Seasons Severe Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 406.2441000882913,
+          "straw": 41.46259183759378,
+          "cost": 1067.2031550630215,
+          "labor": 242.46133337583322,
+          "yield": 6.3340343176041705,
+          "margin": 26.705777930860684,
+          "roi": 41.222168194918105,
+          "water": 443.65835859468746,
+          "fertilizer": 107.49322916666635,
+          "pesticides": 6.1175791750625,
+          "methane": 286.8251041666665,
+          "intensity": 0.0455860480244271
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 10693157.202543415,
+          "straw": 1091378.3423492715,
+          "cost": 28090921.447885428,
+          "labor": 242.4613333758331,
+          "yield": 6.334034317604175,
+          "margin": 26.705777930860634,
+          "roi": 41.222168194735005,
+          "water": 443.65835859468746,
+          "fertilizer": 107.49322916666756,
+          "pesticides": 6.117579175062499,
+          "methane": 286.8251041666667,
+          "intensity": 0.04558604802442705
+        }
+      }
+    },
+    {
+      "code": "BAU-2V-OH-BT",
+      "family": "twoSeasons",
+      "name": {
+        "vi": "Thường lệ, 2 vụ, ôn hòa, kinh tế bình thường",
+        "en": "Business As Usual 2 Seasons Mild Climate Normal Economy"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 774.2397977889584,
+          "straw": 45.92701095216661,
+          "cost": 880.6624200725005,
+          "labor": 253.77887369729174,
+          "yield": 7.016057402735422,
+          "margin": 45.99812111715625,
+          "roi": 87.79206662866947,
+          "water": 521.5899830172916,
+          "fertilizer": 120.33999999999993,
+          "pesticides": 5.927962239579163,
+          "methane": 303.1194791666673,
+          "intensity": 0.04341852162580208
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 20379539.957248975,
+          "straw": 1208890.7822812493,
+          "cost": 23180796.22121878,
+          "labor": 253.77887369729189,
+          "yield": 7.016057402735416,
+          "margin": 45.99812111715628,
+          "roi": 87.79206662791258,
+          "water": 521.5899830172915,
+          "fertilizer": 120.34000000000036,
+          "pesticides": 5.927962239579171,
+          "methane": 303.1194791666669,
+          "intensity": 0.043418521625802106
+        }
+      }
+    },
+    {
+      "code": "BAU-2V-OH-TH",
+      "family": "twoSeasons",
+      "name": {
+        "vi": "Thường lệ, 2 vụ, ôn hòa, thiếu tài nguyên",
+        "en": "Business As Usual 2 Seasons Mild Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 489.5783220658354,
+          "straw": 45.92701095216661,
+          "cost": 1165.3238958076042,
+          "labor": 253.77887369729174,
+          "yield": 7.016057402735422,
+          "margin": 29.578386829923716,
+          "roi": 49.967330650874,
+          "water": 521.5899830172916,
+          "fertilizer": 120.33999999999993,
+          "pesticides": 5.927962239579163,
+          "methane": 303.1194791666673,
+          "intensity": 0.04341852162580208
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 0,
+        "withoutAwd": 960,
+        "values": {
+          "income": 12886084.392395495,
+          "straw": 1208890.782281249,
+          "cost": 30673655.58509377,
+          "labor": 253.77887369729189,
+          "yield": 7.016057402735417,
+          "margin": 29.578386829923737,
+          "roi": 49.964929313023944,
+          "water": 521.5899830172915,
+          "fertilizer": 120.34000000000036,
+          "pesticides": 5.927962239579171,
+          "methane": 303.1194791666669,
+          "intensity": 0.04341852162580209
+        }
+      }
+    },
+    {
+      "code": "BAU-BV-KN-BT",
+      "family": "sustainable",
+      "name": {
+        "vi": "Thường lệ, bền vững, khắc nghiệt, kinh tế bình thường",
+        "en": "Business As Usual Sustainable Severe Climate Normal Economy"
+      },
+      "USD": {
+        "count": 1440,
+        "withAwd": 1440,
+        "withoutAwd": 0,
+        "values": {
+          "income": 581.197947215993,
+          "straw": 43.27677975623611,
+          "cost": 832.4994032441645,
+          "labor": 276.65090445895834,
+          "yield": 6.074766033337498,
+          "margin": 40.12605867638194,
+          "roi": 70.24082113114976,
+          "water": 277.1586663147222,
+          "fertilizer": 105.61513888888882,
+          "pesticides": 5.934764224920143,
+          "methane": 309.21858353083326,
+          "intensity": 0.0527635860643854
+        }
+      },
+      "VND": {
+        "count": 1440,
+        "withAwd": 1440,
+        "withoutAwd": 0,
+        "values": {
+          "income": 15298292.366603475,
+          "straw": 1139131.39674167,
+          "cost": 21913049.292090267,
+          "labor": 276.650904458958,
+          "yield": 6.0747660333374975,
+          "margin": 40.126058676381916,
+          "roi": 70.24082113142826,
+          "water": 277.158666314722,
+          "fertilizer": 105.61513888888884,
+          "pesticides": 5.93476422492014,
+          "methane": 309.2185835308338,
+          "intensity": 0.052763586064385415
+        }
+      }
+    },
+    {
+      "code": "BAU-BV-KN-TH",
+      "family": "sustainable",
+      "name": {
+        "vi": "Thường lệ, bền vững, khắc nghiệt, thiếu tài nguyên",
+        "en": "Business As Usual Sustainable Severe Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 1368,
+        "withAwd": 1368,
+        "withoutAwd": 0,
+        "values": {
+          "income": 402.5943678857575,
+          "straw": 43.27806268679094,
+          "cost": 1017.3250084770477,
+          "labor": 276.61663704480986,
+          "yield": 6.07493331608845,
+          "margin": 27.42919255856114,
+          "roi": 42.361247176986154,
+          "water": 277.2655697454677,
+          "fertilizer": 105.60497076023385,
+          "pesticides": 5.932099338577487,
+          "methane": 309.0229802166666,
+          "intensity": 0.05273132609990054
+        }
+      },
+      "VND": {
+        "count": 1368,
+        "withAwd": 1368,
+        "withoutAwd": 0,
+        "values": {
+          "income": 10597088.951545859,
+          "straw": 1139165.1660424005,
+          "cost": 26778028.873289492,
+          "labor": 276.6166370448095,
+          "yield": 6.074933316088453,
+          "margin": 27.429192558561194,
+          "roi": 42.36124717706936,
+          "water": 277.2655697454677,
+          "fertilizer": 105.60497076023407,
+          "pesticides": 5.932099338577487,
+          "methane": 309.02298021666695,
+          "intensity": 0.05273132609990054
+        }
+      }
+    },
+    {
+      "code": "BAU-BV-OH-BT",
+      "family": "sustainable",
+      "name": {
+        "vi": "Thường lệ, bền vững, ôn hòa, kinh tế bình thường",
+        "en": "Business As Usual Sustainable Mild Climate Normal Economy"
+      },
+      "USD": {
+        "count": 1368,
+        "withAwd": 1368,
+        "withoutAwd": 0,
+        "values": {
+          "income": 670.667480506505,
+          "straw": 47.327702568940104,
+          "cost": 886.7009243025577,
+          "labor": 293.1910989669591,
+          "yield": 6.627193633742698,
+          "margin": 42.14331973502914,
+          "roi": 76.26510909715536,
+          "water": 326.0999576383772,
+          "fertilizer": 112.8924707602338,
+          "pesticides": 5.485807512739761,
+          "methane": 395.66057909035004,
+          "intensity": 0.062275536686418845
+        }
+      },
+      "VND": {
+        "count": 1368,
+        "withAwd": 1368,
+        "withoutAwd": 0,
+        "values": {
+          "income": 17653309.422037978,
+          "straw": 1245759.787030701,
+          "cost": 23339741.729451753,
+          "labor": 293.1910989669597,
+          "yield": 6.627193633742685,
+          "margin": 42.14331973502914,
+          "roi": 76.26510909791477,
+          "water": 326.0999576383771,
+          "fertilizer": 112.892470760234,
+          "pesticides": 5.485807512739759,
+          "methane": 395.66057909035055,
+          "intensity": 0.0622755366864188
+        }
+      }
+    },
+    {
+      "code": "BAU-BV-OH-TH",
+      "family": "sustainable",
+      "name": {
+        "vi": "Thường lệ, bền vững, ôn hòa, thiếu tài nguyên",
+        "en": "Business As Usual Sustainable Mild Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 1440,
+        "withAwd": 1440,
+        "withoutAwd": 0,
+        "values": {
+          "income": 473.1069472333385,
+          "straw": 47.32066414261121,
+          "cost": 1089.9898016412485,
+          "labor": 293.18405367916677,
+          "yield": 6.626215389528486,
+          "margin": 29.93754484368621,
+          "roi": 49.4133094257059,
+          "water": 326.21164195763885,
+          "fertilizer": 112.89104166666662,
+          "pesticides": 5.490144069228468,
+          "methane": 395.4088427748608,
+          "intensity": 0.062248355961131915
+        }
+      },
+      "VND": {
+        "count": 1440,
+        "withAwd": 1440,
+        "withoutAwd": 0,
+        "values": {
+          "income": 12453121.065104742,
+          "straw": 1245574.5215722215,
+          "cost": 28690711.558819454,
+          "labor": 293.1840536791672,
+          "yield": 6.626215389528463,
+          "margin": 29.937544843686283,
+          "roi": 49.4133094255454,
+          "water": 326.21164195763873,
+          "fertilizer": 112.89104166666657,
+          "pesticides": 5.490144069228462,
+          "methane": 395.40884277486094,
+          "intensity": 0.062248355961131895
+        }
+      }
+    },
+    {
+      "code": "1M-2V-KN-BT",
+      "family": "oneMha",
+      "name": {
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, kinh tế bình thường",
+        "en": "1Mha 2 Seasons Severe Climate Normal Economy"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 1031.0361947026036,
+          "straw": 41.543874092968785,
+          "cost": 1035.049492858125,
+          "labor": 272.0086578037501,
+          "yield": 6.046852743473964,
+          "margin": 48.6962169653646,
+          "roi": 100.15890371318802,
+          "water": 389.8228830962502,
+          "fertilizer": 87.375,
+          "pesticides": 6.205532804104156,
+          "methane": 203.41687500000063,
+          "intensity": 0.03552047568601983
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 27138934.71710417,
+          "straw": 1093517.8538827088,
+          "cost": 27244572.75096875,
+          "labor": 272.0086578037499,
+          "yield": 6.046852743473957,
+          "margin": 48.69621696536457,
+          "roi": 100.15890371388699,
+          "water": 389.8228830962498,
+          "fertilizer": 87.375,
+          "pesticides": 6.205532804104158,
+          "methane": 203.4168750000002,
+          "intensity": 0.035520475686019806
+        }
+      }
+    },
+    {
+      "code": "1M-2V-KN-TH",
+      "family": "oneMha",
+      "name": {
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, thiếu tài nguyên",
+        "en": "1Mha 2 Seasons Severe Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 815.2319867970838,
+          "straw": 41.543874092968785,
+          "cost": 1250.853700759895,
+          "labor": 272.0086578037501,
+          "yield": 6.046852743473964,
+          "margin": 38.33403904646877,
+          "roi": 66.49536091432786,
+          "water": 389.8228830962502,
+          "fertilizer": 87.375,
+          "pesticides": 6.205532804104156,
+          "methane": 203.41687500000063,
+          "intensity": 0.03552047568601983
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 21458536.35664581,
+          "straw": 1093517.8538827088,
+          "cost": 32924971.111541685,
+          "labor": 272.0086578037499,
+          "yield": 6.0468527434739565,
+          "margin": 38.33403904646877,
+          "roi": 66.49536091472505,
+          "water": 389.8228830962498,
+          "fertilizer": 87.375,
+          "pesticides": 6.205532804104158,
+          "methane": 203.4168750000002,
+          "intensity": 0.0355204756860198
+        }
+      }
+    },
+    {
+      "code": "1M-2V-OH-BT",
+      "family": "oneMha",
+      "name": {
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, kinh tế bình thường",
+        "en": "1Mha 2 Seasons Mild Climate Normal Economy"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 1169.1330699560417,
+          "straw": 44.5935602437083,
+          "cost": 1085.8948412996879,
+          "labor": 295.8433236727087,
+          "yield": 6.490953138366666,
+          "margin": 50.005941067145805,
+          "roi": 108.92688138522485,
+          "water": 455.49372446770843,
+          "fertilizer": 88,
+          "pesticides": 5.510511172716672,
+          "methane": 177.03291666666672,
+          "intensity": 0.0293113992774646
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 30773920.667396907,
+          "straw": 1173791.692730104,
+          "cost": 28582924.0129271,
+          "labor": 295.8433236727085,
+          "yield": 6.490953138366678,
+          "margin": 50.00594106714576,
+          "roi": 108.92688138532486,
+          "water": 455.493724467708,
+          "fertilizer": 88,
+          "pesticides": 5.510511172716665,
+          "methane": 177.03291666666664,
+          "intensity": 0.02931139927746462
+        }
+      }
+    },
+    {
+      "code": "1M-2V-OH-TH",
+      "family": "oneMha",
+      "name": {
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, thiếu tài nguyên",
+        "en": "1Mha 2 Seasons Mild Climate Resource Shortage"
+      },
+      "USD": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 929.8015419911555,
+          "straw": 44.5935602437083,
+          "cost": 1325.2263692618756,
+          "labor": 295.8433236727087,
+          "yield": 6.490953138366666,
+          "margin": 40.020378915667656,
+          "roi": 75.15425190598837,
+          "water": 455.49372446770843,
+          "fertilizer": 88,
+          "pesticides": 5.510511172716672,
+          "methane": 177.0329166666667,
+          "intensity": 0.0293113992774646
+        }
+      },
+      "VND": {
+        "count": 960,
+        "withAwd": 960,
+        "withoutAwd": 0,
+        "values": {
+          "income": 24474236.188430704,
+          "straw": 1173791.692730104,
+          "cost": 34882608.49229168,
+          "labor": 295.8433236727085,
+          "yield": 6.490953138366678,
+          "margin": 40.02037891566776,
+          "roi": 75.15425190545918,
+          "water": 455.4937244677079,
+          "fertilizer": 88,
+          "pesticides": 5.510511172716665,
+          "methane": 177.03291666666664,
+          "intensity": 0.02931139927746462
+        }
+      }
+    }
+  ]
+}

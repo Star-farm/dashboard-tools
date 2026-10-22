@@ -22,7 +22,6 @@ export default function Glossary({ language }: { language: Language }) {
   return (
       <div className="page-shell glossary-page" id="glossary">
         <section className="intro" aria-labelledby="page-title">
-          <p className="eyebrow">{t.eyebrow}</p>
           <h1 id="page-title">{t.title}</h1>
         </section>
 
@@ -31,10 +30,9 @@ export default function Glossary({ language }: { language: Language }) {
             <label htmlFor="term-search">{t.search}</label>
             <div className="search-field">
               <span className="search-icon" aria-hidden="true" />
-              <input id="term-search" type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} aria-describedby="search-hint" />
+              <input id="term-search" type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} />
               {query && <button type="button" className="clear-search" onClick={() => setQuery('')} aria-label={t.clearSearch}>{t.clear}</button>}
             </div>
-            <p id="search-hint" className="search-hint">{t.searchHint}</p>
           </div>
 
           <div className="category-filters" role="group" aria-label={t.filterByTopic}>

@@ -1,15 +1,32 @@
+import { useEffect, useRef } from 'react'
 import landscape from '../../assets/mekong-landscape.jpg'
 import { translations } from '../../i18n'
 import type { Language } from '../../i18n'
 import { navigationTopics } from '../../app/navigationTopics'
 import type { Topic } from '../../app/navigationTopics'
+import { getScrollBehavior } from '../../app/scrollBehavior'
 
 export default function HomePage({ language }: { language: Language }) {
   const t = translations[language]
+  const exploreRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    if (!window.matchMedia?.('(max-width: 767px)').matches) return
+    const clearRestoredFocus = () => {
+      if (document.activeElement === exploreRef.current) exploreRef.current?.blur()
+    }
+    clearRestoredFocus()
+    const frame = window.requestAnimationFrame?.(clearRestoredFocus)
+    window.addEventListener('pageshow', clearRestoredFocus)
+    return () => {
+      if (frame !== undefined) window.cancelAnimationFrame(frame)
+      window.removeEventListener('pageshow', clearRestoredFocus)
+    }
+  }, [])
 
   function openTopicMenu(topic: Topic) {
     const trigger = document.getElementById(`topic-${topic}-trigger`)
-    trigger?.scrollIntoView?.({ block: 'nearest', inline: 'center' })
+    trigger?.scrollIntoView?.({ block: 'nearest', inline: 'center', behavior: getScrollBehavior() })
     trigger?.focus({ preventScroll: true })
     trigger?.click()
   }
@@ -20,12 +37,11 @@ export default function HomePage({ language }: { language: Language }) {
         <img className="hero-art" src={landscape} alt="" fetchPriority="high" width="4765" height="2480" />
         <div className="hero-shade" />
         <div className="hero-content">
-          <p className="hero-eyebrow">{t.heroEyebrow}</p>
           <h1 id="home-title">{t.heroTitle}<br /><span>{t.heroHighlight}</span></h1>
           <p className="hero-description">{t.heroDescription}</p>
           <p className="hero-project">{t.heroProject}</p>
           <div className="hero-actions">
-            <a className="hero-primary" href="#future">{t.navFuture}<span aria-hidden="true">→</span></a>
+            <a className="hero-primary" href="#home-explore" ref={exploreRef}>{t.heroExplore}<span aria-hidden="true">↓</span></a>
           </div>
         </div>
         <div className="hero-bottom"><span>{t.heroFootnote}</span><a href="#home-explore">{t.scrollExplore}<span aria-hidden="true">↓</span></a></div>

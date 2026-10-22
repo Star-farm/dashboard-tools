@@ -17,17 +17,15 @@ const partners = [
 
 export default function SiteFooter({ language }: { language: Language }) {
   const t = translations[language]
+
   return (
     <footer className="site-footer">
       <div className="footer-main">
         <div className="footer-content content-width">
           <div className="footer-about">
-            <a className="brand footer-brand" href="#home"><span className="brand-name">STAR-FARM</span><span className="brand-full-name"><em>{t.footerProjectTitle}</em></span></a>
-            <p className="footer-project-description">{t.footerDescription}</p>
-            <p className="footer-location">{t.footerLocation}</p>
+            <div className="brand footer-brand"><span className="brand-name">STAR-FARM</span><span className="brand-full-name"><em>{t.footerProjectTitle}</em></span></div>
+            <div className="footer-links"><h2>{t.footerResources}</h2><a href="https://across-lab.org/application/star-farm/" target="_blank" rel="noopener noreferrer">{t.footerProject}<span aria-hidden="true">↗</span></a><a href="https://across-lab.org/" target="_blank" rel="noopener noreferrer">{t.footerResearch}<span aria-hidden="true">↗</span></a></div>
           </div>
-          <nav className="footer-links" aria-label={t.footerNavigation}><h2>{t.footerNavigation}</h2><a href="#home">{t.navHome}</a><a href="#future">{t.navFuture}</a><a href="#scenario-details">{t.navScenarioDetails}</a><a href="#glossary">{t.navGlossary}</a></nav>
-          <div className="footer-links"><h2>{t.footerResources}</h2><a href="https://across-lab.org/application/star-farm/" target="_blank" rel="noopener noreferrer">{t.footerProject}<span aria-hidden="true">↗</span></a><a href="https://across-lab.org/" target="_blank" rel="noopener noreferrer">{t.footerResearch}<span aria-hidden="true">↗</span></a></div>
           <section className="partners-section" id="partners" aria-label={t.partners}>
             <div className="partners-inner">
               <p>{t.partners}</p>
@@ -44,7 +42,7 @@ export default function SiteFooter({ language }: { language: Language }) {
             </div>
           </section>
         </div>
-        <div className="footer-bottom content-width"><span>{t.footerCopyright}</span><a href="#home">{t.backToTop} ↑</a></div>
+        <div className="footer-bottom content-width"><span>{t.footerCopyright}</span></div>
       </div>
     </footer>
   )

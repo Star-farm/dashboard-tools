@@ -16,7 +16,7 @@
 .topic-leaf:hover { color: #586253; background: #f1f3ea; }
 .topic-flyout { position: absolute; right: calc(100% - 1px); top: -6px; width: 224px; z-index: 1; }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   .topic-dropdown { left: 0; right: 0; width: 100%; max-height: calc(100svh - 165px); overflow-y: auto; }
   .topic-flyout { position: static; width: auto; padding: 0 12px 7px; }
   .topic-flyout > .topic-panel { background: #f1f3e9; box-shadow: none; border-color: #e0e6d7; }

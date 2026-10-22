@@ -14,7 +14,7 @@
 .future-charts { display: flex; flex-direction: column; gap: 28px; margin-top: 24px; }
 .future-chart-card { background: #fffefa; border: 1px solid #d8e1cd; border-radius: 10px; overflow: clip; }
 .chart-card-header { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 25px 28px 22px; border-bottom: 1px solid #e8ecdf; }
-.chart-heading h2 { font-size: 21px; color: #30472d; font-weight: 500; letter-spacing: -.5px; line-height: 1.4; margin: 0; }
+.chart-heading h2 { font-size: var(--section-title-size); color: #30472d; font-weight: 600; letter-spacing: -.3px; line-height: 1.4; margin: 0; }
 .chart-heading p { color: #7d8771; font-size: 11px; line-height: 1.6; margin: 7px 0 0; }
 .chart-direction { font-size: 10px; color: #647850; background: #edf1e5; padding: 6px 9px; border-radius: 4px; line-height: 1.5; text-align: right; max-width: 190px; }
 .chart-area { min-width: 0; padding: 24px 23px 18px 17px; }
@@ -32,7 +32,6 @@
 
 @media (min-width: 1600px) {
   .timeseries-plot { height: 360px; }
-  .chart-heading h2 { font-size: 23px; }
   .chart-insight > p { font-size: 14px; }
 }
 
@@ -40,7 +39,6 @@
   .chart-area { padding-inline: 13px; }
   .future-period { font-size: 18px; gap: 9px; }
   .chart-card-header { padding-inline: 22px; }
-  .chart-heading h2 { font-size: 19px; }
   .chart-direction { max-width: 150px; }
 }
 
@@ -54,7 +52,6 @@
   .year-controls select { min-width: 0; width: 100%; font-size: 16px; min-height: 44px; }
   .future-charts { gap: 20px; margin-top: 20px; }
   .chart-card-header { display: block; padding: 20px 17px 17px; }
-  .chart-heading h2 { font-size: 19px; letter-spacing: -.4px; }
   .chart-heading p { font-size: 10px; margin-top: 6px; }
   .chart-direction { display: inline-block; max-width: none; text-align: left; margin-top: 12px; font-size: 9px; padding: 4px 7px; }
   .chart-area { padding: 20px 5px 14px; }

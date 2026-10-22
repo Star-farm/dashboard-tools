@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/future-series.json'
 import type { Language } from '../../i18n'
 import type { Currency } from './futureTypes'
@@ -14,13 +15,13 @@ export default function FuturePage({ language }: { language: Language }) {
   const [endYear, setEndYear] = useState(data.endYear)
 
   useEffect(() => {
-    document.getElementById(window.location.hash.slice(1) || 'future')?.scrollIntoView?.({ block: 'start' })
+    document.getElementById(window.location.hash.slice(1) || 'future')?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [])
 
   return (
     <div className="future-page page-shell" id="future">
       <section className="intro future-intro" aria-labelledby="future-title">
-        <div><p className="eyebrow">{t.eyebrow}</p><h1 id="future-title">{t.title}</h1></div>
+        <div><h1 id="future-title">{t.title}</h1></div>
         <span className="future-period">{startYear}<span aria-hidden="true">—</span>{endYear}</span>
       </section>
 

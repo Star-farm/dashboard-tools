@@ -1,5 +1,4 @@
 .scenario-page { padding-bottom: 64px; }
-.scenario-page h1 { font-size: clamp(27px, 3vw, 38px); line-height: 1.3; letter-spacing: -.9px; }
 .scenario-selector { display: grid; grid-template-columns: minmax(210px, .7fr) minmax(0, 2fr); gap: 24px; align-items: center; padding: 24px 0; border-block: 1px solid #dce2d3; }
 .scenario-selector label { font-size: 13px; color: #344e32; line-height: 1.7; font-weight: 600; }
 .scenario-selector select { display: block; width: 100%; min-width: 0; min-height: 46px; padding: 12px 38px 12px 15px; border: 1px solid #c5d1bc; border-radius: 6px; background: #fffefa; color: #3b5434; font: inherit; font-size: 13px; text-overflow: ellipsis; cursor: pointer; }
@@ -7,7 +6,7 @@
 .scenario-summary { margin-top: 26px; padding: 23px 26px; border-left: 3px solid #9ea966; background: #edf1e4; }
 .scenario-summary p { color: #485d3e; font-size: 13px; line-height: 1.9; margin: 0; }
 .scenario-section { padding-top: 28px; }
-.scenario-section h2 { font-size: 20px; font-weight: 600; letter-spacing: -.3px; line-height: 1.5; margin: 0 0 21px; color: #30472d; }
+.scenario-section h2 { font-size: var(--section-title-size); font-weight: 600; letter-spacing: -.3px; line-height: 1.4; margin: 0 0 21px; color: #30472d; }
 .scenario-section h2 > span { color: #85996a; margin-right: 5px; }
 .scenario-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; }
 .economic-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -36,12 +35,11 @@
 
 @media (max-width: 520px) {
   .scenario-page { padding-bottom: 40px; }
-  .scenario-page h1 { font-size: 27px; }
   .scenario-selector { padding-block: 20px; }
   .scenario-selector select { font-size: 16px; padding-left: 12px; }
   .scenario-summary { padding: 20px 18px; margin-top: 22px; }
   .scenario-summary p { font-size: 12px; }
   .scenario-section { padding-top: 28px; }
-  .scenario-section h2 { font-size: 18px; margin-bottom: 16px; }
+  .scenario-section h2 { margin-bottom: 16px; }
   .scenario-kpis { grid-template-columns: minmax(0, 1fr); gap: 10px; }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/scenario-details.json'
 import type { Language } from '../../i18n'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
@@ -29,13 +30,13 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
   const awd = current.withAwd === current.count ? 'with' : current.withoutAwd === current.count ? 'without' : 'mixed'
 
   useEffect(() => {
-    document.getElementById(window.location.hash.slice(1) || 'scenario-details')?.scrollIntoView?.({ block: 'start' })
+    document.getElementById(window.location.hash.slice(1) || 'scenario-details')?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [])
 
   return (
     <div className="scenario-page page-shell" id="scenario-details">
       <section className="intro" aria-labelledby="scenario-title">
-        <p className="eyebrow">{t.eyebrow}</p><h1 id="scenario-title">{t.title}</h1>
+        <h1 id="scenario-title">{t.title}</h1>
       </section>
       <div className="scenario-selector"><label htmlFor="scenario-select">{t.select}</label><select id="scenario-select" value={selected.code} onChange={(event) => setSelectedCode(event.target.value)}>{families.map((family) => <optgroup label={t[`group${family}`]} key={family}>{scenarios.scenarios.filter((scenario) => scenario.family === family).map((scenario) => <option value={scenario.code} key={scenario.code}>{scenario.name[language]}</option>)}</optgroup>)}</select></div>
       <aside className="scenario-summary" aria-label={t.summary} aria-live="polite"><p><EmphasizedNumbers text={scenarioSummary(current.values, baseline.values, language)} /></p></aside>

@@ -1,0 +1,46 @@
+.economic-comparison-page { padding-bottom: 64px; }
+.comparison-filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 20px 48px; padding: 24px 0; border-block: 1px solid var(--line); }
+.comparison-filters fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+.comparison-filters legend { color: var(--green); font-size: 13px; font-weight: 700; margin-bottom: 11px; padding: 0; }
+.comparison-segmented { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid #c5d1bc; border-radius: 7px; background: #edf1e5; }
+.comparison-segmented button { min-height: 40px; padding: 9px 17px; border: 0; border-radius: 4px; color: #4c6144; background: transparent; font-size: 13px; line-height: 1.4; transition: background .15s, color .15s; }
+.comparison-segmented button:hover { background: #dfe8d6; color: var(--forest); }
+.comparison-segmented button[aria-pressed="true"] { color: #fff9e3; background: var(--forest); }
+.comparison-reset { min-height: 46px; padding: 8px 0; margin-left: auto; border: 0; color: var(--green); background: transparent; font-size: 13px; text-underline-offset: 4px; }
+.comparison-reset:hover { text-decoration: underline; }
+.comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
+.comparison-chart-card { min-width: 0; border: 1px solid #cddbc4; border-radius: 9px; background: #fffefa; }
+.comparison-chart-card > header { padding: 22px 24px 18px; border-bottom: 1px solid #e4eadc; }
+.comparison-chart-card h2 { margin: 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; letter-spacing: -.3px; }
+.comparison-chart-card > header p { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px; margin: 10px 0 0; color: #637357; font-size: 12px; line-height: 1.5; }
+.comparison-chart-card > header p > span { margin-left: auto; padding-left: 10px; }
+.comparison-chart-card > header strong { color: #455d3b; font-weight: 600; }
+.comparison-plot { width: 100%; height: 290px; padding: 12px 12px 0 0; }
+.comparison-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 17px 24px 20px; margin: 0; border-top: 1px solid #e4eadc; background: #f4f6ee; border-radius: 0 0 9px 9px; }
+.comparison-values > div { min-width: 0; }
+.comparison-values > div + div { padding-left: 20px; border-left: 1px solid #d5dfcc; }
+.comparison-values dt { display: flex; align-items: center; gap: 8px; color: #52654a; font-size: 12px; line-height: 1.5; }
+.comparison-swatch { flex: 0 0 9px; width: 9px; height: 9px; border-radius: 2px; background: #bf554c; }
+.comparison-swatch.oneMha { background: #2f8050; }
+.comparison-values dd { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; margin: 7px 0 0; font-variant-numeric: tabular-nums; }
+.comparison-values dd > strong { color: var(--forest); font-size: 20px; font-weight: 600; }
+.comparison-values dd > span { color: var(--muted); font-size: 11px; }
+.comparison-no-data { padding: 40px 24px; color: var(--muted); font-size: 14px; }
+@media (max-width: 1000px) { .comparison-filters { gap: 18px 24px; } .comparison-segmented button { padding-inline: 12px; } }
+@media (max-width: 767px) {
+  .economic-comparison-page { padding-bottom: 40px; }
+  .comparison-filters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-block: 20px; }
+  .comparison-filters legend { font-size: 12px; margin-bottom: 9px; }
+  .comparison-segmented { display: flex; width: 100%; }
+  .comparison-segmented button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 8px 5px; font-size: 12px; }
+  .comparison-reset { justify-self: start; min-height: 32px; margin: -4px 0 0; padding: 0; font-size: 12px; }
+  .comparison-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; margin-top: 20px; }
+  .comparison-chart-card > header { padding: 19px 17px 16px; }
+  .comparison-chart-card > header p { font-size: 11px; }
+  .comparison-plot { height: 260px; padding-right: 0; }
+  .comparison-values { padding: 15px 17px 18px; gap: 10px; }
+  .comparison-values > div + div { padding-left: 12px; }
+  .comparison-values dt { font-size: 11px; }
+  .comparison-values dd > strong { font-size: clamp(17px, 4.6vw, 20px); }
+}
+@media (prefers-reduced-motion: reduce) { .comparison-segmented button { transition: none; } }

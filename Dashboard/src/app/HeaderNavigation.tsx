@@ -47,7 +47,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   function focusFirst(id: string, last = false) {
     window.clearTimeout(focusTimer.current)
     focusTimer.current = window.setTimeout(() => {
-      const buttons = document.getElementById(id)?.querySelectorAll<HTMLButtonElement>('button')
+      const buttons = document.getElementById(id)?.querySelectorAll<HTMLElement>('button, a[href]')
       if (buttons?.length) buttons[last ? buttons.length - 1 : 0].focus()
     }, 0)
   }
@@ -138,8 +138,8 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
     if (!list || list.classList.contains('topic-list')) return
     if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
       event.preventDefault()
-      const buttons = Array.from(list.children).map((item) => item.querySelector<HTMLButtonElement>(':scope > button')).filter((button): button is HTMLButtonElement => button !== null)
-      const current = buttons.indexOf(target as HTMLButtonElement)
+      const buttons = Array.from(list.children).map((item) => item.querySelector<HTMLElement>(':scope > button, :scope > a[href]')).filter((button): button is HTMLElement => button !== null)
+      const current = buttons.indexOf(target)
       const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (current + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length
       buttons[next]?.focus()
     }
@@ -163,7 +163,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
               {openBranch === branch.id && (
                 <div className="topic-flyout" id={`topic-${topic.id}-${branch.id}-panel`}>
                   <ul className="topic-panel" aria-label={`${t[topic.label]} · ${t[branch.label]}`}>
-                    {children[branch.id].map((label) => <li key={label}><button className="topic-menu-button topic-leaf" type="button" aria-disabled="true">{label}</button></li>)}
+                    {children[branch.id].map((label, index) => <li key={label}>{topic.id === 'economics' && branch.id === 'overview' ? <a className="topic-menu-button topic-leaf" href={index === 0 ? '#economics-overview' : '#economics-comparison'} aria-current={page === (index === 0 ? 'economics' : 'economicComparison') ? 'page' : undefined} onClick={navigate}>{label}</a> : <button className="topic-menu-button topic-leaf" type="button" aria-disabled="true">{label}</button>}</li>)}
                   </ul>
                 </div>
               )}

@@ -82,11 +82,11 @@ describe('scenario calculations', () => {
 describe('scenario details page', () => {
   it('shows the selector, all three sections and values matching the reference', () => {
     render(<ScenarioDetailsPage language="vi" />)
-    expect(screen.getByLabelText('Chọn kịch bản bạn muốn xem trước:')).toHaveValue('BAU-BV-OH-TH')
+    expect(screen.getByLabelText('Chọn kịch bản')).toHaveValue('BAU-BV-OH-TH')
     expect(screen.getAllByRole('option')).toHaveLength(16)
-    expect(screen.getByRole('heading', { name: '1. Tính khả thi về kinh tế' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '2. Quản lý nguồn lực' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '3. Tính bền vững' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '1. Kinh tế' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '2. Tài nguyên' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '3. Môi trường' })).toBeInTheDocument()
     for (const value of ['12.453.121', '1.245.575', '28.690.712', '293,18', '6,63', '29,94', '49,41', '326,21', '112,89', '5,49', '395,41', '0,06']) expect(screen.getByText(value)).toBeInTheDocument()
     expect(screen.getAllByText('VNĐ/ha')).toHaveLength(3)
     expect(screen.getByText('kg CH₄/kg gạo')).toBeInTheDocument()
@@ -101,12 +101,12 @@ describe('scenario details page', () => {
   it('updates every metric and the summary when selecting a scenario, and preserves selection on translation', () => {
     const { rerender } = render(<ScenarioDetailsPage language="vi" />)
     const originalSummary = screen.getByLabelText('Nhận xét tổng quan').textContent
-    fireEvent.change(screen.getByLabelText('Chọn kịch bản bạn muốn xem trước:'), { target: { value: 'BAU-2V-OH-BT' } })
+    fireEvent.change(screen.getByLabelText('Chọn kịch bản'), { target: { value: 'BAU-2V-OH-BT' } })
     expect(screen.getByText('Không sử dụng AWD')).toBeInTheDocument()
     expect(screen.getByLabelText('Nhận xét tổng quan').textContent).not.toBe(originalSummary)
     expect(screen.queryByText('12.453.121')).not.toBeInTheDocument()
     rerender(<ScenarioDetailsPage language="en" />)
-    expect(screen.getByLabelText('Choose the scenario you want to explore:')).toHaveValue('BAU-2V-OH-BT')
+    expect(screen.getByLabelText('Choose a scenario')).toHaveValue('BAU-2V-OH-BT')
     expect(screen.getAllByText('$/ha')).toHaveLength(3)
     expect(screen.queryByText('VNĐ/ha')).not.toBeInTheDocument()
     expect(screen.getByText('Without AWD')).toBeInTheDocument()

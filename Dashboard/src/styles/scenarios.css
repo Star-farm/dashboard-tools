@@ -1,6 +1,8 @@
 .scenario-page { padding-bottom: 64px; }
-.scenario-selector { display: grid; grid-template-columns: minmax(210px, .7fr) minmax(0, 2fr); gap: 24px; align-items: center; padding: 24px 0; border-block: 1px solid #dce2d3; }
+.scenario-selector { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 16px; align-items: center; padding: 24px 0; border-block: 1px solid #dce2d3; }
 .scenario-selector label { font-size: 13px; color: #344e32; line-height: 1.7; font-weight: 600; }
+.scenario-select-control { position: relative; min-width: 0; }
+.scenario-selected-name { display: none; }
 .scenario-selector select { display: block; width: 100%; min-width: 0; min-height: 46px; padding: 12px 38px 12px 15px; border: 1px solid #c5d1bc; border-radius: 6px; background: #fffefa; color: #3b5434; font: inherit; font-size: 13px; text-overflow: ellipsis; cursor: pointer; }
 .scenario-selector select:focus-visible { outline: 3px solid #759b7f; outline-offset: 3px; }
 .scenario-summary { margin-top: 26px; padding: 23px 26px; border-left: 3px solid #9ea966; background: #edf1e4; }
@@ -31,6 +33,14 @@
 @media (max-width: 800px) {
   .scenario-selector { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .scenario-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+
+@media (max-width: 767px) {
+  .scenario-select-control { border: 1px solid #c5d1bc; border-radius: 6px; background: #fffefa; }
+  .scenario-selected-name { display: block; min-height: 46px; padding: 11px 34px 11px 12px; color: #3b5434; font-size: 12px; line-height: 1.55; white-space: normal; overflow-wrap: anywhere; }
+  .scenario-select-control::after { content: ''; position: absolute; right: 15px; top: 50%; width: 6px; height: 6px; border-right: 1.5px solid #3b5434; border-bottom: 1.5px solid #3b5434; transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+  .scenario-select-control select { position: absolute; inset: 0; height: 100%; min-height: 0; opacity: 0; font-size: 16px; }
+  .scenario-select-control:focus-within { outline: 3px solid #759b7f; outline-offset: 3px; }
 }
 
 @media (max-width: 520px) {

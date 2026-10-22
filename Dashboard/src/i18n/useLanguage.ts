@@ -9,8 +9,8 @@ export function useLanguage(page: Page = 'glossary') {
 
   useEffect(() => {
     document.documentElement.lang = language
-    const titles = { home: t.homePageTitle, future: t.futurePageTitle, scenario: t.scenarioPageTitle, glossary: t.pageTitle }
-    const descriptions = { home: t.homePageDescription, future: t.futurePageDescription, scenario: t.scenarioPageDescription, glossary: t.pageDescription }
+    const titles = { home: t.homePageTitle, future: t.futurePageTitle, scenario: t.scenarioPageTitle, economics: t.economicsPageTitle, economicComparison: t.economicComparisonPageTitle, glossary: t.pageTitle }
+    const descriptions = { home: t.homePageDescription, future: t.futurePageDescription, scenario: t.scenarioPageDescription, economics: t.economicsPageDescription, economicComparison: t.economicComparisonPageDescription, glossary: t.pageDescription }
     document.title = titles[page]
     document.querySelector('meta[name="description"]')?.setAttribute('content', descriptions[page])
   }, [language, t, page])

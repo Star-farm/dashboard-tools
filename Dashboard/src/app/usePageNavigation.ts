@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { getScrollBehavior } from './scrollBehavior'
 
-export type Page = 'home' | 'glossary' | 'future' | 'scenario'
+export type Page = 'home' | 'glossary' | 'future' | 'scenario' | 'economics' | 'economicComparison'
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
+  if (hash === '#economics-overview') return 'economics'
+  if (hash === '#economics-comparison') return 'economicComparison'
   if (['#future', '#future-income', '#future-labor', '#future-methane'].includes(hash)) return 'future'
   if (['#scenario-details', '#scenario-economics', '#scenario-resources', '#scenario-sustainability'].includes(hash)) return 'scenario'
   if (['#glossary', '#search-panel', '#definitions'].includes(hash)) return 'glossary'

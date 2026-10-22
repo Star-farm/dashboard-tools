@@ -7,23 +7,26 @@
   .desktop-header.header-home + main .home-hero { min-height: max(620px, 100svh); }
   .desktop-header::before, .desktop-header::after { content: ''; position: absolute; inset: 0 0 auto; height: calc(100% + var(--backdrop-extension)); z-index: -1; pointer-events: none; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); -webkit-mask-image: linear-gradient(#000 25%, transparent); mask-image: linear-gradient(#000 25%, transparent); transition: opacity .22s ease, height .22s ease; }
   .desktop-header::before { background: linear-gradient(180deg, #163d308a 0%, #163d3052 48%, #163d301a 82%, #163d3000 100%); }
+  .desktop-header:not(.header-home)::before { background: linear-gradient(180deg, #163d30eb 0%, #163d30cf 48%, #163d305c 82%, #163d3000 100%); }
   .desktop-header::after { opacity: 0; background: linear-gradient(180deg, #163d30f2 0%, #163d30c2 36%, #163d307a 66%, #163d3029 86%, #163d3000 100%); -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
   .desktop-header:has(.topic-dropdown) { --backdrop-extension: calc(var(--submenu-height, 180px) * 3); }
   .desktop-header:has(.topic-dropdown)::after { opacity: 1; }
   .desktop-header:has(.topic-dropdown)::before { opacity: 0; }
   @media (hover: hover) and (pointer: fine) {
-    .desktop-header:hover::after { opacity: 1; }
-    .desktop-header:hover::before { opacity: 0; }
+    .desktop-header:has(.topic-trigger:hover)::after { opacity: 1; }
+    .desktop-header:has(.topic-trigger:hover)::before { opacity: 0; }
   }
   .desktop-header.header-hidden { transform: translateY(calc(-100% - 1px)); pointer-events: none; }
   .desktop-header.header-hidden::before, .desktop-header.header-hidden::after { opacity: 0; }
   .desktop-header.header-hidden .topic-dropdown { visibility: hidden; }
   .desktop-header .header-inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; width: 100%; height: var(--desktop-header-height); min-height: 0; gap: clamp(10px, 1vw, 20px); padding: 6px var(--header-gutter); margin: 0; }
-  .desktop-header .brand { grid-column: 1; grid-row: 1; padding-left: clamp(12px, 1vw, 20px); }
+  .desktop-header .brand { grid-column: 1; grid-row: 1; padding-left: clamp(12px, 1vw, 20px); margin-right: clamp(16px, 2vw, 40px); }
   .desktop-header .brand-name { font-size: clamp(18px, 1.4vw, 24px); letter-spacing: -.6px; text-shadow: 0 1px 4px #0d2c2273; }
-  .desktop-header .top-navigation { grid-column: 2; grid-row: 1; order: 0; justify-self: start; width: min(100%, 1066px); min-width: 0; max-width: none; margin: 0; }
-  .desktop-header .topic-list { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--header-gap); overflow: visible; }
-  .desktop-header .top-navigation > .topic-list > li > a, .desktop-header .topic-trigger { height: calc(clamp(32px, 1.8vw, 36px) * 1.5); min-height: 48px; padding: 3px clamp(3px, .3vw, 6px); border: 0; border-radius: 0; background: transparent; box-shadow: none; color: var(--gold); font-size: var(--menu-font-size); font-weight: 600; line-height: 1.3; white-space: normal; text-wrap: balance; text-shadow: 0 1px 3px #09291ee6; transition: color .15s; }
+  .desktop-header .top-navigation { --menu-font-size: clamp(10px, 1.5cqw, 15.6px); --header-gap: clamp(8px, 1.5cqw, 24px); container-type: inline-size; grid-column: 2; grid-row: 1; order: 0; justify-self: start; width: min(100%, 1066px); min-width: 0; max-width: none; margin: 0; }
+  .desktop-header .topic-list { display: flex; align-items: center; justify-content: flex-start; gap: var(--header-gap); overflow-x: auto; scrollbar-width: none; }
+  .desktop-header .topic-list::-webkit-scrollbar { display: none; }
+  .desktop-header .topic-list > li { flex: 0 0 auto; }
+  .desktop-header .top-navigation > .topic-list > li > a, .desktop-header .topic-trigger { width: auto; height: calc(clamp(32px, 1.8vw, 36px) * 1.5); min-height: 48px; padding: 3px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: var(--gold); font-size: var(--menu-font-size); font-weight: 600; line-height: 1.3; white-space: nowrap; text-shadow: 0 1px 3px #09291ee6; transition: color .15s; }
   .desktop-header .top-navigation > .topic-list > li > a:hover, .desktop-header .topic-trigger:hover { background: transparent; color: var(--gold-bright); }
   .desktop-header .top-navigation > .topic-list > li > a[aria-current], .desktop-header .topic-trigger[aria-expanded="true"] { color: var(--gold-bright); background: transparent; }
   .desktop-header button:active { transform: none; }

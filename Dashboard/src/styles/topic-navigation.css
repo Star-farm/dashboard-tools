@@ -13,6 +13,7 @@
 .topic-menu-button:focus-visible { position: relative; z-index: 1; outline-offset: -3px; }
 .topic-menu-button:active { transform: none; }
 .topic-leaf { cursor: default; }
+.topic-menu-button[href] { text-decoration: none; cursor: pointer; }
 .topic-leaf:hover { color: #586253; background: #f1f3ea; }
 .topic-flyout { position: absolute; right: calc(100% - 1px); top: -6px; width: 224px; z-index: 1; }
 

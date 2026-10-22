@@ -1,0 +1,95 @@
+.economics-page { padding-bottom: 64px; }
+.economic-filters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; padding: 24px 0; border-block: 1px solid var(--line); }
+.economic-filter { min-width: 0; }
+.economic-select-control { position: relative; }
+.economic-selected-label { display: none; }
+.economic-filter label { display: block; margin-bottom: 9px; font-size: 13px; font-weight: 700; color: var(--green); }
+.economic-filter select { width: 100%; min-height: 46px; padding: 10px 30px 10px 12px; border: 1px solid #becdb8; border-radius: 5px; color: #26382e; background: #fffefa; font-size: 14px; cursor: pointer; }
+.economic-filter select:hover { border-color: #71926c; }
+.economic-filter select:focus-visible { outline: 3px solid #759b7f; outline-offset: 2px; }
+.economic-results-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 62px; }
+.economic-results-toolbar p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.economic-results-toolbar strong { color: var(--green); }
+.economic-reset { flex-shrink: 0; min-height: 44px; padding: 8px 0 8px 12px; border: 0; background: transparent; color: var(--green); font-size: 13px; text-underline-offset: 4px; }
+.economic-reset:hover { text-decoration: underline; }
+.economic-table-region { overflow-x: auto; border: 1px solid #c3d1bb; border-radius: 8px; background: #fffefa; scrollbar-color: #91a58a #edf1e8; }
+.economic-table-region:focus-visible { outline: 3px solid #759b7f; outline-offset: 3px; }
+.economic-table { width: 100%; min-width: 1340px; border-spacing: 0; border-collapse: separate; table-layout: fixed; text-align: left; font-size: 13px; line-height: 1.55; }
+.economic-table col { width: 7.25%; }
+.economic-table .economic-group-column { width: 11%; }
+.economic-table .economic-season-column, .economic-table .economic-climate-column { width: 7%; }
+.economic-table .economic-resource-column { width: 11%; }
+.economic-table .economic-awd-column { width: 8%; }
+.economic-table .economic-money-column { width: 9%; }
+.economic-table th, .economic-table td { padding: 18px 12px; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.economic-table thead { color: var(--forest); }
+.economic-table thead th { background: #eaf0e2; font-size: 13px; font-weight: 700; vertical-align: middle; border-bottom-color: #c3d1bb; }
+.economic-table .economic-column-groups th { padding-block: 13px; color: var(--gold-bright); background: var(--forest); font-size: 12px; letter-spacing: .3px; border-bottom: 0; }
+.economic-column-groups th + th { border-left: 1px solid #ffffff30; }
+.economic-table thead > tr:last-child > th:first-child { position: sticky; left: 0; z-index: 1; }
+.economic-table thead > tr:last-child > th:first-child, .economic-table tbody th { border-right: 1px solid #cbd7c3; }
+.economic-table thead small { display: block; margin-top: 6px; color: #576b50; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.economic-table tbody tr { --economic-row-bg: #fffefa; background: var(--economic-row-bg); }
+.economic-table tbody th { position: sticky; left: 0; background: var(--economic-row-bg); font-weight: 400; }
+.economic-table tbody tr:nth-child(even) { --economic-row-bg: #f2f5ed; }
+.economic-table tbody tr:hover { --economic-row-bg: #e9efdf; }
+.economic-table .economic-divider { border-right: 2px solid #cbd7c3; }
+.economic-table .economic-section-start > * { border-top: 2px solid #b6c8aa; }
+.economic-table tbody tr:last-child > * { border-bottom: 0; }
+.economic-table .economic-numeric { text-align: right; font-variant-numeric: tabular-nums; }
+.economic-table td.economic-numeric { white-space: nowrap; overflow-wrap: normal; }
+.economic-income { font-weight: 700; color: var(--forest); }
+.economic-group { display: inline-block; color: #3c5134; font-weight: 700; }
+.economic-group.oneMha { color: #21683d; }
+.economic-row-period { display: block; margin-top: 6px; font-size: 10px; color: var(--muted); }
+.economic-table tbody tr.economic-historical { --economic-row-bg: #f5e9bf; }
+.economic-table tbody tr.economic-historical:hover { --economic-row-bg: #efdfaa; }
+.economic-historical .economic-group { color: #614a19; }
+.economic-table .economic-historical > * { border-block: 1px solid #c4a454; font-weight: 600; }
+.economic-table .economic-historical > th { box-shadow: inset 4px 0 #ab852e; }
+.economic-historical .economic-row-period { color: #614a19; font-size: 11px; font-weight: 700; }
+.economic-awd.with { color: #257344; }
+.economic-awd.without { color: #8b4b3e; }
+.economic-cards { display: none; }
+.economic-empty { padding: 48px 16px; border: 1px solid var(--line); border-radius: 7px; text-align: center; background: #fffefa; }
+.economic-empty h2 { font-size: var(--section-title-size); margin: 0 0 12px; }
+.economic-empty p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+@media (max-width: 1100px) {
+  .economic-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+}
+@media (max-width: 767px) {
+  .economics-page { padding-bottom: 40px; }
+  .economic-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; padding-block: 20px; }
+  .economic-filter:last-child { grid-column: 1 / -1; }
+  .economic-filter label { font-size: 12px; margin-bottom: 7px; }
+  .economic-filter select { font-size: 16px; }
+  .economic-select-control { min-height: 46px; border: 1px solid #becdb8; border-radius: 5px; background: #fffefa; }
+  .economic-select-control:focus-within { outline: 3px solid #759b7f; outline-offset: 2px; }
+  .economic-selected-label { display: flex; align-items: center; min-height: 44px; padding: 10px 28px 10px 12px; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
+  .economic-select-control::after { content: ''; position: absolute; right: 12px; top: calc(50% - 4px); width: 6px; height: 6px; border-right: 1.5px solid var(--green); border-bottom: 1.5px solid var(--green); transform: rotate(45deg); pointer-events: none; }
+  .economic-select-control select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+  .economic-results-toolbar { padding-block: 12px; min-height: 58px; }
+  .economic-results-toolbar p { font-size: 12px; }
+  .economic-reset { font-size: 12px; padding-block: 0; }
+  .economic-table-region { display: none; }
+  .economic-cards { display: grid; gap: 16px; }
+  .economic-card { min-width: 0; border: 1px solid #cddbc4; border-radius: 7px; background: #fffefa; overflow: hidden; }
+  .economic-card > header { padding: 16px; background: #e8eddd; border-bottom: 1px solid var(--line); }
+  .economic-card h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; font-size: 17px; line-height: 1.5; margin: 0; }
+  .economic-card h2 > span:last-child { font-size: 14px; font-weight: 400; }
+  .economic-card-period { margin: 4px 0 0; color: #576b50; font-size: 12px; }
+  .economic-card.economic-historical { border-color: #c4a454; box-shadow: inset 3px 0 #ab852e; }
+  .economic-card.economic-historical > header { background: #f5e9bf; border-bottom-color: #c4a454; }
+  .economic-historical .economic-card-period { color: #614a19; font-weight: 700; }
+  .economic-card-facets { display: flex; flex-wrap: wrap; gap: 12px 20px; padding: 14px 16px; margin: 0; border-bottom: 1px solid var(--line); }
+  .economic-card-facets dt { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+  .economic-card-facets dd { margin: 0; font-size: 12px; line-height: 1.5; }
+  .economic-card-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); margin: 0; }
+  .economic-card-values > div { padding: 13px 16px; min-width: 0; background: #fffefa; }
+  .economic-card-values > .economic-card-income { grid-column: 1 / -1; background: #f1f5e8; }
+  .economic-card-values dt { font-size: 12px; font-weight: 600; line-height: 1.5; }
+  .economic-card-values dd { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; margin: 7px 0 0; font-variant-numeric: tabular-nums; }
+  .economic-card-values strong { font-size: clamp(18px, 5vw, 22px); font-weight: 600; color: var(--forest); }
+  .economic-card-values dd > span { font-size: 11px; color: var(--muted); }
+  .economic-card-income strong { font-size: 26px; }
+}

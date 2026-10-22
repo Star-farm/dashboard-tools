@@ -1,0 +1,580 @@
+[
+  {
+    "code": "BAU-BV-OH-BT",
+    "name": {
+      "en": "Business As Usual Sustainable Mild Climate Normal Economy",
+      "vi": "Thường lệ, bền vững, ôn hòa, kinh tế bình thường"
+    },
+    "group": "bau",
+    "season": "sustainable",
+    "climate": "mild",
+    "resource": "normal",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1368,
+    "USD": {
+      "income": 670.667480506505,
+      "cost": 886.7009243025577,
+      "straw": 47.327702568940104,
+      "roi": 75.63626721535496,
+      "margin": 42.14331973502914,
+      "yield": 6.627193633742698,
+      "labor": 293.1910989669591
+    },
+    "VND": {
+      "income": 17653309.422037978,
+      "cost": 23339741.729451753,
+      "straw": 1245759.787030701,
+      "roi": 75.63626721610964,
+      "margin": 42.14331973502914,
+      "yield": 6.627193633742685,
+      "labor": 293.1910989669597
+    }
+  },
+  {
+    "code": "BAU-BV-OH-TH",
+    "name": {
+      "en": "Business As Usual Sustainable Mild Climate Resource Shortage",
+      "vi": "Thường lệ, bền vững, ôn hòa, thiếu tài nguyên"
+    },
+    "group": "bau",
+    "season": "sustainable",
+    "climate": "mild",
+    "resource": "shortage",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1440,
+    "USD": {
+      "income": 473.1069472333385,
+      "cost": 1089.9898016412485,
+      "straw": 47.32066414261121,
+      "roi": 43.40471319281697,
+      "margin": 29.93754484368621,
+      "yield": 6.626215389528486,
+      "labor": 293.18405367916677
+    },
+    "VND": {
+      "income": 12453121.065104742,
+      "cost": 28690711.558819454,
+      "straw": 1245574.5215722215,
+      "roi": 43.40471319288937,
+      "margin": 29.937544843686283,
+      "yield": 6.626215389528463,
+      "labor": 293.1840536791672
+    }
+  },
+  {
+    "code": "BAU-BV-KN-BT",
+    "name": {
+      "en": "Business As Usual Sustainable Severe Climate Normal Economy",
+      "vi": "Thường lệ, bền vững, khắc nghiệt, kinh tế bình thường"
+    },
+    "group": "bau",
+    "season": "sustainable",
+    "climate": "severe",
+    "resource": "normal",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1440,
+    "USD": {
+      "income": 581.197947215993,
+      "cost": 832.4994032441645,
+      "straw": 43.27677975623611,
+      "roi": 69.8136172772166,
+      "margin": 40.12605867638194,
+      "yield": 6.074766033337498,
+      "labor": 276.65090445895834
+    },
+    "VND": {
+      "income": 15298292.366603475,
+      "cost": 21913049.292090267,
+      "straw": 1139131.39674167,
+      "roi": 69.81361727747104,
+      "margin": 40.126058676381916,
+      "yield": 6.0747660333374975,
+      "labor": 276.650904458958
+    }
+  },
+  {
+    "code": "BAU-BV-KN-TH",
+    "name": {
+      "en": "Business As Usual Sustainable Severe Climate Resource Shortage",
+      "vi": "Thường lệ, bền vững, khắc nghiệt, thiếu tài nguyên"
+    },
+    "group": "bau",
+    "season": "sustainable",
+    "climate": "severe",
+    "resource": "shortage",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1368,
+    "USD": {
+      "income": 402.5943678857575,
+      "cost": 1017.3250084770477,
+      "straw": 43.27806268679094,
+      "roi": 39.57382002123863,
+      "margin": 27.42919255856114,
+      "yield": 6.07493331608845,
+      "labor": 276.61663704480986
+    },
+    "VND": {
+      "income": 10597088.951545859,
+      "cost": 26778028.873289492,
+      "straw": 1139165.1660424005,
+      "roi": 39.57382002121982,
+      "margin": 27.429192558561194,
+      "yield": 6.074933316088453,
+      "labor": 276.6166370448095
+    }
+  },
+  {
+    "code": "BAU-3V-OH-BT",
+    "name": {
+      "en": "Business As Usual 3 Seasons Mild Climate Normal Economy",
+      "vi": "Thường lệ, 3 vụ, ôn hòa, kinh tế bình thường"
+    },
+    "group": "bau",
+    "season": "threeSeasons",
+    "climate": "mild",
+    "resource": "normal",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1440,
+    "USD": {
+      "income": 644.8933441468054,
+      "cost": 918.2406599186112,
+      "straw": 47.32180982293056,
+      "roi": 70.23140798447825,
+      "margin": 40.343753899708304,
+      "yield": 6.626382335544463,
+      "labor": 293.18405367916654
+    },
+    "VND": {
+      "income": 16974882.604575016,
+      "cost": 24169930.650590286,
+      "straw": 1245604.6781673606,
+      "roi": 70.23140798362387,
+      "margin": 40.343753899708354,
+      "yield": 6.626382335544436,
+      "labor": 293.1840536791672
+    }
+  },
+  {
+    "code": "BAU-3V-OH-TT",
+    "name": {
+      "en": "Business As Usual 3 Seasons Mild Climate Neutral",
+      "vi": "Kịch bản hiện tại"
+    },
+    "group": "bau",
+    "season": "threeSeasons",
+    "climate": "mild",
+    "resource": "neutral",
+    "awd": "without",
+    "historical": true,
+    "startYear": 2016,
+    "endYear": 2022,
+    "count": 420,
+    "USD": {
+      "income": 550.5559928033331,
+      "cost": 865.4905724692866,
+      "straw": 43.829212528999975,
+      "roi": 63.61201500237838,
+      "margin": 38.64419610138091,
+      "yield": 6.535083748202385,
+      "labor": 277.60227272523815
+    },
+    "VND": {
+      "income": 14491734.84254761,
+      "cost": 22781442.848785706,
+      "straw": 1153672.532198095,
+      "roi": 63.61201500158734,
+      "margin": 38.64419610138093,
+      "yield": 6.535083748202383,
+      "labor": 277.60227272523815
+    }
+  },
+  {
+    "code": "BAU-3V-OH-TH",
+    "name": {
+      "en": "Business As Usual 3 Seasons Mild Climate Resource Shortage",
+      "vi": "Thường lệ, 3 vụ, ôn hòa, thiếu tài nguyên"
+    },
+    "group": "bau",
+    "season": "threeSeasons",
+    "climate": "mild",
+    "resource": "shortage",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1368,
+    "USD": {
+      "income": 408.28379670657944,
+      "cost": 1156.7357407860375,
+      "straw": 47.32588443296055,
+      "roi": 35.29620312666557,
+      "margin": 25.84762136919163,
+      "yield": 6.626969082900595,
+      "labor": 293.17986582733903
+    },
+    "VND": {
+      "income": 10746846.096970027,
+      "cost": 30447598.16876461,
+      "straw": 1245711.9300548239,
+      "roi": 35.296203127098984,
+      "margin": 25.84762136919162,
+      "yield": 6.6269690829005805,
+      "labor": 293.17986582733977
+    }
+  },
+  {
+    "code": "BAU-3V-KN-BT",
+    "name": {
+      "en": "Business As Usual 3 Seasons Severe Climate Normal Economy",
+      "vi": "Thường lệ, 3 vụ, khắc nghiệt, kinh tế bình thường"
+    },
+    "group": "bau",
+    "season": "threeSeasons",
+    "climate": "severe",
+    "resource": "normal",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1440,
+    "USD": {
+      "income": 539.9301954852492,
+      "cost": 862.4751352186798,
+      "straw": 42.92589985234722,
+      "roi": 62.6024071231167,
+      "margin": 37.47070742886111,
+      "yield": 6.026918282380558,
+      "labor": 276.6519405241664
+    },
+    "VND": {
+      "income": 14212042.605450023,
+      "cost": 22702070.509069458,
+      "straw": 1129895.5359198605,
+      "roi": 62.60240712305216,
+      "margin": 37.47070742886113,
+      "yield": 6.026918282380549,
+      "labor": 276.65194052416683
+    }
+  },
+  {
+    "code": "BAU-3V-KN-TH",
+    "name": {
+      "en": "Business As Usual 3 Seasons Severe Climate Resource Shortage",
+      "vi": "Thường lệ, 3 vụ, khắc nghiệt, thiếu tài nguyên"
+    },
+    "group": "bau",
+    "season": "threeSeasons",
+    "climate": "severe",
+    "resource": "shortage",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 1440,
+    "USD": {
+      "income": 324.28712774847173,
+      "cost": 1078.1182029531244,
+      "straw": 42.925899852347214,
+      "roi": 30.078995685278436,
+      "margin": 22.16958349674126,
+      "yield": 6.026918282380558,
+      "labor": 276.6519405241664
+    },
+    "VND": {
+      "income": 8535885.776592316,
+      "cost": 28378227.338187505,
+      "straw": 1129895.5359198605,
+      "roi": 30.078995685209335,
+      "margin": 22.169583496741225,
+      "yield": 6.026918282380549,
+      "labor": 276.65194052416683
+    }
+  },
+  {
+    "code": "BAU-2V-OH-BT",
+    "name": {
+      "en": "Business As Usual 2 Seasons Mild Climate Normal Economy",
+      "vi": "Thường lệ, 2 vụ, ôn hòa, kinh tế bình thường"
+    },
+    "group": "bau",
+    "season": "twoSeasons",
+    "climate": "mild",
+    "resource": "normal",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 774.2397977889584,
+      "cost": 880.6624200725005,
+      "straw": 45.92701095216661,
+      "roi": 87.915616715565,
+      "margin": 45.99812111715625,
+      "yield": 7.016057402735422,
+      "labor": 253.77887369729174
+    },
+    "VND": {
+      "income": 20379539.957248975,
+      "cost": 23180796.22121878,
+      "straw": 1208890.7822812493,
+      "roi": 87.91561671464224,
+      "margin": 45.99812111715628,
+      "yield": 7.016057402735416,
+      "labor": 253.77887369729189
+    }
+  },
+  {
+    "code": "BAU-2V-OH-TH",
+    "name": {
+      "en": "Business As Usual 2 Seasons Mild Climate Resource Shortage",
+      "vi": "Thường lệ, 2 vụ, ôn hòa, thiếu tài nguyên"
+    },
+    "group": "bau",
+    "season": "twoSeasons",
+    "climate": "mild",
+    "resource": "shortage",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 489.5783220658354,
+      "cost": 1165.3238958076042,
+      "straw": 45.92701095216661,
+      "roi": 42.012209981032186,
+      "margin": 29.578386829923716,
+      "yield": 7.016057402735422,
+      "labor": 253.77887369729174
+    },
+    "VND": {
+      "income": 12886084.392395495,
+      "cost": 30673655.58509377,
+      "straw": 1208890.782281249,
+      "roi": 42.010266290717695,
+      "margin": 29.578386829923737,
+      "yield": 7.016057402735417,
+      "labor": 253.77887369729189
+    }
+  },
+  {
+    "code": "BAU-2V-KN-BT",
+    "name": {
+      "en": "Business As Usual 2 Seasons Severe Climate Normal Economy",
+      "vi": "Thường lệ, 2 vụ, khắc nghiệt, kinh tế bình thường"
+    },
+    "group": "bau",
+    "season": "twoSeasons",
+    "climate": "severe",
+    "resource": "normal",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 652.859830439167,
+      "cost": 820.587424723438,
+      "straw": 41.46259183759378,
+      "roi": 79.56005792547941,
+      "margin": 43.53430101946876,
+      "yield": 6.3340343176041705,
+      "labor": 242.46133337583322
+    },
+    "VND": {
+      "income": 17184576.456749987,
+      "cost": 21599502.193479203,
+      "straw": 1091378.3423492718,
+      "roi": 79.56005792549209,
+      "margin": 43.534301019468735,
+      "yield": 6.334034317604176,
+      "labor": 242.46133337583308
+    }
+  },
+  {
+    "code": "BAU-2V-KN-TH",
+    "name": {
+      "en": "Business As Usual 2 Seasons Severe Climate Resource Shortage",
+      "vi": "Thường lệ, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+    },
+    "group": "bau",
+    "season": "twoSeasons",
+    "climate": "severe",
+    "resource": "shortage",
+    "awd": "without",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 406.2441000882913,
+      "cost": 1067.2031550630215,
+      "straw": 41.46259183759378,
+      "roi": 38.06623866889724,
+      "margin": 26.705777930860684,
+      "yield": 6.3340343176041705,
+      "labor": 242.46133337583322
+    },
+    "VND": {
+      "income": 10693157.202543415,
+      "cost": 28090921.447885428,
+      "straw": 1091378.3423492715,
+      "roi": 38.06623866853735,
+      "margin": 26.705777930860634,
+      "yield": 6.334034317604175,
+      "labor": 242.4613333758331
+    }
+  },
+  {
+    "code": "1M-2V-OH-BT",
+    "name": {
+      "en": "1Mha 2 Seasons Mild Climate Normal Economy",
+      "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, kinh tế bình thường"
+    },
+    "group": "oneMha",
+    "season": "twoSeasons",
+    "climate": "mild",
+    "resource": "normal",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 1169.1330699560417,
+      "cost": 1085.8948412996879,
+      "straw": 44.5935602437083,
+      "roi": 107.66540418929769,
+      "margin": 50.005941067145805,
+      "yield": 6.490953138366666,
+      "labor": 295.8433236727087
+    },
+    "VND": {
+      "income": 30773920.667396907,
+      "cost": 28582924.0129271,
+      "straw": 1173791.692730104,
+      "roi": 107.66540418845494,
+      "margin": 50.00594106714576,
+      "yield": 6.490953138366678,
+      "labor": 295.8433236727085
+    }
+  },
+  {
+    "code": "1M-2V-OH-TH",
+    "name": {
+      "en": "1Mha 2 Seasons Mild Climate Resource Shortage",
+      "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, thiếu tài nguyên"
+    },
+    "group": "oneMha",
+    "season": "twoSeasons",
+    "climate": "mild",
+    "resource": "shortage",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 929.8015419911555,
+      "cost": 1325.2263692618756,
+      "straw": 44.5935602437083,
+      "roi": 70.16171452346185,
+      "margin": 40.020378915667656,
+      "yield": 6.490953138366666,
+      "labor": 295.8433236727087
+    },
+    "VND": {
+      "income": 24474236.188430704,
+      "cost": 34882608.49229168,
+      "straw": 1173791.692730104,
+      "roi": 70.16171452269401,
+      "margin": 40.02037891566776,
+      "yield": 6.490953138366678,
+      "labor": 295.8433236727085
+    }
+  },
+  {
+    "code": "1M-2V-KN-BT",
+    "name": {
+      "en": "1Mha 2 Seasons Severe Climate Normal Economy",
+      "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, kinh tế bình thường"
+    },
+    "group": "oneMha",
+    "season": "twoSeasons",
+    "climate": "severe",
+    "resource": "normal",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 1031.0361947026036,
+      "cost": 1035.049492858125,
+      "straw": 41.543874092968785,
+      "roi": 99.61226026550293,
+      "margin": 48.6962169653646,
+      "yield": 6.046852743473964,
+      "labor": 272.0086578037501
+    },
+    "VND": {
+      "income": 27138934.71710417,
+      "cost": 27244572.75096875,
+      "straw": 1093517.8538827088,
+      "roi": 99.61226026618155,
+      "margin": 48.69621696536457,
+      "yield": 6.046852743473957,
+      "labor": 272.0086578037499
+    }
+  },
+  {
+    "code": "1M-2V-KN-TH",
+    "name": {
+      "en": "1Mha 2 Seasons Severe Climate Resource Shortage",
+      "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+    },
+    "group": "oneMha",
+    "season": "twoSeasons",
+    "climate": "severe",
+    "resource": "shortage",
+    "awd": "with",
+    "historical": false,
+    "startYear": 2027,
+    "endYear": 2050,
+    "count": 960,
+    "USD": {
+      "income": 815.2319867970838,
+      "cost": 1250.853700759895,
+      "straw": 41.543874092968785,
+      "roi": 65.17404763657248,
+      "margin": 38.33403904646877,
+      "yield": 6.046852743473964,
+      "labor": 272.0086578037501
+    },
+    "VND": {
+      "income": 21458536.35664581,
+      "cost": 32924971.111541685,
+      "straw": 1093517.8538827088,
+      "roi": 65.17404763682124,
+      "margin": 38.33403904646877,
+      "yield": 6.0468527434739565,
+      "labor": 272.0086578037499
+    }
+  }
+]

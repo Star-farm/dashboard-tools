@@ -1,0 +1,31 @@
+const vi = {
+  title: 'Canh tác như thường lệ · 3 mùa vụ',
+  bau2Title: 'Canh tác như thường lệ · 2 mùa vụ',
+  baussTitle: 'Canh tác như thường lệ · Bền vững',
+  oneMhaTitle: 'Một triệu héc ta lúa',
+  kpis: 'Các chỉ số kinh tế',
+  average: 'Giá trị bình quân giai đoạn',
+  change: 'Năm 2050 so với 2027',
+  points: 'điểm %',
+  summary: 'Nhận xét tổng hợp',
+  charts: 'Diễn biến các chỉ số theo năm',
+  insight: 'Nhận xét',
+  unavailable: 'Chưa đủ số liệu',
+  method: 'Các KPI tổng hợp bốn tổ hợp thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuối kỳ so với năm đầu kỳ; tỷ suất lợi nhuận so sánh bằng điểm phần trăm.',
+}
+const en: Record<keyof typeof vi, string> = {
+  title: 'Business as usual · 3 seasons',
+  bau2Title: 'Business as usual · 2 seasons',
+  baussTitle: 'Business as usual · Sustainable',
+  oneMhaTitle: 'One million hectares of rice',
+  kpis: 'Economic indicators',
+  average: 'Period average',
+  change: '2050 compared with 2027',
+  points: 'pp',
+  summary: 'Overall assessment',
+  charts: 'Indicator trends by year',
+  insight: 'What the chart shows',
+  unavailable: 'Not enough data',
+  method: 'KPIs summarize the four weather and resource combinations. Changes compare the final year with the first year; profit margin changes are expressed in percentage points.',
+}
+export const bauFarmingText = { vi, en }

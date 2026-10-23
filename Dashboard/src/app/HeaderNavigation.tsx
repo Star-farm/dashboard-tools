@@ -5,6 +5,8 @@ import type { Language } from '../i18n'
 import type { Page } from './usePageNavigation'
 import { navigationTopics as topics } from './navigationTopics'
 import type { Topic } from './navigationTopics'
+import { resourceDestination } from '../features/resources/resourceRoutes'
+import { environmentDestination } from '../features/environment/environmentRoutes'
 import '../styles/topic-navigation.css'
 
 const branches = [
@@ -14,6 +16,29 @@ const branches = [
 ] as const
 
 type Branch = typeof branches[number]['id']
+
+function leafDestination(topic: Topic, branch: Branch, index: number): { href: string; page: Page } | undefined {
+  if (topic === 'sustainability') return environmentDestination(branch, index)
+  if (topic === 'resources') return resourceDestination(branch, index)
+  if (topic !== 'economics') return undefined
+  if (branch === 'bau') {
+    const destinations: { href: string; page: Page }[] = [
+      { href: '#economics-bau3', page: 'bau3Farming' },
+      { href: '#economics-bau2', page: 'bau2Farming' },
+      { href: '#economics-bauss', page: 'baussFarming' },
+    ]
+    return destinations[index]
+  }
+  if (branch === 'overview') return index === 0 ? { href: '#economics-overview', page: 'economics' } : { href: '#economics-comparison', page: 'economicComparison' }
+  if (branch === 'comparison') {
+    const destinations: { href: string; page: Page }[] = [
+      { href: '#economics-bau3-vs-1mha', page: 'bau3Comparison' },
+      { href: '#economics-bau2-vs-1mha', page: 'bau2Comparison' },
+      { href: '#economics-bauss-vs-1mha', page: 'baussComparison' },
+    ]
+    return destinations[index]
+  }
+}
 
 export default function HeaderNavigation({ language, page, mobile = false, onNavigate, onTopicOpen }: {
   language: Language
@@ -152,6 +177,11 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   }
 
   function renderPanel(topic: typeof topics[number]) {
+    const oneMha = {
+      economics: { href: '#economics-1mha', page: 'oneMhaFarming' },
+      resources: { href: '#resources-1mha', page: 'resourceOneMha' },
+      sustainability: { href: '#environment-1mha', page: 'environmentOneMha' },
+    }[topic.id]
     return (
       <div className={`topic-dropdown topic-dropdown-${topic.id}`} id={`topic-${topic.id}-panel`}>
         <ul className="topic-panel" aria-label={t[topic.label]}>
@@ -163,13 +193,16 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
               {openBranch === branch.id && (
                 <div className="topic-flyout" id={`topic-${topic.id}-${branch.id}-panel`}>
                   <ul className="topic-panel" aria-label={`${t[topic.label]} · ${t[branch.label]}`}>
-                    {children[branch.id].map((label, index) => <li key={label}>{topic.id === 'economics' && branch.id === 'overview' ? <a className="topic-menu-button topic-leaf" href={index === 0 ? '#economics-overview' : '#economics-comparison'} aria-current={page === (index === 0 ? 'economics' : 'economicComparison') ? 'page' : undefined} onClick={navigate}>{label}</a> : <button className="topic-menu-button topic-leaf" type="button" aria-disabled="true">{label}</button>}</li>)}
+                    {children[branch.id].map((label, index) => {
+                      const destination = leafDestination(topic.id, branch.id, index)
+                      return <li key={label}>{destination ? <a className="topic-menu-button topic-leaf" href={destination.href} aria-current={page === destination.page ? 'page' : undefined} onClick={navigate}>{label}</a> : <button className="topic-menu-button topic-leaf" type="button" aria-disabled="true">{label}</button>}</li>
+                    })}
                   </ul>
                 </div>
               )}
             </li>
           ))}
-          <li onMouseEnter={mobile ? undefined : () => setOpenBranch(null)}><button className="topic-menu-button topic-leaf" type="button" aria-disabled="true">{t.menuOneMha}</button></li>
+          <li onMouseEnter={mobile ? undefined : () => setOpenBranch(null)}><a className="topic-menu-button topic-leaf" href={oneMha.href} aria-current={page === oneMha.page ? 'page' : undefined} onClick={navigate}>{t.menuOneMha}</a></li>
         </ul>
       </div>
     )

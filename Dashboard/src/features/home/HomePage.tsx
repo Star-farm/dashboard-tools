@@ -3,8 +3,6 @@ import landscape from '../../assets/mekong-landscape.jpg'
 import { translations } from '../../i18n'
 import type { Language } from '../../i18n'
 import { navigationTopics } from '../../app/navigationTopics'
-import type { Topic } from '../../app/navigationTopics'
-import { getScrollBehavior } from '../../app/scrollBehavior'
 
 export default function HomePage({ language }: { language: Language }) {
   const t = translations[language]
@@ -23,13 +21,6 @@ export default function HomePage({ language }: { language: Language }) {
       window.removeEventListener('pageshow', clearRestoredFocus)
     }
   }, [])
-
-  function openTopicMenu(topic: Topic) {
-    const trigger = document.getElementById(`topic-${topic}-trigger`)
-    trigger?.scrollIntoView?.({ block: 'nearest', inline: 'center', behavior: getScrollBehavior() })
-    trigger?.focus({ preventScroll: true })
-    trigger?.click()
-  }
 
   return (
     <>
@@ -63,7 +54,9 @@ export default function HomePage({ language }: { language: Language }) {
         {navigationTopics.map((topic) => (
           <aside className="glossary-callout" key={topic.id} aria-labelledby={`${topic.id}-callout-title`}>
             <div><p className="eyebrow">{t.topicsCtaEyebrow}</p><h2 id={`${topic.id}-callout-title`}>{t[topic.label]}</h2><p>{t[topic.description]}</p></div>
-            <button type="button" aria-label={`${t.openTopicMenu}: ${t[topic.label]}`} aria-controls={`topic-${topic.id}-panel`} onClick={() => openTopicMenu(topic.id)}>{t.openTopicMenu}<span aria-hidden="true">→</span></button>
+            {topic.id === 'economics' ? <a href="#economics-explore">{t.economicExploreTitle}<span aria-hidden="true">→</span></a>
+              : topic.id === 'resources' ? <a href="#resources-explore">{t.resourceExploreTitle}<span aria-hidden="true">→</span></a>
+              : <a href="#environment-explore">{t.environmentExploreTitle}<span aria-hidden="true">→</span></a>}
           </aside>
         ))}
       </section>

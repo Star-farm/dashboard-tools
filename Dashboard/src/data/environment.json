@@ -1,0 +1,5521 @@
+{
+  "startYear": 2027,
+  "endYear": 2050,
+  "rows": [
+    {
+      "code": "BAU-3V-OH-TT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Neutral",
+        "vi": "Kịch bản hiện tại"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "neutral",
+      "awd": "without",
+      "historical": true,
+      "startYear": 2016,
+      "endYear": 2022,
+      "count": 420,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 420,
+        "methane": 420
+      },
+      "values": {
+        "intensity": 71.79816356169039,
+        "methane": 458.48363006000255
+      }
+    },
+    {
+      "code": "BAU-BV-OH-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "withAwd": 1368,
+      "metricCounts": {
+        "intensity": 1368,
+        "methane": 1368
+      },
+      "values": {
+        "intensity": 62.27553668641885,
+        "methane": 395.66057909035004
+      }
+    },
+    {
+      "code": "BAU-BV-OH-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 1440,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 62.24835596113194,
+        "methane": 395.4088427748608
+      }
+    },
+    {
+      "code": "BAU-BV-KN-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 1440,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 52.76358606438532,
+        "methane": 309.21858353083326
+      }
+    },
+    {
+      "code": "BAU-BV-KN-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "withAwd": 1368,
+      "metricCounts": {
+        "intensity": 1368,
+        "methane": 1368
+      },
+      "values": {
+        "intensity": 52.731326099900514,
+        "methane": 309.0229802166666
+      }
+    },
+    {
+      "code": "BAU-3V-OH-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 89.09401588865968,
+        "methane": 574.833278635899
+      }
+    },
+    {
+      "code": "BAU-3V-OH-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1368,
+        "methane": 1368
+      },
+      "values": {
+        "intensity": 89.14113986208328,
+        "methane": 575.1769557817942
+      }
+    },
+    {
+      "code": "BAU-3V-KN-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 71.67356045180554,
+        "methane": 426.22328609451256
+      }
+    },
+    {
+      "code": "BAU-3V-KN-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 71.67356045180554,
+        "methane": 426.22328609451245
+      }
+    },
+    {
+      "code": "BAU-2V-OH-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 43.41852162580209,
+        "methane": 303.1194791666673
+      }
+    },
+    {
+      "code": "BAU-2V-OH-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 43.41852162580209,
+        "methane": 303.1194791666673
+      }
+    },
+    {
+      "code": "BAU-2V-KN-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 45.586048024427136,
+        "methane": 286.8251041666665
+      }
+    },
+    {
+      "code": "BAU-2V-KN-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 45.586048024427136,
+        "methane": 286.8251041666665
+      }
+    },
+    {
+      "code": "1M-2V-OH-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 29.311399277464623,
+        "methane": 177.03291666666672
+      }
+    },
+    {
+      "code": "1M-2V-OH-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 29.31139927746462,
+        "methane": 177.0329166666667
+      }
+    },
+    {
+      "code": "1M-2V-KN-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 35.52047568601973,
+        "methane": 203.41687500000063
+      }
+    },
+    {
+      "code": "1M-2V-KN-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 35.520475686019736,
+        "methane": 203.41687500000063
+      }
+    }
+  ],
+  "series": [
+    {
+      "family": "bau3s",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 88.36634992900002,
+            "methane": 595.5335222149998
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 90.3771368205,
+            "methane": 602.8952849049997
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 85.1985301595,
+            "methane": 561.1282436316664
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 82.61767421033333,
+            "methane": 537.0825734183334
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 82.06915757849997,
+            "methane": 529.5519034516668
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 76.9795077428333,
+            "methane": 488.8240949633334
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 76.26046628833332,
+            "methane": 475.43221974833364
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 75.15687175316666,
+            "methane": 464.2365062700002
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 73.10253332366669,
+            "methane": 445.15709692333337
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 72.32791703383334,
+            "methane": 434.7344282399997
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 70.17933811700004,
+            "methane": 416.7816511166667
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 70.06118604350003,
+            "methane": 413.23625636999975
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 69.06472007516665,
+            "methane": 402.4186415283336
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 67.419007505,
+            "methane": 388.9493748933334
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 66.77092659333331,
+            "methane": 378.06311789666694
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 66.15934968983339,
+            "methane": 370.2537888866669
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 65.75137388000003,
+            "methane": 366.0619427200001
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 65.14948684016666,
+            "methane": 358.5786254616666
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 64.07063330633333,
+            "methane": 349.29770593166654
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 63.81136311750001,
+            "methane": 342.50883576499996
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.91358090416666,
+            "methane": 335.8623376883333
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.765664380333334,
+            "methane": 330.3959055116667
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.707287130999994,
+            "methane": 323.0488517166666
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.88538842033333,
+            "methane": 319.32595701500003
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau3s",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 88.36634992900002,
+            "methane": 595.5335222149998
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 90.3771368205,
+            "methane": 602.8952849049997
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 85.1985301595,
+            "methane": 561.1282436316664
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 82.61767421033333,
+            "methane": 537.0825734183334
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 82.06915757849997,
+            "methane": 529.5519034516668
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 76.9795077428333,
+            "methane": 488.8240949633334
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 76.26046628833332,
+            "methane": 475.43221974833364
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 75.15687175316666,
+            "methane": 464.2365062700002
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 73.10253332366669,
+            "methane": 445.15709692333337
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 72.32791703383334,
+            "methane": 434.73442823999966
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 70.17933811700004,
+            "methane": 416.7816511166667
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 70.06118604350003,
+            "methane": 413.23625636999975
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 69.06472007516665,
+            "methane": 402.4186415283336
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 67.419007505,
+            "methane": 388.9493748933334
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 66.77092659333331,
+            "methane": 378.06311789666694
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 66.15934968983339,
+            "methane": 370.2537888866669
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 65.75137388000003,
+            "methane": 366.0619427200001
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 65.14948684016666,
+            "methane": 358.5786254616666
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 64.07063330633333,
+            "methane": 349.29770593166654
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 63.81136311750001,
+            "methane": 342.508835765
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.91358090416666,
+            "methane": 335.8623376883333
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.765664380333334,
+            "methane": 330.3959055116667
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.707287130999994,
+            "methane": 323.0488517166666
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.88538842033333,
+            "methane": 319.32595701500003
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau3s",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 91.12304852280705,
+            "methane": 619.3900831508769
+          }
+        },
+        {
+          "year": 2028,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 95.68409313245616,
+            "methane": 648.753864794737
+          }
+        },
+        {
+          "year": 2029,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 93.36654359982457,
+            "methane": 628.6265151157892
+          }
+        },
+        {
+          "year": 2030,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 93.46337805140348,
+            "methane": 626.1188886070173
+          }
+        },
+        {
+          "year": 2031,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 93.560715637193,
+            "methane": 624.7650351684209
+          }
+        },
+        {
+          "year": 2032,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 92.14561489789477,
+            "methane": 609.8189034982453
+          }
+        },
+        {
+          "year": 2033,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 90.76701561491227,
+            "methane": 598.7540338438597
+          }
+        },
+        {
+          "year": 2034,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 91.14755622666674,
+            "methane": 600.4608385105262
+          }
+        },
+        {
+          "year": 2035,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 92.05507982245611,
+            "methane": 603.2234696684208
+          }
+        },
+        {
+          "year": 2036,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 90.63143490280704,
+            "methane": 590.0060380192981
+          }
+        },
+        {
+          "year": 2037,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 87.54235903614034,
+            "methane": 567.876211622807
+          }
+        },
+        {
+          "year": 2038,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 89.66862260368424,
+            "methane": 579.6697146982458
+          }
+        },
+        {
+          "year": 2039,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 89.10276661245615,
+            "methane": 573.3882919245611
+          }
+        },
+        {
+          "year": 2040,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 87.4360849112281,
+            "methane": 557.7485710192983
+          }
+        },
+        {
+          "year": 2041,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 86.81897847842102,
+            "methane": 553.7817017157897
+          }
+        },
+        {
+          "year": 2042,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 88.13496029964908,
+            "methane": 558.967272494737
+          }
+        },
+        {
+          "year": 2043,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 86.83253848403511,
+            "methane": 548.5624178385964
+          }
+        },
+        {
+          "year": 2044,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 86.22926675631581,
+            "methane": 541.8934396035087
+          }
+        },
+        {
+          "year": 2045,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 85.95716225192979,
+            "methane": 537.7270868228071
+          }
+        },
+        {
+          "year": 2046,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 86.1099244257895,
+            "methane": 534.7902691789473
+          }
+        },
+        {
+          "year": 2047,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 86.25480620561402,
+            "methane": 536.1438908807017
+          }
+        },
+        {
+          "year": 2048,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 85.00222347035088,
+            "methane": 523.7051561192983
+          }
+        },
+        {
+          "year": 2049,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 84.57314147789472,
+            "methane": 517.4917201210527
+          }
+        },
+        {
+          "year": 2050,
+          "count": 57,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 85.78004126807016,
+            "methane": 522.5835243456139
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau3s",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 90.76228318300005,
+            "methane": 616.518964213333
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 95.69551430749999,
+            "methane": 648.4492488883335
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 92.97085462216667,
+            "methane": 625.9037343049998
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 93.62094586933331,
+            "methane": 627.0187938683332
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 93.20199792533336,
+            "methane": 622.4588087783329
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 91.89134515983336,
+            "methane": 608.0015482099997
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 91.08860622549997,
+            "methane": 601.2928055149999
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 91.39417723216671,
+            "methane": 602.0775125566664
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 91.58450165383331,
+            "methane": 600.410730008333
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 90.784128222,
+            "methane": 591.1416876916662
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 87.38727096549997,
+            "methane": 566.6867612833332
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 89.8299611346667,
+            "methane": 580.5854209816666
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 88.99331415333334,
+            "methane": 572.9871125833329
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 87.34889500950003,
+            "methane": 557.1925323433333
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 86.77631278716665,
+            "methane": 553.123516451667
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 88.10596251016663,
+            "methane": 558.5256815250002
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 86.68223116300003,
+            "methane": 547.5029387083333
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 86.20086818616667,
+            "methane": 541.5363367833332
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 86.0961243473333,
+            "methane": 538.8861080166668
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 86.22619806266668,
+            "methane": 535.6501677599999
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 86.21502378049999,
+            "methane": 535.7974471966667
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 84.99954793416669,
+            "methane": 523.8934155316668
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 84.66529809799998,
+            "methane": 518.3482278566667
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 85.73501879499999,
+            "methane": 522.009186205
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.18825111349999,
+            "methane": 305.80499999999995
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.234328691250006,
+            "methane": 304.93500000000006
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.503561850249994,
+            "methane": 303.1225000000001
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.87113007100001,
+            "methane": 300.73000000000013
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.935000823500005,
+            "methane": 300.22249999999997
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 44.3376872565,
+            "methane": 296.59749999999997
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 44.64722801750001,
+            "methane": 295.79999999999995
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 44.746596224249984,
+            "methane": 294.20499999999987
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.07898626075,
+            "methane": 291.52250000000004
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.273920104249996,
+            "methane": 290.29000000000013
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.631478068500016,
+            "methane": 288.18750000000017
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.6347819885,
+            "methane": 287.3900000000002
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.85027677324998,
+            "methane": 285.4324999999999
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.96231212524999,
+            "methane": 284.19999999999993
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.40113683225002,
+            "methane": 282.0974999999999
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.380498451250006,
+            "methane": 280.7199999999999
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.633402544499994,
+            "methane": 279.05249999999995
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.52602408849999,
+            "methane": 277.67500000000007
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.09473728199999,
+            "methane": 276.5875000000001
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.27116984425,
+            "methane": 275.13750000000016
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.145004992500006,
+            "methane": 272.89
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.19099997725,
+            "methane": 272.23750000000007
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.062091126750005,
+            "methane": 270.42499999999995
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.46454807874999,
+            "methane": 268.5399999999999
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.18825111349999,
+            "methane": 305.80499999999995
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.234328691250006,
+            "methane": 304.93500000000006
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.503561850249994,
+            "methane": 303.1225000000001
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.87113007100001,
+            "methane": 300.73000000000013
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.935000823500005,
+            "methane": 300.22249999999997
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 44.3376872565,
+            "methane": 296.59749999999997
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 44.64722801750001,
+            "methane": 295.79999999999995
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 44.746596224249984,
+            "methane": 294.20499999999987
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.07898626075,
+            "methane": 291.52250000000004
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.273920104249996,
+            "methane": 290.29000000000013
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.631478068500016,
+            "methane": 288.18750000000017
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.6347819885,
+            "methane": 287.3900000000002
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.85027677324998,
+            "methane": 285.4324999999999
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 45.96231212524999,
+            "methane": 284.19999999999993
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.40113683225002,
+            "methane": 282.0974999999999
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.380498451250006,
+            "methane": 280.7199999999999
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.633402544499994,
+            "methane": 279.05249999999995
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 46.52602408849999,
+            "methane": 277.67500000000007
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.09473728199999,
+            "methane": 276.5875000000001
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.27116984425,
+            "methane": 275.13750000000016
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.145004992500006,
+            "methane": 272.89
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.19099997725,
+            "methane": 272.23750000000007
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.062091126750005,
+            "methane": 270.42499999999995
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 47.46454807874999,
+            "methane": 268.5399999999999
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.024803266000006,
+            "methane": 306.8924999999999
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 42.892611932250006,
+            "methane": 307.4
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 42.894208293249996,
+            "methane": 307.1825
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.02466080725,
+            "methane": 305.95
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.001975493749995,
+            "methane": 305.805
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.23252628000001,
+            "methane": 305.0075000000001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.26776926925,
+            "methane": 305.08000000000004
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.07988230674999,
+            "methane": 305.2250000000001
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.25817821425001,
+            "methane": 304.6450000000001
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.317289344,
+            "methane": 303.41250000000014
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.4353867235,
+            "methane": 303.0500000000002
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.369459516,
+            "methane": 303.0500000000002
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.42633184175001,
+            "methane": 303.19500000000016
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.62715303649999,
+            "methane": 301.74500000000006
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.47887658350001,
+            "methane": 302.1800000000002
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.60529030075,
+            "methane": 301.8175000000001
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.6198351425,
+            "methane": 301.0199999999999
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.64138523899999,
+            "methane": 301.1650000000001
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.642636558750006,
+            "methane": 301.74500000000006
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.74438942275,
+            "methane": 300.5850000000001
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.78507270274999,
+            "methane": 300.15
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.883866213499985,
+            "methane": 299.4249999999999
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.842538129000005,
+            "methane": 299.71500000000003
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.94839240225001,
+            "methane": 299.425
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.024803266000006,
+            "methane": 306.8924999999999
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 42.892611932250006,
+            "methane": 307.4
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 42.894208293249996,
+            "methane": 307.1825
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.02466080725,
+            "methane": 305.95
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.001975493749995,
+            "methane": 305.805
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.23252628000001,
+            "methane": 305.0075000000001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.26776926925,
+            "methane": 305.08000000000004
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.07988230674999,
+            "methane": 305.2250000000001
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.25817821425001,
+            "methane": 304.6450000000001
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.317289344,
+            "methane": 303.41250000000014
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.4353867235,
+            "methane": 303.0500000000002
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.369459516,
+            "methane": 303.0500000000002
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.42633184175001,
+            "methane": 303.19500000000016
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.62715303649999,
+            "methane": 301.74500000000006
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.47887658350001,
+            "methane": 302.1800000000002
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.60529030075,
+            "methane": 301.8175000000001
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.6198351425,
+            "methane": 301.0199999999999
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.64138523899999,
+            "methane": 301.1650000000001
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.642636558750006,
+            "methane": 301.74500000000006
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.74438942275,
+            "methane": 300.5850000000001
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.78507270274999,
+            "methane": 300.15
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.883866213499985,
+            "methane": 299.4249999999999
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.842538129000005,
+            "methane": 299.71500000000003
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 0,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 43.94839240225001,
+            "methane": 299.425
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.43255886957894,
+            "methane": 407.55011850561414
+          }
+        },
+        {
+          "year": 2028,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 64.20984564852631,
+            "methane": 422.5369739543858
+          }
+        },
+        {
+          "year": 2029,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 58.12975308785965,
+            "methane": 377.59751296140337
+          }
+        },
+        {
+          "year": 2030,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 59.24938826164912,
+            "methane": 379.71858819824564
+          }
+        },
+        {
+          "year": 2031,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 59.21530363414034,
+            "methane": 375.9203443677191
+          }
+        },
+        {
+          "year": 2032,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 53.81672064435085,
+            "methane": 336.33397795157896
+          }
+        },
+        {
+          "year": 2033,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 55.9442936048421,
+            "methane": 344.84528824070196
+          }
+        },
+        {
+          "year": 2034,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 53.52842537552631,
+            "methane": 326.1391051017543
+          }
+        },
+        {
+          "year": 2035,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 52.12273276757896,
+            "methane": 312.9873087514035
+          }
+        },
+        {
+          "year": 2036,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 53.95321696815789,
+            "methane": 319.72130304035096
+          }
+        },
+        {
+          "year": 2037,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 51.83781774461403,
+            "methane": 304.1717055654384
+          }
+        },
+        {
+          "year": 2038,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 52.40500372298246,
+            "methane": 305.3552748210527
+          }
+        },
+        {
+          "year": 2039,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 50.91614888554384,
+            "methane": 292.83125618596483
+          }
+        },
+        {
+          "year": 2040,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 50.057300299684215,
+            "methane": 285.0476277596492
+          }
+        },
+        {
+          "year": 2041,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 50.368325352157896,
+            "methane": 282.614225908772
+          }
+        },
+        {
+          "year": 2042,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 48.44611882928071,
+            "methane": 268.4268090000001
+          }
+        },
+        {
+          "year": 2043,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 50.438681882333334,
+            "methane": 277.79310000526317
+          }
+        },
+        {
+          "year": 2044,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 49.796234430736824,
+            "methane": 270.62903505438595
+          }
+        },
+        {
+          "year": 2045,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 49.75013488508773,
+            "methane": 269.08275052807016
+          }
+        },
+        {
+          "year": 2046,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 48.20514373140351,
+            "methane": 257.3204469350877
+          }
+        },
+        {
+          "year": 2047,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 47.931177067192955,
+            "methane": 253.97365207719312
+          }
+        },
+        {
+          "year": 2048,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 48.36881689754384,
+            "methane": 253.11271921052634
+          }
+        },
+        {
+          "year": 2049,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 47.42194471245614,
+            "methane": 246.47526298421045
+          }
+        },
+        {
+          "year": 2050,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 48.00673909438597,
+            "methane": 246.36713809122816
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.52503387009998,
+            "methane": 408.56270245366676
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 64.64490279135,
+            "methane": 425.24826451833326
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 58.33850905699999,
+            "methane": 378.7580134066665
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 59.03899549445,
+            "methane": 378.62160528499993
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 59.006950925366645,
+            "methane": 374.4387086143332
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 53.83540197819999,
+            "methane": 336.4709928390001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 55.98015879159998,
+            "methane": 344.93323656200016
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 53.82296457275,
+            "methane": 327.90766675000003
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 52.29512591820001,
+            "methane": 314.30539393550004
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 53.72017536778333,
+            "methane": 318.0621764116667
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 51.74803732304999,
+            "methane": 303.92117341383306
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 52.293606532466676,
+            "methane": 304.61733900833343
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 51.30480348859999,
+            "methane": 295.1738378966666
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 49.8841047492,
+            "methane": 284.2836464800001
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 50.270769437399984,
+            "methane": 281.83741454666676
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 48.411771695149994,
+            "methane": 268.20540194833336
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 50.499077521716686,
+            "methane": 278.1608563950001
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 49.81108853369999,
+            "methane": 270.68279811333326
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 49.682276809333345,
+            "methane": 268.5221673016667
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 48.188062031333324,
+            "methane": 257.12336494999994
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 47.979041858833305,
+            "methane": 254.19013435166684
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 48.23437563549998,
+            "methane": 252.40333369500001
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 47.58316780216666,
+            "methane": 247.2394033816666
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 48.22766336,
+            "methane": 247.5763724816667
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 63.12393062731665,
+            "methane": 422.4853802933333
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 67.1942740961667,
+            "methane": 449.0522148945001
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 64.94959210655001,
+            "methane": 430.5523640350002
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 65.21863023641667,
+            "methane": 429.9861524183334
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 65.2950556661,
+            "methane": 429.6137989000001
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.361595801183334,
+            "methane": 406.3795102535
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.25322599244999,
+            "methane": 404.81878260466664
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 63.18558462498335,
+            "methane": 410.2440531035
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 63.73908942535,
+            "methane": 411.70171504666655
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.60814370836668,
+            "methane": 395.2454300533333
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 60.26150219641667,
+            "methane": 385.08693175999997
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.26174865033335,
+            "methane": 396.5546745933334
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.61557499823329,
+            "methane": 390.9262141183333
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.31483786126668,
+            "methane": 385.3588925038332
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.16311372318334,
+            "methane": 383.95075200166673
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 62.319761718433334,
+            "methane": 388.87651115333324
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.0364080083,
+            "methane": 379.2586119533333
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 60.07563357678335,
+            "methane": 371.4839595111668
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.33133416199999,
+            "methane": 377.69004807
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.274055965433334,
+            "methane": 374.64180623
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 60.81103714156665,
+            "methane": 372.1803386048335
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 60.43620453803333,
+            "methane": 367.0538891150002
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 61.10639929540001,
+            "methane": 367.64125473833326
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "withAwd": 60,
+          "metricCounts": {
+            "intensity": 60,
+            "methane": 60
+          },
+          "values": {
+            "intensity": 60.02380894690002,
+            "methane": 359.02894064066675
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 63.461576758122796,
+            "methane": 424.6440473947368
+          }
+        },
+        {
+          "year": 2028,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 67.32559063147369,
+            "methane": 450.25824539947376
+          }
+        },
+        {
+          "year": 2029,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 64.8110808748421,
+            "methane": 429.58873549122814
+          }
+        },
+        {
+          "year": 2030,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 65.04088544578946,
+            "methane": 428.9489209894737
+          }
+        },
+        {
+          "year": 2031,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 65.60498260221053,
+            "methane": 431.36452335263164
+          }
+        },
+        {
+          "year": 2032,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 62.53778511922807,
+            "methane": 407.630534144035
+          }
+        },
+        {
+          "year": 2033,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 62.24654076977192,
+            "methane": 405.11410335929827
+          }
+        },
+        {
+          "year": 2034,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 62.713823038578965,
+            "methane": 407.2914296107017
+          }
+        },
+        {
+          "year": 2035,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 63.93508505259648,
+            "methane": 413.1960679368421
+          }
+        },
+        {
+          "year": 2036,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.23734918108774,
+            "methane": 392.8388111280701
+          }
+        },
+        {
+          "year": 2037,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 60.25485868064913,
+            "methane": 385.3996902350877
+          }
+        },
+        {
+          "year": 2038,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 62.39335728745616,
+            "methane": 397.2841921157895
+          }
+        },
+        {
+          "year": 2039,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.80289674038592,
+            "methane": 392.40055246315785
+          }
+        },
+        {
+          "year": 2040,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 60.77290282887721,
+            "methane": 381.819538881228
+          }
+        },
+        {
+          "year": 2041,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.29405574294738,
+            "methane": 384.81971264736836
+          }
+        },
+        {
+          "year": 2042,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 62.43973343189472,
+            "methane": 390.0424219999999
+          }
+        },
+        {
+          "year": 2043,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.08198800873683,
+            "methane": 378.9971501
+          }
+        },
+        {
+          "year": 2044,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 59.767554879596524,
+            "methane": 369.4619784135088
+          }
+        },
+        {
+          "year": 2045,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.64875216754384,
+            "methane": 379.9022887701754
+          }
+        },
+        {
+          "year": 2046,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.18465875975439,
+            "methane": 374.19557072280696
+          }
+        },
+        {
+          "year": 2047,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.117057428298246,
+            "methane": 373.8445937857895
+          }
+        },
+        {
+          "year": 2048,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 60.643013980912265,
+            "methane": 368.44493016666695
+          }
+        },
+        {
+          "year": 2049,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 61.02813889340352,
+            "methane": 367.70147787719293
+          }
+        },
+        {
+          "year": 2050,
+          "count": 57,
+          "withAwd": 57,
+          "metricCounts": {
+            "intensity": 57,
+            "methane": 57
+          },
+          "values": {
+            "intensity": 60.26921216989476,
+            "methane": 360.664381183158
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 25.00538719815,
+            "methane": 150.8725
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 29.1278979335,
+            "methane": 176.24749999999992
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.71541893195,
+            "methane": 185.455
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.438236911174993,
+            "methane": 182.19250000000005
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.63413461417498,
+            "methane": 201.33250000000004
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 32.42856553914999,
+            "methane": 190.45749999999998
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 34.404697452425,
+            "methane": 203.57999999999996
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 34.56294880867499,
+            "methane": 202.71
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 35.038509978499995,
+            "methane": 204.95749999999998
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 35.530752980775006,
+            "methane": 205.60999999999999
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 37.20137194725002,
+            "methane": 214.52749999999997
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 36.387033908250004,
+            "methane": 210.32250000000005
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 36.666440974000004,
+            "methane": 209.7425
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 37.24136359650001,
+            "methane": 213.00500000000005
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 37.18610437075001,
+            "methane": 210.24999999999994
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 36.616304244249996,
+            "methane": 207.49499999999998
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.18587598225,
+            "methane": 214.52749999999997
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.10036298524999,
+            "methane": 213.5125
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.937460109499995,
+            "methane": 217.20999999999995
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.801882212750016,
+            "methane": 214.16500000000002
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.137965040249995,
+            "methane": 209.8875
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 39.03259087825,
+            "methane": 213.80250000000007
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 39.33179966625001,
+            "methane": 215.03500000000008
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 39.778310200500016,
+            "methane": 215.10749999999993
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 25.00538719815,
+            "methane": 150.8725
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 29.1278979335,
+            "methane": 176.24749999999992
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.71541893195,
+            "methane": 185.455
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.438236911174993,
+            "methane": 182.19250000000002
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.63413461417498,
+            "methane": 201.33250000000004
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 32.42856553914999,
+            "methane": 190.45749999999998
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 34.404697452425,
+            "methane": 203.57999999999993
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 34.56294880867499,
+            "methane": 202.71
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 35.038509978499995,
+            "methane": 204.95750000000004
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 35.530752980775006,
+            "methane": 205.60999999999999
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 37.20137194725001,
+            "methane": 214.52749999999997
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 36.387033908250004,
+            "methane": 210.32250000000005
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 36.666440974,
+            "methane": 209.7425
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 37.24136359650001,
+            "methane": 213.00500000000005
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 37.186104370750016,
+            "methane": 210.24999999999994
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 36.616304244249996,
+            "methane": 207.49499999999998
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.18587598225,
+            "methane": 214.5275
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.10036298524999,
+            "methane": 213.5125
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.937460109499995,
+            "methane": 217.20999999999995
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.80188221275001,
+            "methane": 214.16500000000002
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 38.137965040249995,
+            "methane": 209.8875
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 39.03259087825,
+            "methane": 213.80250000000007
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 39.33179966625001,
+            "methane": 215.03500000000008
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 39.77831020050001,
+            "methane": 215.10749999999993
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 23.5403630892,
+            "methane": 142.8975
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 24.890460466150007,
+            "methane": 152.75749999999996
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 25.803372927100003,
+            "methane": 158.195
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 23.410696682725,
+            "methane": 143.695
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 26.145556401874995,
+            "methane": 159.8625
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 26.78653290890001,
+            "methane": 161.53000000000003
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 26.451354557475003,
+            "methane": 160.87749999999994
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 25.807064829075,
+            "methane": 157.75999999999996
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 29.004086116999996,
+            "methane": 176.2475
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 29.38680819845,
+            "methane": 177.69750000000002
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.617593738500005,
+            "methane": 190.82000000000005
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.66212710695,
+            "methane": 190.095
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 28.908956781100006,
+            "methane": 175.73999999999998
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 28.732291247200003,
+            "methane": 173.71000000000006
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.081053028600007,
+            "methane": 186.9775
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.817277717325,
+            "methane": 190.96500000000003
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.22601444925,
+            "methane": 182.04749999999996
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.602407023775005,
+            "methane": 183.425
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.189376957875005,
+            "methane": 199.81
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.79754827919999,
+            "methane": 202.20250000000001
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 32.107168576599996,
+            "methane": 191.97999999999996
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.42522607,
+            "methane": 189.44249999999997
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.39438119225,
+            "methane": 200.535
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.68586431257499,
+            "methane": 199.51999999999992
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 23.5403630892,
+            "methane": 142.89749999999998
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 24.890460466150007,
+            "methane": 152.75749999999996
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 25.803372927100003,
+            "methane": 158.195
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 23.410696682725,
+            "methane": 143.695
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 26.145556401874995,
+            "methane": 159.8625
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 26.7865329089,
+            "methane": 161.53000000000003
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 26.451354557474996,
+            "methane": 160.87749999999994
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 25.807064829075,
+            "methane": 157.75999999999996
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 29.004086116999996,
+            "methane": 176.2475
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 29.386808198449994,
+            "methane": 177.69750000000002
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.617593738500005,
+            "methane": 190.82000000000005
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.662127106950003,
+            "methane": 190.095
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 28.908956781100006,
+            "methane": 175.74
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 28.73229124720001,
+            "methane": 173.71000000000006
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.081053028600007,
+            "methane": 186.9775
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.817277717325,
+            "methane": 190.96500000000003
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.22601444925,
+            "methane": 182.04749999999996
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 30.602407023775005,
+            "methane": 183.425
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.189376957875005,
+            "methane": 199.81
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.79754827919999,
+            "methane": 202.20250000000001
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 32.107168576599996,
+            "methane": 191.97999999999996
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 31.425226070000008,
+            "methane": 189.44249999999997
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.39438119225,
+            "methane": 200.53500000000003
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "withAwd": 40,
+          "metricCounts": {
+            "intensity": 40,
+            "methane": 40
+          },
+          "values": {
+            "intensity": 33.68586431257499,
+            "methane": 199.51999999999992
+          }
+        }
+      ]
+    }
+  ]
+}

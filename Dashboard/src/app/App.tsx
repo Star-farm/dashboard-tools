@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import type { ReactElement } from 'react'
 import Glossary from '../features/glossary/Glossary'
 import HomePage from '../features/home/HomePage'
 import SiteFooter from './SiteFooter'
@@ -6,22 +7,71 @@ import SiteHeader from './SiteHeader'
 import BackToTop from './BackToTop'
 import { useLanguage } from '../i18n/useLanguage'
 import { usePageNavigation } from './usePageNavigation'
+import { isResourcePage, resourceRoutes } from '../features/resources/resourceRoutes'
+import type { ResourceContentPage } from '../features/resources/resourceRoutes'
+import { resourceText } from '../features/resources/resourceText'
+import { environmentRoutes, isEnvironmentPage } from '../features/environment/environmentRoutes'
+import type { EnvironmentContentPage } from '../features/environment/environmentRoutes'
+import { environmentText } from '../features/environment/environmentText'
 
 const FuturePage = lazy(() => import('../features/future/FuturePage'))
 const ScenarioDetailsPage = lazy(() => import('../features/scenarios/ScenarioDetailsPage'))
 const EconomicOverviewPage = lazy(() => import('../features/economics/EconomicOverviewPage'))
+const EconomicExplorePage = lazy(() => import('../features/economics/EconomicExplorePage'))
 const EconomicComparisonPage = lazy(() => import('../features/economics/EconomicComparisonPage'))
+const Bau3ComparisonPage = lazy(() => import('../features/economics/Bau3ComparisonPage'))
+const Bau2ComparisonPage = lazy(() => import('../features/economics/Bau2ComparisonPage'))
+const BauSustainableComparisonPage = lazy(() => import('../features/economics/BauSustainableComparisonPage'))
+const Bau3FarmingPage = lazy(() => import('../features/economics/Bau3FarmingPage'))
+const Bau2FarmingPage = lazy(() => import('../features/economics/Bau2FarmingPage'))
+const BauSustainableFarmingPage = lazy(() => import('../features/economics/BauSustainableFarmingPage'))
+const OneMhaFarmingPage = lazy(() => import('../features/economics/OneMhaFarmingPage'))
+const ResourcesPage = lazy(() => import('../features/resources/ResourcesPage'))
+const EnvironmentPage = lazy(() => import('../features/environment/EnvironmentPage'))
 
 export default function App() {
   const { page } = usePageNavigation()
   const { language, changeLanguage, t } = useLanguage(page)
+  const resourcePages = Object.fromEntries((Object.keys(resourceRoutes) as ResourceContentPage[]).map((key) => [key, <ResourcesPage key={key} page={key} language={language} />])) as Record<ResourceContentPage, ReactElement>
+  const environmentPages = Object.fromEntries((Object.keys(environmentRoutes) as EnvironmentContentPage[]).map((key) => [key, <EnvironmentPage key={key} page={key} language={language} />])) as Record<EnvironmentContentPage, ReactElement>
+  const pages = {
+    ...resourcePages,
+    ...environmentPages,
+    environmentExplore: <EconomicExplorePage language={language} topic="sustainability" />,
+    resourceExplore: <EconomicExplorePage language={language} topic="resources" />,
+    home: <HomePage language={language} />,
+    glossary: <Glossary language={language} />,
+    future: <FuturePage language={language} />,
+    scenario: <ScenarioDetailsPage language={language} />,
+    economics: <EconomicOverviewPage language={language} />,
+    economicExplore: <EconomicExplorePage language={language} />,
+    economicComparison: <EconomicComparisonPage language={language} />,
+    bau3Comparison: <Bau3ComparisonPage language={language} />,
+    bau2Comparison: <Bau2ComparisonPage language={language} />,
+    baussComparison: <BauSustainableComparisonPage language={language} />,
+    bau3Farming: <Bau3FarmingPage language={language} />,
+    bau2Farming: <Bau2FarmingPage language={language} />,
+    baussFarming: <BauSustainableFarmingPage language={language} />,
+    oneMhaFarming: <OneMhaFarmingPage language={language} />,
+  }
+  const loadingText = isEnvironmentPage(page) ? environmentText[language].loading : isResourcePage(page) ? resourceText[language].loading : {
+    home: '', glossary: '', future: t.futureLoading, scenario: t.scenarioLoading,
+    economics: t.economicsLoading, economicComparison: t.economicComparisonLoading,
+    economicExplore: t.economicExploreLoading,
+    bau3Comparison: t.bau3ComparisonLoading, bau2Comparison: t.bau2ComparisonLoading,
+    baussComparison: t.baussComparisonLoading,
+    bau3Farming: t.bau3FarmingLoading,
+    bau2Farming: t.bau2FarmingLoading,
+    baussFarming: t.baussFarmingLoading,
+    oneMhaFarming: t.oneMhaFarmingLoading,
+  }[page]
 
   return (
     <>
       <a className="skip-link" href="#main-content">{t.skipContent}</a>
       <SiteHeader language={language} page={page} changeLanguage={changeLanguage} />
       <main id="main-content" tabIndex={-1}>
-        {page === 'home' ? <HomePage language={language} /> : page === 'future' ? <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{t.futureLoading}</p><div /><div /><div /></div>}><FuturePage language={language} /></Suspense> : page === 'scenario' ? <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{t.scenarioLoading}</p><div /><div /><div /></div>}><ScenarioDetailsPage language={language} /></Suspense> : page === 'economics' ? <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{t.economicsLoading}</p><div /></div>}><EconomicOverviewPage language={language} /></Suspense> : page === 'economicComparison' ? <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{t.economicComparisonLoading}</p><div /></div>}><EconomicComparisonPage language={language} /></Suspense> : <Glossary language={language} />}
+        <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
       </main>
       <SiteFooter language={language} />
       <BackToTop language={language} />

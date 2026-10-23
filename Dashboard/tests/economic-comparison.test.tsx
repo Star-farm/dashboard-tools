@@ -7,6 +7,7 @@ import HeaderNavigation from '../src/app/HeaderNavigation'
 import EconomicComparisonPage from '../src/features/economics/EconomicComparisonPage'
 import ComparisonBarChart from '../src/features/economics/ComparisonBarChart'
 import { aggregateEconomicComparison, selectComparisonCohort } from '../src/features/economics/comparisonData'
+import { comparisonSummary } from '../src/features/economics/comparisonAnalysis'
 import type { ComparisonCohort, EconomicComparisonData } from '../src/features/economics/comparisonData'
 import cached from '../src/data/economics-comparison.json'
 
@@ -26,6 +27,22 @@ function fixture(multiplier = 1) {
 }
 
 describe('economic comparison aggregation', () => {
+  it('summarizes all five indicators, reports trade-offs and handles a zero baseline or missing values', () => {
+    const cohort = selectComparisonCohort(data, 'all', 'all')!
+    const summary = comparisonSummary(cohort, 'vi', 2027, 2050)
+    for (const value of ['25.961.407 VNĐ/ha', '13.814.629 VNĐ/ha', '87,9%', 'chi phí sản xuất cao hơn', 'giá trị rơm thấp hơn', 'năng suất thấp hơn', 'cường độ lao động cao hơn', 'nên ưu tiên 1Mha', 'chuẩn bị vốn sản xuất', 'bố trí nhân công', 'cải thiện năng suất']) expect(summary).toContain(value)
+    const changed = structuredClone(cohort)
+    changed.groups.oneMha.USD.income = changed.groups.bau.USD.income! / 2
+    expect(comparisonSummary(changed, 'en', 2027, 2050)).toContain('no net income advantage')
+    changed.groups.bau.USD.income = 0
+    changed.groups.oneMha.USD.income = 20
+    changed.groups.oneMha.USD.straw = null
+    const partial = comparisonSummary(changed, 'en', 2027, 2050)
+    expect(partial).toContain('net income is 20.00 $/ha higher')
+    expect(partial).toContain('insufficient data to compare straw value')
+    expect(partial).not.toMatch(/NaN|Infinity/)
+  })
+
   it('averages records within each filter combination, preserves zero and negative values, and excludes historical data', () => {
     const result = aggregateEconomicComparison(fixture(), fixture(1000))
     expect(result.cohorts).toHaveLength(9)
@@ -76,7 +93,12 @@ describe('economic comparison interface', () => {
     expect(screen.getByRole('heading', { name: 'Economic comparison' })).toBeInTheDocument()
     const cards = screen.getAllByRole('article')
     expect(cards).toHaveLength(5)
+    const summary = screen.getByRole('complementary', { name: 'Overall assessment' })
+    expect(summary.compareDocumentPosition(cards[0]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(summary.querySelectorAll('p')).toHaveLength(1)
+    expect(summary.querySelectorAll('strong').length).toBeGreaterThan(5)
     for (const card of cards) {
+      expect(card.querySelector('header')).toHaveTextContent('Period 2027 - 2050')
       const bars = [...card.querySelectorAll('path.recharts-rectangle')]
       expect(bars.map((path) => path.getAttribute('fill'))).toEqual(['#bf554c', '#2f8050'])
       const zero = Number(card.querySelector('.recharts-reference-line-line')!.getAttribute('y1'))
@@ -97,6 +119,8 @@ describe('economic comparison interface', () => {
     fireEvent.click(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Khắc nghiệt' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Thiếu tài nguyên' }))
     expect(screen.getByRole('status')).toHaveTextContent('Thời tiết: Khắc nghiệt. Tài nguyên: Thiếu tài nguyên.')
+    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng kết' })).toHaveTextContent('21.458.536 VNĐ/ha')
+    expect(screen.getAllByText('Giai đoạn 2027 - 2050')).toHaveLength(5)
     expect(screen.getByRole('article', { name: 'Thu nhập ròng trung bình' }).querySelector('.comparison-values')).toHaveTextContent('21.458.536 VNĐ/ha')
     const filtered = selectComparisonCohort(data, 'severe', 'shortage')!
     for (const [index, metric] of (['income', 'straw', 'cost', 'yield', 'labor'] as const).entries()) {
@@ -108,10 +132,12 @@ describe('economic comparison interface', () => {
     rerender(<EconomicComparisonPage language="en" />)
     expect(screen.getByRole('button', { name: 'Severe weather' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Resource shortage' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('815.23 $/ha')
     expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('815.23 $/ha')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
     expect(screen.getByRole('button', { name: 'All weather' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'All resources' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('986.30 $/ha')
     expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('986.30 $/ha')
   })
 

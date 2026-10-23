@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
+import { yearTicks } from '../../utils/yearTicks'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import type { ChartPoint, Currency, Metric } from './futureTypes'
 import { analyzeChart, formatValue, laborAxisDomain, metricUnit, SERIES_COLORS } from './chartAnalysis'
@@ -13,12 +15,13 @@ interface Props {
 }
 
 export default function TimeSeriesChart({ metric, points, currency, language }: Props) {
+  const [chartWidth, setChartWidth] = useState(800)
   const t = futureText[language]
   const analysis = analyzeChart(points, metric, currency, language)
   const title = t[`${metric}Title`]
   const unit = metricUnit(metric, currency, language)
   const compactNumber = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
-  const ticks = points.filter((point, index) => index === 0 || index === points.length - 1 || point.year % 5 === 0).map((point) => point.year)
+  const ticks = yearTicks(points[0]?.year, points.at(-1)?.year ?? points[0]?.year, chartWidth, 80)
   const yearDomain = points.length === 1 ? [points[0].year - 0.5, points[0].year + 0.5] : ['dataMin', 'dataMax']
 
   return (
@@ -33,10 +36,10 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
             <div className="chart-area">
               <div className="chart-meta"><span className="chart-unit">{t.unit}: {unit}</span><ul className="chart-legend"><li><span className="legend-line green" />{analysis.firstLabel}</li><li><span className="legend-line red" />{analysis.secondLabel}</li></ul></div>
               <div className="timeseries-plot" role="group" aria-label={`${title} · ${points[0]?.year}–${points.at(-1)?.year} · ${unit}`}>
-                <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 800, height: 310 }}>
+                <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 800, height: 310 }} onResize={setChartWidth}>
                   <LineChart data={points} accessibilityLayer margin={{ top: 12, right: 18, left: 0, bottom: 8 }}>
                     <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
-                    <XAxis dataKey="year" type="number" domain={yearDomain} ticks={ticks} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} minTickGap={28} tickMargin={12} tick={{ fill: '#64735b', fontSize: 11 }} />
+                    <XAxis dataKey="year" type="number" domain={yearDomain} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={{ fill: '#64735b', fontSize: 11 }} />
                     <YAxis width={62} domain={metric === 'labor' ? laborAxisDomain(points) : [(min: number) => Math.min(0, min), 'auto']} tickFormatter={(value) => compactNumber.format(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={8} tick={{ fill: '#64735b', fontSize: 11 }} />
                     {metric !== 'labor' && <ReferenceLine y={0} stroke="#819275" />}
                     <Tooltip shared isAnimationActive={false} labelFormatter={(value) => `${t.year} ${value}`} formatter={(value) => `${formatValue(Number(value), metric, currency, language)} ${unit}`} contentStyle={{ background: '#fffef9', border: '1px solid #d7dfcc', borderRadius: 8, fontSize: 12, lineHeight: 1.8 }} wrapperStyle={{ maxWidth: 'min(300px, 85vw)', whiteSpace: 'normal' }} cursor={{ stroke: '#abb99d', strokeDasharray: '3 3' }} />

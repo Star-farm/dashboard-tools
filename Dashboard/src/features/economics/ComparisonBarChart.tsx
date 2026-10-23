@@ -23,7 +23,7 @@ export default function ComparisonBarChart({ metric, cohort, language, startYear
 
   return (
     <article className="comparison-chart-card" aria-labelledby={`comparison-${metric}-title`}>
-      <header><h2 id={`comparison-${metric}-title`}>{title}</h2><p>{t.unit}: <strong>{unit}</strong><span>{text.average} {startYear}–{endYear}</span></p></header>
+      <header><h2 id={`comparison-${metric}-title`}>{title}</h2><p>{t.unit}: <strong>{unit}</strong><span>{text.period} {startYear} - {endYear}</span></p></header>
       {points.some((point) => point.value !== null) ? <div className="comparison-plot" role="group" aria-label={`${title} · ${startYear}–${endYear} · ${unit}`}>
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 600, height: 280 }}>
           <BarChart data={points} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">

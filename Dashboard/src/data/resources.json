@@ -1,0 +1,5922 @@
+{
+  "startYear": 2027,
+  "endYear": 2050,
+  "rows": [
+    {
+      "code": "BAU-3V-OH-TT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Neutral",
+        "vi": "Kịch bản hiện tại"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "neutral",
+      "awd": "without",
+      "historical": true,
+      "startYear": 2016,
+      "endYear": 2022,
+      "count": 420,
+      "metricCounts": {
+        "water": 420,
+        "fertilizer": 420,
+        "pesticides": 420
+      },
+      "values": {
+        "water": 533.1054308523802,
+        "fertilizer": 108.61904761904762,
+        "pesticides": 5.377597402592854
+      }
+    },
+    {
+      "code": "BAU-BV-OH-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "metricCounts": {
+        "water": 1368,
+        "fertilizer": 1368,
+        "pesticides": 1368
+      },
+      "values": {
+        "water": 326.0999576383772,
+        "fertilizer": 112.8924707602338,
+        "pesticides": 5.485807512739761
+      }
+    },
+    {
+      "code": "BAU-BV-OH-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 326.21164195763885,
+        "fertilizer": 112.89104166666662,
+        "pesticides": 5.490144069228468
+      }
+    },
+    {
+      "code": "BAU-BV-KN-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 277.1586663147222,
+        "fertilizer": 105.61513888888882,
+        "pesticides": 5.934764224920143
+      }
+    },
+    {
+      "code": "BAU-BV-KN-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "metricCounts": {
+        "water": 1368,
+        "fertilizer": 1368,
+        "pesticides": 1368
+      },
+      "values": {
+        "water": 277.2655697454677,
+        "fertilizer": 105.60497076023385,
+        "pesticides": 5.932099338577487
+      }
+    },
+    {
+      "code": "BAU-3V-OH-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 418.0310275247572,
+        "fertilizer": 112.89104166666665,
+        "pesticides": 5.490144069228469
+      }
+    },
+    {
+      "code": "BAU-3V-OH-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "metricCounts": {
+        "water": 1368,
+        "fertilizer": 1368,
+        "pesticides": 1368
+      },
+      "values": {
+        "water": 418.1377689038934,
+        "fertilizer": 112.98135964912277,
+        "pesticides": 5.489701235627921
+      }
+    },
+    {
+      "code": "BAU-3V-KN-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 364.4931945136743,
+        "fertilizer": 105.61513888888892,
+        "pesticides": 5.934971438162501
+      }
+    },
+    {
+      "code": "BAU-3V-KN-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 364.4931945136743,
+        "fertilizer": 105.61513888888892,
+        "pesticides": 5.934971438162501
+      }
+    },
+    {
+      "code": "BAU-2V-OH-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 521.5899830172916,
+        "fertilizer": 120.33999999999993,
+        "pesticides": 5.927962239579163
+      }
+    },
+    {
+      "code": "BAU-2V-OH-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 521.5899830172916,
+        "fertilizer": 120.33999999999993,
+        "pesticides": 5.927962239579163
+      }
+    },
+    {
+      "code": "BAU-2V-KN-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 443.65835859468746,
+        "fertilizer": 107.49322916666635,
+        "pesticides": 6.1175791750625
+      }
+    },
+    {
+      "code": "BAU-2V-KN-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 443.65835859468746,
+        "fertilizer": 107.49322916666635,
+        "pesticides": 6.1175791750625
+      }
+    },
+    {
+      "code": "1M-2V-OH-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 455.49372446770843,
+        "fertilizer": 88,
+        "pesticides": 5.510511172716672
+      }
+    },
+    {
+      "code": "1M-2V-OH-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 455.49372446770843,
+        "fertilizer": 88,
+        "pesticides": 5.510511172716672
+      }
+    },
+    {
+      "code": "1M-2V-KN-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 389.8228830962502,
+        "fertilizer": 87.375,
+        "pesticides": 6.205532804104156
+      }
+    },
+    {
+      "code": "1M-2V-KN-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 389.8228830962502,
+        "fertilizer": 87.375,
+        "pesticides": 6.205532804104156
+      }
+    }
+  ],
+  "series": [
+    {
+      "family": "bau3s",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 459.2810400918667,
+            "fertilizer": 121.09166666666667,
+            "pesticides": 4.861122311833332
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 431.6798631081667,
+            "fertilizer": 118.98666666666668,
+            "pesticides": 5.453528225800001
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 419.82491861736673,
+            "fertilizer": 111.97666666666662,
+            "pesticides": 5.5947748655666665
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 407.78668692796674,
+            "fertilizer": 112.06666666666666,
+            "pesticides": 5.730981182733332
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 406.92179955686805,
+            "fertilizer": 110.76666666666672,
+            "pesticides": 5.781384408633334
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 405.86643733536675,
+            "fertilizer": 110.86666666666663,
+            "pesticides": 5.946135752699999
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 393.4036576395666,
+            "fertilizer": 110.9666666666667,
+            "pesticides": 6.078662634316668
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 384.43541847815834,
+            "fertilizer": 111.0666666666666,
+            "pesticides": 6.134694220433334
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 390.9323442908,
+            "fertilizer": 110.49,
+            "pesticides": 6.140188172033332
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 372.5396732834184,
+            "fertilizer": 107.90833333333337,
+            "pesticides": 6.197950268833332
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 366.57384963412835,
+            "fertilizer": 105.36666666666663,
+            "pesticides": 6.178931451549999
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 359.17573446696656,
+            "fertilizer": 107.49666666666671,
+            "pesticides": 6.192103494666667
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 359.5694385170333,
+            "fertilizer": 99.74666666666671,
+            "pesticides": 6.18279569886667
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 350.6672297638817,
+            "fertilizer": 98.63333333333323,
+            "pesticides": 6.155628360249998
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 351.07184138188336,
+            "fertilizer": 98.83333333333333,
+            "pesticides": 6.174210349433334
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 347.04835279419984,
+            "fertilizer": 99.0333333333333,
+            "pesticides": 6.124243951566668
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 336.9893376813366,
+            "fertilizer": 99.23333333333342,
+            "pesticides": 6.09299395155
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 330.7738781611217,
+            "fertilizer": 99.43333333333338,
+            "pesticides": 6.024495967716666
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 316.38825831608335,
+            "fertilizer": 99.63333333333323,
+            "pesticides": 5.96985887098333
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 316.3920405890501,
+            "fertilizer": 99.83333333333333,
+            "pesticides": 5.968918010766667
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 318.3534616724672,
+            "fertilizer": 100.0333333333333,
+            "pesticides": 5.900604838766668
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 312.07504359023335,
+            "fertilizer": 100.23333333333342,
+            "pesticides": 5.907140456966666
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 309.1379194615667,
+            "fertilizer": 100.4333333333334,
+            "pesticides": 5.847647849500002
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 300.9484429686866,
+            "fertilizer": 100.63333333333323,
+            "pesticides": 5.800319220433335
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau3s",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 459.2810400918667,
+            "fertilizer": 121.09166666666667,
+            "pesticides": 4.861122311833332
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 431.6798631081667,
+            "fertilizer": 118.98666666666668,
+            "pesticides": 5.453528225800001
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 419.82491861736673,
+            "fertilizer": 111.97666666666662,
+            "pesticides": 5.5947748655666665
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 407.78668692796674,
+            "fertilizer": 112.06666666666666,
+            "pesticides": 5.730981182733332
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 406.92179955686805,
+            "fertilizer": 110.76666666666672,
+            "pesticides": 5.781384408633334
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 405.86643733536675,
+            "fertilizer": 110.86666666666663,
+            "pesticides": 5.946135752699999
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 393.4036576395666,
+            "fertilizer": 110.9666666666667,
+            "pesticides": 6.078662634316668
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 384.43541847815834,
+            "fertilizer": 111.0666666666666,
+            "pesticides": 6.134694220433334
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 390.9323442908,
+            "fertilizer": 110.49,
+            "pesticides": 6.140188172033332
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 372.5396732834184,
+            "fertilizer": 107.90833333333337,
+            "pesticides": 6.197950268833332
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 366.57384963412835,
+            "fertilizer": 105.36666666666663,
+            "pesticides": 6.178931451549999
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 359.17573446696656,
+            "fertilizer": 107.49666666666671,
+            "pesticides": 6.192103494666667
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 359.5694385170333,
+            "fertilizer": 99.74666666666671,
+            "pesticides": 6.18279569886667
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 350.6672297638817,
+            "fertilizer": 98.63333333333323,
+            "pesticides": 6.155628360249998
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 351.07184138188336,
+            "fertilizer": 98.83333333333333,
+            "pesticides": 6.174210349433334
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 347.04835279419984,
+            "fertilizer": 99.0333333333333,
+            "pesticides": 6.124243951566668
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 336.9893376813366,
+            "fertilizer": 99.23333333333342,
+            "pesticides": 6.09299395155
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 330.7738781611217,
+            "fertilizer": 99.43333333333338,
+            "pesticides": 6.024495967716666
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 316.38825831608335,
+            "fertilizer": 99.63333333333323,
+            "pesticides": 5.969858870983331
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 316.3920405890501,
+            "fertilizer": 99.83333333333333,
+            "pesticides": 5.968918010766667
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 318.3534616724672,
+            "fertilizer": 100.0333333333333,
+            "pesticides": 5.900604838766668
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 312.07504359023335,
+            "fertilizer": 100.23333333333342,
+            "pesticides": 5.907140456966666
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 309.1379194615667,
+            "fertilizer": 100.4333333333334,
+            "pesticides": 5.847647849500002
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 300.9484429686866,
+            "fertilizer": 100.63333333333323,
+            "pesticides": 5.800319220433335
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau3s",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 463.8481656886841,
+            "fertilizer": 123.16140350877194,
+            "pesticides": 4.711145302807018
+          }
+        },
+        {
+          "year": 2028,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 444.5180968263158,
+            "fertilizer": 121.67719298245615,
+            "pesticides": 5.088479768
+          }
+        },
+        {
+          "year": 2029,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 435.2080773797192,
+            "fertilizer": 120.21403508771928,
+            "pesticides": 5.186403508736842
+          }
+        },
+        {
+          "year": 2030,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 433.23198796438595,
+            "fertilizer": 120.24561403508773,
+            "pesticides": 5.0726867572105245
+          }
+        },
+        {
+          "year": 2031,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 434.5002799485088,
+            "fertilizer": 113.69298245614038,
+            "pesticides": 5.190223542754385
+          }
+        },
+        {
+          "year": 2032,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 439.93823635519294,
+            "fertilizer": 113.77192982456137,
+            "pesticides": 5.330008489017543
+          }
+        },
+        {
+          "year": 2033,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 434.63702388314033,
+            "fertilizer": 111.68771929824564,
+            "pesticides": 5.330963497526318
+          }
+        },
+        {
+          "year": 2034,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 425.2259848319473,
+            "fertilizer": 111.78245614035083,
+            "pesticides": 5.313331211105264
+          }
+        },
+        {
+          "year": 2035,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 421.4768929711229,
+            "fertilizer": 111.16666666666667,
+            "pesticides": 5.317664120017543
+          }
+        },
+        {
+          "year": 2036,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 418.41026075243855,
+            "fertilizer": 111.26666666666671,
+            "pesticides": 5.448535653649123
+          }
+        },
+        {
+          "year": 2037,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 417.57652824813334,
+            "fertilizer": 111.36666666666663,
+            "pesticides": 5.531992784385963
+          }
+        },
+        {
+          "year": 2038,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 409.7626650613298,
+            "fertilizer": 111.46666666666671,
+            "pesticides": 5.461162988070174
+          }
+        },
+        {
+          "year": 2039,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 416.51293768575437,
+            "fertilizer": 111.56666666666662,
+            "pesticides": 5.457944255771929
+          }
+        },
+        {
+          "year": 2040,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 420.5618960363683,
+            "fertilizer": 111.66666666666667,
+            "pesticides": 5.597446236596492
+          }
+        },
+        {
+          "year": 2041,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 410.16839381201754,
+            "fertilizer": 111.76666666666671,
+            "pesticides": 5.670681239403508
+          }
+        },
+        {
+          "year": 2042,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 407.40848308508777,
+            "fertilizer": 111.86666666666663,
+            "pesticides": 5.694927843807014
+          }
+        },
+        {
+          "year": 2043,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 413.35786494570175,
+            "fertilizer": 111.96666666666671,
+            "pesticides": 5.637485851754385
+          }
+        },
+        {
+          "year": 2044,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 403.5857026321053,
+            "fertilizer": 111.40175438596488,
+            "pesticides": 5.730935200929824
+          }
+        },
+        {
+          "year": 2045,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 392.8035686175597,
+            "fertilizer": 112.16666666666667,
+            "pesticides": 5.753094934929825
+          }
+        },
+        {
+          "year": 2046,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 399.45360398605254,
+            "fertilizer": 112.26666666666671,
+            "pesticides": 5.794160299964914
+          }
+        },
+        {
+          "year": 2047,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 390.1844309473159,
+            "fertilizer": 112.36666666666663,
+            "pesticides": 5.778915534754387
+          }
+        },
+        {
+          "year": 2048,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 401.8312460975087,
+            "fertilizer": 107.31578947368428,
+            "pesticides": 5.903155065017544
+          }
+        },
+        {
+          "year": 2049,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 399.94878399432287,
+            "fertilizer": 108.73508771929824,
+            "pesticides": 5.8978671477719296
+          }
+        },
+        {
+          "year": 2050,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 401.1553419427298,
+            "fertilizer": 106.96666666666661,
+            "pesticides": 5.853618421087719
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau3s",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 463.8260622669166,
+            "fertilizer": 122.52166666666668,
+            "pesticides": 4.724126344116667
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 443.95445736883335,
+            "fertilizer": 121.82666666666667,
+            "pesticides": 5.102587365616668
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 435.2366521464,
+            "fertilizer": 119.73166666666664,
+            "pesticides": 5.168817204266666
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 435.0882200691667,
+            "fertilizer": 120.46666666666667,
+            "pesticides": 5.094237231166668
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 436.2276300834167,
+            "fertilizer": 113.54666666666671,
+            "pesticides": 5.19400201615
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 439.00236974626665,
+            "fertilizer": 113.62666666666664,
+            "pesticides": 5.308182123716665
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 434.26872061498324,
+            "fertilizer": 111.6516666666667,
+            "pesticides": 5.3227822581166695
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 425.0822262050167,
+            "fertilizer": 111.74666666666663,
+            "pesticides": 5.3314012096833325
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 421.46875888923347,
+            "fertilizer": 111.16666666666667,
+            "pesticides": 5.312600806483333
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 418.4548291981499,
+            "fertilizer": 111.26666666666672,
+            "pesticides": 5.430141129033334
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 417.6417642623934,
+            "fertilizer": 111.36666666666663,
+            "pesticides": 5.55194892475
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 411.4216475757633,
+            "fertilizer": 111.4666666666667,
+            "pesticides": 5.455443548350001
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 416.5492013604667,
+            "fertilizer": 111.5666666666666,
+            "pesticides": 5.458938172016667
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 417.46454573338326,
+            "fertilizer": 111.66666666666667,
+            "pesticides": 5.601982526916668
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 410.4990066257499,
+            "fertilizer": 111.76666666666672,
+            "pesticides": 5.6790154569999975
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 406.8381401716666,
+            "fertilizer": 111.86666666666663,
+            "pesticides": 5.694539650533331
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 415.2102568849167,
+            "fertilizer": 111.9666666666667,
+            "pesticides": 5.643010752699999
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 402.6020995005,
+            "fertilizer": 111.43499999999995,
+            "pesticides": 5.727671370983331
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 393.37877106218167,
+            "fertilizer": 112.16666666666667,
+            "pesticides": 5.744623655933334
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 398.23429974296664,
+            "fertilizer": 112.26666666666672,
+            "pesticides": 5.785584677433335
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 390.29486009011674,
+            "fertilizer": 112.36666666666663,
+            "pesticides": 5.7726814515500005
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 400.85554556933323,
+            "fertilizer": 106.96166666666673,
+            "pesticides": 5.888793682716666
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 399.5089754074901,
+            "fertilizer": 108.31999999999998,
+            "pesticides": 5.9062163979166655
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 399.63562001886004,
+            "fertilizer": 106.64999999999993,
+            "pesticides": 5.864129704333333
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 562.1024190375001,
+            "fertilizer": 121,
+            "pesticides": 5.553830645125
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 541.7988636599999,
+            "fertilizer": 121,
+            "pesticides": 5.769052419475001
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 515.1218017075,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.019833669275
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 509.79418550750006,
+            "fertilizer": 118.7725,
+            "pesticides": 6.033140120900002
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 497.9554822125001,
+            "fertilizer": 118.7725,
+            "pesticides": 6.016431451549999
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 505.7744196400001,
+            "fertilizer": 117.03999999999999,
+            "pesticides": 6.258014112825
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 476.68725803000007,
+            "fertilizer": 116.29749999999999,
+            "pesticides": 6.302041330625
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 476.38903529749996,
+            "fertilizer": 115.49749999999999,
+            "pesticides": 6.331426411250002
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 477.75578557999995,
+            "fertilizer": 113.64999999999998,
+            "pesticides": 6.3635836693500005
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 461.0799217225,
+            "fertilizer": 108.84999999999998,
+            "pesticides": 6.364264112924998
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 437.93951811000005,
+            "fertilizer": 104.84999999999998,
+            "pesticides": 6.405569556400001
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 436.8189907825,
+            "fertilizer": 103.24999999999997,
+            "pesticides": 6.395035282375
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 439.55874187,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.351134072649999
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 419.05787474500005,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.309324596874999
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 422.69519017749997,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.2354334677
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 421.2638174549999,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.167061491975
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 407.30324699000005,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.1191532257249985
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 400.16649586999995,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.06917842735
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 379.55779802750004,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.022479838749998
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 381.2816833074999,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.05070564525
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 375.36846216,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.88394657255
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 377.1918218850001,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.975000000025001
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 368.01996882750007,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.936340725750001
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 357.11782367,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.889919354825001
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 562.1024190375001,
+            "fertilizer": 121,
+            "pesticides": 5.553830645125
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 541.7988636599999,
+            "fertilizer": 121,
+            "pesticides": 5.769052419475001
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 515.1218017075,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.019833669275
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 509.79418550750006,
+            "fertilizer": 118.7725,
+            "pesticides": 6.033140120900002
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 497.9554822125001,
+            "fertilizer": 118.7725,
+            "pesticides": 6.016431451549999
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 505.7744196400001,
+            "fertilizer": 117.03999999999999,
+            "pesticides": 6.258014112825
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 476.68725803000007,
+            "fertilizer": 116.29749999999999,
+            "pesticides": 6.302041330625
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 476.38903529749996,
+            "fertilizer": 115.49749999999999,
+            "pesticides": 6.331426411250002
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 477.75578557999995,
+            "fertilizer": 113.64999999999998,
+            "pesticides": 6.3635836693500005
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 461.0799217225,
+            "fertilizer": 108.84999999999998,
+            "pesticides": 6.364264112924998
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 437.93951811000005,
+            "fertilizer": 104.84999999999998,
+            "pesticides": 6.405569556400001
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 436.8189907825,
+            "fertilizer": 103.24999999999997,
+            "pesticides": 6.395035282375
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 439.55874187,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.351134072649999
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 419.05787474500005,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.309324596874999
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 422.69519017749997,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.2354334677
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 421.2638174549999,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.167061491975
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 407.30324699000005,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.1191532257249985
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 400.16649586999995,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.06917842735
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 379.55779802750004,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.022479838749998
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 381.2816833074999,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 6.05070564525
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 375.36846216,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.88394657255
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 377.1918218850001,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.975000000025001
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 368.01996882750007,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.936340725750001
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 357.11782367,
+            "fertilizer": 100.04999999999998,
+            "pesticides": 5.889919354825001
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 567.4925458675,
+            "fertilizer": 121,
+            "pesticides": 5.480569556400001
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 554.8851697824999,
+            "fertilizer": 121,
+            "pesticides": 5.506199596849999
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 544.1150769075,
+            "fertilizer": 121,
+            "pesticides": 5.722631048374999
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 549.0499918624998,
+            "fertilizer": 121,
+            "pesticides": 5.620715725824999
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 546.7946169875001,
+            "fertilizer": 121,
+            "pesticides": 5.721421370950002
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 547.4052655450001,
+            "fertilizer": 121,
+            "pesticides": 5.811743951575001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 535.6189641174999,
+            "fertilizer": 121,
+            "pesticides": 5.766154233850002
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 541.194274575,
+            "fertilizer": 121,
+            "pesticides": 5.78631552415
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 529.5322037825,
+            "fertilizer": 121,
+            "pesticides": 5.775529233850002
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 530.00122135,
+            "fertilizer": 121,
+            "pesticides": 5.855720766200001
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 502.45493413000014,
+            "fertilizer": 120.505,
+            "pesticides": 6.025932459699998
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 515.3151730924999,
+            "fertilizer": 120.75250000000001,
+            "pesticides": 5.865372983899999
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 525.53770094,
+            "fertilizer": 120.75250000000001,
+            "pesticides": 5.911214717775001
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 528.53038785,
+            "fertilizer": 120.00999999999999,
+            "pesticides": 6.022807459575002
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 512.70798197,
+            "fertilizer": 120.505,
+            "pesticides": 6.020060483850001
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 507.12861002750003,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.13765120965
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 514.7979980150001,
+            "fertilizer": 120.00999999999999,
+            "pesticides": 6.065171370975002
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 510.21202628249995,
+            "fertilizer": 119.2675,
+            "pesticides": 6.100529233875
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 487.534041745,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.140624999950001
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 489.1752197275,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.1763356854749984
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 501.01885101749997,
+            "fertilizer": 119.7625,
+            "pesticides": 6.211542338675
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 492.3983257825001,
+            "fertilizer": 118.7725,
+            "pesticides": 6.229914314524999
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 486.065198735,
+            "fertilizer": 118.02999999999997,
+            "pesticides": 6.138155241975001
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 499.19381232249987,
+            "fertilizer": 119.01999999999998,
+            "pesticides": 6.178780241975001
+          }
+        }
+      ]
+    },
+    {
+      "family": "bau2s",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 567.4925458675,
+            "fertilizer": 121,
+            "pesticides": 5.480569556400001
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 554.8851697824999,
+            "fertilizer": 121,
+            "pesticides": 5.506199596849999
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 544.1150769075,
+            "fertilizer": 121,
+            "pesticides": 5.722631048374999
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 549.0499918624998,
+            "fertilizer": 121,
+            "pesticides": 5.620715725824999
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 546.7946169875001,
+            "fertilizer": 121,
+            "pesticides": 5.721421370950002
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 547.4052655450001,
+            "fertilizer": 121,
+            "pesticides": 5.811743951575001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 535.6189641174999,
+            "fertilizer": 121,
+            "pesticides": 5.766154233850002
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 541.194274575,
+            "fertilizer": 121,
+            "pesticides": 5.78631552415
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 529.5322037825,
+            "fertilizer": 121,
+            "pesticides": 5.775529233850002
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 530.00122135,
+            "fertilizer": 121,
+            "pesticides": 5.855720766200001
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 502.45493413000014,
+            "fertilizer": 120.505,
+            "pesticides": 6.025932459699998
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 515.3151730924999,
+            "fertilizer": 120.75250000000001,
+            "pesticides": 5.865372983899999
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 525.53770094,
+            "fertilizer": 120.75250000000001,
+            "pesticides": 5.911214717775001
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 528.53038785,
+            "fertilizer": 120.00999999999999,
+            "pesticides": 6.022807459575002
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 512.70798197,
+            "fertilizer": 120.505,
+            "pesticides": 6.020060483850001
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 507.12861002750003,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.13765120965
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 514.7979980150001,
+            "fertilizer": 120.00999999999999,
+            "pesticides": 6.065171370975002
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 510.21202628249995,
+            "fertilizer": 119.2675,
+            "pesticides": 6.100529233875
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 487.534041745,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.140624999950001
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 489.1752197275,
+            "fertilizer": 120.25749999999998,
+            "pesticides": 6.1763356854749984
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 501.01885101749997,
+            "fertilizer": 119.7625,
+            "pesticides": 6.211542338675
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 492.3983257825001,
+            "fertilizer": 118.7725,
+            "pesticides": 6.229914314524999
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 486.065198735,
+            "fertilizer": 118.02999999999997,
+            "pesticides": 6.138155241975001
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 499.19381232249987,
+            "fertilizer": 119.01999999999998,
+            "pesticides": 6.178780241975001
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 370.092985908772,
+            "fertilizer": 120.90350877192982,
+            "pesticides": 4.875035370719299
+          }
+        },
+        {
+          "year": 2028,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 354.2603053421053,
+            "fertilizer": 119.43508771929827,
+            "pesticides": 5.437376202596493
+          }
+        },
+        {
+          "year": 2029,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 318.8506769192983,
+            "fertilizer": 112.05087719298241,
+            "pesticides": 5.584624363385966
+          }
+        },
+        {
+          "year": 2030,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 305.2327903859649,
+            "fertilizer": 112.14035087719299,
+            "pesticides": 5.738822863649122
+          }
+        },
+        {
+          "year": 2031,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 305.2348989052631,
+            "fertilizer": 110.76666666666671,
+            "pesticides": 5.778561828017543
+          }
+        },
+        {
+          "year": 2032,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 306.89783297192986,
+            "fertilizer": 110.86666666666663,
+            "pesticides": 5.92966539331579
+          }
+        },
+        {
+          "year": 2033,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 306.18726871578946,
+            "fertilizer": 110.96666666666671,
+            "pesticides": 6.070051641228068
+          }
+        },
+        {
+          "year": 2034,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 291.09333548421057,
+            "fertilizer": 111.06666666666662,
+            "pesticides": 6.124292586298248
+          }
+        },
+        {
+          "year": 2035,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 298.35828959473673,
+            "fertilizer": 110.45438596491228,
+            "pesticides": 6.141465053771933
+          }
+        },
+        {
+          "year": 2036,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 284.2357336947369,
+            "fertilizer": 108.4385964912281,
+            "pesticides": 6.194574137
+          }
+        },
+        {
+          "year": 2037,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 277.5332542614035,
+            "fertilizer": 105.05087719298241,
+            "pesticides": 6.18221208264912
+          }
+        },
+        {
+          "year": 2038,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 278.34783585614036,
+            "fertilizer": 107.28771929824566,
+            "pesticides": 6.1843520090175454
+          }
+        },
+        {
+          "year": 2039,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 280.0659619157895,
+            "fertilizer": 99.12456140350882,
+            "pesticides": 6.184617289157896
+          }
+        },
+        {
+          "year": 2040,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 266.7999819561404,
+            "fertilizer": 98.63333333333324,
+            "pesticides": 6.164933503175437
+          }
+        },
+        {
+          "year": 2041,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 265.63558860175436,
+            "fertilizer": 98.83333333333331,
+            "pesticides": 6.172697368421052
+          }
+        },
+        {
+          "year": 2042,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 251.40597055438593,
+            "fertilizer": 99.03333333333329,
+            "pesticides": 6.121798953052631
+          }
+        },
+        {
+          "year": 2043,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 263.2381723508772,
+            "fertilizer": 99.23333333333342,
+            "pesticides": 6.089983021964914
+          }
+        },
+        {
+          "year": 2044,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 253.8409891263158,
+            "fertilizer": 99.43333333333338,
+            "pesticides": 6.016854131280701
+          }
+        },
+        {
+          "year": 2045,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 230.4856970403509,
+            "fertilizer": 99.63333333333324,
+            "pesticides": 5.967388228596492
+          }
+        },
+        {
+          "year": 2046,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 230.9169441824561,
+            "fertilizer": 99.83333333333331,
+            "pesticides": 5.968856112035087
+          }
+        },
+        {
+          "year": 2047,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 233.98422145263166,
+            "fertilizer": 100.03333333333333,
+            "pesticides": 5.89563879459649
+          }
+        },
+        {
+          "year": 2048,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 223.47616180701755,
+            "fertilizer": 100.23333333333342,
+            "pesticides": 5.90449915117544
+          }
+        },
+        {
+          "year": 2049,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 230.9662715333333,
+            "fertilizer": 100.43333333333338,
+            "pesticides": 5.841981465754387
+          }
+        },
+        {
+          "year": 2050,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 227.23250532982462,
+            "fertilizer": 100.63333333333324,
+            "pesticides": 5.800102574999998
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 366.3764451550001,
+            "fertilizer": 121.09166666666667,
+            "pesticides": 4.861172715083334
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 354.6745890216667,
+            "fertilizer": 118.98666666666668,
+            "pesticides": 5.4535114247333345
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 317.71254144333335,
+            "fertilizer": 111.97666666666662,
+            "pesticides": 5.597311828016666
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 308.242860605,
+            "fertilizer": 112.06666666666666,
+            "pesticides": 5.732913306499999
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 304.7924262333333,
+            "fertilizer": 110.76666666666672,
+            "pesticides": 5.783198924783333
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 306.25622506166667,
+            "fertilizer": 110.86666666666663,
+            "pesticides": 5.944270833316666
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 305.5453466416667,
+            "fertilizer": 110.9666666666667,
+            "pesticides": 6.078830645183331
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 291.5387756666667,
+            "fertilizer": 111.0666666666666,
+            "pesticides": 6.130947580633335
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 298.30112165833333,
+            "fertilizer": 110.49,
+            "pesticides": 6.143497983883335
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 284.83379391166665,
+            "fertilizer": 107.90833333333336,
+            "pesticides": 6.19625336025
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 278.1867629066666,
+            "fertilizer": 105.36666666666663,
+            "pesticides": 6.182426075283331
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 279.03274760666665,
+            "fertilizer": 107.4966666666667,
+            "pesticides": 6.187012768783334
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 277.3865907683333,
+            "fertilizer": 99.74666666666671,
+            "pesticides": 6.183518145133333
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 268.24969973500004,
+            "fertilizer": 98.63333333333323,
+            "pesticides": 6.1568716398499985
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 263.79810078833333,
+            "fertilizer": 98.83333333333333,
+            "pesticides": 6.172681451616667
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 250.1082915083333,
+            "fertilizer": 99.0333333333333,
+            "pesticides": 6.122278225833331
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 264.909712805,
+            "fertilizer": 99.23333333333342,
+            "pesticides": 6.091515456883334
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 252.6072824466667,
+            "fertilizer": 99.43333333333338,
+            "pesticides": 6.023924731166665
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 230.348127895,
+            "fertilizer": 99.63333333333323,
+            "pesticides": 5.9669858870666665
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 230.52160837499997,
+            "fertilizer": 99.83333333333333,
+            "pesticides": 5.971068548366665
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 236.76888977000007,
+            "fertilizer": 100.03333333333332,
+            "pesticides": 5.899008736599998
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 223.57148315833334,
+            "fertilizer": 100.2333333333334,
+            "pesticides": 5.905846774266667
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 230.71192278499996,
+            "fertilizer": 100.4333333333334,
+            "pesticides": 5.846622983866667
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 227.33264560666672,
+            "fertilizer": 100.63333333333323,
+            "pesticides": 5.802671370983331
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 369.5132286316667,
+            "fertilizer": 122.52166666666668,
+            "pesticides": 4.724126344116668
+          }
+        },
+        {
+          "year": 2028,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 362.84877274999997,
+            "fertilizer": 121.82666666666667,
+            "pesticides": 5.102587365616667
+          }
+        },
+        {
+          "year": 2029,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 352.706857155,
+            "fertilizer": 119.73166666666664,
+            "pesticides": 5.168817204266667
+          }
+        },
+        {
+          "year": 2030,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 355.01849624000005,
+            "fertilizer": 120.46666666666667,
+            "pesticides": 5.094237231166668
+          }
+        },
+        {
+          "year": 2031,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 353.76854637333327,
+            "fertilizer": 113.54666666666671,
+            "pesticides": 5.194002016149999
+          }
+        },
+        {
+          "year": 2032,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 352.28707726999994,
+            "fertilizer": 113.62666666666664,
+            "pesticides": 5.308182123716667
+          }
+        },
+        {
+          "year": 2033,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 331.6193781333333,
+            "fertilizer": 111.6516666666667,
+            "pesticides": 5.3227822581166695
+          }
+        },
+        {
+          "year": 2034,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 335.26233971666665,
+            "fertilizer": 111.74666666666663,
+            "pesticides": 5.3314012096833325
+          }
+        },
+        {
+          "year": 2035,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 327.17844879,
+            "fertilizer": 111.16666666666667,
+            "pesticides": 5.312600806483334
+          }
+        },
+        {
+          "year": 2036,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 327.03925611333335,
+            "fertilizer": 111.26666666666672,
+            "pesticides": 5.430141129033335
+          }
+        },
+        {
+          "year": 2037,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 305.5438302833333,
+            "fertilizer": 111.36666666666663,
+            "pesticides": 5.551948924749999
+          }
+        },
+        {
+          "year": 2038,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 315.4133600833333,
+            "fertilizer": 111.4666666666667,
+            "pesticides": 5.45544354835
+          }
+        },
+        {
+          "year": 2039,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 328.00680254999986,
+            "fertilizer": 111.5666666666666,
+            "pesticides": 5.458938172016668
+          }
+        },
+        {
+          "year": 2040,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 334.4769466283333,
+            "fertilizer": 111.66666666666667,
+            "pesticides": 5.601982526916667
+          }
+        },
+        {
+          "year": 2041,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 317.79856523,
+            "fertilizer": 111.76666666666672,
+            "pesticides": 5.679015456999999
+          }
+        },
+        {
+          "year": 2042,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 311.24640066499995,
+            "fertilizer": 111.86666666666663,
+            "pesticides": 5.694539650533334
+          }
+        },
+        {
+          "year": 2043,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 315.54528587333334,
+            "fertilizer": 111.9666666666667,
+            "pesticides": 5.6430107526999995
+          }
+        },
+        {
+          "year": 2044,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 317.16443695000004,
+            "fertilizer": 111.43499999999995,
+            "pesticides": 5.727671370983332
+          }
+        },
+        {
+          "year": 2045,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 305.0199413033334,
+            "fertilizer": 112.16666666666667,
+            "pesticides": 5.744623655933333
+          }
+        },
+        {
+          "year": 2046,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 301.35865667666656,
+            "fertilizer": 112.26666666666672,
+            "pesticides": 5.785584677433333
+          }
+        },
+        {
+          "year": 2047,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 302.12988540833334,
+            "fertilizer": 112.36666666666663,
+            "pesticides": 5.77268145155
+          }
+        },
+        {
+          "year": 2048,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 306.7662047700001,
+            "fertilizer": 106.96166666666673,
+            "pesticides": 5.888793682716668
+          }
+        },
+        {
+          "year": 2049,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 298.9513831433334,
+            "fertilizer": 108.31999999999998,
+            "pesticides": 5.906216397916667
+          }
+        },
+        {
+          "year": 2050,
+          "count": 60,
+          "metricCounts": {
+            "water": 60,
+            "fertilizer": 60,
+            "pesticides": 60
+          },
+          "values": {
+            "water": 302.41530624499995,
+            "fertilizer": 106.64999999999993,
+            "pesticides": 5.864129704333332
+          }
+        }
+      ]
+    },
+    {
+      "family": "bauss",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 370.4613851596492,
+            "fertilizer": 122.40877192982457,
+            "pesticides": 4.7248514431578945
+          }
+        },
+        {
+          "year": 2028,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 363.2633137157895,
+            "fertilizer": 121.67719298245615,
+            "pesticides": 5.098578098508773
+          }
+        },
+        {
+          "year": 2029,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 352.18282259298246,
+            "fertilizer": 119.47192982456139,
+            "pesticides": 5.162209960350879
+          }
+        },
+        {
+          "year": 2030,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 358.1036429157895,
+            "fertilizer": 120.24561403508773,
+            "pesticides": 5.092954159578947
+          }
+        },
+        {
+          "year": 2031,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 356.76456579122794,
+            "fertilizer": 113.69298245614038,
+            "pesticides": 5.2032045840526315
+          }
+        },
+        {
+          "year": 2032,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 351.7039414561403,
+            "fertilizer": 113.77192982456137,
+            "pesticides": 5.284716327175439
+          }
+        },
+        {
+          "year": 2033,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 333.51772348421053,
+            "fertilizer": 111.68771929824564,
+            "pesticides": 5.303692699526318
+          }
+        },
+        {
+          "year": 2034,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 333.9252973578947,
+            "fertilizer": 111.78245614035083,
+            "pesticides": 5.328434493491229
+          }
+        },
+        {
+          "year": 2035,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 325.37755889298245,
+            "fertilizer": 111.16666666666667,
+            "pesticides": 5.308414685947369
+          }
+        },
+        {
+          "year": 2036,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 325.24696914912283,
+            "fertilizer": 111.26666666666671,
+            "pesticides": 5.409716327105263
+          }
+        },
+        {
+          "year": 2037,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 302.34514377192977,
+            "fertilizer": 111.36666666666663,
+            "pesticides": 5.550297113754385
+          }
+        },
+        {
+          "year": 2038,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 316.3476409859649,
+            "fertilizer": 111.46666666666671,
+            "pesticides": 5.461799660403507
+          }
+        },
+        {
+          "year": 2039,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 329.6868048210526,
+            "fertilizer": 111.56666666666662,
+            "pesticides": 5.451347623070176
+          }
+        },
+        {
+          "year": 2040,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 332.74981235087716,
+            "fertilizer": 111.66666666666667,
+            "pesticides": 5.599656904385965
+          }
+        },
+        {
+          "year": 2041,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 315.41936743859645,
+            "fertilizer": 111.76666666666671,
+            "pesticides": 5.669673174877191
+          }
+        },
+        {
+          "year": 2042,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 309.09141285263155,
+            "fertilizer": 111.86666666666663,
+            "pesticides": 5.69335384831579
+          }
+        },
+        {
+          "year": 2043,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 316.7299763894737,
+            "fertilizer": 111.96666666666671,
+            "pesticides": 5.675367855140352
+          }
+        },
+        {
+          "year": 2044,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 314.6061565368421,
+            "fertilizer": 111.40175438596488,
+            "pesticides": 5.715283672894735
+          }
+        },
+        {
+          "year": 2045,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 305.39375056491235,
+            "fertilizer": 112.16666666666667,
+            "pesticides": 5.728724533122806
+          }
+        },
+        {
+          "year": 2046,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 301.6662928385964,
+            "fertilizer": 112.26666666666671,
+            "pesticides": 5.776581069631578
+          }
+        },
+        {
+          "year": 2047,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 302.47955678245614,
+            "fertilizer": 112.36666666666663,
+            "pesticides": 5.791595925228069
+          }
+        },
+        {
+          "year": 2048,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 307.23238631929826,
+            "fertilizer": 107.31578947368426,
+            "pesticides": 5.884532399473685
+          }
+        },
+        {
+          "year": 2049,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 299.2156763087719,
+            "fertilizer": 108.09649122807016,
+            "pesticides": 5.892154782192982
+          }
+        },
+        {
+          "year": 2050,
+          "count": 57,
+          "metricCounts": {
+            "water": 57,
+            "fertilizer": 57,
+            "pesticides": 57
+          },
+          "values": {
+            "water": 302.8877848438596,
+            "fertilizer": 106.96666666666663,
+            "pesticides": 5.852238964368421
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "severeShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 494.3776560375001,
+            "fertilizer": 88,
+            "pesticides": 4.998235887074999
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 468.82519492,
+            "fertilizer": 88,
+            "pesticides": 5.207132056450002
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.43234285750003,
+            "fertilizer": 88,
+            "pesticides": 5.601940524125002
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 434.33913346500003,
+            "fertilizer": 88,
+            "pesticides": 5.808140121000001
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 433.07057210000005,
+            "fertilizer": 88,
+            "pesticides": 5.79599294355
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.1873544450001,
+            "fertilizer": 88,
+            "pesticides": 6.133618951650002
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 412.6589035824999,
+            "fertilizer": 88,
+            "pesticides": 6.2568296370750005
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 429.1615894150001,
+            "fertilizer": 88,
+            "pesticides": 6.33193044355
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 428.40896424000005,
+            "fertilizer": 88,
+            "pesticides": 6.456930443575
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 403.2679125725001,
+            "fertilizer": 88,
+            "pesticides": 6.4879788307499995
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 386.97522775000004,
+            "fertilizer": 88,
+            "pesticides": 6.579208669350001
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 366.59824805000005,
+            "fertilizer": 88,
+            "pesticides": 6.533039314525
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 392.685859735,
+            "fertilizer": 88,
+            "pesticides": 6.498765121025
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 356.23145026500003,
+            "fertilizer": 88,
+            "pesticides": 6.482510080725
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 371.3912600575,
+            "fertilizer": 88,
+            "pesticides": 6.504788306475
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 356.7214961824999,
+            "fertilizer": 88,
+            "pesticides": 6.451436491925
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 356.87298704750003,
+            "fertilizer": 87.85,
+            "pesticides": 6.428402217724998
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 360.2899679325,
+            "fertilizer": 87.25,
+            "pesticides": 6.414591733824999
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 335.6651109025,
+            "fertilizer": 86.8,
+            "pesticides": 6.3782006048249995
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 341.02795504,
+            "fertilizer": 86.5,
+            "pesticides": 6.406426411324999
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 335.67599021000007,
+            "fertilizer": 85.3,
+            "pesticides": 6.300680443550002
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 334.3112489625,
+            "fertilizer": 85.3,
+            "pesticides": 6.313130040300001
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 329.62773352749997,
+            "fertilizer": 85,
+            "pesticides": 6.2932963709
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 334.9450350125,
+            "fertilizer": 85,
+            "pesticides": 6.269581653225001
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "severeNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 494.3776560375001,
+            "fertilizer": 88,
+            "pesticides": 4.998235887074999
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 468.82519492,
+            "fertilizer": 88,
+            "pesticides": 5.207132056450002
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.43234285750003,
+            "fertilizer": 88,
+            "pesticides": 5.601940524125
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 434.33913346500003,
+            "fertilizer": 88,
+            "pesticides": 5.808140121000001
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 433.07057210000005,
+            "fertilizer": 88,
+            "pesticides": 5.79599294355
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.1873544450001,
+            "fertilizer": 88,
+            "pesticides": 6.133618951650001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 412.6589035824999,
+            "fertilizer": 88,
+            "pesticides": 6.2568296370750005
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 429.1615894150001,
+            "fertilizer": 88,
+            "pesticides": 6.33193044355
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 428.40896424000005,
+            "fertilizer": 88,
+            "pesticides": 6.456930443575
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 403.2679125725001,
+            "fertilizer": 88,
+            "pesticides": 6.4879788307499995
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 386.97522775000004,
+            "fertilizer": 88,
+            "pesticides": 6.579208669350001
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 366.59824805000005,
+            "fertilizer": 88,
+            "pesticides": 6.533039314525
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 392.685859735,
+            "fertilizer": 88,
+            "pesticides": 6.498765121025
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 356.23145026500003,
+            "fertilizer": 88,
+            "pesticides": 6.482510080725
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 371.3912600575,
+            "fertilizer": 88,
+            "pesticides": 6.504788306475
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 356.7214961824999,
+            "fertilizer": 88,
+            "pesticides": 6.451436491925001
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 356.87298704750003,
+            "fertilizer": 87.85,
+            "pesticides": 6.428402217724999
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 360.2899679325,
+            "fertilizer": 87.25,
+            "pesticides": 6.414591733824999
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 335.6651109025,
+            "fertilizer": 86.8,
+            "pesticides": 6.3782006048249995
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 341.02795504,
+            "fertilizer": 86.5,
+            "pesticides": 6.406426411324999
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 335.67599021000007,
+            "fertilizer": 85.3,
+            "pesticides": 6.300680443550002
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 334.3112489625,
+            "fertilizer": 85.3,
+            "pesticides": 6.313130040300001
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 329.62773352749997,
+            "fertilizer": 85,
+            "pesticides": 6.2932963709
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 334.9450350125,
+            "fertilizer": 85,
+            "pesticides": 6.269581653225001
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "mildShortage",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 499.506589395,
+            "fertilizer": 88,
+            "pesticides": 4.821471774150002
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 479.4824528825,
+            "fertilizer": 88,
+            "pesticides": 4.829208669375
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 458.6511682075,
+            "fertilizer": 88,
+            "pesticides": 5.038961693575
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.08908071999986,
+            "fertilizer": 88,
+            "pesticides": 5.000050403175
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 459.17033804249996,
+            "fertilizer": 88,
+            "pesticides": 5.147253024225
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 488.82637783499996,
+            "fertilizer": 88,
+            "pesticides": 5.258518145150001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 453.46157782,
+            "fertilizer": 88,
+            "pesticides": 5.22510080645
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 457.9803572125,
+            "fertilizer": 88,
+            "pesticides": 5.233770161249999
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 455.11069127750005,
+            "fertilizer": 88,
+            "pesticides": 5.247832661200001
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 459.49515807499995,
+            "fertilizer": 88,
+            "pesticides": 5.389768145149998
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.4600702599999,
+            "fertilizer": 88,
+            "pesticides": 5.650025201650002
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 448.55093863249994,
+            "fertilizer": 88,
+            "pesticides": 5.470816532274999
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 464.0163157824999,
+            "fertilizer": 88,
+            "pesticides": 5.45385584675
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 454.5246380549999,
+            "fertilizer": 88,
+            "pesticides": 5.6980090726
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.58892763000006,
+            "fertilizer": 88,
+            "pesticides": 5.679687500050002
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.955202715,
+            "fertilizer": 88,
+            "pesticides": 5.801486895175002
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 448.283384415,
+            "fertilizer": 88,
+            "pesticides": 5.7446824597
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.3953653050001,
+            "fertilizer": 88,
+            "pesticides": 5.834248991925
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.50489464000003,
+            "fertilizer": 88,
+            "pesticides": 5.834879032274999
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.09215616250003,
+            "fertilizer": 88,
+            "pesticides": 5.89448084675
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 448.64871615500005,
+            "fertilizer": 88,
+            "pesticides": 5.9988659274
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.6184015275001,
+            "fertilizer": 88,
+            "pesticides": 6.050831653324998
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.3338125125,
+            "fertilizer": 88,
+            "pesticides": 5.9482106855
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.102771965,
+            "fertilizer": 88,
+            "pesticides": 6.000252016125001
+          }
+        }
+      ]
+    },
+    {
+      "family": "oneMha",
+      "condition": "mildNormal",
+      "points": [
+        {
+          "year": 2027,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 499.506589395,
+            "fertilizer": 88,
+            "pesticides": 4.821471774150002
+          }
+        },
+        {
+          "year": 2028,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 479.4824528825,
+            "fertilizer": 88,
+            "pesticides": 4.8292086693749985
+          }
+        },
+        {
+          "year": 2029,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 458.6511682075,
+            "fertilizer": 88,
+            "pesticides": 5.038961693575
+          }
+        },
+        {
+          "year": 2030,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.08908071999986,
+            "fertilizer": 88,
+            "pesticides": 5.000050403175
+          }
+        },
+        {
+          "year": 2031,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 459.17033804249996,
+            "fertilizer": 88,
+            "pesticides": 5.147253024225
+          }
+        },
+        {
+          "year": 2032,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 488.82637783499996,
+            "fertilizer": 88,
+            "pesticides": 5.258518145150001
+          }
+        },
+        {
+          "year": 2033,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 453.46157782,
+            "fertilizer": 88,
+            "pesticides": 5.2251008064499995
+          }
+        },
+        {
+          "year": 2034,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 457.9803572125,
+            "fertilizer": 88,
+            "pesticides": 5.233770161249999
+          }
+        },
+        {
+          "year": 2035,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 455.11069127750005,
+            "fertilizer": 88,
+            "pesticides": 5.2478326611999995
+          }
+        },
+        {
+          "year": 2036,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 459.49515807499995,
+            "fertilizer": 88,
+            "pesticides": 5.389768145149998
+          }
+        },
+        {
+          "year": 2037,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.4600702599999,
+            "fertilizer": 88,
+            "pesticides": 5.650025201650002
+          }
+        },
+        {
+          "year": 2038,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 448.55093863249994,
+            "fertilizer": 88,
+            "pesticides": 5.470816532274999
+          }
+        },
+        {
+          "year": 2039,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 464.0163157824999,
+            "fertilizer": 88,
+            "pesticides": 5.45385584675
+          }
+        },
+        {
+          "year": 2040,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 454.5246380549999,
+            "fertilizer": 88,
+            "pesticides": 5.6980090726
+          }
+        },
+        {
+          "year": 2041,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.58892763000006,
+            "fertilizer": 88,
+            "pesticides": 5.679687500050002
+          }
+        },
+        {
+          "year": 2042,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.955202715,
+            "fertilizer": 88,
+            "pesticides": 5.801486895175002
+          }
+        },
+        {
+          "year": 2043,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 448.283384415,
+            "fertilizer": 88,
+            "pesticides": 5.7446824597
+          }
+        },
+        {
+          "year": 2044,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 449.3953653050001,
+            "fertilizer": 88,
+            "pesticides": 5.834248991925
+          }
+        },
+        {
+          "year": 2045,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.50489464000003,
+            "fertilizer": 88,
+            "pesticides": 5.834879032274999
+          }
+        },
+        {
+          "year": 2046,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.09215616250003,
+            "fertilizer": 88,
+            "pesticides": 5.89448084675
+          }
+        },
+        {
+          "year": 2047,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 448.64871615500005,
+            "fertilizer": 88,
+            "pesticides": 5.9988659274
+          }
+        },
+        {
+          "year": 2048,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.6184015275001,
+            "fertilizer": 88,
+            "pesticides": 6.050831653324998
+          }
+        },
+        {
+          "year": 2049,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 443.3338125125,
+            "fertilizer": 88,
+            "pesticides": 5.948210685499999
+          }
+        },
+        {
+          "year": 2050,
+          "count": 40,
+          "metricCounts": {
+            "water": 40,
+            "fertilizer": 40,
+            "pesticides": 40
+          },
+          "values": {
+            "water": 444.102771965,
+            "fertilizer": 88,
+            "pesticides": 6.000252016125
+          }
+        }
+      ]
+    }
+  ]
+}

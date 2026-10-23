@@ -1,0 +1,11 @@
+.economic-table.environment-table { min-width: 1060px; }
+.environment-table .environment-group-column { width: 19%; }
+.environment-table .environment-season-column { width: 13%; }
+.environment-table .environment-climate-column { width: 12%; }
+.environment-table .environment-resource-column { width: 14%; }
+.environment-table .environment-awd-column { width: 12%; }
+.environment-table .environment-number-column { width: 15%; }
+.environment-kpis.scenario-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.environment-bar-grid { margin-top: 26px; }
+@media (max-width: 800px) { .environment-kpis.scenario-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .environment-kpis.scenario-kpis { grid-template-columns: minmax(0, 1fr); } }

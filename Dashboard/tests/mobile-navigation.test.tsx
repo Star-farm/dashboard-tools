@@ -91,9 +91,9 @@ describe('mobile header menu', () => {
     fireEvent.click(economics)
     const comparison = screen.getByRole('button', { name: 'So sánh' })
     fireEvent.click(comparison)
-    expect(screen.getByRole('button', { name: 'BAU3S vs 1Mha' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'BAU3S vs 1Mha' })).toBeInTheDocument()
     fireEvent.click(comparison)
-    expect(screen.queryByRole('button', { name: 'BAU3S vs 1Mha' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'BAU3S vs 1Mha' })).not.toBeInTheDocument()
     fireEvent.click(economics)
     expect(economics).toHaveAttribute('aria-expanded', 'false')
     fireEvent.click(screen.getByRole('button', { name: 'Đóng menu' }))
@@ -106,11 +106,15 @@ describe('mobile header menu', () => {
     expect(document.body.style.overflow).toBe('')
   })
 
-  it('opens a topic from the homepage and restores desktop navigation when resized', () => {
+  it('opens the resource hub, opens its mobile menu and restores desktop navigation when resized', async () => {
     window.history.replaceState(null, '', '#home')
     render(<App />)
-    fireEvent.click(screen.getByRole('button', { name: 'Xem menu: Tài nguyên' }))
+    fireEvent.click(screen.getByRole('link', { name: 'Khám phá Tài nguyên' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Khám phá Tài nguyên' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Mở menu' }))
     const dialog = screen.getByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Tài nguyên' }))
     expect(within(dialog).getByRole('button', { name: 'Tài nguyên' })).toHaveAttribute('aria-expanded', 'true')
     expect(within(dialog).getByRole('button', { name: 'Tổng quan' })).toBeInTheDocument()
 

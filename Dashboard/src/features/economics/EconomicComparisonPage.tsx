@@ -6,6 +6,8 @@ import { comparisonMetrics, selectComparisonCohort } from './comparisonData'
 import type { ComparisonClimate, ComparisonResource, EconomicComparisonData } from './comparisonData'
 import { economicsText } from './economicsText'
 import { comparisonText } from './comparisonText'
+import { comparisonSummary } from './comparisonAnalysis'
+import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import ComparisonBarChart from './ComparisonBarChart'
 import '../../styles/economic-comparison.css'
 
@@ -31,6 +33,7 @@ export default function EconomicComparisonPage({ language }: { language: Languag
         {(climate !== 'all' || resource !== 'all') && <button className="comparison-reset" type="button" onClick={() => { setClimate('all'); setResource('all') }}>{text.reset}<span aria-hidden="true"> ↺</span></button>}
       </section>
       <p className="sr-only" role="status">{t.climate}: {climate === 'all' ? t.all : t[climate]}. {t.resource}: {resource === 'all' ? t.all : resource === 'normal' ? text.normalResource : t.shortage}.</p>
+      {cohort && <aside className="comparison-summary" aria-labelledby="comparison-summary-title"><h2 id="comparison-summary-title">{text.summary}</h2><p><EmphasizedNumbers text={comparisonSummary(cohort, language, comparison.startYear, comparison.endYear)} /></p></aside>}
       {cohort ? <div className="comparison-grid">{comparisonMetrics.map((metric) => <ComparisonBarChart key={metric} metric={metric} cohort={cohort} language={language} startYear={comparison.startYear} endYear={comparison.endYear} />)}</div> : <p className="comparison-no-data">{text.noData}</p>}
     </div>
   )

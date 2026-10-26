@@ -17,7 +17,7 @@ const en: Record<keyof typeof vi, string> = {
   scenarioColumns: 'Scenario information', financialColumns: 'Financial performance', productionColumns: 'Production',
   tableCaption: 'Mean economic indicators by scenario', mobileResults: 'Economic scenarios', sort: 'Sort by', unit: 'Unit',
   roiNote: 'Mean net income / Mean production cost × 100%.',
-  moneyUnit: '$/ha', yieldUnit: 't/ha', laborUnit: 'hours/ha',
+  moneyUnit: 'USD/ha', yieldUnit: 'ton/ha', laborUnit: 'hours/ha',
   group: 'Scenario group', season: 'Season type', climate: 'Weather', resource: 'Resource scenario', awd: 'AWD adoption',
   bau: 'Business as usual', oneMha: '1Mha', sustainable: 'Sustainable', threeSeasons: '3 seasons', twoSeasons: '2 seasons', mild: 'Normal', severe: 'Severe weather', normal: 'Normal economy', neutral: 'Neutral', shortage: 'Resource shortage', with: 'With AWD', without: 'Without AWD', mixed: 'With and without AWD',
   income: 'Net income', cost: 'Production cost', straw: 'Straw value', roi: 'Return on investment', margin: 'Profit margin', yield: 'Average yield', labor: 'Labor intensity',

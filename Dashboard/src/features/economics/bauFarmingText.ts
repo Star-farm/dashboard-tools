@@ -11,7 +11,7 @@ const vi = {
   charts: 'Diễn biến các chỉ số theo năm',
   insight: 'Nhận xét',
   unavailable: 'Chưa đủ số liệu',
-  method: 'Các KPI tổng hợp bốn tổ hợp thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuối kỳ so với năm đầu kỳ; tỷ suất lợi nhuận so sánh bằng điểm phần trăm.',
+  method: 'Các KPI tổng hợp bốn nhóm điều kiện thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuôi giai đoạn so với năm đầu giai đoạn; tỷ suất lợi nhuận so sánh bằng điểm phần trăm.',
 }
 const en: Record<keyof typeof vi, string> = {
   title: 'Business as usual · 3 seasons',

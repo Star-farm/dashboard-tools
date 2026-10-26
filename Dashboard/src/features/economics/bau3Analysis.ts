@@ -60,7 +60,7 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
   const period = `${data.startYear}–${data.endYear}`
   const direction = language === 'vi'
-    ? higher === count ? `cao hơn ở cả ${count} tổ hợp` : lower === count ? `thấp hơn ở cả ${count} tổ hợp` : [higher ? `cao hơn ở ${higher}/${count} tổ hợp` : '', lower ? `thấp hơn ở ${lower}/${count} tổ hợp` : '', equal ? `tương đương ở ${equal}/${count} tổ hợp` : ''].filter(Boolean).join(', ')
+    ? higher === count ? `cao hơn ở cả ${count} nhóm điều kiện` : lower === count ? `thấp hơn ở cả ${count} nhóm điều kiện` : [higher ? `cao hơn ở ${higher}/${count} nhóm điều kiện` : '', lower ? `thấp hơn ở ${lower}/${count} nhóm điều kiện` : '', equal ? `tương đương ở ${equal}/${count} nhóm điều kiện` : ''].filter(Boolean).join(', ')
     : higher === count ? `higher in all ${count} combinations` : lower === count ? `lower in all ${count} combinations` : [higher ? `higher in ${higher}/${count} combinations` : '', lower ? `lower in ${lower}/${count} combinations` : '', equal ? `similar in ${equal}/${count} combinations` : ''].filter(Boolean).join(', ')
   const relative = metric !== 'margin' && stats.every((stat) => stat.relative !== null)
   const differences = stats.map((stat) => relative ? stat.relative! : stat.difference)
@@ -75,25 +75,25 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const focus = stats.find((stat) => stat.condition === 'severeShortage') ?? stats[0]
   const unit = bau3Unit(metric, language)
   const last = language === 'vi'
-    ? `Ở tổ hợp “${t[focus.condition]}”, năm ${focus.last.year}, ${baseline} đạt ${formatBau3Value(focus.last.bau, metric, language)} ${unit}, còn 1Mha đạt ${formatBau3Value(focus.last.one, metric, language)} ${unit}.`
+    ? `Ở nhóm điều kiện “${t[focus.condition]}”, năm ${focus.last.year}, ${baseline} đạt ${formatBau3Value(focus.last.bau, metric, language)} ${unit}, còn 1Mha đạt ${formatBau3Value(focus.last.one, metric, language)} ${unit}.`
     : `For “${t[focus.condition]}” in ${focus.last.year}, ${baseline} reaches ${formatBau3Value(focus.last.bau, metric, language)} ${unit}, versus ${formatBau3Value(focus.last.one, metric, language)} ${unit} for 1Mha.`
   let conclusion: string
   if (metric === 'income' || metric === 'margin') {
     conclusion = language === 'vi'
-      ? higher === count ? 'Vì vậy, nên ưu tiên 1Mha để cải thiện hiệu quả kinh tế, đồng thời bảo đảm nguồn vốn và kiểm soát chi phí khi triển khai.' : 'Việc triển khai 1Mha cần chọn điều kiện có lợi thế về khả năng sinh lời và kiểm soát chi phí theo từng tổ hợp.'
+      ? higher === count ? 'Vì vậy, nên ưu tiên 1Mha để cải thiện hiệu quả kinh tế, đồng thời bảo đảm nguồn vốn và kiểm soát chi phí khi triển khai.' : 'Việc triển khai 1Mha cần chọn điều kiện có lợi thế về khả năng sinh lời và kiểm soát chi phí theo từng nhóm điều kiện.'
       : higher === count ? 'This supports prioritizing 1Mha to improve economic performance, with sufficient financing and cost control during implementation.' : 'Implementation of 1Mha should target conditions with a profitability advantage and manage costs for each combination.'
   } else if (metric === 'cost') {
     conclusion = language === 'vi'
-      ? higher === count ? 'Do đó, triển khai 1Mha cần dự trù vốn cao hơn, tối ưu vật tư và bảo đảm khả năng tiếp cận tài nguyên, nhất là khi khan hiếm.' : 'Cần lựa chọn tổ hợp có chi phí phù hợp và lập kế hoạch vốn, vật tư trước khi triển khai 1Mha.'
+      ? higher === count ? 'Do đó, triển khai 1Mha cần dự trù vốn cao hơn, tối ưu vật tư và bảo đảm khả năng tiếp cận tài nguyên, nhất là khi khan hiếm.' : 'Cần lựa chọn nhóm điều kiện có chi phí phù hợp và lập kế hoạch vốn, vật tư trước khi triển khai 1Mha.'
       : higher === count ? 'Implementing 1Mha therefore requires a larger budget, efficient input use and reliable resource access, particularly under shortages.' : 'Implementation of 1Mha should select affordable combinations and plan financing and inputs in advance.'
   } else if (metric === 'yield') {
     const resilient = focus.condition.startsWith('severe') && focus.last.one > focus.last.bau
     conclusion = language === 'vi'
-      ? resilient ? `1Mha cho thấy khả năng duy trì năng suất tốt hơn ở điều kiện khắc nghiệt cuối kỳ; cần tiếp tục cải thiện năng suất ở những tổ hợp còn thấp hơn ${baseline}.` : `Cần cải thiện kỹ thuật và lựa chọn giống phù hợp khi triển khai 1Mha tại các tổ hợp năng suất còn thấp hơn ${baseline}.`
+      ? resilient ? `1Mha cho thấy khả năng duy trì năng suất tốt hơn ở điều kiện khắc nghiệt cuối kỳ; cần tiếp tục cải thiện năng suất ở những nhóm điều kiện còn thấp hơn ${baseline}.` : `Cần cải thiện kỹ thuật và lựa chọn giống phù hợp khi triển khai 1Mha tại các nhóm điều kiện năng suất còn thấp hơn ${baseline}.`
       : resilient ? `1Mha maintains a higher yield under the adverse end-period conditions; further yield improvements are needed in combinations where it trails ${baseline}.` : `Implementing 1Mha requires improved practices and suitable varieties in combinations where its yield trails ${baseline}.`
   } else {
     conclusion = language === 'vi'
-      ? higher === count ? `1Mha cần nhiều giờ lao động hơn ${baseline} ở tất cả tổ hợp; cần dự trù nhân công, đào tạo và cơ giới hóa phù hợp khi triển khai.` : lower === count ? `1Mha cần ít giờ lao động hơn ${baseline} ở tất cả tổ hợp; nên tận dụng lợi thế này cùng đào tạo và cơ giới hóa phù hợp.` : 'Kế hoạch triển khai 1Mha cần bố trí nhân công và cơ giới hóa theo từng điều kiện, vì mức tiết kiệm lao động khác nhau giữa các tổ hợp.'
+      ? higher === count ? `1Mha cần nhiều giờ lao động hơn ${baseline} ở tất cả nhóm điều kiện; cần dự trù nhân công, đào tạo và cơ giới hóa phù hợp khi triển khai.` : lower === count ? `1Mha cần ít giờ lao động hơn ${baseline} ở tất cả nhóm điều kiện; nên tận dụng lợi thế này cùng đào tạo và cơ giới hóa phù hợp.` : 'Kế hoạch triển khai 1Mha cần bố trí nhân công và cơ giới hóa theo từng điều kiện, vì mức tiết kiệm lao động khác nhau giữa các nhóm điều kiện.'
       : higher === count ? `1Mha requires more labor hours than ${baseline} in every combination; implementation needs suitable staffing, training and mechanization.` : lower === count ? `1Mha requires fewer labor hours than ${baseline} in every combination; this advantage should be supported by appropriate training and mechanization.` : 'Plans for implementing 1Mha should adapt staffing and mechanization to each condition, as labor savings vary across combinations.'
   }
   return { higher, lower, equal, count, comparison, last, conclusion, paragraph: `${comparison} ${last} ${conclusion}` }

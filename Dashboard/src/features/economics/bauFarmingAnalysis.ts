@@ -49,17 +49,17 @@ function farmingConclusion(stats: BauFarmingStats, language: Language, family: B
     : { bau3s: 'three-season profitability', bau2s: 'two-season profitability', bauss: 'sustainable business-as-usual profitability', oneMha: '1Mha profitability' }[family]
   switch (stats.metric) {
     case 'income': return vi
-      ? declining ? `Thu nhập suy giảm cho thấy cần ưu tiên ổn định tài nguyên đầu vào, kiểm soát chi phí và đánh giá lại khả năng sinh lời của ${model} trong các điều kiện bất lợi.` : 'Cần duy trì khả năng tiếp cận tài nguyên và kiểm soát chi phí để bảo vệ mức thu nhập, đồng thời theo dõi các tổ hợp có kết quả thấp.'
+      ? declining ? `Thu nhập suy giảm cho thấy cần ưu tiên ổn định tài nguyên đầu vào, kiểm soát chi phí và đánh giá lại khả năng sinh lời của ${model} trong các điều kiện bất lợi.` : 'Cần duy trì khả năng tiếp cận tài nguyên và kiểm soát chi phí để bảo vệ mức thu nhập, đồng thời theo dõi các nhóm điều kiện có kết quả thấp.'
       : declining ? `Declining income calls for more reliable resource access, cost control and a reassessment of ${model} under adverse conditions.` : 'Reliable resource access and cost control can help protect income, while lower-performing combinations require closer monitoring.'
     case 'cost': return vi
-      ? 'Cần dự trù vốn theo từng điều kiện và ưu tiên sử dụng vật tư hiệu quả, nhất là ở các tổ hợp có chi phí tăng; đối chiếu với thu nhập để tránh thu hẹp lợi nhuận.'
+      ? 'Cần dự trù vốn theo từng điều kiện và ưu tiên sử dụng vật tư hiệu quả, nhất là ở các nhóm điều kiện có chi phí tăng; đối chiếu với thu nhập để tránh thu hẹp lợi nhuận.'
       : 'Financing should reflect each condition, with efficient input use where costs rise; costs must be assessed alongside income to protect profitability.'
     case 'yield': return vi
       ? declining ? 'Năng suất giảm ở cuối kỳ đặt ra nhu cầu điều chỉnh giống, lịch mùa vụ và kỹ thuật canh tác theo thời tiết, đồng thời bảo đảm tài nguyên đầu vào.' : 'Cần duy trì kỹ thuật canh tác phù hợp với thời tiết và kiểm tra độ ổn định năng suất trước khi mở rộng sản xuất.'
       : declining ? 'Lower end-period yields support adapting varieties, seasonal calendars and farming practices to weather conditions while maintaining resource access.' : 'Weather-appropriate practices and yield stability should be assessed before expanding production.'
     case 'margin': return vi
-      ? declining ? 'Biên lợi nhuận thu hẹp làm giảm dư địa chống chịu trước các cú sốc; cần kiểm soát chi phí và ưu tiên các điều kiện duy trì khả năng sinh lời.' : 'Cần duy trì kỷ luật chi phí và theo dõi các tổ hợp có biên lợi nhuận thấp để bảo vệ khả năng sinh lời.'
-      : declining ? 'Narrower margins leave less room to absorb shocks; cost control and conditions that sustain profitability should take priority.' : 'Cost discipline and monitoring low-margin combinations remain important to sustain profitability.'
+      ? declining ? 'Biên lợi nhuận giảm khiến nông dân dễ bị ảnh hưởng bởi biến động giá cả và chi phí sản xuất. Cần tối ưu chi phí đầu vào để duy trì lợi nhuận và giảm rủi ro thua lỗ.' : 'Cần duy trì kỷ luật chi phí và theo dõi các nhóm điều kiện có biên lợi nhuận thấp để bảo vệ khả năng sinh lời.'
+      : declining ? 'Declining profit margins make farmers more vulnerable to price fluctuations and rising production costs. Optimizing input costs is essential to maintaining profitability and reducing the risk of financial losses.' : 'Cost discipline and monitoring low-margin combinations remain important to sustain profitability.'
     case 'labor': return vi
       ? 'Giảm giờ lao động không tự động đồng nghĩa với hiệu quả cao hơn: cần đối chiếu với năng suất và thu nhập, rồi bố trí nhân công và cơ giới hóa theo từng điều kiện.'
       : 'Fewer labor hours do not automatically mean greater efficiency: assess them alongside yield and income, then adapt staffing and mechanization to each condition.'
@@ -81,7 +81,7 @@ export function analyzeBauFarming(data: Bau3Data, metric: Bau3Metric, language: 
   const higher = stats.conditions.filter((condition) => condition.difference > .000001).length
   const equal = stats.conditions.length - lower - higher
   const directions = vi
-    ? [lower ? `giảm ở ${lower}/${stats.conditions.length} tổ hợp` : '', higher ? `tăng ở ${higher}/${stats.conditions.length} tổ hợp` : '', equal ? `không đổi ở ${equal}/${stats.conditions.length} tổ hợp` : '']
+    ? [lower ? `giảm ở ${lower}/${stats.conditions.length} nhóm điều kiện` : '', higher ? `tăng ở ${higher}/${stats.conditions.length} nhóm điều kiện` : '', equal ? `không đổi ở ${equal}/${stats.conditions.length} nhóm điều kiện` : '']
     : [lower ? `decreases in ${lower}/${stats.conditions.length} combinations` : '', higher ? `increases in ${higher}/${stats.conditions.length} combinations` : '', equal ? `is unchanged in ${equal}/${stats.conditions.length} combinations` : '']
   const changes = stats.conditions.flatMap((condition) => condition.change === null ? [] : [condition.change])
   const changeUnit = metric === 'margin' ? vi ? ' điểm phần trăm' : ' percentage points' : '%'
@@ -122,7 +122,7 @@ export function bauFarmingSummary(data: Bau3Data, language: Language, family: Ba
   const normal = incomeEnds.filter(({ condition }) => condition.endsWith('Normal'))
   const resourceRisk = shortage.length === 2 && normal.length === 2 && shortage.every((a) => normal.every((b) => a.end < b.end))
   const risk = resourceRisk ? vi
-    ? `Các tổ hợp thiếu tài nguyên có thu nhập cuối kỳ thấp hơn cả hai tổ hợp tài nguyên bình thường, cho thấy rủi ro kinh tế cần được xem xét theo từng điều kiện.`
+    ? `Các nhóm điều kiện thiếu tài nguyên có thu nhập cuối kỳ thấp hơn cả hai nhóm điều kiện tài nguyên bình thường, cho thấy rủi ro kinh tế cần được xem xét theo từng điều kiện.`
     : `Both resource-shortage combinations have lower end-period income than either normal-resource combination, indicating that economic risk should be assessed for each condition.` : ''
   const conclusion = vi
     ? 'Nhìn chung, cần ưu tiên khả năng sinh lời, ổn định tài nguyên và quản lý chi phí; việc giảm lao động chỉ có ý nghĩa tích cực khi đi cùng năng suất và thu nhập được duy trì.'

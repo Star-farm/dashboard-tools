@@ -17,7 +17,7 @@ const en: Record<keyof typeof vi, string> = {
   oneMhaDescription: 'High-quality, low-emission rice',
   income: 'Net income', yield: 'Average yield', labor: 'Labor intensity', cost: 'Production cost', margin: 'Profit margin',
   severeShortage: 'Severe weather · Resource shortage', severeNormal: 'Severe weather · Normal resources', mildShortage: 'Normal weather · Resource shortage', mildNormal: 'Normal weather · Normal resources',
-  unit: 'Unit', moneyUnit: '$/ha', yieldUnit: 't/ha', laborUnit: 'hours/ha', year: 'Year', insight: 'What the comparison shows', noData: 'Not enough data to compare.',
+  unit: 'Unit', moneyUnit: 'USD/ha', yieldUnit: 'ton/ha', laborUnit: 'hours/ha', year: 'Year', insight: 'What the comparison shows', noData: 'Not enough data to compare.',
   overlap: 'Some lines overlap because their values are the same.',
 }
 export const bau3Text = { vi, en }

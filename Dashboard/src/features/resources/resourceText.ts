@@ -10,7 +10,7 @@ const vi = {
   bau: 'Thường lệ', oneMha: '1Mha', bau3s: 'Thường lệ · 3 mùa vụ', bau2s: 'Thường lệ · 2 mùa vụ', bauss: 'Thường lệ · Bền vững',
   bau3Short: 'BAU 3 vụ', bau2Short: 'BAU 2 vụ', baussShort: 'BAU bền vững',
   filters: 'Lọc biểu đồ tài nguyên', allWeather: 'Tất cả thời tiết', allResources: 'Tất cả tài nguyên', normal: 'Tài nguyên bình thường',
-  method: 'Các KPI tổng hợp bốn tổ hợp thời tiết và tài nguyên. Mức thay đổi so sánh năm cuối kỳ với năm đầu kỳ.',
+  method: 'Các KPI tổng hợp bốn nhóm điều kiện thời tiết và tài nguyên. Mức thay đổi so sánh năm cuối giai đoạn với năm đầu giai đoạn.',
   conclusion: 'Cần đối chiếu mức sử dụng đầu vào với năng suất và điều kiện canh tác để đánh giá hiệu quả tài nguyên, đồng thời điều chỉnh lượng tưới, phân bón và thuốc theo nhu cầu thực tế.',
   waterConclusion: 'Nên điều chỉnh lịch tưới theo nhu cầu cây lúa và khả năng cấp nước; cân nhắc AWD khi điều kiện đồng ruộng phù hợp, đồng thời theo dõi năng suất để đánh giá mức tiết kiệm.',
   fertilizerConclusion: 'Cần cân đối lượng đạm theo nhu cầu cây trồng, chia thời điểm bón hợp lý và đối chiếu với năng suất; lượng bón thấp hơn chưa đủ để kết luận hiệu quả dinh dưỡng cao hơn.',

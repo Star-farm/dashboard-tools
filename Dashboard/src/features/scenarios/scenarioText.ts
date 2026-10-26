@@ -22,7 +22,7 @@ const vi = {
   groupthreeSeasons: 'Thường lệ · 3 mùa vụ',
   grouptwoSeasons: 'Thường lệ · 2 mùa vụ',
   groupsustainable: 'Thường lệ · Bền vững',
-  grouponeMha: 'Một triệu héc-ta (1Mha)',
+  grouponeMha: 'Một triệu hecta (1Mha)',
   laborUnit: 'giờ/ha',
   yieldUnit: 'tấn/ha',
   waterUnit: 'mm',
@@ -65,6 +65,6 @@ const en: Record<keyof typeof vi, string> = {
 
 export const scenarioText = { vi, en }
 export const scenarioMetricLabels: Record<Language, Record<ScenarioMetric, string>> = {
-  vi: { income: 'Thu nhập ròng trên héc-ta', straw: 'Giá trị rơm trên héc-ta', cost: 'Chi phí sản xuất', labor: 'Thời gian lao động', yield: 'Năng suất trung bình', margin: 'Tỷ suất lợi nhuận', roi: 'Tỷ suất hoàn vốn (ROI)', water: 'Sử dụng nước', fertilizer: 'Sử dụng phân bón gốc nitơ', pesticides: 'Sử dụng thuốc trừ sâu', methane: 'Phát thải khí metan', intensity: 'Cường độ phát thải' },
+  vi: { income: 'Thu nhập ròng trên hecta', straw: 'Giá trị rơm trên hecta', cost: 'Chi phí sản xuất', labor: 'Thời gian lao động', yield: 'Năng suất trung bình', margin: 'Tỷ suất lợi nhuận', roi: 'Tỷ suất hoàn vốn (ROI)', water: 'Sử dụng nước', fertilizer: 'Sử dụng phân bón gốc nitơ', pesticides: 'Sử dụng thuốc trừ sâu', methane: 'Phát thải khí metan', intensity: 'Cường độ phát thải' },
   en: { income: 'Net income per hectare', straw: 'Straw value per hectare', cost: 'Production cost', labor: 'Labor requirements', yield: 'Average yield', margin: 'Profit margin', roi: 'Return on investment (ROI)', water: 'Water usage', fertilizer: 'Nitrogen-based fertilizer usage', pesticides: 'Pesticide usage', methane: 'Methane emissions', intensity: 'Emission intensity' },
 }

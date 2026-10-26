@@ -55,7 +55,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
               const value = current.values[id]
               const change = relativeChange(value, baseline.values[id])
               const tone = change === null || Math.abs(change) < 0.000001 ? 'neutral' : (change > 0) === (metric.preferred === 'higher') ? 'good' : 'bad'
-              const unit = metric.kind === 'money' ? currency === 'VND' ? 'VNĐ/ha' : '$/ha' : metric.kind === 'percentage' ? '%' : t[`${metric.kind}Unit`]
+              const unit = metric.kind === 'money' ? currency === 'VND' ? 'VNĐ/ha' : 'USD/ha' : metric.kind === 'percentage' ? '%' : t[`${metric.kind}Unit`]
               const formatted = value === null ? '—' : metric.kind === 'money' && currency === 'VND' ? new Intl.NumberFormat(language, { maximumFractionDigits: 0 }).format(value) : number.format(value)
               return <div className="scenario-kpi" key={id}><dt title={id === 'roi' ? t.roiNote : undefined}>{scenarioMetricLabels[language][id]}</dt><dd className="scenario-kpi-value"><strong>{formatted}</strong><span>{unit}</span></dd><dd className="scenario-kpi-change">{change === null ? <span>{t.changeUnavailable}</span> : <><span className={`scenario-change ${tone}`}><span aria-hidden="true">{Math.abs(change) < 0.000001 ? '−' : change > 0 ? '↑' : '↓'}</span> {percent.format(Math.abs(change))}%</span><span>{t.comparedWith} ({baselineYears})</span></>}</dd></div>
             })}

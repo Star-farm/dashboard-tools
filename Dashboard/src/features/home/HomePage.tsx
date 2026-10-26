@@ -35,7 +35,6 @@ export default function HomePage({ language }: { language: Language }) {
             <a className="hero-primary" href="#home-explore" ref={exploreRef}>{t.heroExplore}<span aria-hidden="true">↓</span></a>
           </div>
         </div>
-        <div className="hero-bottom"><span>{t.heroFootnote}</span><a href="#home-explore">{t.scrollExplore}<span aria-hidden="true">↓</span></a></div>
       </section>
 
       <section className="home-explore content-width" id="home-explore" aria-label={t.homeExplore}>

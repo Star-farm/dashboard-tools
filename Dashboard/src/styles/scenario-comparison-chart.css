@@ -1,9 +1,12 @@
 .scenario-comparison-chart h3 { color: #30472d; }
 .scenario-comparison-chart h3 > span { color: #819275; padding-inline: 6px; }
 .comparison-model-key { display: flex; flex-wrap: wrap; gap: 10px 24px; padding: 16px 22px 8px; color: #52654a; font-size: 12px; }
-.comparison-model-key > span { display: inline-flex; align-items: center; gap: 8px; }
+.comparison-model-key > button { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; max-width: 100%; padding: 7px 11px; border: 1px solid #c5d1bc; border-radius: 5px; background: transparent; color: #52654a; font: inherit; text-align: left; line-height: 1.5; }
+.comparison-model-key > button[aria-pressed="true"] { border-color: #527441; background: #edf2e5; color: #254f3d; }
+.comparison-model-key > button:hover { border-color: #527441; color: #254f3d; }
+.comparison-model-key > button:active { transform: none; }
 .model-line { display: inline-block; width: 25px; border-top: 3px solid #30472d; }
-.model-line-bau { opacity: .42; border-top-width: 2px; }
+.model-line-bau { opacity: .42; border-top-width: 2px; border-top-style: dashed; }
 .comparison-year-values i { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; display: inline-block; }
 .comparison-combined-plot { height: clamp(300px, 30vw, 400px); }
 .comparison-year-details { margin: 10px 22px 14px; padding: 16px 18px 10px; border: 1px solid #d8e1d0; border-radius: 6px; background: #f6f8f0; }

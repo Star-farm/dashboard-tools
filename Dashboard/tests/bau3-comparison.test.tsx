@@ -72,7 +72,7 @@ describe('BAU 3 seasons data and observations', () => {
     expect(data.series.reduce((sum, series) => sum + series.USD.reduce((total, point) => total + point.count, 0), 0)).toBe(9528)
   })
 
-  it('reports economic benefits and trade-offs, uses percentage points for margins and changes conclusions with the data', () => {
+  it('reports economic benefits and trade-offs, uses pp for margins and changes conclusions with the data', () => {
     const income = analyzeBau3(data, 'income', 'vi')!
     expect(income).toMatchObject({ higher: 4, lower: 0, count: 4 })
     expect(income.paragraph).toContain('81,3–151,4')
@@ -80,8 +80,8 @@ describe('BAU 3 seasons data and observations', () => {
     expect(analyzeBau3(data, 'cost', 'vi')!.conclusion).toContain('dự trù vốn cao hơn')
     expect(analyzeBau3(data, 'yield', 'vi')).toMatchObject({ higher: 2, lower: 2 })
     expect(analyzeBau3(data, 'labor', 'vi')).toMatchObject({ higher: 2, lower: 2 })
-    expect(analyzeBau3(data, 'margin', 'vi')!.paragraph).toContain('điểm phần trăm')
-    expect(analyzeBau3(data, 'margin', 'en')!.paragraph).toContain('percentage points')
+    expect(analyzeBau3(data, 'margin', 'vi')!.paragraph).toContain('điểm %')
+    expect(analyzeBau3(data, 'margin', 'en')!.paragraph).toContain('pp')
     const changed = structuredClone(data)
     for (const series of changed.series.filter((series) => series.family === 'oneMha')) for (const currency of ['USD', 'VND'] as const) for (const point of series[currency]) point.income = -100
     expect(analyzeBau3(changed, 'income', 'vi')).toMatchObject({ higher: 0, lower: 4 })
@@ -120,7 +120,9 @@ describe('BAU 3 seasons comparison page', () => {
       expect(paths.map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#3478c6', '#9362bc', '#ce762b', '#589044']))
       expect(paths.slice(0, 4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('0.42'))
       expect(paths.slice(4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
-      for (const path of paths) { expect(path.getAttribute('d')).not.toMatch(/[CQ]/); expect(path).not.toHaveAttribute('stroke-dasharray') }
+      for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
+      for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
+      for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
       expect(card.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
       expect(card.querySelector('header')).toHaveTextContent('Đơn vị: VNĐ/ha')
     }
@@ -128,7 +130,7 @@ describe('BAU 3 seasons comparison page', () => {
       expect(insight.querySelectorAll('p')).toHaveLength(1)
       expect(insight.querySelectorAll('strong').length).toBeGreaterThan(4)
     }
-    expect(screen.getByRole('complementary', { name: 'Nhận xét · Tỷ suất lợi nhuận' })).toHaveTextContent('điểm phần trăm')
+    expect(screen.getByRole('complementary', { name: 'Nhận xét · Tỷ suất lợi nhuận' })).toHaveTextContent('điểm %')
   })
 
   it('shows all four conditions with the selected year and units in the tooltip', async () => {
@@ -143,10 +145,10 @@ describe('BAU 3 seasons comparison page', () => {
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
     expect(tooltip).toHaveStyle({ visibility: 'visible' })
-    for (const amount of ['593.43', '627.16', '608.57', '630.13']) expect(tooltip).toHaveTextContent(`${amount} $/ha`)
+    for (const amount of ['593.43', '627.16', '608.57', '630.13']) expect(tooltip).toHaveTextContent(`${amount} USD/ha`)
     hover(dots[23])
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
-    expect(tooltip).toHaveTextContent('37.55 $/ha')
+    expect(tooltip).toHaveTextContent('37.55 USD/ha')
   })
 
   it('connects the mobile menu and direct URL and translates units and observations', async () => {
@@ -167,7 +169,7 @@ describe('BAU 3 seasons comparison page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(document.title).toBe('BAU 3 seasons vs 1Mha | STAR FARM')
     const income = screen.getByRole('region', { name: 'Net income' })
-    for (const card of within(income).getAllByRole('article')) expect(card.querySelector('header')).toHaveTextContent('Unit: $/ha')
+    for (const card of within(income).getAllByRole('article')) expect(card.querySelector('header')).toHaveTextContent('Unit: USD/ha')
     expect(screen.getByRole('complementary', { name: 'What the comparison shows · Net income' })).toHaveTextContent('prioritizing 1Mha')
   })
 })

@@ -115,7 +115,7 @@ describe('environmental data', () => {
     for (const series of changed.series.filter((series) => series.family === 'oneMha')) for (const point of series.points) point.values.methane = 1e9
     const selected = changed.series.filter((series) => series.family === 'bau3s' || series.family === 'oneMha')
     const insight = environmentComparisonInsight(changed, selected, 'methane', 'vi', 'bau3s')
-    expect(insight).toContain('cao hơn ở 4/4 tổ hợp')
+    expect(insight).toContain('cao hơn ở 4/4 nhóm điều kiện')
     expect(insight).not.toContain('ủng hộ ưu tiên 1Mha')
   })
 })

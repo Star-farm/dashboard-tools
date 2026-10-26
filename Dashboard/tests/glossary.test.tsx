@@ -11,7 +11,7 @@ describe('CSV data', () => {
     expect(indicators.map((item) => item.id)).toEqual(Array.from({ length: 31 }, (_, index) => String(index + 1)))
     expect(CATEGORIES.map((category) => indicators.filter((item) => item.category === category).length)).toEqual([5, 5, 2, 8, 11])
     expect(indicators.find((item) => item.id === '27')?.englishName).toContain('high-quality, low-emission')
-    expect(indicators.find((item) => item.id === '21')?.definition).toContain('"Đề án một triệu héc-ta lúa (1Mha)"')
+    expect(indicators.find((item) => item.id === '21')?.definition).toContain('"Đề án một triệu hecta lúa (1Mha)"')
   })
 
   it('handles BOM, escaped quotes, comma, CRLF and multiline fields', () => {

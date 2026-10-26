@@ -12,8 +12,8 @@ export function selectChartPoints(annual: AnnualSeries[], metric: Metric, curren
 }
 
 export function metricUnit(metric: Metric, currency: Currency, language: Language) {
-  if (metric === 'income') return currency === 'USD' ? '$/ha' : 'VNĐ/ha'
-  return metric === 'labor' ? futureText[language].laborUnit : 'kg CH₄/ha'
+  if (metric === 'income') return currency === 'USD' ? 'USD/ha' : 'VNĐ/ha'
+  return metric === 'labor' ? futureText[language].laborUnit : language === 'vi' ? 'kg Metan/ha' : 'kg Methane/ha'
 }
 
 export function formatValue(value: number, metric: Metric, currency: Currency, language: Language) {
@@ -67,7 +67,7 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
   let conclusion: string
   if (language === 'vi') {
     if (difference === 0) {
-      conclusion = `Nhìn chung, hai nhóm có mức ${metric === 'income' ? 'thu nhập' : metric === 'labor' ? 'sử dụng lao động' : 'phát thải metan'} bình quân tương đương trong giai đoạn được chọn.`
+      conclusion = `Nhìn chung, hai nhóm có mức ${metric === 'income' ? 'thu nhập' : metric === 'labor' ? 'sử dụng lao động' : 'phát thải Metan'} bình quân tương đương trong giai đoạn được chọn.`
     } else if (metric === 'income') {
       const declining = firstValid && lastValid && lastValid.first! < firstValid.first!
       conclusion = difference > 0
@@ -79,8 +79,8 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
         : 'Kết quả này ủng hộ việc ưu tiên áp dụng 1Mha để giảm nhu cầu lao động so với thường lệ, kết hợp bố trí nhân công phù hợp với từng mùa vụ.'
     } else {
       conclusion = difference < 0
-        ? 'Mức phát thải metan bình quân thấp hơn của nhóm có AWD là cơ sở để đề xuất ưu tiên AWD trong các phương án canh tác hướng tới giảm phát thải, kết hợp theo dõi hiệu quả tại điều kiện canh tác thực tế.'
-        : 'Nhìn chung, nhóm có AWD có mức phát thải metan bình quân cao hơn nhóm không có AWD, nên dữ liệu giai đoạn này chưa cho thấy lợi thế về giảm phát thải của nhóm có AWD.'
+        ? 'Mức phát thải Metan bình quân thấp hơn của nhóm có AWD là cơ sở để đề xuất ưu tiên AWD trong các phương án canh tác hướng tới giảm phát thải, kết hợp theo dõi hiệu quả tại điều kiện canh tác thực tế.'
+        : 'Nhìn chung, nhóm có AWD có mức phát thải Metan bình quân cao hơn nhóm không có AWD, nên dữ liệu giai đoạn này chưa cho thấy lợi thế về giảm phát thải của nhóm có AWD.'
     }
   } else {
     if (difference === 0) {

@@ -36,7 +36,7 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
         <>
           <div className="chart-and-insight">
             <div className="chart-area">
-              <div className="chart-meta"><span className="chart-unit">{t.unit}: {unit}</span><ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={[{ key: 'first', label: analysis.firstLabel, color: SERIES_COLORS.first }, { key: 'second', label: analysis.secondLabel, color: SERIES_COLORS.second }]} selected={selection} onSelect={setSelection} /></div>
+              <div className="chart-meta"><span className="chart-unit">{t.unit}: {unit}</span><ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={[{ key: 'first', label: analysis.firstLabel, color: SERIES_COLORS.first }, { key: 'second', label: analysis.secondLabel, color: SERIES_COLORS.second, dashed: true }]} selected={selection} onSelect={setSelection} /></div>
               <div className="timeseries-plot" role="group" aria-label={`${title} · ${points[0]?.year}–${points.at(-1)?.year} · ${unit}`}>
                 <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 800, height: 310 }} onResize={setChartWidth}>
                   <LineChart data={points} accessibilityLayer margin={{ top: 12, right: 18, left: 0, bottom: 8 }}>
@@ -46,7 +46,7 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
                     {metric !== 'labor' && <ReferenceLine y={0} stroke="#819275" />}
                     <Tooltip shared isAnimationActive={false} labelFormatter={(value) => `${t.year} ${value}`} formatter={(value) => `${formatValue(Number(value), metric, currency, language)} ${unit}`} contentStyle={{ background: '#fffef9', border: '1px solid #d7dfcc', borderRadius: 8, fontSize: 12, lineHeight: 1.8 }} wrapperStyle={{ maxWidth: 'min(300px, 85vw)', whiteSpace: 'normal' }} cursor={{ stroke: '#abb99d', strokeDasharray: '3 3' }} />
                     {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} stroke={SERIES_COLORS.first} strokeWidth={3} dot={{ r: 3, fill: SERIES_COLORS.first, stroke: '#fffefa', strokeWidth: 1 }} activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }} connectNulls={false} isAnimationActive={false} />}
-                    {selection !== 'first' && <Line type="linear" dataKey="second" name={analysis.secondLabel} stroke={SERIES_COLORS.second} strokeWidth={3} dot={{ r: 3, fill: SERIES_COLORS.second, stroke: '#fffefa', strokeWidth: 1 }} activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }} connectNulls={false} isAnimationActive={false} />}
+                    {selection !== 'first' && <Line type="linear" strokeDasharray="6 4" dataKey="second" name={analysis.secondLabel} stroke={SERIES_COLORS.second} strokeWidth={3} dot={{ r: 3, fill: SERIES_COLORS.second, stroke: '#fffefa', strokeWidth: 1 }} activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }} connectNulls={false} isAnimationActive={false} />}
                   </LineChart>
                 </ResponsiveContainer>
               </div>

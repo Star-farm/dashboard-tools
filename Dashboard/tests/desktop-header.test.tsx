@@ -40,6 +40,6 @@ describe('desktop header scrolling', () => {
     expect(header).toHaveClass('header-hidden')
     fireEvent(window, new HashChangeEvent('hashchange'))
     expect(header).not.toHaveClass('header-hidden')
-    expect(within(header).getByRole('link', { name: 'About future' })).toHaveAttribute('aria-current', 'page')
+    expect(within(header).getByRole('link', { name: 'About the future' })).toHaveAttribute('aria-current', 'page')
   })
 })

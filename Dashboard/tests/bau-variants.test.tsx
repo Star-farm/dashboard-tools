@@ -75,8 +75,8 @@ describe('BAU 2 seasons and sustainable comparisons', () => {
     expect(screen.getByRole('heading', { name: englishTitle })).toBeInTheDocument()
     const translated = within(screen.getByRole('region', { name: 'Net income' })).getAllByRole('article')
     expect(translated[0].querySelector('header')).toHaveTextContent(englishTitle.replace(' vs ', ' / '))
-    for (const card of translated) expect(card.querySelector('header')).toHaveTextContent('Unit: $/ha')
-    expect(screen.getByRole('complementary', { name: 'What the comparison shows · Profit margin' })).toHaveTextContent('percentage points')
+    for (const card of translated) expect(card.querySelector('header')).toHaveTextContent('Unit: USD/ha')
+    expect(screen.getByRole('complementary', { name: 'What the comparison shows · Profit margin' })).toHaveTextContent('pp')
   })
 
   it.each(variants)('opens $variant through the menu and supports its direct URL and page navigation', async ({ menu, hash, title }) => {

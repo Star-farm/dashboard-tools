@@ -66,12 +66,12 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const differences = stats.map((stat) => relative ? stat.relative! : stat.difference)
   const minimum = number.format(Math.min(...differences)), maximum = number.format(Math.max(...differences))
   const range = minimum === maximum ? minimum : `${minimum}–${maximum}`
-  const changeUnit = relative ? '%' : metric === 'margin' ? language === 'vi' ? 'điểm phần trăm' : 'percentage points' : bau3Unit(metric, language)
+  const changeUnit = relative ? '%' : metric === 'margin' ? language === 'vi' ? 'điểm %' : 'pp' : bau3Unit(metric, language)
   const metricName = metric === 'yield' ? language === 'vi' ? 'năng suất' : 'yield' : t[metric].toLocaleLowerCase(language)
   const change = `${range}${relative ? '%' : ` ${changeUnit}`}`
   const comparison = language === 'vi'
     ? `Trong ${period}, ${metricName} bình quân của 1Mha ${direction} thời tiết–tài nguyên so với ${baseline}; mức chênh lệch ${change}.`
-    : `Over ${period}, average ${metricName} under 1Mha is ${direction} of weather and resources compared with ${baseline}, with a difference of ${change}.`
+    : `Over ${period}, average ${metricName} under 1Mha is ${direction} compared with ${baseline}, with a difference of ${change}.`
   const focus = stats.find((stat) => stat.condition === 'severeShortage') ?? stats[0]
   const unit = bau3Unit(metric, language)
   const last = language === 'vi'

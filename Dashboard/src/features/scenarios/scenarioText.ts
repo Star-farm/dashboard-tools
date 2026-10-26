@@ -26,10 +26,10 @@ const vi = {
   laborUnit: 'giờ/ha',
   yieldUnit: 'tấn/ha',
   waterUnit: 'mm',
-  fertilizerUnit: 'kg/ha',
+  fertilizerUnit: 'kg Nito/ha',
   pesticidesUnit: 'lần',
-  methaneUnit: 'kg CH₄/ha',
-  intensityUnit: 'kg CH₄/kg gạo',
+  methaneUnit: 'kg Metan/ha',
+  intensityUnit: 'kg Metan/kg gạo',
 }
 
 const en: Record<keyof typeof vi, string> = {
@@ -55,16 +55,16 @@ const en: Record<keyof typeof vi, string> = {
   groupsustainable: 'Business as usual · Sustainable',
   grouponeMha: 'One million hectares (1Mha)',
   laborUnit: 'hours/ha',
-  yieldUnit: 'tonnes/ha',
+  yieldUnit: 'ton/ha',
   waterUnit: 'mm',
-  fertilizerUnit: 'kg/ha',
+  fertilizerUnit: 'kg Nitrogen/ha',
   pesticidesUnit: 'applications',
-  methaneUnit: 'kg CH₄/ha',
-  intensityUnit: 'kg CH₄/kg rice',
+  methaneUnit: 'kg Methane/ha',
+  intensityUnit: 'kg Methane/kg rice',
 }
 
 export const scenarioText = { vi, en }
 export const scenarioMetricLabels: Record<Language, Record<ScenarioMetric, string>> = {
-  vi: { income: 'Thu nhập ròng trên hecta', straw: 'Giá trị rơm trên hecta', cost: 'Chi phí sản xuất', labor: 'Thời gian lao động', yield: 'Năng suất trung bình', margin: 'Tỷ suất lợi nhuận', roi: 'Tỷ suất hoàn vốn (ROI)', water: 'Sử dụng nước', fertilizer: 'Sử dụng phân bón gốc nitơ', pesticides: 'Sử dụng thuốc trừ sâu', methane: 'Phát thải khí metan', intensity: 'Cường độ phát thải' },
+  vi: { income: 'Thu nhập ròng trên hecta', straw: 'Giá trị rơm trên hecta', cost: 'Chi phí sản xuất', labor: 'Thời gian lao động', yield: 'Năng suất trung bình', margin: 'Tỷ suất lợi nhuận', roi: 'Tỷ suất hoàn vốn (ROI)', water: 'Sử dụng nước', fertilizer: 'Sử dụng phân bón gốc Nito', pesticides: 'Sử dụng thuốc trừ sâu', methane: 'Phát thải khí Metan', intensity: 'Cường độ phát thải' },
   en: { income: 'Net income per hectare', straw: 'Straw value per hectare', cost: 'Production cost', labor: 'Labor requirements', yield: 'Average yield', margin: 'Profit margin', roi: 'Return on investment (ROI)', water: 'Water usage', fertilizer: 'Nitrogen-based fertilizer usage', pesticides: 'Pesticide usage', methane: 'Methane emissions', intensity: 'Emission intensity' },
 }

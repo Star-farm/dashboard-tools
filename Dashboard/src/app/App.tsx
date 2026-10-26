@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import type { ReactElement } from 'react'
 import Glossary from '../features/glossary/Glossary'
+import NotFoundPage from '../features/NotFoundPage'
 import HomePage from '../features/home/HomePage'
 import SiteFooter from './SiteFooter'
 import SiteHeader from './SiteHeader'
@@ -40,6 +41,7 @@ export default function App() {
     environmentExplore: <EconomicExplorePage language={language} topic="sustainability" />,
     resourceExplore: <EconomicExplorePage language={language} topic="resources" />,
     home: <HomePage language={language} />,
+    notFound: <NotFoundPage language={language} />,
     glossary: <Glossary language={language} />,
     future: <FuturePage language={language} />,
     scenario: <ScenarioDetailsPage language={language} />,
@@ -55,7 +57,7 @@ export default function App() {
     oneMhaFarming: <OneMhaFarmingPage language={language} />,
   }
   const loadingText = isEnvironmentPage(page) ? environmentText[language].loading : isResourcePage(page) ? resourceText[language].loading : {
-    home: '', glossary: '', future: t.futureLoading, scenario: t.scenarioLoading,
+    home: '', glossary: '', notFound: '', future: t.futureLoading, scenario: t.scenarioLoading,
     economics: t.economicsLoading, economicComparison: t.economicComparisonLoading,
     economicExplore: t.economicExploreLoading,
     bau3Comparison: t.bau3ComparisonLoading, bau2Comparison: t.bau2ComparisonLoading,

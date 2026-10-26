@@ -84,7 +84,7 @@ export function analyzeBauFarming(data: Bau3Data, metric: Bau3Metric, language: 
     ? [lower ? `giảm ở ${lower}/${stats.conditions.length} nhóm điều kiện` : '', higher ? `tăng ở ${higher}/${stats.conditions.length} nhóm điều kiện` : '', equal ? `không đổi ở ${equal}/${stats.conditions.length} nhóm điều kiện` : '']
     : [lower ? `decreases in ${lower}/${stats.conditions.length} combinations` : '', higher ? `increases in ${higher}/${stats.conditions.length} combinations` : '', equal ? `is unchanged in ${equal}/${stats.conditions.length} combinations` : '']
   const changes = stats.conditions.flatMap((condition) => condition.change === null ? [] : [condition.change])
-  const changeUnit = metric === 'margin' ? vi ? ' điểm phần trăm' : ' percentage points' : '%'
+  const changeUnit = metric === 'margin' ? vi ? ' điểm %' : ' pp' : '%'
   const range = changes.length ? `${number.format(Math.min(...changes))}${changeUnit} ${vi ? 'đến' : 'to'} ${number.format(Math.max(...changes))}${changeUnit}` : null
   const trend = stats.conditions.length ? vi
     ? `Từ ${data.startYear} đến ${data.endYear}, chỉ số ${directions.filter(Boolean).join(', ')}${range ? `, với mức biến động từ ${range}` : ''}.`
@@ -113,7 +113,7 @@ export function bauFarmingSummary(data: Bau3Data, language: Language, family: Ba
     const change = stats[metric].change
     if (change === null) return []
     const direction = Math.abs(change) < .000001 ? vi ? 'không đổi' : 'is unchanged' : vi ? change > 0 ? 'tăng' : 'giảm' : change > 0 ? 'increases' : 'decreases'
-    const amount = Math.abs(change) < .000001 ? '' : ` ${number.format(Math.abs(change))}${metric === 'margin' ? vi ? ' điểm phần trăm' : ' percentage points' : '%'}`
+    const amount = Math.abs(change) < .000001 ? '' : ` ${number.format(Math.abs(change))}${metric === 'margin' ? vi ? ' điểm %' : ' pp' : '%'}`
     return [`${bau3Text[language][metric].toLocaleLowerCase(language)} ${direction}${amount}`]
   }).join('; ')
   const trend = endChanges ? vi ? `So với ${data.startYear}, đến ${data.endYear}, ${endChanges}.` : `By ${data.endYear} compared with ${data.startYear}, ${endChanges}.` : ''

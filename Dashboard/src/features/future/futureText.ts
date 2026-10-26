@@ -13,7 +13,7 @@ const vi = {
   incomeSubtitle: 'Theo kịch bản 1Mha, thường lệ và thời gian',
   laborTitle: 'Cường độ lao động trung bình',
   laborSubtitle: 'Theo kịch bản 1Mha, thường lệ và thời gian',
-  methaneTitle: 'Phát thải khí metan trung bình',
+  methaneTitle: 'Phát thải khí Metan trung bình',
   methaneSubtitle: 'Theo nhóm có AWD, không có AWD và thời gian',
   incomeDirection: 'Thu nhập cao hơn là tốt hơn',
   laborDirection: 'Ít giờ lao động hơn là tốt hơn',
@@ -33,7 +33,7 @@ const vi = {
 
 const en: Record<keyof typeof vi, string> = {
   eyebrow: 'DONG THAP · SCENARIOS 2027–2050',
-  title: 'About future',
+  title: 'About the future',
   controls: 'Chart controls',
   fromYear: 'From year',
   toYear: 'To year',

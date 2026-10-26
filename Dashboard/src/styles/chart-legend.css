@@ -1,18 +1,19 @@
-.interactive-chart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 22px; padding: 12px 22px 16px; }
-.interactive-chart-legend .chart-legend-option { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; max-width: 100%; margin: 0; padding: 5px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: #52654a; font: inherit; font-size: 11px; line-height: 1.5; text-align: left; cursor: pointer; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.interactive-chart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 22px 16px; }
+.interactive-chart-legend .chart-legend-option { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; max-width: 100%; margin: 0; padding: 6px 10px; border: 1px solid #bdc9b4; border-radius: 4px; background: transparent; box-shadow: none; color: #52654a; font: inherit; font-size: 11px; line-height: 1.5; text-align: left; cursor: pointer; transition: border-color .18s ease, background-color .18s ease; }
 .interactive-chart-legend .chart-legend-option:hover,
-.interactive-chart-legend .chart-legend-option:focus-visible { color: #254f3d; text-decoration: underline; outline: none; }
+.interactive-chart-legend .chart-legend-option:focus-visible { border-color: #527441; background: #f1f4e9; color: #254f3d; }
 .interactive-chart-legend .chart-legend-option:active { transform: none; }
-.interactive-chart-legend .chart-legend-option[aria-pressed="true"] { color: #254f3d; text-decoration: underline; }
-.interactive-chart-legend[data-filtered="true"] .chart-legend-option[aria-pressed="false"] { opacity: .5; }
+.interactive-chart-legend .chart-legend-option[aria-pressed="true"] { border-color: #527441; background: #edf1e4; color: #254f3d; }
+.interactive-chart-legend[data-filtered="true"] .chart-legend-option[aria-pressed="false"] { opacity: .65; }
 .interactive-chart-legend[data-filtered="true"] .chart-legend-option[aria-pressed="false"]:hover,
 .interactive-chart-legend[data-filtered="true"] .chart-legend-option[aria-pressed="false"]:focus-visible { opacity: 1; }
 .chart-legend-swatch { display: inline-block; width: 19px; height: 3px; flex: 0 0 19px; }
 .chart-meta .interactive-chart-legend { padding: 0; }
 @media (max-width: 767px) {
-  .interactive-chart-legend { gap: 2px 14px; padding: 10px 14px 12px; }
+  .interactive-chart-legend { gap: 8px; padding: 10px 14px 12px; }
   .interactive-chart-legend[data-layout="conditions"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .interactive-chart-legend[data-layout="conditions"] .chart-legend-all { grid-column: 1 / -1; justify-self: start; }
   .interactive-chart-legend .chart-legend-option { min-height: 40px; font-size: 11px; gap: 6px; }
   .chart-legend-swatch { width: 14px; flex-basis: 14px; }
 }
+@media (prefers-reduced-motion: reduce) { .interactive-chart-legend .chart-legend-option { transition: none; } }

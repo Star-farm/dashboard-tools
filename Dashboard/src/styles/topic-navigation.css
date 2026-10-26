@@ -1,6 +1,7 @@
 .topic-list { display: grid; grid-template-columns: repeat(7, minmax(96px, 1fr)); gap: 4px; list-style: none; padding: 0; margin: 0; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #849d84 transparent; }
 .topic-list > li { min-width: 0; }
 .topic-trigger-label { display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.site-header .topic-trigger[aria-current="true"], .mobile-navigation .topic-trigger[aria-current="true"] { color: var(--gold-bright); text-shadow: 0 0 8px #ffeaa880, 0 0 18px #ffeaa840; }
 .topic-chevron { display: inline-block; width: 5px; height: 5px; flex: 0 0 5px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; }
 .topic-chevron.down { transform: rotate(45deg); margin-top: -3px; }
 .topic-chevron.right { transform: rotate(-45deg); }

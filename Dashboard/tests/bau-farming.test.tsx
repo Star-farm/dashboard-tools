@@ -35,16 +35,16 @@ describe('three-season business-as-usual KPIs', () => {
     }
   })
 
-  it('uses percentage points for margins and treats reduced labor cautiously', () => {
+  it('uses pp for margins and treats reduced labor cautiously', () => {
     const margin = bauFarmingStats(data, 'margin', 'USD')
     expect(margin.change).toBeLessThan(0)
     expect(farmingTone(margin)).toBe('bad')
     expect(farmingTone(bauFarmingStats(data, 'cost', 'USD'))).toBe('bad')
     expect(farmingTone(bauFarmingStats(data, 'labor', 'USD'))).toBe('neutral')
-    expect(analyzeBauFarming(data, 'margin', 'vi')!.paragraph).toContain('điểm phần trăm')
-    expect(analyzeBauFarming(data, 'income', 'vi')!.paragraph).toContain('giảm ở 4/4 tổ hợp')
+    expect(analyzeBauFarming(data, 'margin', 'vi')!.paragraph).toContain('điểm %')
+    expect(analyzeBauFarming(data, 'income', 'vi')!.paragraph).toContain('giảm ở 4/4 nhóm điều kiện')
     expect(analyzeBauFarming(data, 'labor', 'vi')!.paragraph).toContain('không tự động đồng nghĩa với hiệu quả cao hơn')
-    expect(bauFarmingSummary(data, 'vi')).toContain('Các tổ hợp thiếu tài nguyên')
+    expect(bauFarmingSummary(data, 'vi')).toContain('Các nhóm điều kiện thiếu tài nguyên')
   })
 
   it('keeps zeroes and negatives, avoids dividing by zero and handles missing data', () => {
@@ -88,8 +88,8 @@ describe('three-season business-as-usual page', () => {
     expect(container.querySelectorAll('.bau3-chart-oneMha')).toHaveLength(0)
     rerender(<Bau3FarmingPage language="en" />)
     expect(screen.getByRole('heading', { level: 1, name: 'Business as usual · 3 seasons' })).toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'Economic indicators' })).toHaveTextContent('$/ha')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('percentage points')
+    expect(screen.getByRole('region', { name: 'Economic indicators' })).toHaveTextContent('USD/ha')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('pp')
   })
 
   it.each([false, true])('connects the three-season leaf to its page (mobile: %s)', (mobile) => {

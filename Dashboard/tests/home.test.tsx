@@ -44,7 +44,7 @@ describe('home page', () => {
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(screen.getByRole('heading', { name: /The impact of the/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Explore' })).toHaveAttribute('href', '#home-explore')
-    for (const name of ['About future', 'Economics', 'Resources', 'Environment']) expect(within(screen.getByRole('main')).getByRole('heading', { name })).toBeInTheDocument()
+    for (const name of ['About the future', 'Economics', 'Resources', 'Environment']) expect(within(screen.getByRole('main')).getByRole('heading', { name })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Download CSV/ })).not.toBeInTheDocument()
     expect(screen.queryByText('Data for sustainable growing seasons.')).not.toBeInTheDocument()
     expect(screen.getByText('© 2026 STAR-FARM · All rights reserved.')).toBeInTheDocument()
@@ -53,7 +53,7 @@ describe('home page', () => {
     expect(screen.queryByText('Sustainable agriculture')).not.toBeInTheDocument()
     expect(within(screen.getByRole('banner')).queryByText(/^Smart Agroecological Transformation/)).not.toBeInTheDocument()
     expect(within(screen.getByRole('contentinfo')).getByText(/^Smart Agroecological Transformation/)).toBeInTheDocument()
-    expect(document.documentElement.lang).toBe('en')
+    expect(document.documentElement.lang).toBe('en-US')
   })
 
   it('opens deep links and retains language while navigating between pages', async () => {
@@ -61,8 +61,8 @@ describe('home page', () => {
     render(<App />)
     expect(screen.getByRole('region', { name: 'Khám phá nội dung' })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    fireEvent.click(screen.getByRole('link', { name: 'Explore environment' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Explore environment' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('link', { name: 'Explore the environment' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Explore the environment' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Environment' })).toHaveAttribute('aria-expanded', 'false')
     const menu = screen.getByRole('navigation', { name: 'Main menu' })
     fireEvent.click(within(menu).getByRole('link', { name: 'Glossary' }))

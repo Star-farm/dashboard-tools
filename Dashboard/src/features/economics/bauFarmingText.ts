@@ -11,7 +11,7 @@ const vi = {
   charts: 'Diễn biến các chỉ số theo năm',
   insight: 'Nhận xét',
   unavailable: 'Chưa đủ số liệu',
-  method: 'Các KPI tổng hợp bốn nhóm điều kiện thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuôi giai đoạn so với năm đầu giai đoạn; tỷ suất lợi nhuận so sánh bằng điểm phần trăm.',
+  method: 'Các KPI tổng hợp bốn nhóm điều kiện thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuối giai đoạn so với năm đầu giai đoạn; tỷ suất lợi nhuận so sánh bằng điểm %.',
 }
 const en: Record<keyof typeof vi, string> = {
   title: 'Business as usual · 3 seasons',
@@ -26,6 +26,6 @@ const en: Record<keyof typeof vi, string> = {
   charts: 'Indicator trends by year',
   insight: 'What the chart shows',
   unavailable: 'Not enough data',
-  method: 'KPIs summarize the four weather and resource combinations. Changes compare the final year with the first year; profit margin changes are expressed in percentage points.',
+  method: 'KPIs summarize the four weather and resource combinations. Changes compare the final year with the first year; profit margin changes are expressed in pp.',
 }
 export const bauFarmingText = { vi, en }

@@ -19,7 +19,7 @@ import { parseCsv } from '../src/utils/csv'
 const models = [
   { family: 'bau2s' as Bau3Family, data: two as Bau3Data, Component: Bau2FarmingPage, title: 'Canh tác như thường lệ · 2 mùa vụ', enTitle: 'Business as usual · 2 seasons', metadata: 'Canh tác thường lệ · 2 mùa vụ | STAR FARM', name: 'canh tác thường lệ 2 vụ', enName: 'business as usual with two seasons', hash: '#economics-bau2', page: 'bau2Farming' as const, leaf: '2 mùa vụ', season: '2 Seasons', viSeason: '2 vụ', count: 3840 },
   { family: 'bauss' as Bau3Family, data: sustainable as Bau3Data, Component: BauSustainableFarmingPage, title: 'Canh tác như thường lệ · Bền vững', enTitle: 'Business as usual · Sustainable', metadata: 'Canh tác thường lệ · Bền vững | STAR FARM', name: 'canh tác thường lệ bền vững', enName: 'sustainable business-as-usual farming', hash: '#economics-bauss', page: 'baussFarming' as const, leaf: 'Bền vững', season: 'Sustainable', viSeason: 'Bền vững', count: 5616 },
-  { family: 'oneMha' as Bau3Family, data: three as Bau3Data, Component: OneMhaFarmingPage, title: 'Một triệu héc ta lúa', enTitle: 'One million hectares of rice', metadata: 'Một triệu héc ta lúa | STAR FARM', name: 'mô hình 1Mha', enName: 'the 1Mha system', hash: '#economics-1mha', page: 'oneMhaFarming' as const, leaf: 'Một triệu hecta lúa', season: '', viSeason: '', count: 3840 },
+  { family: 'oneMha' as Bau3Family, data: three as Bau3Data, Component: OneMhaFarmingPage, title: 'Một triệu héc ta lúa', enTitle: 'One million hectares of rice', metadata: 'Một triệu hecta lúa | STAR FARM', name: 'mô hình 1Mha', enName: 'the 1Mha system', hash: '#economics-1mha', page: 'oneMhaFarming' as const, leaf: 'Một triệu hecta lúa', season: '', viSeason: '', count: 3840 },
 ]
 
 describe.each(models)('$family standalone farming page', (model) => {
@@ -83,7 +83,7 @@ describe.each(models)('$family standalone farming page', (model) => {
     rerender(<model.Component language="en" />)
     expect(screen.getByRole('heading', { level: 1, name: model.enTitle })).toBeInTheDocument()
     const indicators = screen.getByRole('region', { name: 'Economic indicators' })
-    expect(indicators).toHaveTextContent('$/ha')
+    expect(indicators).toHaveTextContent('USD/ha')
     expect(indicators).toHaveTextContent('2050 compared with 2027')
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent(model.enName)
   }, 10000)

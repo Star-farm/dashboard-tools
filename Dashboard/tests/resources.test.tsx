@@ -19,7 +19,7 @@ describe('resource overview and comparison', () => {
     expect(within(table).getAllByRole('row')).toHaveLength(19)
     expect(table.querySelector('tbody tr')).toHaveTextContent('Hiện trạng · 2016–2022')
     expect(table.querySelectorAll('thead tr:last-child th')).toHaveLength(8)
-    expect(table).toHaveTextContent('kg N/ha')
+    expect(table).toHaveTextContent('kg Nito/ha')
     expect(screen.getAllByRole('article')).toHaveLength(17)
     expect(screen.getAllByRole('article')[0]).toHaveTextContent('Hiện trạng · 2016–2022')
     expect(screen.getAllByRole('combobox')).toHaveLength(5)
@@ -82,7 +82,10 @@ describe('resource model pages', () => {
     for (const chart of charts) {
       expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
       expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
-      for (const path of chart.querySelectorAll('path.recharts-line-curve')) { expect(path.getAttribute('d')).not.toMatch(/[CQ]/); expect(path).not.toHaveAttribute('stroke-dasharray') }
+      const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
+      for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
+      for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
+      for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
     }
     expect(charts[0]).toHaveClass('scenario-comparison-chart')
     expect(charts[0].querySelector('header')).toHaveTextContent('1Mha')

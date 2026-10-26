@@ -15,7 +15,7 @@ export default function EconomicExplorePage({ language, topic = 'economics' }: {
   const text = topic === 'sustainability' ? {
     description: environmentText[language].description,
     overview: language === 'vi' ? 'Xem các chỉ số phát thải theo kịch bản hoặc so sánh thường lệ với 1Mha.' : 'View emission indicators by scenario or compare business as usual with 1Mha.',
-    comparison: language === 'vi' ? 'So sánh phát thải metan và cường độ phát thải giữa từng mô hình thường lệ và 1Mha qua thời gian.' : 'Compare methane emissions and emission intensity between each business-as-usual model and 1Mha over time.',
+    comparison: language === 'vi' ? 'So sánh phát thải Metan và cường độ phát thải giữa từng mô hình thường lệ và 1Mha qua thời gian.' : 'Compare methane emissions and emission intensity between each business-as-usual model and 1Mha over time.',
     bau: language === 'vi' ? 'Xem KPI môi trường, tỷ lệ áp dụng AWD và diễn biến phát thải của từng mô hình thường lệ.' : 'Explore environmental KPIs, AWD adoption and emission trends for each business-as-usual model.',
     oneMha: language === 'vi' ? 'Theo dõi các chỉ số môi trường của mô hình lúa chất lượng cao, phát thải thấp 1Mha.' : 'Track environmental indicators for the high-quality, low-emission 1Mha rice model.',
     oneMhaLink: economicExploreText[language].oneMhaLink,

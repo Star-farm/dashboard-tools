@@ -86,9 +86,9 @@ describe('chart observations', () => {
     expect(result.comparison).toContain('Có AWD thấp hơn Không có AWD')
     expect(result.trend).toContain('Có AWD giảm')
     expect(result.latest).toContain('2050')
-    expect(result.latest).toContain('kg CH₄/ha')
+    expect(result.latest).toContain('kg Metan/ha')
     expect(result.paragraph.endsWith(result.conclusion)).toBe(true)
-    expect(result.conclusion).toContain('Mức phát thải metan bình quân thấp hơn')
+    expect(result.conclusion).toContain('Mức phát thải Metan bình quân thấp hơn')
     expect(result.conclusion).toContain('đề xuất ưu tiên AWD')
   })
 
@@ -106,7 +106,7 @@ describe('chart observations', () => {
     expect(analyzeChart([{ year: 2027, first: null, second: 1 }], 'income', 'USD', 'en')).toBeNull()
     const single = analyzeChart([{ year: 2027, first: -10, second: 0 }], 'income', 'USD', 'en')!
     expect(single.statistic).not.toMatch(/Infinity|NaN/)
-    expect(single.statistic).toBe('-10 $/ha')
+    expect(single.statistic).toBe('-10 USD/ha')
     expect(single.trend).toContain('multiple years')
     expect(analyzeChart([{ year: 2027, first: 5, second: 5 }], 'labor', 'USD', 'en')!.comparison).toContain('equal period averages')
   })
@@ -137,7 +137,8 @@ describe('future page interactions', () => {
       expect([...article.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([SERIES_COLORS.first, SERIES_COLORS.second])
       for (const path of article.querySelectorAll('path.recharts-line-curve')) {
         expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
-        expect(path).not.toHaveAttribute('stroke-dasharray')
+        if (path.getAttribute('stroke') === SERIES_COLORS.second) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
+        else expect(path).not.toHaveAttribute('stroke-dasharray')
       }
       expect(article.querySelectorAll('.chart-insight > p')).toHaveLength(1)
     }
@@ -153,8 +154,8 @@ describe('future page interactions', () => {
     expect(within(labor).getByText('Đơn vị: giờ/ha')).toBeInTheDocument()
     expect(labor.querySelector('.recharts-yAxis')).not.toHaveTextContent(/^0$/)
     rerender(<FuturePage language="en" />)
-    expect(within(income).getByText('Unit: $/ha')).toBeInTheDocument()
-    expect(income.querySelector('.chart-insight')).toHaveTextContent('979.16 $/ha')
+    expect(within(income).getByText('Unit: USD/ha')).toBeInTheDocument()
+    expect(income.querySelector('.chart-insight')).toHaveTextContent('979.16 USD/ha')
     expect(income.querySelector('.chart-insight')).not.toHaveTextContent('VNĐ')
     rerender(<FuturePage language="vi" />)
     expect(within(income).getByText('Đơn vị: VNĐ/ha')).toBeInTheDocument()
@@ -174,12 +175,12 @@ describe('future page interactions', () => {
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
     expect(tooltip).toHaveStyle({ visibility: 'visible' })
-    expect(tooltip).toHaveTextContent('1Mha : 20 $/ha')
-    expect(tooltip).toHaveTextContent('Business as usual : 100 $/ha')
+    expect(tooltip).toHaveTextContent('1Mha : 20 USD/ha')
+    expect(tooltip).toHaveTextContent('Business as usual : 100 USD/ha')
     hover(dots[1])
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2028'))
-    expect(tooltip).toHaveTextContent('1Mha : 30 $/ha')
-    expect(tooltip).toHaveTextContent('Business as usual : 80 $/ha')
+    expect(tooltip).toHaveTextContent('1Mha : 30 USD/ha')
+    expect(tooltip).toHaveTextContent('Business as usual : 80 USD/ha')
   })
 
   it('filters all charts and observations, supports one year and prevents invalid ranges', () => {
@@ -209,11 +210,11 @@ describe('future page interactions', () => {
     expect(screen.getByText('Đơn vị: VNĐ/ha')).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Từ năm'), { target: { value: '2035' } })
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(screen.getByRole('heading', { name: 'About future' })).toBeInTheDocument()
-    expect(screen.getByText('Unit: $/ha')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'About the future' })).toBeInTheDocument()
+    expect(screen.getByText('Unit: USD/ha')).toBeInTheDocument()
     expect(screen.getByLabelText('From year')).toHaveValue('2035')
     expect(screen.getByRole('article', { name: 'Average methane emissions' })).toBeInTheDocument()
-    expect(document.title).toBe('About future | STAR FARM')
+    expect(document.title).toBe('About the future | STAR FARM')
     fireEvent.click(within(screen.getByRole('navigation', { name: 'Main menu' })).getByRole('link', { name: 'Home' }))
     expect(await screen.findByRole('heading', { name: /The impact of the/ })).toBeInTheDocument()
   })

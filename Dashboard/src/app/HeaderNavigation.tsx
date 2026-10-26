@@ -209,6 +209,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   }
 
   const activeTopic = topics.find((topic) => topic.id === openTopic)
+  const currentTopic: Topic | undefined = page.startsWith('environment') ? 'sustainability' : page.startsWith('resource') ? 'resources' : ['economics', 'economicExplore', 'economicComparison', 'bau3Comparison', 'bau2Comparison', 'baussComparison', 'bau3Farming', 'bau2Farming', 'baussFarming', 'oneMhaFarming'].includes(page) ? 'economics' : undefined
 
   return (
     <nav className={`top-navigation${mobile ? ' mobile-navigation' : ''}`} aria-label={t.mainNavigation} ref={navigationRef} onKeyDown={handleKeys} onMouseLeave={mobile ? undefined : close}>
@@ -219,7 +220,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#scenario-details" aria-current={page === 'scenario' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navScenarioDetails}</a></li>
         {topics.map((topic) => (
           <li className="topic-item" key={topic.id} onMouseEnter={mobile ? undefined : () => open(topic.id)}>
-            <button className="topic-trigger" id={`topic-${topic.id}-trigger`} type="button" aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)} onKeyDown={(event) => {
+            <button className="topic-trigger" id={`topic-${topic.id}-trigger`} type="button" aria-current={currentTopic === topic.id ? 'true' : undefined} aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)} onKeyDown={(event) => {
               if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
                 event.preventDefault()
                 event.stopPropagation()

@@ -6,7 +6,7 @@ import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import { scenarioMetrics } from './scenarioTypes'
 import type { ScenarioData, ScenarioFamily, ScenarioMetric } from './scenarioTypes'
 import { scenarioMetricLabels, scenarioText } from './scenarioText'
-import { relativeChange, scenarioSummary } from './scenarioAnalysis'
+import { relativeChange, scenarioChangeTone, scenarioSummaryParts } from './scenarioAnalysis'
 import '../../styles/scenarios.css'
 
 const scenarios = data as ScenarioData
@@ -45,7 +45,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
           <select id="scenario-select" title={selected.name[language]} value={selected.code} onChange={(event) => setSelectedCode(event.target.value)}>{families.map((family) => <optgroup label={t[`group${family}`]} key={family}>{scenarios.scenarios.filter((scenario) => scenario.family === family).map((scenario) => <option value={scenario.code} key={scenario.code}>{scenario.name[language]}</option>)}</optgroup>)}</select>
         </div>
       </div>
-      <aside className="scenario-summary" aria-label={t.summary} aria-live="polite"><p><EmphasizedNumbers text={scenarioSummary(current.values, baseline.values, language)} /></p></aside>
+      <aside className="scenario-summary" aria-label={t.summary} aria-live="polite"><p>{scenarioSummaryParts(current.values, baseline.values, language).map((part, index) => part.tone ? <strong key={index} className={`scenario-change ${part.tone}`} data-metric={part.metric}>{part.text}</strong> : <EmphasizedNumbers key={index} text={part.text} />)}</p></aside>
       {sections.map((section, index) => (
         <section className="scenario-section" id={`scenario-${section.id}`} aria-labelledby={`scenario-${section.id}-title`} key={section.id}>
           <h2 id={`scenario-${section.id}-title`}><span>{index + 1}.</span> {t[section.id]}</h2>
@@ -54,7 +54,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
               const metric = scenarioMetrics.find((item) => item.id === id)!
               const value = current.values[id]
               const change = relativeChange(value, baseline.values[id])
-              const tone = change === null || Math.abs(change) < 0.000001 ? 'neutral' : (change > 0) === (metric.preferred === 'higher') ? 'good' : 'bad'
+              const tone = scenarioChangeTone(id, change)
               const unit = metric.kind === 'money' ? currency === 'VND' ? 'VNĐ/ha' : 'USD/ha' : metric.kind === 'percentage' ? '%' : t[`${metric.kind}Unit`]
               const formatted = value === null ? '—' : metric.kind === 'money' && currency === 'VND' ? new Intl.NumberFormat(language, { maximumFractionDigits: 0 }).format(value) : number.format(value)
               return <div className="scenario-kpi" key={id}><dt title={id === 'roi' ? t.roiNote : undefined}>{scenarioMetricLabels[language][id]}</dt><dd className="scenario-kpi-value"><strong>{formatted}</strong><span>{unit}</span></dd><dd className="scenario-kpi-change">{change === null ? <span>{t.changeUnavailable}</span> : <><span className={`scenario-change ${tone}`}><span aria-hidden="true">{Math.abs(change) < 0.000001 ? '−' : change > 0 ? '↑' : '↓'}</span> {percent.format(Math.abs(change))}%</span><span>{t.comparedWith} ({baselineYears})</span></>}</dd></div>

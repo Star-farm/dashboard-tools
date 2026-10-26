@@ -38,7 +38,7 @@ describe('economic comparison aggregation', () => {
     changed.groups.oneMha.USD.income = 20
     changed.groups.oneMha.USD.straw = null
     const partial = comparisonSummary(changed, 'en', 2027, 2050)
-    expect(partial).toContain('net income is 20.00 $/ha higher')
+    expect(partial).toContain('net income is 20.00 USD/ha higher')
     expect(partial).toContain('insufficient data to compare straw value')
     expect(partial).not.toMatch(/NaN|Infinity/)
   })
@@ -105,11 +105,11 @@ describe('economic comparison interface', () => {
       for (const bar of bars) expect(Number(bar.getAttribute('y')) + Number(bar.getAttribute('height'))).toBeCloseTo(zero, 4)
     }
     const income = screen.getByRole('article', { name: 'Average net income' })
-    expect(income.querySelector('.comparison-values')).toHaveTextContent('524.83 $/ha')
-    expect(income.querySelector('.comparison-values')).toHaveTextContent('986.30 $/ha')
-    expect(income.querySelector('header')).toHaveTextContent('Unit: $/ha')
+    expect(income.querySelector('.comparison-values')).toHaveTextContent('524.83 USD/ha')
+    expect(income.querySelector('.comparison-values')).toHaveTextContent('986.30 USD/ha')
+    expect(income.querySelector('header')).toHaveTextContent('Unit: USD/ha')
     const straw = screen.getByRole('article', { name: 'Average straw value' })
-    expect(straw.querySelector('header')).toHaveTextContent('Unit: $/ha')
+    expect(straw.querySelector('header')).toHaveTextContent('Unit: USD/ha')
     expect(screen.getByRole('article', { name: 'Average labor intensity' }).querySelector('header')).toHaveTextContent('Unit: hours/ha')
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
@@ -132,13 +132,13 @@ describe('economic comparison interface', () => {
     rerender(<EconomicComparisonPage language="en" />)
     expect(screen.getByRole('button', { name: 'Severe weather' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Resource shortage' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('815.23 $/ha')
-    expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('815.23 $/ha')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('815.23 USD/ha')
+    expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('815.23 USD/ha')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
     expect(screen.getByRole('button', { name: 'All weather' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'All resources' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('986.30 $/ha')
-    expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('986.30 $/ha')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('986.30 USD/ha')
+    expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('986.30 USD/ha')
   })
 
   it('shows the scenario value and unit on hover', async () => {

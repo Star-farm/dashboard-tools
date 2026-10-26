@@ -29,10 +29,12 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
   const id = useId()
   const [width, setWidth] = useState(620)
   const [condition, setCondition] = useState<Bau3Condition | 'all'>('all')
+  const [model, setModel] = useState<'all' | 'bau' | 'oneMha'>('all')
   const [year, setYear] = useState(startYear)
   const t = bau3Text[language]
   const vi = language === 'vi'
   const visible = condition === 'all' ? bau3Conditions : [condition]
+  const visibleModels = (['bau', 'oneMha'] as const).filter((key) => model === 'all' || model === key)
   const baselineYears = new Map(baseline.map((point) => [point.year, point]))
   const oneMhaYears = new Map(oneMha.map((point) => [point.year, point]))
   const points: ({ year: number } & Record<string, number | null>)[] = Array.from({ length: endYear - startYear + 1 }, (_, index) => {
@@ -45,7 +47,7 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
       ])),
     }
   })
-  const hasData = points.some((point) => visible.some((key) => point[`bau_${key}`] != null || point[`oneMha_${key}`] != null))
+  const hasData = points.some((point) => visible.some((key) => visibleModels.some((group) => point[`${group}_${key}`] != null)))
   const selectedYear = Math.min(endYear, Math.max(startYear, year))
   const display = (value: number | null | undefined) => value == null ? '—' : formatValue(value)
   const selectYear = ({ activeLabel }: { activeLabel?: string | number }) => {
@@ -55,9 +57,10 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
   const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   return <article className="bau3-chart scenario-comparison-chart" aria-labelledby={`${id}-title`}>
     <header><h3 id={`${id}-title`}>{baselineLabel} <span> / </span> 1Mha</h3><p>{t.unit}: <strong>{unit}</strong></p></header>
-    <div className="comparison-model-key">
-      <span><i className="model-line model-line-oneMha" aria-hidden="true" />1Mha · {vi ? 'nét đậm' : 'bold line'}</span>
-      <span><i className="model-line model-line-bau" aria-hidden="true" />{baselineLabel} · {vi ? 'nét nhạt' : 'faint line'}</span>
+    <div className="comparison-model-key" role="group" aria-label={vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}>
+      <button type="button" aria-pressed={model === 'all'} onClick={() => setModel('all')}>{vi ? 'Tất cả mô hình' : 'All models'}</button>
+      <button type="button" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}><i className="model-line model-line-oneMha" aria-hidden="true" />1Mha · {vi ? 'nét đậm' : 'bold line'}</button>
+      <button type="button" aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><i className="model-line model-line-bau" aria-hidden="true" />{baselineLabel} · {vi ? 'nét đứt nhạt' : 'faint dashed line'}</button>
     </div>
     <ChartLegend language={language} label={vi ? 'Chọn điều kiện kịch bản' : 'Choose scenario conditions'} items={bau3Conditions.map((key) => ({ key, label: t[key], color: colors[key] }))} selected={condition} onSelect={setCondition} allLabel={vi ? 'Tất cả điều kiện' : 'All conditions'} />
     {hasData ? <>
@@ -75,7 +78,7 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
             <ReferenceLine x={selectedYear} stroke="#687a5c" strokeWidth={1} />
             <Tooltip trigger="click" content={() => null} cursor={false} isAnimationActive={false} />
-            {(['bau', 'oneMha'] as const).flatMap((model) => visible.map((key) => <Line key={`${model}_${key}`} type="linear" dataKey={`${model}_${key}`} name={`${model === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} stroke={colors[key]} strokeOpacity={model === 'bau' ? .42 : 1} strokeWidth={model === 'bau' ? 1.8 : 2.8} dot={{ r: model === 'bau' ? 2.2 : 3, fill: colors[key], fillOpacity: model === 'bau' ? .42 : 1, stroke: model === 'bau' ? colors[key] : '#fffefa', strokeOpacity: model === 'bau' ? .42 : 1, strokeWidth: .6 }} activeDot={{ r: model === 'bau' ? 4 : 5, stroke: '#fffefa', strokeWidth: 1.5 }} connectNulls={false} isAnimationActive={false} />))}
+            {visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} stroke={colors[key]} strokeDasharray={group === 'bau' ? '6 4' : undefined} strokeOpacity={group === 'bau' ? .42 : 1} strokeWidth={group === 'bau' ? 1.8 : 2.8} dot={{ r: group === 'bau' ? 2.2 : 3, fill: colors[key], fillOpacity: group === 'bau' ? .42 : 1, stroke: group === 'bau' ? colors[key] : '#fffefa', strokeOpacity: group === 'bau' ? .42 : 1, strokeWidth: .6 }} activeDot={{ r: group === 'bau' ? 4 : 5, stroke: '#fffefa', strokeWidth: 1.5 }} connectNulls={false} isAnimationActive={false} />))}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -83,8 +86,8 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
       <div className="comparison-year-details">
         <p className="comparison-selected-year">{t.year} <strong>{selectedYear}</strong></p>
         <table className="comparison-year-values" aria-label={`${title} · ${t.year} ${selectedYear} · ${unit}`}>
-          <thead><tr><th scope="col">{vi ? 'Điều kiện kịch bản' : 'Scenario conditions'}</th><th scope="col">{baselineLabel}</th><th scope="col">1Mha</th></tr></thead>
-          <tbody>{visible.map((key) => <tr key={key}><th scope="row"><i style={{ background: colors[key] }} aria-hidden="true" />{t[key]}</th><td>{display(baselineYears.get(selectedYear)?.[key])}</td><td><strong>{display(oneMhaYears.get(selectedYear)?.[key])}</strong></td></tr>)}</tbody>
+          <thead><tr><th scope="col">{vi ? 'Điều kiện kịch bản' : 'Scenario conditions'}</th>{model !== 'oneMha' && <th scope="col">{baselineLabel}</th>}{model !== 'bau' && <th scope="col">1Mha</th>}</tr></thead>
+          <tbody>{visible.map((key) => <tr key={key}><th scope="row"><i style={{ background: colors[key] }} aria-hidden="true" />{t[key]}</th>{model !== 'oneMha' && <td>{display(baselineYears.get(selectedYear)?.[key])}</td>}{model !== 'bau' && <td><strong>{display(oneMhaYears.get(selectedYear)?.[key])}</strong></td>}</tr>)}</tbody>
         </table>
       </div>
     </> : <p className="bau3-no-data">{t.noData}</p>}

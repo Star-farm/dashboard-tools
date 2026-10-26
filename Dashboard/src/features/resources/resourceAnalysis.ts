@@ -83,5 +83,5 @@ export function resourceSummary(data: ResourceData, selected: ResourceSeries[], 
     return `${t[metric].toLocaleLowerCase(language)} ${resourceNumber(stats.mean, language)} ${resourceUnit(metric, language)}${compare ? '' : ` (${changeText(stats.change, language)})`}`
   })
   if (compare) return resourceMetrics.map((metric) => resourceComparisonInsight(data, selected, metric, language, family).split('. ').slice(0, 1).join('. ')).join('. ') + `. ${t.conclusion}`
-  return vi ? `Trong giai đoạn ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} có mức bình quân: ${parts.join('; ')}. Các mức biến động so sánh năm ${data.endYear} với ${data.startYear}. ${t.conclusion}` : `Over ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} averages ${parts.join('; ')}. Changes compare ${data.endYear} with ${data.startYear}. ${t.conclusion}`
+  return vi ? `Trong giai đoạn ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} có mức bình quân: ${parts.join('; ')}. Các mức biến động so sánh năm ${data.endYear} với ${data.startYear}. ${t.conclusion}` : `Over ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} has the following period averages: ${parts.join('; ')}. Changes compare ${data.endYear} with ${data.startYear}. ${t.conclusion}`
 }

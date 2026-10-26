@@ -35,7 +35,7 @@ describe('browser language and saved preference', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(screen.getByRole('heading', { name: 'Glossary' })).toBeInTheDocument()
-    expect(document.documentElement.lang).toBe('en')
+    expect(document.documentElement.lang).toBe('en-US')
   })
 })
 
@@ -50,7 +50,7 @@ describe('bilingual glossary and navigation', () => {
     const names = screen.getAllByRole('rowheader').map((row) => row.querySelector('.term-name')?.textContent ?? '')
     expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'en')))
     expect(document.title).toBe('Glossary | STAR FARM')
-    expect(document.documentElement.lang).toBe('en')
+    expect(document.documentElement.lang).toBe('en-US')
   })
 
   it('preserves filters and sort on switch, and remembers the choice after remount', () => {
@@ -91,7 +91,7 @@ describe('bilingual glossary and navigation', () => {
     expect(await screen.findByRole('heading', { name: /Tác động của đề án/ })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(within(screen.getByRole('navigation', { name: 'Main menu' })).queryByRole('link', { name: 'Data' })).not.toBeInTheDocument()
-    expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Home', 'Glossary', 'About future', 'Scenario details'])
+    expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Home', 'Glossary', 'About the future', 'Scenario details'])
     fireEvent.click(within(menu).getByRole('link', { name: 'Glossary' }))
     expect(await screen.findByRole('heading', { name: 'Glossary' })).toBeInTheDocument()
   })
@@ -101,7 +101,7 @@ describe('bilingual glossary and navigation', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     function BrokenContent(): never { throw new Error('Invalid CSV') }
     render(<ErrorBoundary><BrokenContent /></ErrorBoundary>)
-    expect(screen.getByRole('alert')).toHaveTextContent('The glossary could not be displayed')
+    expect(screen.getByRole('alert')).toHaveTextContent('404')
     expect(screen.getByRole('button', { name: 'Reload page' })).toBeInTheDocument()
   })
 })

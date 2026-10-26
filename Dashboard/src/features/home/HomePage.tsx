@@ -28,7 +28,7 @@ export default function HomePage({ language }: { language: Language }) {
         <img className="hero-art" src={landscape} alt="" fetchPriority="high" width="4765" height="2480" />
         <div className="hero-shade" />
         <div className="hero-content">
-          <h1 id="home-title">{t.heroTitle}<br /><span>{t.heroHighlight}</span></h1>
+          <h1 id="home-title">{t.heroTitle}{' '}<br /><span>{t.heroHighlight}</span></h1>
           <p className="hero-description">{t.heroDescription}</p>
           <p className="hero-project">{t.heroProject}</p>
           <div className="hero-actions">

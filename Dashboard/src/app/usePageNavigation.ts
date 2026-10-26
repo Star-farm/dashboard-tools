@@ -5,7 +5,7 @@ import type { ResourcePage } from '../features/resources/resourceRoutes'
 import { environmentPageForHash } from '../features/environment/environmentRoutes'
 import type { EnvironmentPage } from '../features/environment/environmentRoutes'
 
-export type Page = 'home' | 'glossary' | 'future' | 'scenario' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
+export type Page = 'home' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
   const environmentPage = environmentPageForHash(hash)
@@ -26,7 +26,9 @@ function pageForHash(hash: string, previous: Page = 'home'): Page {
   if (['#scenario-details', '#scenario-economics', '#scenario-resources', '#scenario-sustainability'].includes(hash)) return 'scenario'
   if (['#glossary', '#search-panel', '#definitions'].includes(hash)) return 'glossary'
   if (['', '#home', '#home-explore', '#datasets'].includes(hash)) return 'home'
-  return previous
+  if (hash === '#main-content') return previous
+  if (hash === '#partners') return 'home'
+  return 'notFound'
 }
 
 export function usePageNavigation() {

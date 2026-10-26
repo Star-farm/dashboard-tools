@@ -1,5 +1,13 @@
 import type { Language } from '../../i18n'
-import type { ScenarioSnapshot } from './scenarioTypes'
+import { scenarioMetrics } from './scenarioTypes'
+import type { ScenarioMetric, ScenarioSnapshot } from './scenarioTypes'
+
+export interface ScenarioSummaryPart { text: string; tone?: 'good' | 'bad' | 'neutral'; metric?: ScenarioMetric }
+
+export function scenarioChangeTone(metric: ScenarioMetric, change: number | null) {
+  if (change === null || Math.abs(change) < .000001) return 'neutral'
+  return (change > 0) === (scenarioMetrics.find((item) => item.id === metric)!.preferred === 'higher') ? 'good' : 'bad'
+}
 
 export function relativeChange(value: number | null, baseline: number | null): number | null {
   if (value === null || baseline === null || baseline === 0) return null
@@ -7,15 +15,17 @@ export function relativeChange(value: number | null, baseline: number | null): n
   return Number.isFinite(change) ? change : null
 }
 
-export function scenarioSummary(values: ScenarioSnapshot['values'], baseline: ScenarioSnapshot['values'], language: Language) {
-  const changes = Object.fromEntries(Object.entries(values).map(([key, value]) => [key, relativeChange(value, baseline[key as keyof typeof baseline])]))
+export function scenarioSummaryParts(values: ScenarioSnapshot['values'], baseline: ScenarioSnapshot['values'], language: Language): ScenarioSummaryPart[] {
+  const changes = Object.fromEntries(Object.entries(values).map(([key, value]) => [key, relativeChange(value, baseline[key as keyof typeof baseline])])) as Record<ScenarioMetric, number | null>
   const percent = new Intl.NumberFormat(language, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-  function describe(change: number | null) {
-    if (change === null) return language === 'vi' ? 'chưa đủ dữ liệu để so sánh' : 'cannot be compared with the available data'
-    if (Math.abs(change) < 0.000001) return language === 'vi' ? 'không thay đổi' : 'remained unchanged'
-    return language === 'vi'
-      ? `${change > 0 ? 'tăng' : 'giảm'} ${percent.format(Math.abs(change))}%`
-      : `${change > 0 ? 'increased' : 'decreased'} by ${percent.format(Math.abs(change))}%`
+  function describe(metric: ScenarioMetric): ScenarioSummaryPart[] {
+    const change = changes[metric]
+    if (change === null) return [{ text: language === 'vi' ? 'chưa đủ dữ liệu để so sánh' : 'cannot be compared with the available data' }]
+    if (Math.abs(change) < 0.000001) return [{ text: language === 'vi' ? 'không thay đổi' : 'remained unchanged' }]
+    return [
+      { text: language === 'vi' ? `${change > 0 ? 'tăng' : 'giảm'} ` : `${change > 0 ? 'increased' : 'decreased'} by ` },
+      { text: `${percent.format(Math.abs(change))}%`, tone: scenarioChangeTone(metric, change), metric },
+    ]
   }
   let conclusion: string
   if (changes.income === null || changes.methane === null) {
@@ -31,7 +41,12 @@ export function scenarioSummary(values: ScenarioSnapshot['values'], baseline: Sc
   } else {
     conclusion = language === 'vi' ? 'Nhìn chung, cần xem đồng thời các chỉ số kinh tế, nguồn lực và phát thải để lựa chọn kịch bản phù hợp.' : 'Overall, economic, resource and emissions indicators should be considered together when selecting a suitable scenario.'
   }
-  return language === 'vi'
-    ? `Trong giai đoạn 2027–2050, thu nhập ròng ${describe(changes.income)} và năng suất trung bình ${describe(changes.yield)} so với nền 2016–2022. Chi phí sản xuất ${describe(changes.cost)}, tỷ suất lợi nhuận ${describe(changes.margin)} và ROI ${describe(changes.roi)}. Giá trị rơm ${describe(changes.straw)}, lượng nước sử dụng ${describe(changes.water)} và phát thải metan ${describe(changes.methane)}. ${conclusion}`
-    : `For 2027–2050, net income ${describe(changes.income)} and average yield ${describe(changes.yield)} relative to the 2016–2022 baseline. Production cost ${describe(changes.cost)}, profit margin ${describe(changes.margin)} and ROI ${describe(changes.roi)}. Straw value ${describe(changes.straw)}, water usage ${describe(changes.water)} and methane emissions ${describe(changes.methane)}. ${conclusion}`
+  const parts = language === 'vi'
+    ? ['Trong giai đoạn 2027–2050, thu nhập ròng ', describe('income'), ' và năng suất trung bình ', describe('yield'), ' so với giai đoạn 2016–2022. Chi phí sản xuất ', describe('cost'), ', tỷ suất lợi nhuận ', describe('margin'), ' và ROI ', describe('roi'), '. Giá trị rơm ', describe('straw'), ', lượng nước sử dụng ', describe('water'), ' và phát thải Metan ', describe('methane'), `. ${conclusion}`]
+    : ['For 2027–2050, net income ', describe('income'), ' and average yield ', describe('yield'), ' relative to the 2016–2022 baseline. Production cost ', describe('cost'), ', profit margin ', describe('margin'), ', and ROI ', describe('roi'), '. Straw value ', describe('straw'), ', water usage ', describe('water'), ', and methane emissions ', describe('methane'), `. ${conclusion}`]
+  return parts.flatMap((part) => typeof part === 'string' ? [{ text: part }] : part)
+}
+
+export function scenarioSummary(values: ScenarioSnapshot['values'], baseline: ScenarioSnapshot['values'], language: Language) {
+  return scenarioSummaryParts(values, baseline, language).map((part) => part.text).join('')
 }

@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react'
 import { useLanguage } from '../i18n/useLanguage'
 
 function ErrorFallback() {
-  const { t } = useLanguage()
+  const { t } = useLanguage('notFound')
   return (
     <main className="error-state" role="alert">
       <p className="eyebrow">STAR FARM</p>

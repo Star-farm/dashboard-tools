@@ -19,8 +19,8 @@ describe('environmental overview and comparison', () => {
     expect(within(table).getAllByRole('row')).toHaveLength(19)
     expect(table.querySelector('tbody tr')).toHaveTextContent('Hiện trạng · 2016–2022')
     expect(table.querySelectorAll('thead tr:last-child th')).toHaveLength(7)
-    expect(table).toHaveTextContent('kg CH₄/tấn gạo')
-    expect(table).toHaveTextContent('kg CH₄/ha')
+    expect(table).toHaveTextContent('kg Metan/tấn gạo')
+    expect(table).toHaveTextContent('kg Metan/ha')
     expect(screen.getAllByRole('article')).toHaveLength(17)
     expect(screen.getAllByRole('combobox')).toHaveLength(5)
     fireEvent.change(screen.getByLabelText('Nhóm kịch bản'), { target: { value: 'oneMha' } })
@@ -29,7 +29,7 @@ describe('environmental overview and comparison', () => {
     rerender(<EnvironmentPage page="environmentOverview" language="en" />)
     expect(screen.getByLabelText('Scenario group')).toHaveValue('oneMha')
     expect(screen.getByLabelText('Weather')).toHaveValue('severe')
-    expect(screen.getByRole('table')).toHaveTextContent('kg CH₄/t rice')
+    expect(screen.getByRole('table')).toHaveTextContent('kg Methane/ton rice')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
     expect(screen.getAllByRole('article')).toHaveLength(17)
     fireEvent.change(screen.getByLabelText('AWD adoption'), { target: { value: 'with' } })
@@ -85,7 +85,10 @@ describe('environmental model pages', () => {
     for (const chart of screen.getAllByRole('article')) {
       expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
       expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
-      for (const path of chart.querySelectorAll('path.recharts-line-curve')) { expect(path.getAttribute('d')).not.toMatch(/[CQ]/); expect(path).not.toHaveAttribute('stroke-dasharray') }
+      const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
+      for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
+      for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
+      for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
     }
     expect(screen.getAllByRole('article')[0]).toHaveClass('scenario-comparison-chart')
     expect(screen.getAllByRole('article')[0].querySelector('header')).toHaveTextContent('1Mha')
@@ -101,7 +104,7 @@ describe('environmental model pages', () => {
     fireEvent.mouseMove(dots[0], { clientX: Number(dots[0].getAttribute('cx')), clientY: Number(dots[0].getAttribute('cy')) })
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
-    for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${environmentNumber(series.points[0].values.intensity!, 'en')} kg CH₄/t rice`)
+    for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${environmentNumber(series.points[0].values.intensity!, 'en')} kg Methane/ton rice`)
     fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('cx')), clientY: Number(dots[23].getAttribute('cy')) })
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
   })

@@ -93,7 +93,7 @@ describe('economic overview interface', () => {
     expect(within(table).getByText('473.11')).toBeInTheDocument()
     expect(within(table).getByText('1,089.99')).toBeInTheDocument()
     expect(within(table).getByText('43.40%')).toBeInTheDocument()
-    expect(within(table).getAllByText('Unit: $/ha')).toHaveLength(3)
+    expect(within(table).getAllByText('Unit: USD/ha')).toHaveLength(3)
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
     expect(within(table).getAllByRole('row')).toHaveLength(19)
     expect(screen.getAllByRole('combobox').every((select) => (select as HTMLSelectElement).value === 'all')).toBe(true)

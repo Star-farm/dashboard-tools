@@ -3,11 +3,13 @@ import type { Language } from '../../i18n'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import cached from '../../data/resources.json'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
+import ScenarioComparisonChart from '../../components/ScenarioComparisonChart'
+import { bau3Text } from '../economics/bau3Text'
 import type { Bau3Family } from '../economics/bau3Types'
 import { economicsText } from '../economics/economicsText'
 import { resourceMetrics } from './resourceTypes'
 import type { ResourceData, ResourceSeries } from './resourceTypes'
-import { resourceComparisonInsight, resourceDomain, resourceFamilyInsight, resourceFilteredSeries, resourceNumber, resourceStats, resourceSummary, resourceUnit } from './resourceAnalysis'
+import { resourceColors, resourceComparisonInsight, resourceDomain, resourceFamilyInsight, resourceFilteredSeries, resourceLinePoints, resourceNumber, resourceStats, resourceSummary, resourceUnit } from './resourceAnalysis'
 import { resourceText } from './resourceText'
 import { resourcePageTitle, resourceRoutes } from './resourceRoutes'
 import type { ResourceContentPage } from './resourceRoutes'
@@ -62,10 +64,12 @@ function ResourceFarming({ family, language }: { family: Bau3Family; language: L
 }
 function ResourcePair({ family, language }: { family: Exclude<Bau3Family, 'oneMha'>; language: Language }) {
   const t = resourceText[language], selected: ResourceSeries[] = data.series.filter((item) => item.family === family || item.family === 'oneMha')
+  const labels = bau3Text[language], baselineLabel = { bau3s: labels.bau3Short, bau2s: labels.bau2Short, bauss: labels.baussShort }[family]
   return <>
     <Insight label={t.summary} text={resourceSummary(data, selected, language, family, true)} summary />
     <div className="bau3-sections">{resourceMetrics.map((metric) => <section className="bau3-section" key={metric} aria-labelledby={`resource-pair-${metric}-title`}>
-      <h2 id={`resource-pair-${metric}-title`}>{t[metric]}</h2><div className="bau3-chart-pair">{([family, 'oneMha'] as Bau3Family[]).map((model) => <ResourceLineChart key={model} data={data} family={model} metric={metric} domain={resourceDomain(selected, metric)} language={language} />)}</div>
+      <h2 id={`resource-pair-${metric}-title`}>{t[metric]}</h2>
+      <ScenarioComparisonChart key={family} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={resourceLinePoints(data, family, metric)} oneMha={resourceLinePoints(data, 'oneMha', metric)} startYear={data.startYear} endYear={data.endYear} domain={resourceDomain(selected, metric)} unit={resourceUnit(metric, language)} colors={resourceColors} formatValue={(value) => resourceNumber(value, language)} />
       <Insight label={`${t.insight} · ${t[metric]}`} text={resourceComparisonInsight(data, selected, metric, language, family)} />
     </section>)}</div>
   </>

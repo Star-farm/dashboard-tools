@@ -74,17 +74,18 @@ describe('resource model pages', () => {
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('2050')
   }, 10000)
 
-  it.each(['resourceBau3Comparison', 'resourceBau2Comparison', 'resourceBaussComparison'] as const)('shows three matching chart pairs and observations for %s', (page) => {
+  it.each(['resourceBau3Comparison', 'resourceBau2Comparison', 'resourceBaussComparison'] as const)('shows three combined charts and observations for %s', (page) => {
     render(<ResourcesPage page={page} language="vi" />)
-    expect(screen.getAllByRole('article')).toHaveLength(6)
+    expect(screen.getAllByRole('article')).toHaveLength(3)
     expect(screen.getAllByRole('complementary')).toHaveLength(4)
     const charts = screen.getAllByRole('article')
     for (const chart of charts) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
+      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
+      expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
       for (const path of chart.querySelectorAll('path.recharts-line-curve')) { expect(path.getAttribute('d')).not.toMatch(/[CQ]/); expect(path).not.toHaveAttribute('stroke-dasharray') }
     }
-    expect(charts[0]).toHaveClass(`bau3-chart-${resourceRoutes[page].family}`)
-    expect(charts[1]).toHaveClass('bau3-chart-oneMha')
+    expect(charts[0]).toHaveClass('scenario-comparison-chart')
+    expect(charts[0].querySelector('header')).toHaveTextContent('1Mha')
   }, 10000)
 
   it('shows year and all four values in the yearly tooltip', async () => {

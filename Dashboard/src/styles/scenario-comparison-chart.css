@@ -1,0 +1,36 @@
+.scenario-comparison-chart h3 { color: #30472d; }
+.scenario-comparison-chart h3 > span { color: #819275; padding-inline: 6px; }
+.comparison-model-key { display: flex; flex-wrap: wrap; gap: 10px 24px; padding: 16px 22px 8px; color: #52654a; font-size: 12px; }
+.comparison-model-key > span { display: inline-flex; align-items: center; gap: 8px; }
+.model-line { display: inline-block; width: 25px; border-top: 3px solid #30472d; }
+.model-line-bau { opacity: .42; border-top-width: 2px; }
+.comparison-year-values i { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; display: inline-block; }
+.comparison-combined-plot { height: clamp(300px, 30vw, 400px); }
+.comparison-year-details { margin: 10px 22px 14px; padding: 16px 18px 10px; border: 1px solid #d8e1d0; border-radius: 6px; background: #f6f8f0; }
+.comparison-selected-year { margin: 0 0 6px; font-size: 13px; color: #30472d; }
+.comparison-selected-year strong { font-size: 16px; margin-left: 5px; font-variant-numeric: tabular-nums; }
+.comparison-year-hint { margin: 4px 22px 10px; font-size: 11px; color: #637357; line-height: 1.6; }
+.comparison-year-values { width: 100%; border-collapse: collapse; table-layout: fixed; color: #405538; font-size: 12px; line-height: 1.5; }
+.comparison-year-values th:first-child { width: 48%; text-align: left; }
+.comparison-year-values th, .comparison-year-values td { padding: 9px 8px; border-bottom: 1px solid #dce4d4; text-align: right; vertical-align: middle; }
+.comparison-year-values th:first-child { padding-left: 0; }
+.comparison-year-values th:last-child, .comparison-year-values td:last-child { padding-right: 0; }
+.comparison-year-values thead th { font-weight: 700; color: #30472d; }
+.comparison-year-values tbody th { font-weight: 400; }
+.comparison-year-values tbody i { margin-right: 7px; }
+.comparison-year-values td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.comparison-year-values tr:last-child > * { border-bottom: 0; }
+@media (max-width: 767px) {
+  .comparison-model-key { padding: 14px 14px 8px; gap: 8px 16px; font-size: 11px; }
+  .comparison-combined-plot { height: 290px; }
+  .comparison-year-details { margin: 8px 12px 12px; padding: 12px 10px 6px; }
+  .comparison-year-hint { margin-inline: 12px; font-size: 10px; }
+  .comparison-year-values { font-size: 11px; }
+  .comparison-year-values th:first-child { width: 44%; }
+  .comparison-year-values th, .comparison-year-values td { padding: 8px 4px; }
+  .comparison-year-values tbody i { width: 6px; height: 6px; margin-right: 4px; }
+}
+@media (max-width: 359px) {
+  .comparison-year-details { margin-inline: 8px; padding-inline: 8px; }
+  .comparison-year-values { font-size: 10px; }
+}

@@ -2,10 +2,10 @@
 .comparison-filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 20px 48px; padding: 24px 0; border-block: 1px solid var(--line); }
 .comparison-filters fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
 .comparison-filters legend { color: var(--green); font-size: 13px; font-weight: 700; margin-bottom: 11px; padding: 0; }
-.comparison-segmented { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid #c5d1bc; border-radius: 7px; background: #edf1e5; }
-.comparison-segmented button { min-height: 40px; padding: 9px 17px; border: 0; border-radius: 4px; color: #4c6144; background: transparent; font-size: 13px; line-height: 1.4; transition: background .15s, color .15s; }
-.comparison-segmented button:hover { background: #dfe8d6; color: var(--forest); }
-.comparison-segmented button[aria-pressed="true"] { color: #fff9e3; background: var(--forest); }
+.comparison-segmented { display: inline-flex; flex-wrap: wrap; gap: 6px 22px; padding: 0; border: 0; background: transparent; }
+.comparison-segmented button { min-height: 40px; padding: 7px 0; border: 0; border-radius: 0; color: #4c6144; background: transparent; font-size: 13px; line-height: 1.4; text-underline-offset: 4px; }
+.comparison-segmented button:hover, .comparison-segmented button:focus-visible { background: transparent; color: var(--forest); outline: none; text-decoration: underline; }
+.comparison-segmented button[aria-pressed="true"] { color: var(--forest); background: transparent; text-decoration: underline; }
 .comparison-reset { min-height: 46px; padding: 8px 0; margin-left: auto; border: 0; color: var(--green); background: transparent; font-size: 13px; text-underline-offset: 4px; }
 .comparison-reset:hover { text-decoration: underline; }
 .comparison-summary { margin-top: 24px; padding: 22px 25px; border-left: 3px solid #9caa70; background: #edf1e4; }

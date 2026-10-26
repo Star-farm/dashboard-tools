@@ -27,6 +27,12 @@ button { cursor: pointer; }
 button:active { transform: translateY(1px); }
 button, a { touch-action: manipulation; }
 button:focus-visible, a:focus-visible { outline: 3px solid #759b7f; outline-offset: 4px; }
+/* Recharts also focuses nested SVG groups and tooltip portals on click. */
+.recharts-responsive-container, .recharts-responsive-container *,
+.recharts-wrapper, .recharts-wrapper *,
+.bau3-plot:focus, .bau3-plot:focus-visible,
+.comparison-plot:focus, .comparison-plot:focus-visible,
+.timeseries-plot:focus, .timeseries-plot:focus-visible { outline: none !important; box-shadow: none !important; -webkit-tap-highlight-color: transparent; }
 a { color: inherit; }
 .back-to-top { position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 1; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 1px solid #e6d49a59; border-radius: 50%; color: var(--gold); background: var(--forest); box-shadow: 0 4px 16px #102a2233; transition: background .15s, color .15s; }
 .back-to-top:hover { background: #28523f; color: #fff0b8; }

@@ -5,12 +5,13 @@ import App from '../src/app/App'
 import { CATEGORIES, parseCsv, readIndicators, selectIndicators } from '../src/features/glossary/glossaryData'
 
 describe('CSV data', () => {
-  it('reads all 31 original terms and their categories', () => {
+  it('reads all 31 terms with stable IDs and categories', () => {
     const indicators = readIndicators(csv)
     expect(indicators).toHaveLength(31)
+    expect(indicators.map((item) => item.id)).toEqual(Array.from({ length: 31 }, (_, index) => String(index + 1)))
     expect(CATEGORIES.map((category) => indicators.filter((item) => item.category === category).length)).toEqual([5, 5, 2, 8, 11])
     expect(indicators.find((item) => item.id === '27')?.englishName).toContain('high-quality, low-emission')
-    expect(indicators.find((item) => item.id === '21')?.definition).toContain('"Đề án một triệu hecta"')
+    expect(indicators.find((item) => item.id === '21')?.definition).toContain('"Đề án một triệu héc-ta lúa (1Mha)"')
   })
 
   it('handles BOM, escaped quotes, comma, CRLF and multiline fields', () => {

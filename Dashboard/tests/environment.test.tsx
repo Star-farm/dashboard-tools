@@ -78,16 +78,17 @@ describe('environmental model pages', () => {
     expect(screen.getByText('AWD adoption rate')).toBeInTheDocument()
   }, 10000)
 
-  it.each(['environmentBau3Comparison', 'environmentBau2Comparison', 'environmentBaussComparison'] as const)('shows two matching chart pairs and observations for %s', (page) => {
+  it.each(['environmentBau3Comparison', 'environmentBau2Comparison', 'environmentBaussComparison'] as const)('shows two combined charts and observations for %s', (page) => {
     render(<EnvironmentPage page={page} language="vi" />)
-    expect(screen.getAllByRole('article')).toHaveLength(4)
+    expect(screen.getAllByRole('article')).toHaveLength(2)
     expect(screen.getAllByRole('complementary')).toHaveLength(3)
     for (const chart of screen.getAllByRole('article')) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
+      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
+      expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
       for (const path of chart.querySelectorAll('path.recharts-line-curve')) { expect(path.getAttribute('d')).not.toMatch(/[CQ]/); expect(path).not.toHaveAttribute('stroke-dasharray') }
     }
-    expect(screen.getAllByRole('article')[0]).toHaveClass(`bau3-chart-${environmentRoutes[page].family}`)
-    expect(screen.getAllByRole('article')[1]).toHaveClass('bau3-chart-oneMha')
+    expect(screen.getAllByRole('article')[0]).toHaveClass('scenario-comparison-chart')
+    expect(screen.getAllByRole('article')[0].querySelector('header')).toHaveTextContent('1Mha')
     expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })).toHaveTextContent('AWD')
   }, 10000)
 

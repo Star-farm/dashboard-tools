@@ -61,19 +61,20 @@ describe('BAU 2 seasons and sustainable comparisons', () => {
     }
   })
 
-  it.each(variants)('renders and translates five matching chart pairs for $variant', ({ Component, title, englishTitle, englishLabel, label }) => {
+  it.each(variants)('renders and translates five combined comparisons for $variant', ({ Component, title, englishTitle, label }) => {
     const { rerender } = render(<Component language="vi" />)
     expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
-    expect(screen.getAllByRole('article')).toHaveLength(10)
+    expect(screen.getAllByRole('article')).toHaveLength(5)
     expect(screen.getAllByRole('complementary')).toHaveLength(5)
     expect(screen.getByRole('complementary', { name: 'Nhận xét · Thu nhập ròng' })).toHaveTextContent(label)
     const income = screen.getByRole('region', { name: 'Thu nhập ròng' })
     const pair = within(income).getAllByRole('article')
-    for (const card of pair) expect([...card.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(['#3478c6', '#9362bc', '#ce762b', '#589044'])
+    expect(pair).toHaveLength(1)
+    for (const card of pair) expect([...card.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#3478c6', '#9362bc', '#ce762b', '#589044']))
     rerender(<Component language="en" />)
     expect(screen.getByRole('heading', { name: englishTitle })).toBeInTheDocument()
     const translated = within(screen.getByRole('region', { name: 'Net income' })).getAllByRole('article')
-    expect(translated[0].querySelector('header')).toHaveTextContent(englishLabel)
+    expect(translated[0].querySelector('header')).toHaveTextContent(englishTitle.replace(' vs ', ' / '))
     for (const card of translated) expect(card.querySelector('header')).toHaveTextContent('Unit: $/ha')
     expect(screen.getByRole('complementary', { name: 'What the comparison shows · Profit margin' })).toHaveTextContent('percentage points')
   })

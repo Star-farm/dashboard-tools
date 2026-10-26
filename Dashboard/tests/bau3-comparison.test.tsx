@@ -105,21 +105,23 @@ describe('BAU 3 seasons data and observations', () => {
 })
 
 describe('BAU 3 seasons comparison page', () => {
-  it('renders five pairs, five prose observations, straight lines and yearly dots in the existing template', () => {
+  it('renders five combined charts, observations, straight lines and yearly dots in the existing template', () => {
     render(<Bau3ComparisonPage language="vi" />)
     expect(screen.getByRole('heading', { name: 'BAU 3 vụ so với 1Mha' })).toBeInTheDocument()
-    expect(screen.getAllByRole('article')).toHaveLength(10)
+    expect(screen.getAllByRole('article')).toHaveLength(5)
     expect(screen.getAllByRole('complementary')).toHaveLength(5)
     const income = screen.getByRole('region', { name: 'Thu nhập ròng' })
     const pair = within(income).getAllByRole('article')
-    expect(pair[0].querySelector('header')).toHaveTextContent('Thường lệ · 3 mùa vụ')
-    expect(pair[1].querySelector('header')).toHaveTextContent('1Mha')
+    expect(pair).toHaveLength(1)
+    expect(pair[0].querySelector('header')).toHaveTextContent('BAU 3 vụ / 1Mha')
     for (const card of pair) {
       const paths = [...card.querySelectorAll('path.recharts-line-curve')]
-      expect(paths).toHaveLength(4)
-      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(['#3478c6', '#9362bc', '#ce762b', '#589044'])
+      expect(paths).toHaveLength(8)
+      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#3478c6', '#9362bc', '#ce762b', '#589044']))
+      expect(paths.slice(0, 4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('0.42'))
+      expect(paths.slice(4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
       for (const path of paths) { expect(path.getAttribute('d')).not.toMatch(/[CQ]/); expect(path).not.toHaveAttribute('stroke-dasharray') }
-      expect(card.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
+      expect(card.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
       expect(card.querySelector('header')).toHaveTextContent('Đơn vị: VNĐ/ha')
     }
     for (const insight of screen.getAllByRole('complementary')) {

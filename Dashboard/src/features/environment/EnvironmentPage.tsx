@@ -3,11 +3,13 @@ import type { Language } from '../../i18n'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import cached from '../../data/environment.json'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
+import ScenarioComparisonChart from '../../components/ScenarioComparisonChart'
+import { bau3Text } from '../economics/bau3Text'
 import type { Bau3Family } from '../economics/bau3Types'
 import { economicsText } from '../economics/economicsText'
 import { environmentMetrics } from './environmentTypes'
 import type { EnvironmentData, EnvironmentSeries } from './environmentTypes'
-import { environmentAwdStats, environmentComparisonInsight, environmentDomain, environmentFamilyInsight, environmentFilteredSeries, environmentNumber, environmentStats, environmentSummary, environmentUnit } from './environmentAnalysis'
+import { environmentAwdStats, environmentColors, environmentComparisonInsight, environmentDomain, environmentFamilyInsight, environmentFilteredSeries, environmentLinePoints, environmentNumber, environmentStats, environmentSummary, environmentUnit } from './environmentAnalysis'
 import { environmentText } from './environmentText'
 import { environmentPageTitle, environmentRoutes } from './environmentRoutes'
 import type { EnvironmentContentPage } from './environmentRoutes'
@@ -63,10 +65,12 @@ function EnvironmentFarming({ family, language }: { family: Bau3Family; language
 }
 function EnvironmentPair({ family, language }: { family: Exclude<Bau3Family, 'oneMha'>; language: Language }) {
   const t = environmentText[language], selected: EnvironmentSeries[] = data.series.filter((item) => item.family === family || item.family === 'oneMha')
+  const labels = bau3Text[language], baselineLabel = { bau3s: labels.bau3Short, bau2s: labels.bau2Short, bauss: labels.baussShort }[family]
   return <>
     <Insight label={t.summary} text={environmentSummary(data, selected, language, family, true)} summary />
     <div className="bau3-sections">{environmentMetrics.map((metric) => <section className="bau3-section" key={metric} aria-labelledby={`environment-pair-${metric}-title`}>
-      <h2 id={`environment-pair-${metric}-title`}>{t[metric]}</h2><div className="bau3-chart-pair">{([family, 'oneMha'] as Bau3Family[]).map((model) => <EnvironmentLineChart key={model} data={data} family={model} metric={metric} domain={environmentDomain(selected, metric)} language={language} />)}</div>
+      <h2 id={`environment-pair-${metric}-title`}>{t[metric]}</h2>
+      <ScenarioComparisonChart key={family} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={environmentLinePoints(data, family, metric)} oneMha={environmentLinePoints(data, 'oneMha', metric)} startYear={data.startYear} endYear={data.endYear} domain={environmentDomain(selected, metric)} unit={environmentUnit(metric, language)} colors={environmentColors} formatValue={(value) => environmentNumber(value, language)} />
       <Insight label={`${t.insight} · ${t[metric]}`} text={environmentComparisonInsight(data, selected, metric, language, family)} />
     </section>)}</div>
   </>

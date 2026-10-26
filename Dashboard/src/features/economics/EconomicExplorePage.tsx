@@ -46,7 +46,9 @@ export default function EconomicExplorePage({ language, topic = 'economics' }: {
   ]
 
   useEffect(() => {
-    document.getElementById(`${prefix}-explore`)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
+    const hash = window.location.hash.slice(1)
+    const target = ['overview', 'comparison', 'bau'].some((branch) => hash === `${prefix}-explore-${branch}`) ? hash : `${prefix}-explore`
+    document.getElementById(target)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [prefix])
 
   return (
@@ -56,7 +58,7 @@ export default function EconomicExplorePage({ language, topic = 'economics' }: {
         <p>{text.description}</p>
       </section>
       <div className="economic-explore-grid">{groups.map((group) => (
-        <section className="economic-explore-card" key={group.id} aria-labelledby={`explore-${group.id}-title`}>
+        <section className="economic-explore-card" id={`${prefix}-explore-${group.id}`} key={group.id} aria-labelledby={`explore-${group.id}-title`}>
           <header><h2 id={`explore-${group.id}-title`}>{group.title}</h2><p>{group.description}</p></header>
           <ul>{group.items.map((item) => <li key={item.label}>
             <a href={item.href}><span>{item.label}</span><span aria-hidden="true">→</span></a>

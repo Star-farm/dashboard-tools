@@ -8,6 +8,8 @@ import type { EnvironmentPage } from '../features/environment/environmentRoutes'
 export type Page = 'home' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
+  const exploreSection = /^#(economics|resources|environment)-explore-(overview|comparison|bau)$/.exec(hash)
+  if (exploreSection) return ({ economics: 'economicExplore', resources: 'resourceExplore', environment: 'environmentExplore' } as const)[exploreSection[1] as 'economics' | 'resources' | 'environment']
   const environmentPage = environmentPageForHash(hash)
   if (environmentPage) return environmentPage
   const resourcePage = resourcePageForHash(hash)

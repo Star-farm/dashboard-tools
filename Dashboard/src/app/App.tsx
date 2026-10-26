@@ -5,6 +5,7 @@ import NotFoundPage from '../features/NotFoundPage'
 import HomePage from '../features/home/HomePage'
 import SiteFooter from './SiteFooter'
 import SiteHeader from './SiteHeader'
+import { PageBreadcrumbs } from './PageBreadcrumbs'
 import BackToTop from './BackToTop'
 import { useLanguage } from '../i18n/useLanguage'
 import { usePageNavigation } from './usePageNavigation'
@@ -73,6 +74,7 @@ export default function App() {
       <a className="skip-link" href="#main-content">{t.skipContent}</a>
       <SiteHeader language={language} page={page} changeLanguage={changeLanguage} />
       <main id="main-content" tabIndex={-1}>
+        <PageBreadcrumbs page={page} language={language} />
         <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
       </main>
       <SiteFooter language={language} />

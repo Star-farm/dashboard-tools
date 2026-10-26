@@ -1,0 +1,14 @@
+.page-breadcrumbs { padding-top: 32px; color: var(--green); font-size: 12px; line-height: 1.6; }
+.page-breadcrumbs ol { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; padding: 0; list-style: none; }
+.page-breadcrumbs li { display: inline-flex; align-items: baseline; gap: 10px; min-width: 0; max-width: 100%; }
+.page-breadcrumbs a { min-width: 0; padding-block: 4px; text-decoration: none; text-underline-offset: 4px; }
+.page-breadcrumbs a:hover { color: var(--forest); text-decoration: underline; }
+.page-breadcrumbs [aria-current="page"] { padding-block: 4px; color: var(--muted); }
+.breadcrumb-separator { flex-shrink: 0; color: #819275; }
+.page-breadcrumbs + .page-shell { scroll-margin-top: 76px; }
+.page-breadcrumbs + .page-shell > .intro { padding-top: 12px; }
+@media (max-width: 767px) {
+  .page-breadcrumbs { padding-top: 24px; font-size: 11px; }
+  .page-breadcrumbs ol { gap: 2px 7px; }
+  .page-breadcrumbs li { gap: 7px; }
+}

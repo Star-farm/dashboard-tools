@@ -1,0 +1,30 @@
+.page-transition { min-width: 0; }
+.back-to-top { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(12px) scale(.94); transition: background .15s, color .15s, opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
+.back-to-top.is-visible { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
+
+@keyframes page-reveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes content-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes submenu-reveal {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .page-transition > :not(.page-breadcrumbs) { animation: page-reveal .32s cubic-bezier(.22, 1, .36, 1); }
+  .page-transition > .page-breadcrumbs { animation: content-fade .22s ease-out; }
+  .topic-dropdown, .topic-flyout { animation: submenu-reveal .18s ease-out; }
+  .mobile-navigation .topic-dropdown, .mobile-navigation .topic-flyout { animation-name: content-fade; }
+  .page-transition .economic-explore-card, .page-transition .explore-destination-card { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .economic-explore-card:hover, .explore-destination-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px #254f3d12; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top { transition: none; transform: none; }
+}

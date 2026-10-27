@@ -15,6 +15,7 @@ import { resourceText } from '../features/resources/resourceText'
 import { environmentRoutes, isEnvironmentPage } from '../features/environment/environmentRoutes'
 import type { EnvironmentContentPage } from '../features/environment/environmentRoutes'
 import { environmentText } from '../features/environment/environmentText'
+import '../styles/motion.css'
 
 const FuturePage = lazy(() => import('../features/future/FuturePage'))
 const ScenarioDetailsPage = lazy(() => import('../features/scenarios/ScenarioDetailsPage'))
@@ -32,22 +33,22 @@ const ResourcesPage = lazy(() => import('../features/resources/ResourcesPage'))
 const EnvironmentPage = lazy(() => import('../features/environment/EnvironmentPage'))
 
 export default function App() {
-  const { page } = usePageNavigation()
-  const { language, changeLanguage, t } = useLanguage(page)
+  const { page, branch } = usePageNavigation()
+  const { language, changeLanguage, t } = useLanguage(page, branch)
   const resourcePages = Object.fromEntries((Object.keys(resourceRoutes) as ResourceContentPage[]).map((key) => [key, <ResourcesPage key={key} page={key} language={language} />])) as Record<ResourceContentPage, ReactElement>
   const environmentPages = Object.fromEntries((Object.keys(environmentRoutes) as EnvironmentContentPage[]).map((key) => [key, <EnvironmentPage key={key} page={key} language={language} />])) as Record<EnvironmentContentPage, ReactElement>
   const pages = {
     ...resourcePages,
     ...environmentPages,
-    environmentExplore: <EconomicExplorePage language={language} topic="sustainability" />,
-    resourceExplore: <EconomicExplorePage language={language} topic="resources" />,
+    environmentExplore: <EconomicExplorePage language={language} topic="sustainability" branch={branch} />,
+    resourceExplore: <EconomicExplorePage language={language} topic="resources" branch={branch} />,
     home: <HomePage language={language} />,
     notFound: <NotFoundPage language={language} />,
     glossary: <Glossary language={language} />,
     future: <FuturePage language={language} />,
     scenario: <ScenarioDetailsPage language={language} />,
     economics: <EconomicOverviewPage language={language} />,
-    economicExplore: <EconomicExplorePage language={language} />,
+    economicExplore: <EconomicExplorePage language={language} branch={branch} />,
     economicComparison: <EconomicComparisonPage language={language} />,
     bau3Comparison: <Bau3ComparisonPage language={language} />,
     bau2Comparison: <Bau2ComparisonPage language={language} />,
@@ -74,8 +75,10 @@ export default function App() {
       <a className="skip-link" href="#main-content">{t.skipContent}</a>
       <SiteHeader language={language} page={page} changeLanguage={changeLanguage} />
       <main id="main-content" tabIndex={-1}>
-        <PageBreadcrumbs page={page} language={language} />
-        <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
+        <div className="page-transition" key={`${page}-${branch ?? 'root'}`}>
+          <PageBreadcrumbs page={page} language={language} branch={branch} />
+          <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
+        </div>
       </main>
       <SiteFooter language={language} />
       <BackToTop language={language} />

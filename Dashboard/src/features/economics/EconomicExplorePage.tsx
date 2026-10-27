@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { getScrollBehavior } from '../../app/scrollBehavior'
+import type { ExploreBranch } from '../../app/exploreNavigation'
 import { translations } from '../../i18n'
 import type { Language } from '../../i18n'
 import { economicExploreText } from './economicExploreText'
@@ -7,7 +8,7 @@ import { resourceText } from '../resources/resourceText'
 import { environmentText } from '../environment/environmentText'
 import '../../styles/economic-explore.css'
 
-export default function EconomicExplorePage({ language, topic = 'economics' }: { language: Language; topic?: 'economics' | 'resources' | 'sustainability' }) {
+export default function EconomicExplorePage({ language, topic = 'economics', branch }: { language: Language; topic?: 'economics' | 'resources' | 'sustainability'; branch?: ExploreBranch }) {
   const t = translations[language]
   const prefix = topic === 'sustainability' ? 'environment' : topic
   const resources = resourceText[language]
@@ -44,27 +45,31 @@ export default function EconomicExplorePage({ language, topic = 'economics' }: {
     ] },
     { id: 'one-mha', title: t.menuOneMha, description: text.oneMha, items: [{ label: text.oneMhaLink, href: `#${prefix}-1mha` }] },
   ]
+  const selectedGroup = branch ? groups.find((group) => group.id === branch) : undefined
+  const anchor = `${prefix}-explore${branch ? `-${branch}` : ''}`
 
   useEffect(() => {
-    const hash = window.location.hash.slice(1)
-    const target = ['overview', 'comparison', 'bau'].some((branch) => hash === `${prefix}-explore-${branch}`) ? hash : `${prefix}-explore`
-    document.getElementById(target)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
-  }, [prefix])
+    document.getElementById(anchor)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
+  }, [anchor])
 
   return (
-    <div className="economic-explore-page page-shell" id={`${prefix}-explore`}>
-      <section className="intro economic-explore-intro" aria-labelledby="economic-explore-title">
-        <h1 id="economic-explore-title">{title}</h1>
-        <p>{text.description}</p>
+    <div className="economic-explore-page page-shell" id={anchor} role={selectedGroup ? 'region' : undefined} aria-labelledby={selectedGroup ? 'economic-explore-title' : undefined}>
+      <section className="intro economic-explore-intro" aria-labelledby={selectedGroup ? undefined : 'economic-explore-title'}>
+        <h1 id="economic-explore-title">{selectedGroup?.title ?? title}</h1>
+        <p>{selectedGroup?.description ?? text.description}</p>
       </section>
-      <div className="economic-explore-grid">{groups.map((group) => (
+      {selectedGroup ? <div className="explore-destinations" data-count={selectedGroup.items.length}>
+        {selectedGroup.items.map((item) => <a className="explore-destination-card" key={item.href} href={item.href}>
+          <h2>{item.label}</h2><span aria-hidden="true">{'>'}</span>
+        </a>)}
+      </div> : <div className="economic-explore-grid">{groups.map((group) => (
         <section className="economic-explore-card" id={`${prefix}-explore-${group.id}`} key={group.id} aria-labelledby={`explore-${group.id}-title`}>
-          <header><h2 id={`explore-${group.id}-title`}>{group.title}</h2><p>{group.description}</p></header>
-          <ul>{group.items.map((item) => <li key={item.label}>
-            <a href={item.href}><span>{item.label}</span><span aria-hidden="true">→</span></a>
-          </li>)}</ul>
+          <a className="explore-group-link" href={group.id === 'one-mha' ? `#${prefix}-1mha` : `#${prefix}-explore-${group.id}`} aria-labelledby={`explore-${group.id}-title`} aria-describedby={`explore-${group.id}-description`}>
+            <div><h2 id={`explore-${group.id}-title`}>{group.title}</h2><p id={`explore-${group.id}-description`}>{group.description}</p></div>
+            <span aria-hidden="true">{'>'}</span>
+          </a>
         </section>
-      ))}</div>
+      ))}</div>}
     </div>
   )
 }

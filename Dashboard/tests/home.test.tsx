@@ -110,12 +110,16 @@ describe('home page', () => {
 
   it.each(['#home', '#glossary', '#future-labor', '#scenario-resources'])('scrolls to the top without leaving %s', async (hash) => {
     window.history.replaceState(null, '', hash)
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(0)
     const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
     render(<App />)
     const main = screen.getByRole('main')
     const title = await within(main).findByRole('heading', { level: 1 }, { timeout: 5000 })
     scrollTo.mockClear()
 
+    expect(screen.queryByRole('button', { name: /Về đầu trang/ })).not.toBeInTheDocument()
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(300)
+    fireEvent.scroll(window)
     const backToTop = screen.getByRole('button', { name: /Về đầu trang/ })
     expect(backToTop.closest('footer')).toBeNull()
     fireEvent.click(backToTop)
@@ -124,6 +128,9 @@ describe('home page', () => {
     expect(window.location.hash).toBe(hash)
     expect(title).toBeInTheDocument()
     expect(main).toHaveFocus()
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(0)
+    fireEvent.scroll(window)
+    expect(screen.queryByRole('button', { name: /Về đầu trang/ })).not.toBeInTheDocument()
   })
 })
 

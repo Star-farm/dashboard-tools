@@ -83,6 +83,18 @@ describe('mobile header menu', () => {
     document.body.style.overflow = ''
   })
 
+  it('opens exploration by tapping a topic name and closes the mobile menu', async () => {
+    window.history.replaceState(null, '', '#home')
+    render(<App />)
+    fireEvent.click(screen.getByRole('button', { name: 'Mở menu' }))
+    const dialog = screen.getByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('link', { name: 'Kinh tế' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Khám phá Kinh tế' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(document.body.style.overflow).not.toBe('hidden')
+    expect(window.location.hash).toBe('#economics-explore')
+  })
+
   it('expands and collapses nested menus by tapping and closes with the X or Escape', () => {
     render(<App />)
     const trigger = screen.getByRole('button', { name: 'Mở menu' })

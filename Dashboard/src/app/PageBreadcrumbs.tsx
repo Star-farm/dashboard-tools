@@ -3,6 +3,8 @@ import type { Language } from '../i18n'
 import { resourceRoutes } from '../features/resources/resourceRoutes'
 import { environmentRoutes } from '../features/environment/environmentRoutes'
 import type { Page } from './usePageNavigation'
+import { exploreBranches } from './exploreNavigation'
+import type { ExploreBranch } from './exploreNavigation'
 import '../styles/page-breadcrumbs.css'
 
 const economicPaths = {
@@ -11,7 +13,7 @@ const economicPaths = {
   bau3Farming: 'bau3', bau2Farming: 'bau2', baussFarming: 'bauss', oneMhaFarming: '1mha',
 } as const
 
-export function PageBreadcrumbs({ page, language }: { page: Page; language: Language }) {
+export function PageBreadcrumbs({ page, language, branch }: { page: Page; language: Language; branch?: ExploreBranch }) {
   if (page === 'home' || page === 'notFound') return null
   const t = translations[language]
   const items: { label: string; href?: string }[] = [{ label: t.navHome, href: '#home' }]
@@ -26,7 +28,8 @@ export function PageBreadcrumbs({ page, language }: { page: Page; language: Lang
     const topicLabel = { economics: t.topicEconomics, resources: t.topicResources, environment: t.topicSustainability }[prefix]
     const path = economicsPath ?? (resourceRoute?.anchor ?? environmentRoute?.anchor)?.slice(prefix.length + 1)
     if (!path) {
-      items.push({ label: topicLabel })
+      items.push({ label: topicLabel, href: branch ? `#${prefix}-explore` : undefined })
+      if (branch) items.push({ label: t[exploreBranches.find((item) => item.id === branch)!.label] })
     } else {
       items.push({ label: topicLabel, href: `#${prefix}-explore` })
       if (path === 'overview' || path === 'comparison') {

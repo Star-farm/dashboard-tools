@@ -122,9 +122,10 @@ describe('environmental navigation', () => {
     expect(screen.getByRole('link', { name: 'Một triệu hecta lúa' })).toHaveAttribute('href', '#environment-1mha')
   })
 
-  it('shows all nine destinations and opens the hub from the homepage', async () => {
+  it('shows four parent destinations and opens the hub from the homepage', async () => {
     const { unmount } = render(<EconomicExplorePage language="vi" topic="sustainability" />)
-    expect(screen.getAllByRole('link')).toHaveLength(9)
+    expect(screen.getAllByRole('link')).toHaveLength(4)
+    expect(document.querySelector('.economic-explore-card ul')).not.toBeInTheDocument()
     for (const link of screen.getAllByRole('link')) expect(link.getAttribute('href')).toMatch(/^#environment-/)
     unmount()
     window.history.replaceState(null, '', '#home')

@@ -35,10 +35,10 @@ describe('page breadcrumbs', () => {
   })
 
   it.each([
-    ['economics-overview', 'Tổng quan', 'economics-explore-overview', 'Kinh tế'],
-    ['resources-bau2-vs-1mha', 'So sánh', 'resources-explore-comparison', 'Tài nguyên'],
-    ['environment-bauss', 'Canh tác như thường lệ', 'environment-explore-bau', 'Môi trường'],
-  ])('opens the real parent section from #%s and keeps its destination links usable', async (anchor, branch, destination, topic) => {
+    ['economics-overview', 'Tổng quan', 'economics-explore-overview'],
+    ['resources-bau2-vs-1mha', 'So sánh', 'resources-explore-comparison'],
+    ['environment-bauss', 'Canh tác như thường lệ', 'environment-explore-bau'],
+  ])('opens the real parent page from #%s and keeps its destination links usable', async (anchor, branch, destination) => {
     window.history.replaceState(null, '', `#${anchor}`)
     render(<App />)
     const breadcrumb = screen.getByRole('navigation', { name: 'Đường dẫn trang' })
@@ -47,7 +47,7 @@ describe('page breadcrumbs', () => {
     expect(window.location.hash).toBe(`#${destination}`)
     expect(section).toHaveAttribute('id', destination)
     expect(screen.queryByRole('heading', { name: '404' })).not.toBeInTheDocument()
-    expect(screen.getByRole('navigation', { name: 'Đường dẫn trang' }).querySelector('[aria-current="page"]')).toHaveTextContent(topic)
+    expect(screen.getByRole('navigation', { name: 'Đường dẫn trang' }).querySelector('[aria-current="page"]')).toHaveTextContent(branch)
     const child = within(section).getAllByRole('link')[0]
     const childHash = child.getAttribute('href')
     fireEvent.click(child)

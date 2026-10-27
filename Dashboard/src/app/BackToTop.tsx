@@ -1,9 +1,22 @@
+import { useSyncExternalStore } from 'react'
 import { translations } from '../i18n'
 import type { Language } from '../i18n'
 import { getScrollBehavior } from './scrollBehavior'
 
+function subscribeToScroll(onChange: () => void) {
+  window.addEventListener('scroll', onChange, { passive: true })
+  window.addEventListener('pageshow', onChange)
+  return () => {
+    window.removeEventListener('scroll', onChange)
+    window.removeEventListener('pageshow', onChange)
+  }
+}
+
+const isBelowTop = () => window.scrollY > 24
+
 export default function BackToTop({ language }: { language: Language }) {
   const label = translations[language].backToTop
+  const visible = useSyncExternalStore(subscribeToScroll, isBelowTop, () => false)
 
   function backToTop() {
     document.getElementById('main-content')?.focus({ preventScroll: true })
@@ -11,8 +24,8 @@ export default function BackToTop({ language }: { language: Language }) {
   }
 
   return (
-    <button className="back-to-top" type="button" aria-label={label} title={label} onClick={backToTop}>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6" /></svg>
+    <button className={`back-to-top${visible ? ' is-visible' : ''}`} type="button" aria-label={label} aria-hidden={!visible || undefined} disabled={!visible} tabIndex={visible ? 0 : -1} title={label} onClick={backToTop}>
+      <span className="back-to-top-chevron" aria-hidden="true">{'>'}</span>
     </button>
   )
 }

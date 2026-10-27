@@ -45,7 +45,7 @@ export default function Glossary({ language }: { language: Language }) {
 
           <div className="results-toolbar">
             <p className="results-count" role="status" aria-live="polite" aria-atomic="true"><strong>{visible.length}</strong> / {indicators.length} {t.termsCount}<span className="selected-category">{category === 'Tất cả' ? t.allTopics : categoryLabels[language][category]}</span></p>
-            <button type="button" className="mobile-sort" onClick={() => setAscending(!ascending)}>{t.sortName} {ascending ? 'A → Z' : 'Z → A'}</button>
+            <button type="button" className="mobile-sort" onClick={() => setAscending(!ascending)}>{t.sortName} {ascending ? 'A > Z' : 'Z > A'}</button>
             {(query || category !== 'Tất cả') && <button className="reset-filters" onClick={resetFilters}>{t.resetFilters}</button>}
           </div>
 
@@ -55,7 +55,7 @@ export default function Glossary({ language }: { language: Language }) {
               <colgroup><col className="term-column" /><col /></colgroup>
               <thead>
                 <tr>
-                  <th scope="col" aria-sort={ascending ? 'ascending' : 'descending'}><button className="sort-button" onClick={() => setAscending(!ascending)} aria-label={ascending ? t.sortDescending : t.sortAscending}>{t.termName}<span className={`sort-arrow${ascending ? '' : ' descending'}`} aria-hidden="true" /></button></th>
+                  <th scope="col" aria-sort={ascending ? 'ascending' : 'descending'}><button className="sort-button" onClick={() => setAscending(!ascending)} aria-label={ascending ? t.sortDescending : t.sortAscending}>{t.termName}<span className={`sort-arrow${ascending ? '' : ' descending'}`} aria-hidden="true">{'>'}</span></button></th>
                   <th scope="col">{t.definition}</th>
                 </tr>
               </thead>

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { startTransition, useEffect, useState } from 'react'
 import { getScrollBehavior } from './scrollBehavior'
+import { exploreRouteForHash } from './exploreNavigation'
 import { resourcePageForHash } from '../features/resources/resourceRoutes'
 import type { ResourcePage } from '../features/resources/resourceRoutes'
 import { environmentPageForHash } from '../features/environment/environmentRoutes'
@@ -8,8 +9,8 @@ import type { EnvironmentPage } from '../features/environment/environmentRoutes'
 export type Page = 'home' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
-  const exploreSection = /^#(economics|resources|environment)-explore-(overview|comparison|bau)$/.exec(hash)
-  if (exploreSection) return ({ economics: 'economicExplore', resources: 'resourceExplore', environment: 'environmentExplore' } as const)[exploreSection[1] as 'economics' | 'resources' | 'environment']
+  const exploreSection = exploreRouteForHash(hash)
+  if (exploreSection) return ({ economics: 'economicExplore', resources: 'resourceExplore', environment: 'environmentExplore' } as const)[exploreSection.prefix]
   const environmentPage = environmentPageForHash(hash)
   if (environmentPage) return environmentPage
   const resourcePage = resourcePageForHash(hash)
@@ -34,10 +35,13 @@ function pageForHash(hash: string, previous: Page = 'home'): Page {
 }
 
 export function usePageNavigation() {
-  const [{ hash, page }, setLocation] = useState(() => ({ hash: window.location.hash, page: pageForHash(window.location.hash) }))
+  const [{ hash, page, branch }, setLocation] = useState(() => ({ hash: window.location.hash, page: pageForHash(window.location.hash), branch: exploreRouteForHash(window.location.hash)?.branch }))
 
   useEffect(() => {
-    const update = () => setLocation((previous) => ({ hash: window.location.hash, page: pageForHash(window.location.hash, previous.page) }))
+    const update = () => {
+      const nextHash = window.location.hash
+      startTransition(() => setLocation((previous) => ({ hash: nextHash, page: pageForHash(nextHash, previous.page), branch: nextHash === '#main-content' ? previous.branch : exploreRouteForHash(nextHash)?.branch })))
+    }
     window.addEventListener('hashchange', update)
     return () => window.removeEventListener('hashchange', update)
   }, [])
@@ -47,5 +51,5 @@ export function usePageNavigation() {
     target?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [hash, page])
 
-  return { page, hash }
+  return { page, hash, branch }
 }

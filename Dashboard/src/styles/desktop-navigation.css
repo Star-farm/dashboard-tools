@@ -31,7 +31,7 @@
   .desktop-header .top-navigation > .topic-list > li > a[aria-current], .desktop-header .topic-trigger[aria-expanded="true"] { color: var(--gold-bright); background: transparent; }
   .desktop-header button:active { transform: none; }
   .desktop-header .topic-trigger-label { gap: clamp(5px, .45vw, 10px); }
-  .desktop-header .topic-chevron { width: clamp(5px, .4vw, 8px); height: clamp(5px, .4vw, 8px); flex-basis: clamp(5px, .4vw, 8px); }
+  .desktop-header .topic-chevron { width: .75em; height: 1em; flex-basis: .75em; }
   .desktop-header .language-switcher { grid-column: 3; grid-row: 1; align-self: center; justify-self: end; margin: 0; border: 0; border-radius: 0; background: transparent; }
   .desktop-header .language-switcher button { width: calc(clamp(24px, 1.4vw, 28px) * 1.3); height: calc(clamp(26px, 1.5vw, 30px) * 1.5); min-width: 24px; min-height: 26px; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: calc(clamp(10px, .55vw, 11px) * 1.3); color: var(--gold); text-shadow: 0 1px 3px #09291ee6; transition: color .15s; }
   .desktop-header .language-switcher button:hover, .desktop-header .language-switcher button[aria-pressed="true"] { color: var(--gold-bright); background: transparent; }

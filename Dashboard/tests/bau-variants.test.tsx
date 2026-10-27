@@ -88,7 +88,7 @@ describe('BAU 2 seasons and sustainable comparisons', () => {
     fireEvent.click(screen.getByRole('button', { name: 'So sánh' }))
     expect(screen.getByRole('link', { name: menu })).toHaveAttribute('aria-current', 'page')
     expect(screen.getByRole('link', { name: menu })).toHaveAttribute('href', hash)
-    fireEvent.click(screen.getByRole('link', { name: 'Trang chủ' }))
+    fireEvent.click(within(screen.getByRole('navigation', { name: 'Menu chính' })).getByRole('link', { name: 'Trang chủ' }))
     expect(await screen.findByRole('heading', { name: /Tác động của đề án/ })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Kinh tế' }))
     fireEvent.click(screen.getByRole('button', { name: 'So sánh' }))

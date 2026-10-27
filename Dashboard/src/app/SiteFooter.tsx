@@ -24,7 +24,7 @@ export default function SiteFooter({ language }: { language: Language }) {
         <div className="footer-content content-width">
           <div className="footer-about">
             <div className="brand footer-brand"><span className="brand-name">STAR-FARM</span><span className="brand-full-name"><em>{t.footerProjectTitle}</em></span></div>
-            <div className="footer-links"><h2>{t.footerResources}</h2><a href="https://across-lab.org/application/star-farm/" target="_blank" rel="noopener noreferrer">{t.footerProject}<span aria-hidden="true">↗</span></a><a href="https://across-lab.org/" target="_blank" rel="noopener noreferrer">{t.footerResearch}<span aria-hidden="true">↗</span></a></div>
+            <div className="footer-links"><h2>{t.footerResources}</h2><a href="https://across-lab.org/application/star-farm/" target="_blank" rel="noopener noreferrer">{t.footerProject}<span aria-hidden="true">{'>'}</span></a><a href="https://across-lab.org/" target="_blank" rel="noopener noreferrer">{t.footerResearch}<span aria-hidden="true">{'>'}</span></a></div>
           </div>
           <section className="partners-section" id="partners" aria-label={t.partners}>
             <div className="partners-inner">

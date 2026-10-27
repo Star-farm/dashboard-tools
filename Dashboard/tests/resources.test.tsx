@@ -121,7 +121,8 @@ describe('resource navigation', () => {
 
   it('shows a complete resource hub and opens it directly from the homepage', async () => {
     const { unmount } = render(<EconomicExplorePage language="vi" topic="resources" />)
-    expect(screen.getAllByRole('link')).toHaveLength(9)
+    expect(screen.getAllByRole('link')).toHaveLength(4)
+    expect(document.querySelector('.economic-explore-card ul')).not.toBeInTheDocument()
     for (const link of screen.getAllByRole('link')) expect(link.getAttribute('href')).toMatch(/^#resources-/)
     unmount()
     window.history.replaceState(null, '', '#home')

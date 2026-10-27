@@ -2,17 +2,25 @@ import { useEffect, useState } from 'react'
 import { getInitialLanguage, LANGUAGE_STORAGE_KEY, translations } from './index'
 import type { Language } from './index'
 import type { Page } from '../app/usePageNavigation'
+import { exploreBranches } from '../app/exploreNavigation'
+import type { ExploreBranch } from '../app/exploreNavigation'
 import { isResourcePage, resourcePageTitle } from '../features/resources/resourceRoutes'
 import { resourceText } from '../features/resources/resourceText'
 import { isEnvironmentPage, environmentPageTitle } from '../features/environment/environmentRoutes'
 import { environmentText } from '../features/environment/environmentText'
 
-export function useLanguage(page: Page = 'glossary') {
+export function useLanguage(page: Page = 'glossary', branch?: ExploreBranch) {
   const [language, setLanguage] = useState(getInitialLanguage)
   const t = translations[language]
 
   useEffect(() => {
     document.documentElement.lang = language === 'en' ? 'en-US' : 'vi'
+    if (branch && ['economicExplore', 'resourceExplore', 'environmentExplore'].includes(page)) {
+      const topic = page === 'economicExplore' ? t.topicEconomics : page === 'resourceExplore' ? t.topicResources : t.topicSustainability
+      document.title = `${t[exploreBranches.find((item) => item.id === branch)!.label]} · ${topic} | STAR FARM`
+      document.querySelector('meta[name="description"]')?.setAttribute('content', page === 'economicExplore' ? t.economicExplorePageDescription : page === 'resourceExplore' ? resourceText[language].description : environmentText[language].description)
+      return
+    }
     if (isEnvironmentPage(page)) {
       document.title = `${environmentPageTitle(page, language)} | STAR FARM`
       document.querySelector('meta[name="description"]')?.setAttribute('content', environmentText[language].description)
@@ -39,7 +47,7 @@ export function useLanguage(page: Page = 'glossary') {
     }
     document.title = titles[page]
     document.querySelector('meta[name="description"]')?.setAttribute('content', descriptions[page])
-  }, [language, t, page])
+  }, [language, t, page, branch])
 
   function changeLanguage(next: Language) {
     setLanguage(next)

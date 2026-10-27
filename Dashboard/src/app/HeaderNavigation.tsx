@@ -5,17 +5,11 @@ import type { Language } from '../i18n'
 import type { Page } from './usePageNavigation'
 import { navigationTopics as topics } from './navigationTopics'
 import type { Topic } from './navigationTopics'
+import { exploreBranches as branches } from './exploreNavigation'
+import type { ExploreBranch as Branch } from './exploreNavigation'
 import { resourceDestination } from '../features/resources/resourceRoutes'
 import { environmentDestination } from '../features/environment/environmentRoutes'
 import '../styles/topic-navigation.css'
-
-const branches = [
-  { id: 'overview', label: 'menuOverview' },
-  { id: 'comparison', label: 'menuComparison' },
-  { id: 'bau', label: 'menuBau' },
-] as const
-
-type Branch = typeof branches[number]['id']
 
 function leafDestination(topic: Topic, branch: Branch, index: number): { href: string; page: Page } | undefined {
   if (topic === 'sustainability') return environmentDestination(branch, index)
@@ -72,7 +66,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   function focusFirst(id: string, last = false) {
     window.clearTimeout(focusTimer.current)
     focusTimer.current = window.setTimeout(() => {
-      const buttons = document.getElementById(id)?.querySelectorAll<HTMLElement>('button, a[href]')
+      const buttons = document.getElementById(id)?.querySelectorAll<HTMLElement>('.topic-branch-toggle, .topic-leaf')
       if (buttons?.length) buttons[last ? buttons.length - 1 : 0].focus()
     }, 0)
   }
@@ -94,7 +88,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
       const height = Math.max(panelBounds.height, flyoutBounds ? flyoutBounds.bottom - panelBounds.top + 8 : 0)
       if (height > 0) header.style.setProperty('--submenu-height', `${height}px`)
       const navigationBounds = navigationRef.current?.getBoundingClientRect()
-      const triggerBounds = document.getElementById(`topic-${openTopic}-trigger`)?.getBoundingClientRect()
+      const triggerBounds = document.getElementById(`topic-${openTopic}-trigger`)?.closest('.topic-control')?.getBoundingClientRect()
       if (panelBounds.width > 0 && navigationBounds && triggerBounds) {
         const inner = header.querySelector<HTMLElement>('.header-inner')
         const gutter = inner ? parseFloat(window.getComputedStyle(inner).paddingRight) || 16 : 16
@@ -163,8 +157,9 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
     if (!list || list.classList.contains('topic-list')) return
     if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
       event.preventDefault()
-      const buttons = Array.from(list.children).map((item) => item.querySelector<HTMLElement>(':scope > button, :scope > a[href]')).filter((button): button is HTMLElement => button !== null)
-      const current = buttons.indexOf(target)
+      const buttons = Array.from(list.children).map((item) => item.querySelector<HTMLElement>(':scope > .topic-branch-row > .topic-branch-toggle, :scope > button, :scope > a[href]')).filter((button): button is HTMLElement => button !== null)
+      const focused = target.closest('.topic-branch-row')?.querySelector<HTMLElement>('.topic-branch-toggle') ?? target
+      const current = buttons.indexOf(focused)
       const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (current + (event.key === 'ArrowDown' ? 1 : -1) + buttons.length) % buttons.length
       buttons[next]?.focus()
     }
@@ -177,6 +172,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   }
 
   function renderPanel(topic: typeof topics[number]) {
+    const prefix = topic.id === 'sustainability' ? 'environment' : topic.id
     const oneMha = {
       economics: { href: '#economics-1mha', page: 'oneMhaFarming' },
       resources: { href: '#resources-1mha', page: 'resourceOneMha' },
@@ -187,9 +183,12 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
         <ul className="topic-panel" aria-label={t[topic.label]}>
           {branches.map((branch) => (
             <li className="topic-branch" key={branch.id} onMouseEnter={mobile ? undefined : () => setOpenBranch(branch.id)}>
-              <button className="topic-menu-button" type="button" id={`topic-${topic.id}-${branch.id}-trigger`} data-branch={branch.id} aria-expanded={openBranch === branch.id} aria-controls={`topic-${topic.id}-${branch.id}-panel`} onClick={() => setOpenBranch(mobile && openBranch === branch.id ? null : branch.id)}>
-                {t[branch.label]}<span className="topic-chevron right" aria-hidden="true" />
-              </button>
+              <div className="topic-branch-row">
+                <a className="topic-menu-button topic-branch-link" href={`#${prefix}-explore-${branch.id}`} data-branch={branch.id} aria-current={window.location.hash === `#${prefix}-explore-${branch.id}` ? 'page' : undefined} onClick={navigate}>{t[branch.label]}</a>
+                <button className="topic-menu-button topic-branch-toggle" type="button" id={`topic-${topic.id}-${branch.id}-trigger`} data-branch={branch.id} aria-label={t[branch.label]} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${t[branch.label]}`} aria-expanded={openBranch === branch.id} aria-controls={`topic-${topic.id}-${branch.id}-panel`} onClick={() => setOpenBranch(mobile && openBranch === branch.id ? null : branch.id)}>
+                  <span className={`topic-chevron ${mobile ? 'down' : 'right'}`} aria-hidden="true">{mobile ? null : '>'}</span>
+                </button>
+              </div>
               {openBranch === branch.id && (
                 <div className="topic-flyout" id={`topic-${topic.id}-${branch.id}-panel`}>
                   <ul className="topic-panel" aria-label={`${t[topic.label]} · ${t[branch.label]}`}>
@@ -220,7 +219,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#scenario-details" aria-current={page === 'scenario' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navScenarioDetails}</a></li>
         {topics.map((topic) => (
           <li className="topic-item" key={topic.id} onMouseEnter={mobile ? undefined : () => open(topic.id)}>
-            <button className="topic-trigger" id={`topic-${topic.id}-trigger`} type="button" aria-current={currentTopic === topic.id ? 'true' : undefined} aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)} onKeyDown={(event) => {
+            <div className="topic-control" data-current={currentTopic === topic.id} onKeyDown={(event) => {
               if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
                 event.preventDefault()
                 event.stopPropagation()
@@ -228,8 +227,11 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
                 focusFirst(`topic-${topic.id}-panel`, event.key === 'ArrowUp')
               }
             }}>
-              <span className="topic-trigger-label">{t[topic.label]}<span className="topic-chevron down" aria-hidden="true" /></span>
-            </button>
+              <a className="topic-trigger topic-link" href={`#${topic.id === 'sustainability' ? 'environment' : topic.id}-explore`} onClick={navigate}>{t[topic.label]}</a>
+              <button className="topic-trigger topic-toggle" id={`topic-${topic.id}-trigger`} type="button" aria-label={t[topic.label]} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${t[topic.label]}`} aria-current={currentTopic === topic.id ? 'true' : undefined} aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)}>
+                <span className="topic-chevron down" aria-hidden="true" />
+              </button>
+            </div>
             {mobile && openTopic === topic.id && renderPanel(topic)}
           </li>
         ))}

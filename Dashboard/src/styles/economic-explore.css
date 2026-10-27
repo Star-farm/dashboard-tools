@@ -2,26 +2,29 @@
 .economic-explore-intro { border-bottom: 1px solid var(--line); }
 .economic-explore-intro > p { max-width: 740px; margin: 18px 0 0; color: #637357; font-size: 13px; line-height: 1.8; }
 .economic-explore-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
-.economic-explore-card { min-width: 0; overflow: hidden; border: 1px solid #cddbc4; border-top: 3px solid #9caa70; border-radius: 8px; background: #fffefa; }
-.economic-explore-card > header { padding: 26px 28px 22px; background: #f1f4e8; }
+.economic-explore-card { min-width: 0; overflow: hidden; border: 1px solid #cddbc4; border-top: 3px solid #9caa70; border-radius: 8px; background: #f1f4e8; }
 .economic-explore-card h2 { margin: 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; letter-spacing: -.3px; }
-.economic-explore-card header p { margin: 12px 0 0; color: #637357; font-size: 13px; line-height: 1.8; }
-.economic-explore-card ul { list-style: none; margin: 0; padding: 8px 28px 12px; }
-.economic-explore-card li + li { border-top: 1px solid #e0e6d7; }
-.economic-explore-card a { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; min-height: 54px; padding: 14px 0; font-size: 13px; line-height: 1.6; }
-.economic-explore-card a { color: #345130; text-decoration: none; transition: color .15s; }
+.economic-explore-card p { margin: 12px 0 0; color: #637357; font-size: 13px; line-height: 1.8; }
+.economic-explore-card a { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 156px; height: 100%; padding: 26px 28px; color: #345130; text-decoration: none; transition: color .15s, background .15s; }
 .economic-explore-card a > span:last-child { flex-shrink: 0; font-size: 18px; transition: transform .15s; }
-.economic-explore-card a:hover { color: #172f20; }
+.economic-explore-card a:hover { color: #172f20; background: #e8eedc; }
 .economic-explore-card a:hover > span:last-child { transform: translateX(4px); }
-.economic-explore-card a:focus-visible { outline: 2px solid #759b7f; outline-offset: 3px; border-radius: 3px; }
+.economic-explore-card a:focus-visible { outline: 2px solid #759b7f; outline-offset: -3px; border-radius: 3px; }
+.explore-destinations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
+.explore-destination-card { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 156px; padding: 30px; border: 1px solid #cddbc4; border-top: 3px solid #9caa70; border-radius: 8px; background: #f1f4e8; color: #30472d; text-decoration: none; transition: background .15s, border-color .15s; }
+.explore-destination-card h2 { margin: 0; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; }
+.explore-destination-card > span { flex-shrink: 0; font-size: 24px; transition: transform .15s; }
+.explore-destination-card:hover { border-color: #8aa083; background: #e8eedc; }
+.explore-destination-card:hover > span { transform: translateX(4px); }
+@media (min-width: 1100px) { .explore-destinations[data-count="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 767px) {
   .economic-explore-page { padding-bottom: 40px; }
   .economic-explore-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 24px; }
-  .economic-explore-card > header { padding: 21px 20px 18px; }
-  .economic-explore-card ul { padding-inline: 20px; }
-  .economic-explore-intro > p, .economic-explore-card header p { font-size: 12px; }
-  .economic-explore-card a { gap: 8px 12px; }
+  .economic-explore-intro > p, .economic-explore-card p { font-size: 12px; }
+  .economic-explore-card a { min-height: 132px; padding: 21px 20px; gap: 12px; }
+  .explore-destinations { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 24px; }
+  .explore-destination-card { min-height: 112px; padding: 22px 20px; gap: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .economic-explore-card a, .economic-explore-card a > span:last-child { transition: none; }
+  .economic-explore-card a, .economic-explore-card a > span:last-child, .explore-destination-card, .explore-destination-card > span { transition: none; }
 }

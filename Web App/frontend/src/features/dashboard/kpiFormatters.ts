@@ -20,25 +20,43 @@ export function buildKeyMessage(
     kpiChange: KpiChangeResult | null,
     t: Translation,
 ): string {
-    if (!kpiChange?.kpis) return '';
-    const yieldChange = kpiChange.kpis['Avg Yield']?.pct_change;
-    const laborChange = kpiChange.kpis['Labor Intensity']?.pct_change;
-    const incomeChange = kpiChange.kpis['Net Income']?.pct_change;
-    const profitChange = kpiChange.kpis['Profit Margin']?.pct_change;
-    const parts: string[] = [];
+    return buildKeyMessageParts(kpiChange, t).map(part => part.text).join('');
+}
 
-    if (laborChange != null && laborChange > 0) {
-        parts.push(t.laborIntensityIncreaseMessage.replace('{value}', laborChange.toFixed(1)));
-    }
-    if (yieldChange != null && yieldChange < 0) {
-        parts.push(t.yieldDecreaseMessage.replace('{value}', Math.abs(yieldChange).toFixed(1)));
-    }
-    if (incomeChange != null && incomeChange < 0) {
-        parts.push(t.netIncomeDecreaseMessage.replace('{value}', Math.abs(incomeChange).toFixed(1)));
-    }
-    if (profitChange != null && profitChange < 0) {
-        parts.push(t.profitMarginDecreaseMessage.replace('{value}', Math.abs(profitChange).toFixed(1)));
-    }
+export interface KeyMessagePart {
+    text: string;
+    tone?: 'text-success' | 'text-danger';
+}
 
-    return parts.length ? t.keyMessageTemplate.replace('{parts}', parts.join(', ')) : '';
+export function kpiChangeTone(percentage: number, lowerIsBetter = false): KeyMessagePart['tone'] {
+    if (!Number.isFinite(percentage) || percentage === 0) return undefined;
+    return (lowerIsBetter ? percentage < 0 : percentage > 0) ? 'text-success' : 'text-danger';
+}
+
+export function buildKeyMessageParts(kpiChange: KpiChangeResult | null, t: Translation): KeyMessagePart[] {
+    if (!kpiChange?.kpis) return [];
+    const indicators = [
+        { key: 'Labor Intensity', template: t.laborIntensityIncreaseMessage, lowerIsBetter: true },
+        { key: 'Avg Yield', template: t.yieldDecreaseMessage, lowerIsBetter: false },
+        { key: 'Net Income', template: t.netIncomeDecreaseMessage, lowerIsBetter: false },
+        { key: 'Profit Margin', template: t.profitMarginDecreaseMessage, lowerIsBetter: false },
+    ];
+    const changes: KeyMessagePart[] = [];
+    for (const indicator of indicators) {
+        const percentage = kpiChange.kpis[indicator.key]?.pct_change;
+        if (percentage == null || !Number.isFinite(percentage) || percentage === 0) continue;
+        const favorable = indicator.lowerIsBetter ? percentage < 0 : percentage > 0;
+        // This warning summarizes unfavorable outcomes, matching the KPI panel.
+        if (favorable) continue;
+        if (changes.length) changes.push({ text: ', ' });
+        const [before, after = ''] = indicator.template.split('{value}');
+        changes.push(
+            { text: before },
+            { text: `${Math.abs(percentage).toFixed(1)}${after.startsWith('%') ? '%' : ''}`, tone: kpiChangeTone(percentage, indicator.lowerIsBetter) },
+            { text: after.startsWith('%') ? after.slice(1) : after },
+        );
+    }
+    if (!changes.length) return [];
+    const [before, after = ''] = t.keyMessageTemplate.split('{parts}');
+    return [{ text: before }, ...changes, { text: after }];
 }

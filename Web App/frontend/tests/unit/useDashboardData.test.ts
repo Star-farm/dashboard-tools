@@ -75,7 +75,7 @@ describe('useDashboardData Custom Hook', () => {
 
         // The mock state contains declines in yield, net income, profit margins, and increased labour intensity
         const message = result.current.keyMessage;
-        expect(message).toContain('labour intensity could rise by 12.0%');
+        expect(message).toContain('labor intensity could rise by 12.0%');
         expect(message).toContain('average yield could drop 5.0%');
         expect(message).toContain('net income could fall 10.0%');
         expect(message).toContain('profit margin could shrink 3.0%');

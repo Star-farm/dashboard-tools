@@ -14,7 +14,7 @@ vi.mock('../../src/hooks/useDashboardData', () => ({
     SIMULATION_INPUT_LIMITS: {
         fertilizer_usage: { min: 80, max: 145, step: 5 },
         pesticide_usage: { min: 4, max: 7.5, step: 0.5 },
-        water_usage: { min: 0, max: 850, step: 25 },
+        water_usage: { min: 150, max: 850, step: 25 },
     },
     useDashboardData: vi.fn(),
 }));
@@ -61,6 +61,7 @@ vi.mock('recharts', () => ({
         return <div data-testid="label-list" />;
     },
     ReferenceLine: () => <div data-testid="ref-line" />,
+    CartesianGrid: () => <div data-testid="chart-grid" />,
 }));
 
 // ── 2. STANDARD IMPORTS ──────────────────────────────────────────────────────
@@ -68,6 +69,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Dashboard } from '../../src/features/dashboard/Dashboard';
 import { detectBrowserLang } from '../../src/utils/language';
 import { useDashboardData } from '../../src/hooks/useDashboardData';
+import { buildKeyMessageParts } from '../../src/features/dashboard/kpiFormatters';
+import { TRANSLATIONS } from '../../src/i18n';
+import type { KpiChangeResult } from '../../src/types/dashboard';
 
 const mockTranslations = {
     title: "Star Farm Dashboard",
@@ -184,6 +188,24 @@ describe('Dashboard Component UI', () => {
         vi.clearAllMocks();
     });
 
+    it('renders adverse summary percentages in bold red text', () => {
+        const changes: KpiChangeResult = {
+            ...defaultHookReturn.kpiChange,
+            scenario_group: 'Business As Usual',
+            kpis: Object.fromEntries(Object.entries(defaultHookReturn.kpiChange.kpis).map(([key, entry]) => [key, { ...entry, base_value: 100 }])),
+        };
+        const keyMessageParts = buildKeyMessageParts(changes, TRANSLATIONS.en);
+        vi.mocked(useDashboardData).mockReturnValue({
+            ...defaultHookReturn, keyMessageParts, keyMessage: keyMessageParts.map(part => part.text).join(''),
+        } as any);
+        render(<Dashboard />);
+        for (const percentage of ['12.0%', '5.0%', '10.0%', '3.0%']) {
+            const emphasis = screen.getByText(percentage);
+            expect(emphasis.tagName).toBe('STRONG');
+            expect(emphasis).toHaveClass('text-danger');
+        }
+    });
+
     it('should render the loading screen spinner when initiating models', () => {
         vi.mocked(useDashboardData).mockReturnValue({
             ...defaultHookReturn,
@@ -274,7 +296,7 @@ describe('Dashboard Component UI', () => {
         expect(pesticideSlider).toHaveAttribute('min', '4');
         expect(pesticideSlider).toHaveAttribute('max', '7.5');
         expect(pesticideSlider).toHaveAttribute('step', '0.5');
-        expect(waterSlider).toHaveAttribute('min', '0');
+        expect(waterSlider).toHaveAttribute('min', '150');
         expect(waterSlider).toHaveAttribute('max', '850');
         expect(waterSlider).toHaveAttribute('step', '25');
 

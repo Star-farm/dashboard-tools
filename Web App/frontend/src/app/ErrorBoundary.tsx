@@ -19,12 +19,12 @@ export class ErrorBoundary extends Component<React.PropsWithChildren, ErrorBound
             const browserLanguage = typeof navigator !== 'undefined' ? navigator.language : '';
             const t = TRANSLATIONS[browserLanguage.toLowerCase().startsWith('vi') ? 'vi' : 'en'];
             return (
-                <div className="error-boundary-container" style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                <div className="error-boundary-container">
                     <h2>{t.errorTitle}</h2>
                     <p>{t.errorDefaultMessage}</p>
                     <button
+                        className="btn"
                         onClick={() => this.setState({ hasError: false })}
-                        style={{ marginTop: '1rem', padding: '0.5rem 1rem', background: '#22c55e', border: 'none', borderRadius: '4px', cursor: 'pointer', color: '#000' }}
                     >
                         {t.errorRetry}
                     </button>

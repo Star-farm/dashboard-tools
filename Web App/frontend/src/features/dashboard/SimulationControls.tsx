@@ -43,11 +43,11 @@ export function SimulationControls({
         .replace('{baseYear}', String(currentKpis?.base_year ?? 2022));
 
     return (
-        <div className="glass-panel col-4" style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="glass-panel simulation-controls">
             <h2>{t.inputSimulationControls}</h2>
-            <div className="slider-group" style={{ marginTop: '1rem' }}>
+            <div className="slider-group">
                 <div className="slider-item">
-                    <label className="filter-label">
+                    <label className="filter-label" htmlFor="scenario-group">
                         {t.simulatedGroup}
                         <div className="info-tooltip-container">
                             <span className="info-icon">?</span>
@@ -65,15 +65,15 @@ export function SimulationControls({
                             </div>
                         </div>
                     </label>
-                    <select className="select-input" value={scenarioGroup} onChange={(event) => setScenarioGroup(event.target.value as ScenarioGroup)}>
+                    <select id="scenario-group" className="select-input" value={scenarioGroup} onChange={(event) => setScenarioGroup(event.target.value as ScenarioGroup)}>
                         <option value="Business As Usual">{t.bau}</option>
                         <option value="One Million Hectare Rice">{t.omrh}</option>
                     </select>
                 </div>
 
                 <div className="slider-item">
-                    <label className="filter-label">{t.awdAdoptionPractice}</label>
-                    <select className="select-input" value={inputs.awd_adoption} onChange={(event) => setInputs((current) => ({ ...current, awd_adoption: event.target.value }))}>
+                    <label className="filter-label" htmlFor="awd-adoption">{t.awdAdoptionPractice}</label>
+                    <select id="awd-adoption" className="select-input" value={inputs.awd_adoption} onChange={(event) => setInputs((current) => ({ ...current, awd_adoption: event.target.value }))}>
                         <option value="With AWD">{t.awd}</option>
                         <option value="Without AWD">{t.noawd}</option>
                     </select>
@@ -89,7 +89,7 @@ export function SimulationControls({
 
                 {results && (
                     <div className="simulation-estimates-box">
-                        <h4 style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#000' }}>{simulationEstimatesTitle}</h4>
+                        <h4>{simulationEstimatesTitle}</h4>
                         <div className="results-grid-small">
                             <SimulationEstimate label={t.yieldColonLabel} metric="Avg Yield" value={results.predictions['Avg Yield']} currentKpis={currentKpis} displayValue={`${results.predictions['Avg Yield']?.toFixed(2)} ${t.yieldUnit}`} />
                             <SimulationEstimate label={t.methaneColonLabel} metric="Methane Emissions" value={results.predictions['Methane Emissions']} currentKpis={currentKpis} lowerIsBetter displayValue={`${results.predictions['Methane Emissions']?.toFixed(1)} ${t.methaneUnit}`} />

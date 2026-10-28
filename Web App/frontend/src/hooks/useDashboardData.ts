@@ -10,7 +10,7 @@ import {
     type SimulationInputs,
 } from '../api/dashboardApi';
 import { buildIndicatorChart } from '../features/dashboard/chartTransformers';
-import { buildKeyMessage, buildKpiCards } from '../features/dashboard/kpiFormatters';
+import { buildKeyMessageParts, buildKpiCards } from '../features/dashboard/kpiFormatters';
 
 const DEFAULT_SCENARIO: ScenarioGroup = 'Business As Usual';
 const DEFAULT_INPUTS: SimulationInputs = {
@@ -118,7 +118,8 @@ export function useDashboardData(lang: 'vi' | 'en') {
         [lang, scenarioMetricValues, simResults, t],
     );
     const kpiCards = useMemo(() => buildKpiCards(t), [t]);
-    const keyMessage = useMemo(() => buildKeyMessage(kpiChange, t), [kpiChange, t]);
+    const keyMessageParts = useMemo(() => buildKeyMessageParts(kpiChange, t), [kpiChange, t]);
+    const keyMessage = keyMessageParts.map(part => part.text).join('');
 
     return {
         t,
@@ -139,6 +140,7 @@ export function useDashboardData(lang: 'vi' | 'en') {
         environmentChart,
         KPI_CARDS: kpiCards,
         keyMessage,
+        keyMessageParts,
         runSimulation,
     };
 }

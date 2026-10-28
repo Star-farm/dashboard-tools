@@ -6,6 +6,7 @@ This workspace contains the source code and documentation for the Star Farm agri
 
 | Directory | Purpose |
 | --- | --- |
+| [`Dashboard`](./Dashboard/) | Static bilingual scenario dashboard; [usage, data, maintenance, and deployment documentation](./Dashboard/README.md) |
 | [`Web App`](./Web%20App/) | Complete dashboard application |
 | [`Data Studio guide`](./Data%20Studio%20guide/) | Data dashboard documentation and resources |
 
@@ -15,6 +16,8 @@ The `Web App` directory contains two source services:
 - `frontend`: React, TypeScript, and Vite application deployed on Vercel.
 
 ## Getting Started
+
+For the static scenario dashboard, see [`Dashboard/README.md`](./Dashboard/README.md). It runs independently and does not require the Web App backend or an API key.
 
 See [`Web App/README.md`](./Web%20App/README.md) to choose a deployment model and run the complete system.
 

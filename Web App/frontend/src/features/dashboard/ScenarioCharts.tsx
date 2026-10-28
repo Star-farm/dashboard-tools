@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Bar,
     BarChart,
+    CartesianGrid,
     LabelList,
     Legend,
     ReferenceLine,
@@ -54,20 +55,24 @@ export function ScenarioCharts({
     const formatIndicatorTick = (tick: unknown) => metricLabel(String(tick ?? ''));
 
     return (
-        <div className="col-8" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div className="chart-stack">
             {[
                 { chart: economicChart, title: t.economicGroup },
                 { chart: environmentChart, title: t.environmentGroup },
             ].map(({ chart, title }) => (
-                <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column' }} key={title}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div className="glass-panel" key={title}>
+                    <div className="chart-heading">
                         <h2>{title}</h2>
                     </div>
                     {showVndNote && chart === economicChart && (
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '-0.5rem', marginBottom: '0.75rem' }}>
+                        <p className="chart-note">
                             {t.exchangeRateNote}
                         </p>
                     )}
+                    <p className="chart-units">
+                        <span>{metricLabel(chart.left.key)} ({chart.left.unit})</span>
+                        <span>{metricLabel(chart.right.key)} ({chart.right.unit})</span>
+                    </p>
                     <div className="chart-container-height" style={{ height: isMobile ? 420 : 380 }}>
                         {loading ? (
                             <div className="centered-fallback">
@@ -77,7 +82,8 @@ export function ScenarioCharts({
                         ) : (
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={chart.data} margin={{ top: 20, right: isMobile ? 10 : 20, left: isMobile ? 0 : 10, bottom: isMobile ? 40 : 10 }}>
-                                    <XAxis dataKey="indicator" stroke="#000000ff" interval={0} textAnchor="middle" height={40} tick={{ fontSize: isMobile ? 9 : 12 }} tickFormatter={formatIndicatorTick} />
+                                    <CartesianGrid yAxisId="left" stroke="#dce3d9" vertical={false} />
+                                    <XAxis dataKey="indicator" stroke="#657168" axisLine={{ stroke: '#bac8b9' }} tickLine={false} interval={0} textAnchor="middle" height={40} tick={{ fontSize: isMobile ? 10 : 12 }} tickFormatter={formatIndicatorTick} />
                                     <YAxis yAxisId="left" domain={chart.leftDomain} ticks={chart.leftTicks} tick={{ fontSize: isMobile ? 10 : 12 }} width={isMobile ? 36 : 55} label={isMobile ? undefined : { value: chart.left.unit, angle: -90, position: 'insideLeft', fontSize: 12, offset: 5 }} />
                                     <YAxis yAxisId="right" orientation="right" domain={chart.rightDomain} ticks={chart.rightTicks} tick={{ fontSize: isMobile ? 10 : 12 }} width={isMobile ? 36 : 55} label={isMobile ? undefined : { value: chart.right.unit, angle: 90, position: 'insideRight', fontSize: 12, offset: 5 }} />
                                     <ReferenceLine yAxisId="right" y={0} stroke="#9ca3af" strokeWidth={1.5} strokeDasharray="4 4" />

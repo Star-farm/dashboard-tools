@@ -4,12 +4,12 @@ export type MetricGroupKey = 'economic' | 'environment';
 
 export const METRIC_GROUPS = {
     economic: {
-        left: { key: 'Avg Yield', unit: 't/ha' },
-        right: { key: 'Net Income', unit: '$/ha' },
+        left: { key: 'Avg Yield', unit: 'ton/ha' },
+        right: { key: 'Net Income', unit: 'USD/ha' },
     },
     environment: {
-        left: { key: 'Methane Emissions', unit: 'kg/ha' },
-        right: { key: 'Emission Intensity', unit: 'kg CH₄/t' },
+        left: { key: 'Methane Emissions', unit: 'kg Methane/ha' },
+        right: { key: 'Emission Intensity', unit: 'kg Methane/ton rice' },
     },
 } as const;
 
@@ -43,8 +43,8 @@ export const KPI_CARDS_CONFIG: {
     unit: string;
     lowerIsBetter?: boolean;
 }[] = [
-    { key: 'Avg Yield', unit: 't/ha' },
+    { key: 'Avg Yield', unit: 'ton/ha' },
     { key: 'Labor Intensity', unit: 'hours/ha', lowerIsBetter: true },
-    { key: 'Net Income', unit: '$/ha' },
+    { key: 'Net Income', unit: 'USD/ha' },
     { key: 'Profit Margin', unit: '%' },
 ];

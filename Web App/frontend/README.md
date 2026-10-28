@@ -10,20 +10,30 @@ React and TypeScript dashboard for KPI summaries, comparison charts, and simulat
 - Vitest and Testing Library.
 - Vercel Functions using Web-standard `Request` and `Response` APIs.
 
+## Interface
+
+The frontend follows the `Dashboard` STAR-FARM template: Lora typography, a cream background, forest-green panels and gold navigation. `src/styles/index.css` contains the shared visual tokens and responsive dashboard layout; `src/styles/site-shell.css` styles the header and the compact partner footer.
+
+The header contains the STAR-FARM wordmark and the language switcher on every screen size. It hides while scrolling down and returns while scrolling up. The back-to-top button appears after scrolling, and motion follows the device's reduced-motion preference. Simulation inputs, API requests and calculation rules are unchanged.
+
+`npm run local` starts the built frontend at `http://127.0.0.1:5174` with an authenticated local API proxy. It starts the backend on loopback port `8080` if needed, using the existing `VPS/.venv`, dataset and trained model cache. It reads the existing key from `frontend/.env.local` or `VPS/.env` and keeps it in server processes; it never writes it into client assets. Local dataset paths are passed to the backend process without editing the VPS deployment configuration. Serving never trains a model.
+
 ## Local Development
 
 ```powershell
 npm install
-npm run dev
+npm run dev:local
 ```
 
-The Vite development proxy forwards `/api/proxy/*` to the local VPS service on port `8080`. Start the VPS service first, and set `BACKEND_API_KEY` in the ignored `.env.local` file. The development server fails closed instead of using a repository-wide default key.
+For manual service management, start the VPS service separately, set `BACKEND_API_KEY` in the ignored `.env.local` file, and run `npm run dev` or `npm run preview`. Both local proxy modes require authentication and forward `/api/proxy/*` to `127.0.0.1:8080`. Production continues to use the Vercel API proxy.
 
 ## Scripts
 
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Start the development server |
+| `npm run dev:local` | Start the local backend and development frontend together |
+| `npm run local` | Start the local backend and built frontend together |
 | `npm run build` | Type-check and create a production build |
 | `npm run preview` | Preview the production build locally |
 | `npm test -- --run` | Run tests once |

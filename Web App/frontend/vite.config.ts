@@ -12,9 +12,9 @@ export function createDevelopmentProxyHeaders(apiKey: string | undefined): Recor
   return { 'X-API-Key': trimmedKey }
 }
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ command, mode, isPreview }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const developmentProxyHeaders = command === 'serve' && mode === 'development'
+  const developmentProxyHeaders = command === 'serve' && (mode === 'development' || isPreview)
     ? createDevelopmentProxyHeaders(env.BACKEND_API_KEY)
     : undefined
 
@@ -40,7 +40,7 @@ export default defineConfig(({ command, mode }) => {
     server: {
       proxy: {
         '/api/proxy': {
-          target: 'http://localhost:8080',
+          target: 'http://127.0.0.1:8080',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/proxy/, '/api'),
           configure: (proxy) => {

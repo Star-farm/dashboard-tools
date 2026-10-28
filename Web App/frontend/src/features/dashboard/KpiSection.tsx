@@ -26,7 +26,7 @@ export function KpiSection({ t, language, cards, changes, loading }: KpiSectionP
         });
 
     return (
-        <section className="glass-panel">
+        <section className="glass-panel kpi-panel">
             <h2>{t.kpiSectionTitle}</h2>
             <div className="metrics-row">
                 {visibleCards.map((card) => {
@@ -51,12 +51,12 @@ export function KpiSection({ t, language, cards, changes, loading }: KpiSectionP
                                     : t.notAvailable}
                             </span>
                             <span className={`subtext ${colorClass}`}>
-                                {t.kpiChangeTitle}
+                                <span>{t.kpiChangeTitle}</span>
                                 {displayValue != null && (
-                                    <> &middot; {t.kpiTargetYear}: {displayValue.toLocaleString(undefined, {
+                                    <strong>{t.kpiTargetYear}: {displayValue.toLocaleString(language === 'vi' ? 'vi-VN' : 'en-US', {
                                         minimumFractionDigits: isVnd ? 1 : 0,
                                         maximumFractionDigits: isVnd ? 1 : 0,
-                                    })} {displayUnit}</>
+                                    })} {displayUnit}</strong>
                                 )}
                             </span>
                         </div>

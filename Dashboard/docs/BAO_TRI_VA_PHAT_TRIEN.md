@@ -26,7 +26,7 @@ Dashboard/
     i18n/                       Shared translations, language, dynamic metadata
     styles/                     Theme, responsive layouts, and feature CSS
     utils/                      CSV parser and year tick generation
-    assets/                     Home illustration and partner logos
+    assets/                     Source illustration, WebP variants, bundled fonts, and partner logos
   tests/                        Data, interaction, and navigation tests
   docs/                         This documentation
   dist/                         Generated build; do not edit manually
@@ -45,7 +45,8 @@ Paths below are relative to `Dashboard`.
 | Tab titles and SEO descriptions after navigation/language changes | `src/i18n/index.ts`, `src/i18n/useLanguage.ts`, and topic text files |
 | Home illustration overlay text, menu labels, and shared content | `src/i18n/index.ts` |
 | Home page layout | `src/features/home/HomePage.tsx` |
-| Home illustration | `src/assets/mekong-landscape.jpg` |
+| Home illustration | Edit `src/assets/mekong-landscape.jpg`, run `npm run images:optimize`, and commit regenerated `src/assets/hero/` files |
+| Font and license | `src/assets/fonts/`; `npm run fonts:sync` refreshes the official Lora subsets |
 | Header and mobile menu dialog | `src/app/SiteHeader.tsx` |
 | Multilevel menu content | `src/app/HeaderNavigation.tsx`, `src/app/navigationTopics.ts` |
 | Breadcrumbs | `src/app/PageBreadcrumbs.tsx` |
@@ -59,6 +60,8 @@ Paths below are relative to `Dashboard`.
 The initial Vietnamese tab title, **STAR FARM | Tương lai của hạt gạo Đồng Tháp**, is in `index.html`. Translations and titles applied after React initializes are handled by i18n. Update all relevant locations to avoid displaying an outdated title during startup.
 
 Analysis paragraphs are generated from data. Do not replace them with fixed text if they must continue to reflect the active filters and scenario.
+
+Resources and Environment keep lightweight page shells and information tables separate from `ResourceCharts.tsx` and `EnvironmentCharts.tsx`. Chart modules are lazy-loaded inside Suspense only for chart routes. Avoid adding chart imports or full annual-series JSON to the page shells: table-only visits should load only the compact overview data. Tests should wait for visible chart content across its lazy-loading boundary before checking controls or SVG.
 
 ## 3. Routing and menus
 

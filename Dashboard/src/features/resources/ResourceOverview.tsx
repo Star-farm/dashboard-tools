@@ -8,7 +8,7 @@ import type { ResourceData, ResourceRow } from './resourceTypes'
 import { resourceNumber, resourceUnit } from './resourceAnalysis'
 import { resourceText } from './resourceText'
 
-export default function ResourceOverview({ data, language }: { data: ResourceData; language: Language }) {
+export default function ResourceOverview({ data, language }: { data: Pick<ResourceData, 'rows'>; language: Language }) {
   const [filters, setFilters] = useState<EconomicFilters>(emptyEconomicFilters)
   const t = economicsText[language], text = resourceText[language]
   const visible = data.rows.filter((row) => (Object.keys(filters) as (keyof EconomicFilters)[]).every((key) => filters[key] === 'all' || row[key] === filters[key]))

@@ -1,0 +1,448 @@
+{
+  "startYear": 2027,
+  "endYear": 2050,
+  "rows": [
+    {
+      "code": "BAU-3V-OH-TT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Neutral",
+        "vi": "Kịch bản hiện tại"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "neutral",
+      "awd": "without",
+      "historical": true,
+      "startYear": 2016,
+      "endYear": 2022,
+      "count": 420,
+      "metricCounts": {
+        "water": 420,
+        "fertilizer": 420,
+        "pesticides": 420
+      },
+      "values": {
+        "water": 533.1054308523802,
+        "fertilizer": 108.61904761904762,
+        "pesticides": 5.377597402592854
+      }
+    },
+    {
+      "code": "BAU-BV-OH-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "metricCounts": {
+        "water": 1368,
+        "fertilizer": 1368,
+        "pesticides": 1368
+      },
+      "values": {
+        "water": 326.0999576383772,
+        "fertilizer": 112.8924707602338,
+        "pesticides": 5.485807512739761
+      }
+    },
+    {
+      "code": "BAU-BV-OH-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 326.21164195763885,
+        "fertilizer": 112.89104166666662,
+        "pesticides": 5.490144069228468
+      }
+    },
+    {
+      "code": "BAU-BV-KN-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 277.1586663147222,
+        "fertilizer": 105.61513888888882,
+        "pesticides": 5.934764224920143
+      }
+    },
+    {
+      "code": "BAU-BV-KN-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "metricCounts": {
+        "water": 1368,
+        "fertilizer": 1368,
+        "pesticides": 1368
+      },
+      "values": {
+        "water": 277.2655697454677,
+        "fertilizer": 105.60497076023385,
+        "pesticides": 5.932099338577487
+      }
+    },
+    {
+      "code": "BAU-3V-OH-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 418.0310275247572,
+        "fertilizer": 112.89104166666665,
+        "pesticides": 5.490144069228469
+      }
+    },
+    {
+      "code": "BAU-3V-OH-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "metricCounts": {
+        "water": 1368,
+        "fertilizer": 1368,
+        "pesticides": 1368
+      },
+      "values": {
+        "water": 418.1377689038934,
+        "fertilizer": 112.98135964912277,
+        "pesticides": 5.489701235627921
+      }
+    },
+    {
+      "code": "BAU-3V-KN-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 364.4931945136743,
+        "fertilizer": 105.61513888888892,
+        "pesticides": 5.934971438162501
+      }
+    },
+    {
+      "code": "BAU-3V-KN-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "metricCounts": {
+        "water": 1440,
+        "fertilizer": 1440,
+        "pesticides": 1440
+      },
+      "values": {
+        "water": 364.4931945136743,
+        "fertilizer": 105.61513888888892,
+        "pesticides": 5.934971438162501
+      }
+    },
+    {
+      "code": "BAU-2V-OH-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 521.5899830172916,
+        "fertilizer": 120.33999999999993,
+        "pesticides": 5.927962239579163
+      }
+    },
+    {
+      "code": "BAU-2V-OH-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 521.5899830172916,
+        "fertilizer": 120.33999999999993,
+        "pesticides": 5.927962239579163
+      }
+    },
+    {
+      "code": "BAU-2V-KN-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 443.65835859468746,
+        "fertilizer": 107.49322916666635,
+        "pesticides": 6.1175791750625
+      }
+    },
+    {
+      "code": "BAU-2V-KN-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 443.65835859468746,
+        "fertilizer": 107.49322916666635,
+        "pesticides": 6.1175791750625
+      }
+    },
+    {
+      "code": "1M-2V-OH-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 455.49372446770843,
+        "fertilizer": 88,
+        "pesticides": 5.510511172716672
+      }
+    },
+    {
+      "code": "1M-2V-OH-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 455.49372446770843,
+        "fertilizer": 88,
+        "pesticides": 5.510511172716672
+      }
+    },
+    {
+      "code": "1M-2V-KN-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 389.8228830962502,
+        "fertilizer": 87.375,
+        "pesticides": 6.205532804104156
+      }
+    },
+    {
+      "code": "1M-2V-KN-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "metricCounts": {
+        "water": 960,
+        "fertilizer": 960,
+        "pesticides": 960
+      },
+      "values": {
+        "water": 389.8228830962502,
+        "fertilizer": 87.375,
+        "pesticides": 6.205532804104156
+      }
+    }
+  ]
+}

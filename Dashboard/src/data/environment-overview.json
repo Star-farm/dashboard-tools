@@ -1,0 +1,431 @@
+{
+  "startYear": 2027,
+  "endYear": 2050,
+  "rows": [
+    {
+      "code": "BAU-3V-OH-TT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Neutral",
+        "vi": "Kịch bản hiện tại"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "neutral",
+      "awd": "without",
+      "historical": true,
+      "startYear": 2016,
+      "endYear": 2022,
+      "count": 420,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 420,
+        "methane": 420
+      },
+      "values": {
+        "intensity": 71.79816356169039,
+        "methane": 458.48363006000255
+      }
+    },
+    {
+      "code": "BAU-BV-OH-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "withAwd": 1368,
+      "metricCounts": {
+        "intensity": 1368,
+        "methane": 1368
+      },
+      "values": {
+        "intensity": 62.27553668641885,
+        "methane": 395.66057909035004
+      }
+    },
+    {
+      "code": "BAU-BV-OH-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Mild Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 1440,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 62.24835596113194,
+        "methane": 395.4088427748608
+      }
+    },
+    {
+      "code": "BAU-BV-KN-BT",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Normal Economy",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 1440,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 52.76358606438532,
+        "methane": 309.21858353083326
+      }
+    },
+    {
+      "code": "BAU-BV-KN-TH",
+      "name": {
+        "en": "Business As Usual Sustainable Severe Climate Resource Shortage",
+        "vi": "Thường lệ, bền vững, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "sustainable",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "withAwd": 1368,
+      "metricCounts": {
+        "intensity": 1368,
+        "methane": 1368
+      },
+      "values": {
+        "intensity": 52.731326099900514,
+        "methane": 309.0229802166666
+      }
+    },
+    {
+      "code": "BAU-3V-OH-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 89.09401588865968,
+        "methane": 574.833278635899
+      }
+    },
+    {
+      "code": "BAU-3V-OH-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1368,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1368,
+        "methane": 1368
+      },
+      "values": {
+        "intensity": 89.14113986208328,
+        "methane": 575.1769557817942
+      }
+    },
+    {
+      "code": "BAU-3V-KN-BT",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 71.67356045180554,
+        "methane": 426.22328609451256
+      }
+    },
+    {
+      "code": "BAU-3V-KN-TH",
+      "name": {
+        "en": "Business As Usual 3 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 3 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "threeSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 1440,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 1440,
+        "methane": 1440
+      },
+      "values": {
+        "intensity": 71.67356045180554,
+        "methane": 426.22328609451245
+      }
+    },
+    {
+      "code": "BAU-2V-OH-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 43.41852162580209,
+        "methane": 303.1194791666673
+      }
+    },
+    {
+      "code": "BAU-2V-OH-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 43.41852162580209,
+        "methane": 303.1194791666673
+      }
+    },
+    {
+      "code": "BAU-2V-KN-BT",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Normal Economy",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 45.586048024427136,
+        "methane": 286.8251041666665
+      }
+    },
+    {
+      "code": "BAU-2V-KN-TH",
+      "name": {
+        "en": "Business As Usual 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Thường lệ, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "bau",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "without",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 0,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 45.586048024427136,
+        "methane": 286.8251041666665
+      }
+    },
+    {
+      "code": "1M-2V-OH-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 29.311399277464623,
+        "methane": 177.03291666666672
+      }
+    },
+    {
+      "code": "1M-2V-OH-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Mild Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, ôn hòa, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "mild",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 29.31139927746462,
+        "methane": 177.0329166666667
+      }
+    },
+    {
+      "code": "1M-2V-KN-BT",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Normal Economy",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, kinh tế bình thường"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "normal",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 35.52047568601973,
+        "methane": 203.41687500000063
+      }
+    },
+    {
+      "code": "1M-2V-KN-TH",
+      "name": {
+        "en": "1Mha 2 Seasons Severe Climate Resource Shortage",
+        "vi": "Một triệu héc-ta, 2 vụ, khắc nghiệt, thiếu tài nguyên"
+      },
+      "group": "oneMha",
+      "season": "twoSeasons",
+      "climate": "severe",
+      "resource": "shortage",
+      "awd": "with",
+      "historical": false,
+      "startYear": 2027,
+      "endYear": 2050,
+      "count": 960,
+      "withAwd": 960,
+      "metricCounts": {
+        "intensity": 960,
+        "methane": 960
+      },
+      "values": {
+        "intensity": 35.520475686019736,
+        "methane": 203.41687500000063
+      }
+    }
+  ]
+}

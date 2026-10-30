@@ -1,0 +1,640 @@
+{
+  "capturedAtUtc": "2026-10-29T08:53:28.489Z",
+  "sourceCommit": "80dda475ab2a2bab047aef6048e81edbf6d32436",
+  "scope": "Dashboard only; source review, npm advisories, existing jsdom tests, static output, and read-only production HTTP observations. No browser performance trace.",
+  "runtime": {
+    "node": "v24.16.0",
+    "npm": "11.13.0"
+  },
+  "validation": {
+    "build": "passed",
+    "lint": "passed",
+    "testCommand": "npm test -- --run --maxWorkers=2",
+    "testFilesPassed": 27,
+    "testsPassed": 241,
+    "testDurationSeconds": 81.84
+  },
+  "dependencyAudit": {
+    "all": {
+      "info": 0,
+      "low": 0,
+      "moderate": 4,
+      "high": 7,
+      "critical": 0,
+      "total": 11
+    },
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "affectedPackages": [
+      {
+        "name": "@vitest/coverage-v8",
+        "severity": "moderate",
+        "direct": true,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/@vitest/coverage-v8",
+            "version": "4.1.10",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "dependency": "vitest"
+          }
+        ]
+      },
+      {
+        "name": "@vitest/mocker",
+        "severity": "moderate",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/@vitest/mocker",
+            "version": "4.1.10",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+            "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+            "range": ">=2.1.0 <4.1.11",
+            "severity": "moderate"
+          },
+          {
+            "title": "Vitest: Code injection via unauthenticated manual mock registration",
+            "url": "https://github.com/advisories/GHSA-qxg6-89mg-rqv8",
+            "range": ">=2.1.0-beta.7 <4.1.12",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "baseline-browser-mapping",
+        "severity": "moderate",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/baseline-browser-mapping",
+            "version": "2.10.42",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "baseline-browser-mapping process termination on invalid input causes denial of service",
+            "url": "https://github.com/advisories/GHSA-w5vr-8v7q-w6rv",
+            "range": ">=2.0.0 <2.11.0",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "brace-expansion",
+        "severity": "high",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/brace-expansion",
+            "version": "5.0.9",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+            "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+            "range": ">=4.0.0 <5.0.12",
+            "severity": "moderate"
+          },
+          {
+            "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+            "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+            "range": ">=4.0.0 <5.0.11",
+            "severity": "high"
+          },
+          {
+            "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+            "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+            "range": ">=4.0.0 <5.0.10",
+            "severity": "high"
+          }
+        ]
+      },
+      {
+        "name": "browserslist",
+        "severity": "high",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/browserslist",
+            "version": "4.28.5",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+            "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+            "range": "<=4.28.6",
+            "severity": "high"
+          },
+          {
+            "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+            "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+            "range": "<=4.28.6",
+            "severity": "high"
+          }
+        ]
+      },
+      {
+        "name": "nanoid",
+        "severity": "high",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/nanoid",
+            "version": "3.3.16",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "nanoid: custom generators can loop indefinitely when size is zero",
+            "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+            "range": "<3.3.18",
+            "severity": "high"
+          }
+        ]
+      },
+      {
+        "name": "source-map-js",
+        "severity": "high",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/source-map-js",
+            "version": "1.2.1",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+            "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+            "range": ">=1.0.0 <1.2.2",
+            "severity": "high"
+          }
+        ]
+      },
+      {
+        "name": "undici",
+        "severity": "high",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/jsdom/node_modules/undici",
+            "version": "7.28.0",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+            "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+            "range": ">=7.0.0 <7.29.0",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to cross-user information disclosure and parse-time crash via degenerate private cache directives",
+            "url": "https://github.com/advisories/GHSA-4cwx-7wf7-3272",
+            "range": ">=7.0.0 <7.29.0",
+            "severity": "high"
+          },
+          {
+            "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+            "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+            "range": ">=7.0.0 <7.29.0",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to cross-user information disclosure via whitespace around equals in Cache-Control directives",
+            "url": "https://github.com/advisories/GHSA-jr45-8vmc-qm54",
+            "range": ">=7.0.0 <7.29.0",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+            "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+            "range": ">=7.0.0 <7.29.0",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+            "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+            "range": ">=7.28.0 <7.29.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+            "url": "https://github.com/advisories/GHSA-pmjh-fq2x-6v4x",
+            "range": ">=7.11.0 <7.29.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to downstream response splitting via retry interceptor",
+            "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+            "range": ">=7.0.0 <7.29.1",
+            "severity": "low"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+            "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+            "range": ">=7.0.0 <7.29.1",
+            "severity": "high"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+            "url": "https://github.com/advisories/GHSA-3xpg-4rpp-hhhm",
+            "range": ">=7.15.0 <7.29.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+            "url": "https://github.com/advisories/GHSA-2jfj-6hjv-fm6j",
+            "range": ">=7.0.0 <7.29.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+            "url": "https://github.com/advisories/GHSA-2gqq-gqf2-x968",
+            "range": ">=7.1.0 <7.29.1",
+            "severity": "low"
+          },
+          {
+            "title": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+            "url": "https://github.com/advisories/GHSA-w293-vg96-wgc3",
+            "range": ">=7.24.1 <7.29.1",
+            "severity": "high"
+          },
+          {
+            "title": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+            "url": "https://github.com/advisories/GHSA-8436-99hf-9mmv",
+            "range": ">=7.0.0 <7.29.1",
+            "severity": "low"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+            "url": "https://github.com/advisories/GHSA-rx4f-c7p8-82vq",
+            "range": ">=7.0.0 <7.29.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via unbounded memory in the EventSource parser",
+            "url": "https://github.com/advisories/GHSA-4qv8-2p9j-2685",
+            "range": ">=7.0.0 <7.30.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to Subresource Integrity bypass via non-lowercase algorithm tokens",
+            "url": "https://github.com/advisories/GHSA-f72v-6w45-q472",
+            "range": ">=7.15.0 <7.30.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via unhandled error on excessive content-encodings",
+            "url": "https://github.com/advisories/GHSA-xjj6-f33q-929c",
+            "range": ">=7.18.0 <7.30.1",
+            "severity": "high"
+          },
+          {
+            "title": "undici vulnerable to cache poisoning and cross-user disclosure via cross-origin redirects",
+            "url": "https://github.com/advisories/GHSA-4w7w-5xrc-9h26",
+            "range": ">=7.0.0 <7.30.1",
+            "severity": "high"
+          },
+          {
+            "title": "undici vulnerable to TLS certificate validation bypass via dropped tls options in Agent",
+            "url": "https://github.com/advisories/GHSA-2m5v-pch6-74hx",
+            "range": ">=7.0.0 <7.30.1",
+            "severity": "high"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via TLS 1.2 certificate-changing renegotiation",
+            "url": "https://github.com/advisories/GHSA-qrxm-fqhp-jwvm",
+            "range": ">=7.0.0 <7.30.1",
+            "severity": "high"
+          },
+          {
+            "title": "undici WebSocket client vulnerable to Denial of Service via unbounded automatic PONG buffering",
+            "url": "https://github.com/advisories/GHSA-9fm3-97px-rjf6",
+            "range": ">=7.0.0 <7.30.1",
+            "severity": "moderate"
+          },
+          {
+            "title": "undici vulnerable to Denial of Service via unhandled exception in the decompress interceptor",
+            "url": "https://github.com/advisories/GHSA-55wc-3pg8-jfw6",
+            "range": ">=7.15.0 <7.30.1",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "vite",
+        "severity": "high",
+        "direct": true,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/vite",
+            "version": "8.1.3",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+            "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+            "range": ">=8.0.0 <=8.1.5",
+            "severity": "moderate"
+          },
+          {
+            "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+            "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+            "range": ">=8.0.0 <=8.1.5",
+            "severity": "moderate"
+          },
+          {
+            "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+            "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+            "range": ">=8.0.0 <=8.1.5",
+            "severity": "high"
+          },
+          {
+            "title": "Vite: Cross origin script execution through Vite custom middleware",
+            "url": "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+            "range": ">=8.0.0 <=8.1.5",
+            "severity": "low"
+          },
+          {
+            "title": "Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine",
+            "url": "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+            "range": ">=8.0.0 <=8.1.5",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "vitest",
+        "severity": "moderate",
+        "direct": true,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/vitest",
+            "version": "4.1.10",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "dependency": "@vitest/coverage-v8"
+          },
+          {
+            "dependency": "@vitest/mocker"
+          },
+          {
+            "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+            "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+            "range": ">=2.1.0 <4.1.11",
+            "severity": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "zod",
+        "severity": "high",
+        "direct": false,
+        "fixAvailable": true,
+        "installed": [
+          {
+            "path": "node_modules/zod",
+            "version": "4.4.3",
+            "dev": true
+          }
+        ],
+        "advisories": [
+          {
+            "title": "Zod can exhaust memory while validating oversized constrained collections",
+            "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+            "range": "<4.6.6",
+            "severity": "high"
+          }
+        ]
+      }
+    ]
+  },
+  "secretPatternScan": {
+    "scannedFiles": 149,
+    "patterns": [
+      "private-key",
+      "openai-key",
+      "github-token",
+      "aws-access-key"
+    ],
+    "findings": [],
+    "limits": "Heuristic current-file scan; not a Git history or comprehensive credential scan."
+  },
+  "build": {
+    "totalAssetBytes": 4476042,
+    "allJsBytes": 1107350,
+    "note": "Total output is not initial page transfer. gzip sizes below use local node:zlib defaults and are not measured production Brotli transfer sizes.",
+    "keyAssets": [
+      {
+        "name": "index-DUesW9Q5.js",
+        "bytes": 277633,
+        "gzipBytes": 86974
+      },
+      {
+        "name": "index-b6RvfSyT.css",
+        "bytes": 36710,
+        "gzipBytes": 8330
+      },
+      {
+        "name": "ChartLegend-ChidAEP0.js",
+        "bytes": 338024,
+        "gzipBytes": 97861
+      },
+      {
+        "name": "mekong-landscape-BEGP6vds.jpg",
+        "bytes": 3151633
+      }
+    ],
+    "overviewStaticImports": [
+      {
+        "file": "ResourcesPage-BcBcx341.js",
+        "imports": [
+          "./index-DUesW9Q5.js",
+          "./EmphasizedNumbers-RMzkn_Z3.js",
+          "./ChartLegend-ChidAEP0.js",
+          "./economic-comparison-CQ60DY7C.js",
+          "./yearTicks-D0-vz9Y-.js",
+          "./bau3-comparison-D-NDN8dh.js",
+          "./ScenarioComparisonChart-BsaNOzEm.js",
+          "./economicsText-lk72SCti.js",
+          "./economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "file": "EnvironmentPage-Bj-0v8JB.js",
+        "imports": [
+          "./index-DUesW9Q5.js",
+          "./EmphasizedNumbers-RMzkn_Z3.js",
+          "./ChartLegend-ChidAEP0.js",
+          "./economic-comparison-CQ60DY7C.js",
+          "./yearTicks-D0-vz9Y-.js",
+          "./bau3-comparison-D-NDN8dh.js",
+          "./ScenarioComparisonChart-BsaNOzEm.js",
+          "./economicsText-lk72SCti.js",
+          "./economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "file": "EconomicOverviewPage-XUbFzB7a.js",
+        "imports": [
+          "./index-DUesW9Q5.js",
+          "./economicsText-lk72SCti.js",
+          "./economics-D04D5uE1.js"
+        ]
+      }
+    ],
+    "sourceMaps": [],
+    "distRootFiles": [
+      "assets",
+      "favicon.svg",
+      "index.html"
+    ]
+  },
+  "production": {
+    "origin": "https://dashboard-star-farm.vercel.app/",
+    "entryScriptMatchesLocalBuild": true,
+    "observations": [
+      {
+        "url": "https://dashboard-star-farm.vercel.app/",
+        "method": "GET",
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "content-length": "789",
+          "content-encoding": null,
+          "cache-control": "public, max-age=0, must-revalidate",
+          "etag": "\"92aac7541ba50b6c7ba5c35d1b1a21db\"",
+          "content-security-policy": null,
+          "content-security-policy-report-only": null,
+          "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+          "x-frame-options": null,
+          "x-content-type-options": null,
+          "referrer-policy": null,
+          "permissions-policy": null,
+          "x-vercel-cache": "HIT"
+        },
+        "htmlBytes": 789
+      },
+      {
+        "url": "https://dashboard-star-farm.vercel.app/assets/index-DUesW9Q5.js",
+        "method": "HEAD",
+        "status": 200,
+        "headers": {
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": null,
+          "content-encoding": "br",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "etag": "W/\"bc31c6d8e0926ecd45cb4f17cca2ee6b\"",
+          "content-security-policy": null,
+          "content-security-policy-report-only": null,
+          "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+          "x-frame-options": null,
+          "x-content-type-options": null,
+          "referrer-policy": null,
+          "permissions-policy": null,
+          "x-vercel-cache": "HIT"
+        }
+      },
+      {
+        "url": "https://dashboard-star-farm.vercel.app/assets/index-b6RvfSyT.css",
+        "method": "HEAD",
+        "status": 200,
+        "headers": {
+          "content-type": "text/css; charset=utf-8",
+          "content-length": null,
+          "content-encoding": "br",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "etag": "W/\"8c23e2671c9ef2eb656aeccd5539fb85\"",
+          "content-security-policy": null,
+          "content-security-policy-report-only": null,
+          "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+          "x-frame-options": null,
+          "x-content-type-options": null,
+          "referrer-policy": null,
+          "permissions-policy": null,
+          "x-vercel-cache": "HIT"
+        }
+      },
+      {
+        "url": "https://dashboard-star-farm.vercel.app/assets/mekong-landscape-BEGP6vds.jpg",
+        "method": "HEAD",
+        "status": 200,
+        "headers": {
+          "content-type": "image/jpeg",
+          "content-length": "3151633",
+          "content-encoding": null,
+          "cache-control": "public, max-age=0, must-revalidate",
+          "etag": "\"663eaf546e37629e2a2d41a281d1f9bb\"",
+          "content-security-policy": null,
+          "content-security-policy-report-only": null,
+          "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+          "x-frame-options": null,
+          "x-content-type-options": null,
+          "referrer-policy": null,
+          "permissions-policy": null,
+          "x-vercel-cache": "HIT"
+        }
+      },
+      {
+        "url": "https://dashboard-star-farm.vercel.app/assets/mekong-landscape-BEGP6vds.jpg",
+        "method": "HEAD",
+        "conditional": "If-None-Match",
+        "status": 304,
+        "headers": {
+          "content-type": null,
+          "content-length": null,
+          "content-encoding": null,
+          "cache-control": "public, max-age=0, must-revalidate",
+          "etag": "\"663eaf546e37629e2a2d41a281d1f9bb\"",
+          "content-security-policy": null,
+          "content-security-policy-report-only": null,
+          "strict-transport-security": null,
+          "x-frame-options": null,
+          "x-content-type-options": null,
+          "referrer-policy": null,
+          "permissions-policy": null,
+          "x-vercel-cache": "HIT"
+        }
+      }
+    ]
+  }
+}

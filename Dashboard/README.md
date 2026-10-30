@@ -4,7 +4,7 @@ A bilingual Vietnamese–English dashboard for exploring rice farming scenarios 
 
 This directory contains a **static website that displays aggregated CSV data**. It runs independently of the simulation application in `../Web App/frontend`. Dashboard does not call a machine learning model and does not require FastAPI or an API key.
 
-Documentation reviewed against the source code on **October 28, 2026**.
+Documentation reviewed against the source code on **October 29, 2026**.
 
 ## Documentation
 
@@ -14,6 +14,8 @@ Documentation reviewed against the source code on **October 28, 2026**.
 | [Data and calculations](docs/DU_LIEU_VA_CACH_TINH.md) | Source CSVs, generated JSON, units, averages, and comparison baselines |
 | [Maintenance and development](docs/BAO_TRI_VA_PHAT_TRIEN.md) | Code structure, content editing, terminology, styling, and testing |
 | [Build and deployment](docs/BUILD_VA_TRIEN_KHAI.md) | Local development, previewing builds, static hosting, and troubleshooting |
+| [Security and performance audit](docs/SECURITY_AND_PERFORMANCE_AUDIT_2026-10-29.md) | Findings, dependency advisories, build sizes, production headers, and verification on October 29, 2026 |
+| [Optimization results](docs/OPTIMIZATION_2026-10-29.md) | Implemented fixes, before/after asset sizes, browser checks, and deployment requirements |
 | [Partner logo sources](src/assets/partners/README.md) | Image assets used in the footer |
 
 ## Quick start
@@ -45,6 +47,8 @@ Run these commands from `Dashboard`.
 | `npm run lint` | Check the code with ESLint |
 | `npm run build` | Generate data, check TypeScript, and build the static site into `dist/` |
 | `npm run preview` | Serve the existing build without rebuilding it |
+| `npm run images:optimize` | Regenerate WebP variants after changing the source illustration |
+| `npm run fonts:sync` | Manually refresh bundled Lora fonts and their license from official sources; requires internet |
 | `npm run test:coverage` | Run tests and generate a coverage report |
 
 ## Main features
@@ -74,7 +78,7 @@ The model sources contain current conditions for 2016–2022 and future scenario
 
 React 19, TypeScript, Vite, Recharts, Vitest, and Testing Library. Exact dependency versions are locked in `package-lock.json`.
 
-The template uses Lora, a cream background (`#faf9f3`), forest green (`#163d30`), primary green (`#254f3d`), and gold (`#e6d49a`). If Google Fonts cannot load, the browser falls back to Georgia/serif.
+The template uses Lora, a cream background (`#faf9f3`), forest green (`#163d30`), primary green (`#254f3d`), and gold (`#e6d49a`). Lora's Latin, Latin Extended, and Vietnamese variable-font subsets are bundled under `src/assets/fonts/` with their SIL Open Font License. Font loading does not require Google Fonts at runtime; Georgia/serif remains the fallback.
 
 ## Build for release
 

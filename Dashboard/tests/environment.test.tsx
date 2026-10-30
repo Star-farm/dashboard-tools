@@ -36,8 +36,9 @@ describe('environmental overview and comparison', () => {
     expect(screen.getAllByRole('article')).toHaveLength(8)
   })
 
-  it('shows two bar comparisons with summary and individual findings, and updates values with both filters', () => {
+  it('shows two bar comparisons with summary and individual findings, and updates values with both filters', async () => {
     const { rerender } = render(<EnvironmentPage page="environmentComparison" language="vi" />)
+    await screen.findAllByRole('article')
     expect(screen.getAllByRole('article')).toHaveLength(2)
     expect(screen.getAllByRole('complementary')).toHaveLength(3)
     const summary = screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })
@@ -58,8 +59,9 @@ describe('environmental overview and comparison', () => {
 })
 
 describe('environmental model pages', () => {
-  it.each(['environmentBau3', 'environmentBau2', 'environmentBauss', 'environmentOneMha'] as const)('shows two emission KPIs, AWD rate and yearly plots for %s', (page) => {
+  it.each(['environmentBau3', 'environmentBau2', 'environmentBauss', 'environmentOneMha'] as const)('shows two emission KPIs, AWD rate and yearly plots for %s', async (page) => {
     const { rerender } = render(<EnvironmentPage page={page} language="vi" />)
+    await screen.findAllByRole('article')
     expect(screen.getByRole('heading', { level: 1, name: environmentPageTitle(page, 'vi') })).toBeInTheDocument()
     expect(screen.getAllByRole('term')).toHaveLength(3)
     expect(screen.getAllByRole('article')).toHaveLength(2)
@@ -78,8 +80,9 @@ describe('environmental model pages', () => {
     expect(screen.getByText('AWD adoption rate')).toBeInTheDocument()
   }, 10000)
 
-  it.each(['environmentBau3Comparison', 'environmentBau2Comparison', 'environmentBaussComparison'] as const)('shows two combined charts and observations for %s', (page) => {
+  it.each(['environmentBau3Comparison', 'environmentBau2Comparison', 'environmentBaussComparison'] as const)('shows two combined charts and observations for %s', async (page) => {
     render(<EnvironmentPage page={page} language="vi" />)
+    await screen.findAllByRole('article')
     expect(screen.getAllByRole('article')).toHaveLength(2)
     expect(screen.getAllByRole('complementary')).toHaveLength(3)
     for (const chart of screen.getAllByRole('article')) {

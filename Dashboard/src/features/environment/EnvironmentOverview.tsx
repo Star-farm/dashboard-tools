@@ -8,7 +8,7 @@ import type { EnvironmentData, EnvironmentRow } from './environmentTypes'
 import { environmentNumber, environmentUnit } from './environmentAnalysis'
 import { environmentText } from './environmentText'
 
-export default function EnvironmentOverview({ data, language }: { data: EnvironmentData; language: Language }) {
+export default function EnvironmentOverview({ data, language }: { data: Pick<EnvironmentData, 'rows'>; language: Language }) {
   const [filters, setFilters] = useState<EconomicFilters>(emptyEconomicFilters)
   const t = economicsText[language], text = environmentText[language]
   const visible = data.rows.filter((row) => (Object.keys(filters) as (keyof EconomicFilters)[]).every((key) => filters[key] === 'all' || row[key] === filters[key]))

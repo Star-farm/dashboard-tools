@@ -4,6 +4,7 @@
 .home-hero { position: relative; display: grid; place-items: center; min-height: clamp(620px, calc(100svh - 84px), 940px); isolation: isolate; overflow: hidden; background: #516744; color: #fffdf4; }
 .hero-art, .hero-shade { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
 .hero-art { object-fit: cover; object-position: center; }
+.hero-picture { display: contents; }
 .hero-shade { background: linear-gradient(180deg, #18392e3d, #142e2394 48%, #142e238f 75%, #102a229e); }
 .hero-content { width: min(100% - 64px, 1180px); padding: 100px 0 130px; text-align: center; }
 .hero-content h1 { text-wrap: balance; text-shadow: 0 2px 16px #102a2233; }

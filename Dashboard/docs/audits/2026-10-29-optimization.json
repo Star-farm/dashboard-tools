@@ -1,0 +1,530 @@
+{
+  "capturedAt": "2026-10-29T09:29:58.672Z",
+  "scope": "Dashboard local optimization; no production deployment",
+  "dependencyAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "unitTests": {
+    "files": 27,
+    "passed": 241
+  },
+  "buildAssets": [
+    {
+      "name": "ChartLegend-BLyZ2g-m.js",
+      "bytes": 337589
+    },
+    {
+      "name": "EnvironmentPage-Cg1hbNk-.js",
+      "bytes": 19840
+    },
+    {
+      "name": "index-B8OuOBcy.js",
+      "bytes": 278376
+    },
+    {
+      "name": "index-CYmHOuSf.css",
+      "bytes": 37532
+    },
+    {
+      "name": "landscape-1280-DOAAJb04.webp",
+      "bytes": 247064
+    },
+    {
+      "name": "landscape-1920-ssDzcx3W.webp",
+      "bytes": 468590
+    },
+    {
+      "name": "landscape-2560-NZe5zzPX.webp",
+      "bytes": 735600
+    },
+    {
+      "name": "mobile-1280-Bk216YUe.webp",
+      "bytes": 338460
+    },
+    {
+      "name": "mobile-640-C5Y5am1B.webp",
+      "bytes": 111032
+    },
+    {
+      "name": "mobile-960-CShW9cbu.webp",
+      "bytes": 214364
+    },
+    {
+      "name": "ResourcesPage-BTkFMNd7.js",
+      "bytes": 19321
+    }
+  ],
+  "browser": {
+    "version": "156.0.4314.50",
+    "checks": 68,
+    "inlineScriptBlocked": true,
+    "method": "Fresh headless browser contexts, no network/CPU throttling; byte totals count requested local asset files, not wire transfer or Core Web Vitals.",
+    "results": [
+      {
+        "device": "desktop",
+        "route": "home",
+        "hero": {
+          "source": "landscape-1920-ssDzcx3W.webp",
+          "naturalWidth": 1799,
+          "naturalHeight": 936,
+          "bytes": 468590
+        },
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "glossary",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "future",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "scenario-details",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-explore",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-overview",
+        "cspViolations": [],
+        "errors": [],
+        "requestedScripts": [
+          "index-B8OuOBcy.js",
+          "EconomicOverviewPage-CyUIqOVK.js",
+          "economicsText-lk72SCti.js",
+          "economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "device": "desktop",
+        "route": "economics-comparison",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-bau3-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-bau2-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-bauss-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-bau3",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-bau2",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-bauss",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "economics-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-explore",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-overview",
+        "cspViolations": [],
+        "errors": [],
+        "requestedScripts": [
+          "index-B8OuOBcy.js",
+          "ResourcesPage-BTkFMNd7.js",
+          "bau3-comparison-D-NDN8dh.js",
+          "economicsText-lk72SCti.js",
+          "economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "device": "desktop",
+        "route": "resources-comparison",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-bau3-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-bau2-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-bauss-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-bau3",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-bau2",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-bauss",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "resources-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-explore",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-overview",
+        "cspViolations": [],
+        "errors": [],
+        "requestedScripts": [
+          "index-B8OuOBcy.js",
+          "EnvironmentPage-Cg1hbNk-.js",
+          "bau3-comparison-D-NDN8dh.js",
+          "economicsText-lk72SCti.js",
+          "economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "device": "desktop",
+        "route": "environment-comparison",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-bau3-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-bau2-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-bauss-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-bau3",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-bau2",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-bauss",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "desktop",
+        "route": "environment-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "home",
+        "hero": {
+          "source": "mobile-1280-Bk216YUe.webp",
+          "naturalWidth": 724,
+          "naturalHeight": 724,
+          "bytes": 338460
+        },
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "glossary",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "future",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "scenario-details",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-explore",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-overview",
+        "cspViolations": [],
+        "errors": [],
+        "requestedScripts": [
+          "index-B8OuOBcy.js",
+          "EconomicOverviewPage-CyUIqOVK.js",
+          "economicsText-lk72SCti.js",
+          "economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "device": "mobile",
+        "route": "economics-comparison",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-bau3-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-bau2-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-bauss-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-bau3",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-bau2",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-bauss",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "economics-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-explore",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-overview",
+        "cspViolations": [],
+        "errors": [],
+        "requestedScripts": [
+          "index-B8OuOBcy.js",
+          "ResourcesPage-BTkFMNd7.js",
+          "bau3-comparison-D-NDN8dh.js",
+          "economicsText-lk72SCti.js",
+          "economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "device": "mobile",
+        "route": "resources-comparison",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-bau3-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-bau2-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-bauss-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-bau3",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-bau2",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-bauss",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "resources-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-explore",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-overview",
+        "cspViolations": [],
+        "errors": [],
+        "requestedScripts": [
+          "index-B8OuOBcy.js",
+          "EnvironmentPage-Cg1hbNk-.js",
+          "bau3-comparison-D-NDN8dh.js",
+          "economicsText-lk72SCti.js",
+          "economics-D04D5uE1.js"
+        ]
+      },
+      {
+        "device": "mobile",
+        "route": "environment-comparison",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-bau3-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-bau2-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-bauss-vs-1mha",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-bau3",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-bau2",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-bauss",
+        "cspViolations": [],
+        "errors": []
+      },
+      {
+        "device": "mobile",
+        "route": "environment-1mha",
+        "cspViolations": [],
+        "errors": []
+      }
+    ]
+  }
+}

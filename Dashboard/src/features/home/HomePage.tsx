@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react'
-import landscape from '../../assets/mekong-landscape.jpg'
+import landscape1280 from '../../assets/hero/landscape-1280.webp'
+import landscape1920 from '../../assets/hero/landscape-1920.webp'
+import landscape2560 from '../../assets/hero/landscape-2560.webp'
+import mobile640 from '../../assets/hero/mobile-640.webp'
+import mobile960 from '../../assets/hero/mobile-960.webp'
+import mobile1280 from '../../assets/hero/mobile-1280.webp'
 import { translations } from '../../i18n'
 import type { Language } from '../../i18n'
 import { navigationTopics } from '../../app/navigationTopics'
@@ -25,7 +30,10 @@ export default function HomePage({ language }: { language: Language }) {
   return (
     <>
       <section className="home-hero" id="home" aria-labelledby="home-title">
-        <img className="hero-art" src={landscape} alt="" fetchPriority="high" width="4765" height="2480" />
+        <picture className="hero-picture">
+          <source media="(max-width: 600px)" srcSet={`${mobile640} 640w, ${mobile960} 960w, ${mobile1280} 1280w`} sizes="max(630px, calc(100svh - 120px))" />
+          <img className="hero-art" src={landscape1920} srcSet={`${landscape1280} 1280w, ${landscape1920} 1920w, ${landscape2560} 2560w`} sizes="(max-width: 900px) 1230px, (max-width: 1800px) 1800px, 100vw" alt="" fetchPriority="high" width="4765" height="2480" />
+        </picture>
         <div className="hero-shade" />
         <div className="hero-content">
           <h1 id="home-title">{t.heroTitle}{' '}<br /><span>{t.heroHighlight}</span></h1>

@@ -34,8 +34,9 @@ describe('resource overview and comparison', () => {
     expect(screen.getAllByRole('article')).toHaveLength(17)
   })
 
-  it('shows three resource bar comparisons, updates actual values and findings with filters, and translates units', () => {
+  it('shows three resource bar comparisons, updates actual values and findings with filters, and translates units', async () => {
     const { rerender } = render(<ResourcesPage page="resourceComparison" language="vi" />)
+    await screen.findAllByRole('article')
     expect(screen.getAllByRole('article')).toHaveLength(3)
     expect(screen.getAllByRole('complementary')).toHaveLength(4)
     const summary = screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })
@@ -56,8 +57,9 @@ describe('resource overview and comparison', () => {
 })
 
 describe('resource model pages', () => {
-  it.each(['resourceBau3', 'resourceBau2', 'resourceBauss', 'resourceOneMha'] as const)('renders isolated KPIs and annual plots for %s', (page) => {
+  it.each(['resourceBau3', 'resourceBau2', 'resourceBauss', 'resourceOneMha'] as const)('renders isolated KPIs and annual plots for %s', async (page) => {
     const { rerender } = render(<ResourcesPage page={page} language="vi" />)
+    await screen.findAllByRole('article')
     expect(screen.getByRole('heading', { level: 1, name: resourcePageTitle(page, 'vi') })).toBeInTheDocument()
     expect(screen.getAllByRole('term')).toHaveLength(3)
     expect(screen.getAllByRole('article')).toHaveLength(3)
@@ -74,8 +76,9 @@ describe('resource model pages', () => {
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('2050')
   }, 10000)
 
-  it.each(['resourceBau3Comparison', 'resourceBau2Comparison', 'resourceBaussComparison'] as const)('shows three combined charts and observations for %s', (page) => {
+  it.each(['resourceBau3Comparison', 'resourceBau2Comparison', 'resourceBaussComparison'] as const)('shows three combined charts and observations for %s', async (page) => {
     render(<ResourcesPage page={page} language="vi" />)
+    await screen.findAllByRole('article')
     expect(screen.getAllByRole('article')).toHaveLength(3)
     expect(screen.getAllByRole('complementary')).toHaveLength(4)
     const charts = screen.getAllByRole('article')

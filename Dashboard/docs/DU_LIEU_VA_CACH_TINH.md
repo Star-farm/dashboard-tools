@@ -40,6 +40,7 @@ For data pages, the browser uses pre-aggregated JSON instead of downloading and 
 | `npm run data:scenarios` | `scenario-details.json`, `economics-overview.json`, `economics-comparison.json` |
 | Same `data:scenarios` command | `economics-bau3-series.json`, `economics-bau2-series.json`, `economics-bauss-series.json` |
 | Same `data:scenarios` command | `resources.json`, `environment.json` |
+| Same `data:scenarios` command | `resources-overview.json`, `environment-overview.json`: period metadata and table rows only, without annual series |
 
 Do not edit these JSON files directly to update values: the next script run overwrites them. Update the source CSVs or aggregation logic, then regenerate the JSON.
 

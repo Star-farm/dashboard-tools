@@ -78,6 +78,10 @@ Do not use the build command or proxy configuration from `Web App/frontend`. Das
 
 URLs use `#...`, so the server receives the same HTML path regardless of the page hash. No separate rewrite is required for each hash, such as `#economics-overview`. Deploy and verify the Dashboard project without overwriting the Web App service configuration.
 
+`Dashboard/vercel.json` defines a self-origin Content Security Policy, MIME-sniffing protection, same-origin framing, an explicit referrer policy, and restrictions on unused camera/microphone/location features. Inline script execution is blocked; inline style attributes remain allowed for chart rendering and dynamic navigation styles. `npm run preview` applies the same security headers so the policy can be checked locally. The development server retains its normal HMR behavior.
+
+The configuration also gives fingerprinted `/assets/` files a one-year immutable browser cache. HTML keeps the platform's revalidation behavior so new deployments can point to new asset hashes. These Vercel hosting changes take effect only after deployment; local preview does not change production settings. If adding external scripts, fonts, APIs, or partner iframe embedding, update the policy for the specific required origins and test before release.
+
 ### Other static hosts
 
 Serve all contents of `dist/`, including `index.html`, the favicon, and the assets directory. The `base: './'` setting in `vite.config.ts` generates relative asset paths and supports hosting under a subdirectory when its base URL is configured correctly.
@@ -110,7 +114,7 @@ Release only after the preview displays the intended data and layout. These inst
 | Preview does not reflect source changes | Run `npm run build` first; check the port and browser cache |
 | Exchange rates do not update daily | This is current behavior; Dashboard uses separate currency sources |
 | A simulation/API data-loading message appears | Check whether you opened Web App on another port instead of Dashboard |
-| The font differs from the design | Check access to Google Fonts; the fallback font still supports reading the content |
+| The font differs from the design | Check that bundled WOFF2 assets are deployed and served correctly; Georgia/serif remains the fallback |
 | The local port is occupied | Choose another port or stop the specific process you started |
 
 ### Vitest EPERM errors in the Windows temporary directory

@@ -2,18 +2,11 @@ import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
 import { yearTicks } from '../../utils/yearTicks'
-import { bau3Conditions } from './bau3Types'
+import { bau3Conditions, conditionColors } from './bau3Types'
 import type { Bau3Condition, Bau3Data, Bau3Family, Bau3Metric } from './bau3Types'
 import { bau3Unit, formatBau3Value, selectBau3Points } from './bau3Analysis'
 import { bau3Text } from './bau3Text'
 import ChartLegend from '../../components/ChartLegend'
-
-const conditionColors: Record<Bau3Condition, string> = {
-  severeShortage: '#3478c6',
-  severeNormal: '#9362bc',
-  mildShortage: '#ce762b',
-  mildNormal: '#589044',
-}
 
 export default function Bau3LineChart({ data, family, metric, domain, language, title }: {
   data: Bau3Data

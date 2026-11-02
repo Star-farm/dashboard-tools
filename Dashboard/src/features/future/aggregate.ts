@@ -1,8 +1,8 @@
 import { parseCsv } from '../../utils/csv.ts'
 import type { FutureData } from './futureTypes.ts'
 
-export const START_YEAR = 2027
-export const END_YEAR = 2050
+const START_YEAR = 2027
+const END_YEAR = 2050
 
 interface Accumulator { sum: number; count: number }
 interface Bucket {

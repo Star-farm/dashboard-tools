@@ -8,9 +8,6 @@
 .year-controls select { min-width: 118px; min-height: 43px; border: 1px solid #c5d1bc; background: #fffefa; border-radius: 6px; padding: 10px 30px 10px 13px; color: #3b5434; font: inherit; font-size: 14px; cursor: pointer; font-variant-numeric: tabular-nums; }
 .year-controls select:focus-visible { outline: 3px solid #759b7f; outline-offset: 3px; }
 .year-control-divider { color: #a1ae94; padding-bottom: 13px; font-size: 14px; }
-.legend-line { display: inline-block; width: 22px; height: 0; border-top: 3px solid; flex-shrink: 0; }
-.legend-line.green { border-color: #2f8050; }
-.legend-line.red { border-color: #bf554c; }
 .future-charts { display: flex; flex-direction: column; gap: 28px; margin-top: 24px; }
 .future-chart-card { background: #fffefa; border: 1px solid #d8e1cd; border-radius: 10px; overflow: clip; }
 .chart-card-header { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 25px 28px 22px; border-bottom: 1px solid #e8ecdf; }
@@ -20,8 +17,6 @@
 .chart-area { min-width: 0; padding: 24px 23px 18px 17px; }
 .chart-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-left: 12px; margin-bottom: 22px; }
 .chart-unit { font-size: 12px; color: #52654a; }
-.chart-legend { display: flex; align-items: center; gap: 10px 22px; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; }
-.chart-legend li { display: flex; align-items: center; gap: 8px; font-size: 11px; line-height: 1.6; color: #52654a; }
 .timeseries-plot { width: 100%; min-width: 0; height: 320px; }
 .timeseries-plot .recharts-responsive-container { outline: none; }
 .chart-x-label { color: #7b856f; font-size: 10px; text-align: center; margin: 9px 0 0; }
@@ -57,9 +52,6 @@
   .chart-area { padding: 20px 5px 14px; }
   .chart-meta { padding-inline: 12px; margin-bottom: 15px; align-items: flex-start; gap: 13px; }
   .chart-unit { font-size: 11px; }
-  .chart-legend { gap: 9px 14px; }
-  .chart-legend li { font-size: 10px; gap: 6px; }
-  .legend-line { width: 17px; border-top-width: 2.5px; }
   .timeseries-plot { height: 270px; }
   .chart-insight { padding: 21px 19px; }
   .chart-insight > p { font-size: 12px; }

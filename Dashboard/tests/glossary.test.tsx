@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import csv from '../src/data/indicators.csv?raw'
 import App from '../src/app/App'
-import { CATEGORIES, parseCsv, readIndicators, selectIndicators } from '../src/features/glossary/glossaryData'
+import { CATEGORIES, readIndicators, selectIndicators } from '../src/features/glossary/glossaryData'
+import { parseCsv } from '../src/utils/csv'
 
 describe('CSV data', () => {
   it('reads all 31 terms with stable IDs and categories', () => {

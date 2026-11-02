@@ -1,10 +1,10 @@
 import type { EconomicFilters, EconomicMetric } from './economicsData'
 
 const vi = {
-  title: 'Tổng quan kinh tế', filters: 'Lọc kịch bản', all: 'Tất cả', reset: 'Xóa bộ lọc', results: 'Kết quả theo kịch bản', scenario: 'kịch bản',
+  title: 'Tổng quan kinh tế', filters: 'Lọc kịch bản', all: 'Tất cả', reset: 'Xóa bộ lọc', scenario: 'kịch bản',
   historical: 'Hiện trạng', noResults: 'Không có kịch bản phù hợp', noResultsDescription: 'Thử thay đổi lựa chọn hoặc xóa bộ lọc để xem tất cả kịch bản.',
   scenarioColumns: 'Thông tin kịch bản', financialColumns: 'Hiệu quả tài chính', productionColumns: 'Sản xuất',
-  tableCaption: 'Các chỉ số kinh tế trung bình theo kịch bản', mobileResults: 'Các kịch bản kinh tế', sort: 'Sắp xếp theo', unit: 'Đơn vị',
+  tableCaption: 'Các chỉ số kinh tế trung bình theo kịch bản', mobileResults: 'Các kịch bản kinh tế', unit: 'Đơn vị',
   roiNote: 'Thu nhập ròng bình quân / Chi phí sản xuất bình quân × 100%.',
   moneyUnit: 'VNĐ/ha', yieldUnit: 'tấn/ha', laborUnit: 'giờ/ha',
   group: 'Nhóm kịch bản', season: 'Mùa vụ', climate: 'Thời tiết', resource: 'Tài nguyên', awd: 'Áp dụng AWD',
@@ -12,10 +12,10 @@ const vi = {
   income: 'Thu nhập ròng', cost: 'Chi phí sản xuất', straw: 'Giá trị rơm', roi: 'Tỷ suất hoàn vốn', margin: 'Tỷ suất lợi nhuận', yield: 'Năng suất trung bình', labor: 'Cường độ lao động',
 }
 const en: Record<keyof typeof vi, string> = {
-  title: 'Economic viability overview', filters: 'Filter scenarios', all: 'All', reset: 'Clear filters', results: 'Results by scenario', scenario: 'scenarios',
+  title: 'Economic viability overview', filters: 'Filter scenarios', all: 'All', reset: 'Clear filters', scenario: 'scenarios',
   historical: 'Current conditions', noResults: 'No matching scenarios', noResultsDescription: 'Change your selection or clear filters to view every scenario.',
   scenarioColumns: 'Scenario information', financialColumns: 'Financial performance', productionColumns: 'Production',
-  tableCaption: 'Mean economic indicators by scenario', mobileResults: 'Economic scenarios', sort: 'Sort by', unit: 'Unit',
+  tableCaption: 'Mean economic indicators by scenario', mobileResults: 'Economic scenarios', unit: 'Unit',
   roiNote: 'Mean net income / Mean production cost × 100%.',
   moneyUnit: 'USD/ha', yieldUnit: 'ton/ha', laborUnit: 'hours/ha',
   group: 'Scenario group', season: 'Season type', climate: 'Weather', resource: 'Resource scenario', awd: 'AWD adoption',

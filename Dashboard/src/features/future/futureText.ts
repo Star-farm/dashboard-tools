@@ -1,5 +1,4 @@
 const vi = {
-  eyebrow: 'ĐỒNG THÁP · KỊCH BẢN 2027–2050',
   title: 'Về tương lai',
   controls: 'Điều chỉnh biểu đồ',
   fromYear: 'Từ năm',
@@ -32,7 +31,6 @@ const vi = {
 }
 
 const en: Record<keyof typeof vi, string> = {
-  eyebrow: 'DONG THAP · SCENARIOS 2027–2050',
   title: 'About the future',
   controls: 'Chart controls',
   fromYear: 'From year',

@@ -2,17 +2,14 @@ import type { Language } from '../../i18n'
 import type { ScenarioMetric } from './scenarioTypes'
 
 const vi = {
-  eyebrow: 'CHI TIẾT KỊCH BẢN',
   title: 'Về các chỉ số kịch bản đến năm 2050',
   period: 'Bình quân giai đoạn',
-  baseline: 'Nền so sánh',
   select: 'Chọn kịch bản',
   summary: 'Nhận xét tổng quan',
   economics: 'Kinh tế',
   resources: 'Tài nguyên',
   sustainability: 'Môi trường',
   comparedWith: 'So với giai đoạn',
-  unavailable: 'Chưa có dữ liệu',
   changeUnavailable: 'Chưa tính được tỷ lệ thay đổi',
   awd: 'Áp dụng AWD',
   withAwd: 'Sử dụng AWD',
@@ -33,17 +30,14 @@ const vi = {
 }
 
 const en: Record<keyof typeof vi, string> = {
-  eyebrow: 'SCENARIO DETAILS',
   title: 'Scenario indicators through 2050',
   period: 'Period average',
-  baseline: 'Comparison baseline',
   select: 'Choose a scenario',
   summary: 'Scenario overview',
   economics: 'Economics',
   resources: 'Resources',
   sustainability: 'Environment',
   comparedWith: 'Compared with the period',
-  unavailable: 'No data available',
   changeUnavailable: 'Relative change unavailable',
   awd: 'AWD adoption',
   withAwd: 'With AWD',

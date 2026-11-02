@@ -2,14 +2,13 @@ import { useId, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../i18n'
 import { yearTicks } from '../utils/yearTicks'
-import { bau3Conditions } from '../features/economics/bau3Types'
+import { bau3Conditions, conditionColors } from '../features/economics/bau3Types'
 import type { Bau3Condition } from '../features/economics/bau3Types'
 import { bau3Text } from '../features/economics/bau3Text'
 import ChartLegend from './ChartLegend'
 import '../styles/scenario-comparison-chart.css'
 
 type ConditionPoint = { year: number } & Record<Bau3Condition, number | null>
-const conditionColors = { severeShortage: '#3478c6', severeNormal: '#9362bc', mildShortage: '#ce762b', mildNormal: '#589044' }
 interface Props {
   language: Language
   title: string

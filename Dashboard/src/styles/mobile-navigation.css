@@ -17,7 +17,6 @@
 .mobile-navigation > .topic-list > li > a, .mobile-navigation .topic-trigger { justify-content: flex-start; height: auto; min-height: var(--mobile-item-height); padding: 4px 0; border-radius: 0; color: var(--gold); font-size: var(--mobile-menu-font-size); font-weight: 600; letter-spacing: .4px; line-height: 1.35; text-align: left; white-space: normal; text-transform: uppercase; }
 .mobile-navigation > .topic-list > li > a:hover, .mobile-navigation .topic-trigger:hover { background: transparent; color: var(--gold-bright); }
 .mobile-navigation > .topic-list > li > a[aria-current], .mobile-navigation .topic-trigger[aria-expanded="true"] { background: transparent; color: var(--gold-bright); }
-.mobile-navigation .topic-trigger-label { justify-content: flex-start; width: auto; gap: 8px; }
 .mobile-navigation .topic-chevron { width: .75em; height: 1em; flex-basis: .75em; margin: 0; }
 .mobile-navigation .topic-dropdown { position: static; width: 100%; max-height: none; padding: 0 0 4px 12px; overflow: visible; }
 .mobile-navigation .topic-panel { border: 0; border-radius: 0; padding: 0; background: transparent; box-shadow: none; }

@@ -1,5 +1,4 @@
 import { parseCsv } from '../../utils/csv'
-export { parseCsv } from '../../utils/csv'
 import { categoryLabels } from '../../i18n'
 import type { Language } from '../../i18n'
 
@@ -42,7 +41,7 @@ export function readIndicators(source: string): Indicator[] {
   })
 }
 
-export function normalizeSearch(value: string): string {
+function normalizeSearch(value: string): string {
   return value.normalize('NFD').replace(/\p{M}/gu, '').replace(/[đĐ]/g, 'd').toLocaleLowerCase('vi').replace(/\s+/g, ' ').trim()
 }
 

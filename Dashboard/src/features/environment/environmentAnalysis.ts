@@ -6,10 +6,10 @@ import { environmentMetrics } from './environmentTypes'
 import type { EnvironmentData, EnvironmentMetric, EnvironmentPoint, EnvironmentSeries } from './environmentTypes'
 import { environmentText } from './environmentText'
 
-export const environmentColors = { severeShortage: '#3478c6', severeNormal: '#9362bc', mildShortage: '#ce762b', mildNormal: '#589044' }
+export { conditionColors as environmentColors } from '../economics/bau3Types'
 export const environmentUnit = (metric: EnvironmentMetric, language: Language) => environmentText[language][`${metric}Unit`]
 export const environmentNumber = (value: number, language: Language) => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
-export function environmentMean(points: EnvironmentPoint[], metric: EnvironmentMetric): number | null {
+function environmentMean(points: EnvironmentPoint[], metric: EnvironmentMetric): number | null {
   const valid = points.filter((point) => point.values[metric] !== null && point.metricCounts[metric] > 0)
   const count = valid.reduce((sum, point) => sum + point.metricCounts[metric], 0)
   return count ? valid.reduce((sum, point) => sum + point.values[metric]! * point.metricCounts[metric], 0) / count : null

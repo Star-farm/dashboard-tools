@@ -16,9 +16,6 @@
 .hero-actions a:hover { transform: translateY(-2px); }
 .hero-primary { color: #203e2d; background: #eddda6; border: 1px solid #eddda6; }
 .hero-primary:hover { background: #f5e9c5; }
-.hero-bottom { position: absolute; bottom: 28px; left: 48px; right: 48px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: #f0f0df; font-size: 11px; line-height: 1.5; letter-spacing: .5px; }
-.hero-bottom a { display: flex; align-items: center; gap: 14px; min-height: 44px; text-decoration: none; }
-.hero-bottom a span { display: inline-grid; place-items: center; height: 32px; width: 32px; border: 1px solid #ffffff66; border-radius: 50%; font-size: 16px; }
 .glossary-callout { margin-top: 62px; padding: 34px 38px; background: #ebefdf; border-left: 3px solid #8a9e61; display: flex; justify-content: space-between; align-items: center; gap: 35px; }
 .glossary-callout .eyebrow { margin-bottom: 11px; font-size: 10px; }
 .glossary-callout h2 { font-size: var(--section-title-size); font-weight: 600; letter-spacing: -.3px; line-height: 1.4; margin: 0; }
@@ -56,7 +53,6 @@
 @media (max-width: 900px) {
   .home-hero { min-height: 640px; }
   .hero-content { padding-block: 80px 110px; }
-  .hero-bottom { left: 24px; right: 24px; bottom: 22px; font-size: 10px; }
   .glossary-callout { gap: 24px; padding: 28px; }
   .partner-list { gap: 10px 18px; }
   .footer-content { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
@@ -71,10 +67,6 @@
   .hero-project { font-size: 10px; margin-top: 16px; }
   .hero-actions { flex-direction: column; align-items: stretch; margin: 28px auto 0; gap: 10px; max-width: 290px; }
   .hero-actions a { min-height: 48px; font-size: 12px; }
-  .hero-bottom { left: 20px; right: 20px; bottom: 15px; align-items: flex-end; gap: 14px; }
-  .hero-bottom > span { max-width: 145px; font-size: 9px; line-height: 1.7; }
-  .hero-bottom a { font-size: 9px; gap: 8px; }
-  .hero-bottom a span { height: 28px; width: 28px; }
   .glossary-callout { flex-direction: column; align-items: flex-start; margin-top: 34px; padding: 24px 20px; gap: 15px; }
   .glossary-callout p:not(.eyebrow) { font-size: 12px; }
   .glossary-callout > a, .glossary-callout > button { font-size: 12px; min-height: 44px; }

@@ -5,7 +5,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import App from '../src/app/App'
 import HomePage from '../src/features/home/HomePage'
 import catalog from '../src/data/catalog.json'
-import { parseCsv } from '../src/features/glossary/glossaryData'
+import { parseCsv } from '../src/utils/csv'
 
 describe('home page', () => {
   it('clears browser-restored focus on the mobile explore button while preserving intentional focus', () => {

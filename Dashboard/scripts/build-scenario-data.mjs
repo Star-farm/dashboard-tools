@@ -3,6 +3,7 @@ import { aggregateScenarioData } from '../src/features/scenarios/aggregateScenar
 import { aggregateEconomicOverview } from '../src/features/economics/economicsData.ts'
 import { aggregateEconomicComparison } from '../src/features/economics/comparisonData.ts'
 import { aggregateBau3Data, aggregateBauComparisonData } from '../src/features/economics/aggregateBau3.ts'
+import { aggregateSeasonalData, packSeasonalData } from '../src/features/economics/seasonalData.ts'
 import { aggregateResourceData } from '../src/features/resources/aggregateResources.ts'
 import { aggregateEnvironmentData } from '../src/features/environment/aggregateEnvironment.ts'
 
@@ -29,6 +30,11 @@ console.log(`Economic comparison: ${comparison.cohorts.length} filter combinatio
 const bau3 = aggregateBau3Data(master, combined)
 writeFileSync(new URL('economics-bau3-series.json', directory), JSON.stringify(bau3, null, 2) + '\n')
 console.log(`BAU 3S comparison: ${bau3.series.length} annual series.`)
+const seasonal = aggregateSeasonalData(master, combined)
+for (const topic of ['economics', 'resources', 'environment', 'all']) {
+  writeFileSync(new URL(`${topic}-seasonal.json`, directory), JSON.stringify(packSeasonalData(seasonal, topic)) + '\n')
+}
+console.log(`Seasonal comparison: ${seasonal.rows.length} recording-period groups.`)
 for (const [variant, filename] of [['bau2s', 'economics-bau2-series.json'], ['bauss', 'economics-bauss-series.json']]) {
   const comparison = aggregateBauComparisonData(master, combined, variant)
   writeFileSync(new URL(filename, directory), JSON.stringify(comparison, null, 2) + '\n')

@@ -99,14 +99,14 @@ describe('economic overview interface', () => {
     expect(screen.getAllByRole('combobox').every((select) => (select as HTMLSelectElement).value === 'all')).toBe(true)
   })
 
-  it('provides an empty state and lets users recover', () => {
+  it('hides incompatible options and restores them when filters are cleared', () => {
     render(<EconomicOverviewPage language="vi" />)
     fireEvent.change(screen.getByLabelText('Nhóm kịch bản'), { target: { value: 'oneMha' } })
-    fireEvent.change(screen.getByLabelText('Áp dụng AWD'), { target: { value: 'without' } })
-    expect(screen.getByRole('heading', { name: 'Không có kịch bản phù hợp' })).toBeInTheDocument()
-    expect(screen.queryByRole('table')).not.toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Xóa bộ lọc' }))
-    expect(screen.getByRole('table')).toBeInTheDocument()
+    expect(within(screen.getByLabelText('Áp dụng AWD')).queryByRole('option', { name: 'Không có AWD' })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('article')).toHaveLength(4)
+    fireEvent.click(screen.getByRole('button', { name: /Xóa bộ lọc/ }))
+    expect(within(screen.getByLabelText('Áp dụng AWD')).getByRole('option', { name: 'Không có AWD' })).toBeInTheDocument()
+    expect(screen.getAllByRole('article')).toHaveLength(17)
   })
 
   it('connects the economics overview menu on mobile and closes it on navigation', () => {

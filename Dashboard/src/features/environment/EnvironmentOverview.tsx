@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import type { Language } from '../../i18n'
-import { emptyEconomicFilters } from '../economics/economicsData'
+import { emptyEconomicFilters, filterEconomicRows } from '../economics/economicsData'
 import type { EconomicFilters } from '../economics/economicsData'
 import { economicFacets, economicsText } from '../economics/economicsText'
+import ScenarioFilters from '../economics/ScenarioFilters'
 import { environmentMetrics } from './environmentTypes'
 import type { EnvironmentData, EnvironmentRow } from './environmentTypes'
 import { environmentNumber, environmentUnit } from './environmentAnalysis'
@@ -11,14 +12,11 @@ import { environmentText } from './environmentText'
 export default function EnvironmentOverview({ data, language }: { data: Pick<EnvironmentData, 'rows'>; language: Language }) {
   const [filters, setFilters] = useState<EconomicFilters>(emptyEconomicFilters)
   const t = economicsText[language], text = environmentText[language]
-  const visible = data.rows.filter((row) => (Object.keys(filters) as (keyof EconomicFilters)[]).every((key) => filters[key] === 'all' || row[key] === filters[key]))
+  const visible = filterEconomicRows(data.rows, filters)
   const filtered = Object.values(filters).some((value) => value !== 'all')
   const period = (row: EnvironmentRow) => `${row.historical ? `${t.historical} · ` : ''}${row.startYear}–${row.endYear}`
   return <>
-    <form className="economic-filters" aria-label={t.filters} onSubmit={(event) => event.preventDefault()}>{economicFacets.map(({ key, options }) => <div className="economic-filter" key={key}>
-      <label htmlFor={`environment-filter-${key}`}>{t[key]}</label><div className="economic-select-control"><span className="economic-selected-label" aria-hidden="true">{filters[key] === 'all' ? t.all : t[filters[key] as keyof typeof t]}</span>
-        <select id={`environment-filter-${key}`} value={filters[key]} onChange={(event) => setFilters({ ...filters, [key]: event.target.value })}><option value="all">{t.all}</option>{options.filter((option) => data.rows.some((row) => row[key] === option)).map((option) => <option value={option} key={option}>{t[option]}</option>)}</select>
-      </div></div>)}</form>
+    <ScenarioFilters rows={data.rows} filters={filters} onChange={setFilters} language={language} idPrefix="environment-filter" />
     <div className="economic-results-toolbar"><p role="status"><strong>{visible.length}</strong> {t.scenario}</p>{filtered && <button type="button" className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}<span aria-hidden="true"> ↺</span></button>}</div>
     {!visible.length ? <div className="economic-empty"><h2>{t.noResults}</h2><p>{t.noResultsDescription}</p></div> : <>
       <div className="economic-table-region" role="region" aria-label={text.table} tabIndex={0}><table className="economic-table environment-table">

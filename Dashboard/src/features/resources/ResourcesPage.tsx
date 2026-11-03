@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
+import AnalysisView from '../../components/AnalysisView'
 import type { Language } from '../../i18n'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import cached from '../../data/resources-overview.json'
@@ -22,6 +23,8 @@ export default function ResourcesPage({ page, language }: { page: ResourceConten
   useEffect(() => { document.getElementById(route.anchor)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() }) }, [route.anchor])
   return <div className={`resources-page economics-page bau3-page page-shell${route.kind === 'farming' ? ' bau-farming-page' : ''}`} id={route.anchor}>
     <section className={`intro${route.kind === 'farming' || route.kind === 'pair' ? ' bau3-intro' : ''}`} aria-labelledby="resources-title"><h1 id="resources-title">{resourcePageTitle(page, language)}</h1>{(route.kind === 'farming' || route.kind === 'pair') && <span>{overview.startYear}–{overview.endYear}</span>}</section>
-    {page === 'resourceOverview' ? <ResourceOverview data={overview} language={language} /> : <Suspense fallback={<p role="status">{resourceText[language].loading}</p>}><ResourceCharts key={page} page={page} language={language} /></Suspense>}
+    <AnalysisView key={page} language={language} config={{ topic: 'resources', kind: route.kind === 'overview' ? 'overview' : route.kind === 'farming' ? 'family' : 'comparison', family: 'family' in route ? route.family : undefined }}>
+      {page === 'resourceOverview' ? <ResourceOverview data={overview} language={language} /> : <Suspense fallback={<p role="status">{resourceText[language].loading}</p>}><ResourceCharts key={page} page={page} language={language} /></Suspense>}
+    </AnalysisView>
   </div>
 }

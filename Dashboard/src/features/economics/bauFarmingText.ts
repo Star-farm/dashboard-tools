@@ -17,7 +17,7 @@ const en: Record<keyof typeof vi, string> = {
   title: 'Business as usual · 3 seasons',
   bau2Title: 'Business as usual · 2 seasons',
   baussTitle: 'Business as usual · Sustainable',
-  oneMhaTitle: 'One million hectares of rice',
+  oneMhaTitle: 'One million hectares rice',
   kpis: 'Economic indicators',
   average: 'Period average',
   change: '2050 compared with 2027',

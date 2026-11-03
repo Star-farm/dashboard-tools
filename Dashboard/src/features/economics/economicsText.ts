@@ -1,4 +1,4 @@
-import type { EconomicFilters, EconomicMetric } from './economicsData'
+import type { EconomicFilters, EconomicMetric, EconomicRow } from './economicsData'
 
 const vi = {
   title: 'Tổng quan kinh tế', filters: 'Lọc kịch bản', all: 'Tất cả', reset: 'Xóa bộ lọc', scenario: 'kịch bản',
@@ -23,7 +23,7 @@ const en: Record<keyof typeof vi, string> = {
   income: 'Net income', cost: 'Production cost', straw: 'Straw value', roi: 'Return on investment', margin: 'Profit margin', yield: 'Average yield', labor: 'Labor intensity',
 }
 export const economicsText = { vi, en }
-export const economicFacets: { key: keyof EconomicFilters; options: (keyof typeof vi)[] }[] = [
+export const economicFacets: { key: keyof EconomicFilters; options: EconomicRow[keyof EconomicFilters][] }[] = [
   { key: 'group', options: ['bau', 'oneMha'] },
   { key: 'season', options: ['sustainable', 'threeSeasons', 'twoSeasons'] },
   { key: 'climate', options: ['mild', 'severe'] },

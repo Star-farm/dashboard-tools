@@ -33,11 +33,11 @@ describe('economics exploration page', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Explore economics' })).toBeInTheDocument()
     expect(document.title).toBe('Explore economics | STAR FARM')
     expect(window.location.hash).toBe('#economics-explore')
-    for (const name of ['Overview', 'Comparison', 'Business as usual', 'One million hectares of rice']) {
+    for (const name of ['Overview', 'Comparison', 'Business as usual', 'One million hectares rice']) {
       expect(screen.getByRole('region', { name })).toBeInTheDocument()
     }
     expect(within(screen.getByRole('main')).queryByText('Coming soon')).not.toBeInTheDocument()
-    expect(within(screen.getByRole('main')).getByRole('link', { name: 'One million hectares of rice' })).toHaveAttribute('href', '#economics-1mha')
+    expect(within(screen.getByRole('main')).getByRole('link', { name: 'One million hectares rice' })).toHaveAttribute('href', '#economics-1mha')
     const overview = screen.getByRole('region', { name: 'Overview' })
     fireEvent.click(within(overview).getByRole('link', { name: 'Overview' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument()

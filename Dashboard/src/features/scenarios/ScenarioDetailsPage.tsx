@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/scenario-details.json'
 import type { Language } from '../../i18n'
@@ -45,6 +46,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
           <select id="scenario-select" title={selected.name[language]} value={selected.code} onChange={(event) => setSelectedCode(event.target.value)}>{families.map((family) => <optgroup label={t[`group${family}`]} key={family}>{scenarios.scenarios.filter((scenario) => scenario.family === family).map((scenario) => <option value={scenario.code} key={scenario.code}>{scenario.name[language]}</option>)}</optgroup>)}</select>
         </div>
       </div>
+      <AnalysisView language={language} config={{ topic: 'all', kind: 'family', family: ({ threeSeasons: 'bau3s', twoSeasons: 'bau2s', sustainable: 'bauss', oneMha: 'oneMha' } as const)[selected.family], scenarioCode: selected.code }}>
       <aside className="scenario-summary" aria-label={t.summary} aria-live="polite"><p>{scenarioSummaryParts(current.values, baseline.values, language).map((part, index) => part.tone ? <strong key={index} className={`scenario-change ${part.tone}`} data-metric={part.metric}>{part.text}</strong> : <EmphasizedNumbers key={index} text={part.text} />)}</p></aside>
       {sections.map((section, index) => (
         <section className="scenario-section" id={`scenario-${section.id}`} aria-labelledby={`scenario-${section.id}-title`} key={section.id}>
@@ -63,6 +65,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
           </dl>
         </section>
       ))}
+      </AnalysisView>
     </div>
   )
 }

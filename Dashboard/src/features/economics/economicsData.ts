@@ -107,6 +107,6 @@ export function aggregateEconomicOverview(masterSource: string, combinedSource: 
   return rows.sort((a, b) => groupOrder.indexOf(a.group) - groupOrder.indexOf(b.group) || seasonOrder.indexOf(a.season) - seasonOrder.indexOf(b.season) || climateOrder.indexOf(a.climate) - climateOrder.indexOf(b.climate) || resourceOrder.indexOf(a.resource) - resourceOrder.indexOf(b.resource) || a.code.localeCompare(b.code))
 }
 
-export function filterEconomicRows(rows: EconomicRow[], filters: EconomicFilters): EconomicRow[] {
+export function filterEconomicRows<T extends Pick<EconomicRow, keyof EconomicFilters>>(rows: readonly T[], filters: EconomicFilters): T[] {
   return rows.filter((row) => (Object.keys(filters) as (keyof EconomicFilters)[]).every((key) => filters[key] === 'all' || row[key] === filters[key]))
 }

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/economics-overview.json'
 import type { Language } from '../../i18n'
 import { economicMetrics, emptyEconomicFilters, filterEconomicRows } from './economicsData'
 import type { EconomicFilters, EconomicRow } from './economicsData'
 import { economicFacets, economicMetricUnits, economicsText } from './economicsText'
+import ScenarioFilters from './ScenarioFilters'
 import '../../styles/economics.css'
 
 const rows = data as EconomicRow[]
@@ -31,20 +33,8 @@ export default function EconomicOverviewPage({ language }: { language: Language 
   return (
     <div className="economics-page page-shell" id="economics-overview">
       <section className="intro" aria-labelledby="economics-title"><h1 id="economics-title">{t.title}</h1></section>
-      <form className="economic-filters" aria-label={t.filters} onSubmit={(event) => event.preventDefault()}>
-        {economicFacets.map(({ key, options }) => (
-          <div className="economic-filter" key={key}>
-            <label htmlFor={`economic-${key}`}>{t[key]}</label>
-            <div className="economic-select-control">
-              <span className="economic-selected-label" aria-hidden="true">{filters[key] === 'all' ? t.all : t[filters[key] as keyof typeof t]}</span>
-              <select id={`economic-${key}`} value={filters[key]} onChange={(event) => setFilters({ ...filters, [key]: event.target.value })}>
-                <option value="all">{t.all}</option>
-                {options.filter((option) => rows.some((row) => row[key] === option)).map((option) => <option key={option} value={option}>{t[option]}</option>)}
-              </select>
-            </div>
-          </div>
-        ))}
-      </form>
+      <AnalysisView language={language} config={{ topic: 'economics', kind: 'overview' }}>
+      <ScenarioFilters rows={rows} filters={filters} onChange={setFilters} language={language} idPrefix="economic" />
       <div className="economic-results-toolbar">
         <p role="status"><strong>{visible.length}</strong> {t.scenario}</p>
         {filtered && visible.length > 0 && <button type="button" className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}<span aria-hidden="true"> ↺</span></button>}
@@ -73,6 +63,7 @@ export default function EconomicOverviewPage({ language }: { language: Language 
           </article>)}
         </section>
       </>}
+      </AnalysisView>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import AnalysisView from '../../components/AnalysisView'
 import type { Language } from '../../i18n'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
@@ -23,6 +24,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
   return (
     <div className="bau3-page page-shell" id={anchor}>
       <section className="intro bau3-intro" aria-labelledby="bau-comparison-title"><h1 id="bau-comparison-title">{title}</h1><span>{data.startYear}–{data.endYear}</span></section>
+      <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison', family: variant }}>
       <div className="bau3-sections">{bau3Metrics.map((metric) => {
         const domain = bau3Domain(data, metric, currency)
         const analysis = analyzeBau3(data, metric, language)
@@ -32,6 +34,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
           <aside className="bau3-insight" aria-label={`${t.insight} · ${t[metric]}`}><h3>{t.insight}</h3><p><EmphasizedNumbers text={analysis?.paragraph ?? t.noData} /></p></aside>
         </section>
       })}</div>
+      </AnalysisView>
     </div>
   )
 }

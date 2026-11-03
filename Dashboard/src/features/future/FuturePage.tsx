@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/future-series.json'
 import type { Language } from '../../i18n'
@@ -25,11 +26,13 @@ export default function FuturePage({ language }: { language: Language }) {
         <span className="future-period">{startYear}<span aria-hidden="true">—</span>{endYear}</span>
       </section>
 
+      <AnalysisView language={language} config={{ topic: 'all', kind: 'comparison', metrics: ['income', 'labor', 'methane'] }}>
       <section className="future-controls" aria-label={t.controls}>
         <div className="year-controls"><label>{t.fromYear}<select value={startYear} onChange={(event) => setStartYear(Number(event.target.value))}>{data.annual.map(({ year }) => <option value={year} key={year} disabled={year > endYear}>{year}</option>)}</select></label><span className="year-control-divider" aria-hidden="true">{'>'}</span><label>{t.toYear}<select value={endYear} onChange={(event) => setEndYear(Number(event.target.value))}>{data.annual.map(({ year }) => <option value={year} key={year} disabled={year < startYear}>{year}</option>)}</select></label></div>
       </section>
 
       <div className="future-charts">{(['income', 'labor', 'methane'] as const).map((metric) => <TimeSeriesChart key={metric} metric={metric} points={selectChartPoints(data.annual, metric, currency, startYear, endYear)} currency={currency} language={language} />)}</div>
+      </AnalysisView>
     </div>
   )
 }

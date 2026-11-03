@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/economics-comparison.json'
 import type { Language } from '../../i18n'
@@ -27,6 +28,7 @@ export default function EconomicComparisonPage({ language }: { language: Languag
   return (
     <div className="economic-comparison-page page-shell" id="economics-comparison">
       <section className="intro" aria-labelledby="economic-comparison-title"><h1 id="economic-comparison-title">{text.title}</h1></section>
+      <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison' }}>
       <section className="comparison-filters" aria-label={text.filters}>
         <fieldset><legend>{t.climate}</legend><div className="comparison-segmented">{(['all', 'severe', 'mild'] as const).map((option) => <button key={option} type="button" aria-pressed={climate === option} aria-label={option === 'all' ? text.allWeather : undefined} onClick={() => setClimate(option)}>{option === 'all' ? t.all : t[option]}</button>)}</div></fieldset>
         <fieldset><legend>{t.resource}</legend><div className="comparison-segmented">{(['all', 'shortage', 'normal'] as const).map((option) => <button key={option} type="button" aria-pressed={resource === option} aria-label={option === 'all' ? text.allResources : undefined} onClick={() => setResource(option)}>{option === 'all' ? t.all : option === 'normal' ? text.normalResource : t.shortage}</button>)}</div></fieldset>
@@ -35,6 +37,7 @@ export default function EconomicComparisonPage({ language }: { language: Languag
       <p className="sr-only" role="status">{t.climate}: {climate === 'all' ? t.all : t[climate]}. {t.resource}: {resource === 'all' ? t.all : resource === 'normal' ? text.normalResource : t.shortage}.</p>
       {cohort && <aside className="comparison-summary" aria-labelledby="comparison-summary-title"><h2 id="comparison-summary-title">{text.summary}</h2><p><EmphasizedNumbers text={comparisonSummary(cohort, language, comparison.startYear, comparison.endYear)} /></p></aside>}
       {cohort ? <div className="comparison-grid">{comparisonMetrics.map((metric) => <ComparisonBarChart key={metric} metric={metric} cohort={cohort} language={language} startYear={comparison.startYear} endYear={comparison.endYear} />)}</div> : <p className="comparison-no-data">{text.noData}</p>}
+      </AnalysisView>
     </div>
   )
 }

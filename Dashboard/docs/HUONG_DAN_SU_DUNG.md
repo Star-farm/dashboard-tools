@@ -62,7 +62,7 @@ Economics, Resources, and Environment share the same navigation structure.
 | Overview | Information dashboard; Comparison dashboard |
 | Comparison | BAU3S vs 1Mha; BAU2S vs 1Mha; BAUSS vs 1Mha |
 | Business as usual | 3 seasons; 2 seasons; Sustainable |
-| One million hectares of rice | Indicators for 1Mha alone |
+| One million hectares rice | Indicators for 1Mha alone |
 
 BAU means business as usual, 3S means three seasons, 2S means two seasons, and BAUSS identifies sustainable business as usual. These abbreviations are used in route and model names.
 
@@ -114,7 +114,7 @@ Replace `{topic}` with `economics`, `resources`, or `environment`.
 | Three-season business as usual | `#{topic}-bau3` |
 | Two-season business as usual | `#{topic}-bau2` |
 | Sustainable business as usual | `#{topic}-bauss` |
-| One million hectares of rice | `#{topic}-1mha` |
+| One million hectares rice | `#{topic}-1mha` |
 
 For example, `#resources-bau2-vs-1mha` opens the resource comparison between two-season business as usual and 1Mha.
 

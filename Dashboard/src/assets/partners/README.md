@@ -1,6 +1,6 @@
 # Partner logo assets
 
-Logos are stored locally so the site does not depend on external image hosts at runtime. Raster files retain their aspect ratio; IRD and CTU are downscaled for web delivery. The footer pairs DeSIRA and the EU emblem in one group, without an additional duplicate EU item.
+Logos are stored locally so the site does not depend on external image hosts at runtime. The footer groups EU Global Gateway and DeSIRA under funding, FAO under project coordination, and CIRAD, CTU, IRD, ISPAE, and VAAS under project partners. Raster files retain their aspect ratio.
 
 | Asset | Source |
 | --- | --- |
@@ -11,4 +11,12 @@ Logos are stored locally so the site does not depend on external image hosts at 
 | `eu.png` | https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/250px-Flag_of_Europe.svg.png |
 | `fao-blue.png` | https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/FAO_logo.svg/250px-FAO_logo.svg.png |
 
-The transparent white DeSIRA mark is displayed in black using CSS `brightness(0)` to match the reference. The CIRAD asset includes its official tagline. Other logos retain their source colors; no synthetic wordmarks are used.
+Additional assets reused from the local Dashboard_v2.0 asset library:
+
+| Asset | Original source |
+| --- | --- |
+| `ispae.png` | https://ispae.vn/img/logo/ISPAE.png |
+| `vaas.png` | https://vaas.vn/themes/vaas/logo.png |
+| `eu-global-gateway.svg` | European Commission, Global Gateway communication resources: https://international-partnerships.ec.europa.eu/policies/global-gateway/communication-resources_en |
+
+All partner logos retain their original colors without CSS color filters. The source images are unchanged. The Global Gateway SVG and DeSIRA logo use transparent artwork. No synthetic wordmarks are used.

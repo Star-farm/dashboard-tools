@@ -73,9 +73,9 @@ describe.each(models)('$family standalone farming page', (model) => {
     expect(container.querySelectorAll(`.bau3-chart-${model.family}`)).toHaveLength(5)
     expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })).toHaveTextContent(model.name)
     for (const chart of screen.getAllByRole('article')) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
+      expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
-      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(['#3478c6', '#9362bc', '#ce762b', '#589044'])
+      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(model.family === 'oneMha' ? '#217348' : '#b8322b'))
       for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
       expect(chart.nextElementSibling!.querySelectorAll('strong').length).toBeGreaterThan(3)

@@ -4,15 +4,17 @@ import irdLogo from '../assets/partners/ird.png'
 import ciradLogo from '../assets/partners/cirad.png'
 import ctuLogo from '../assets/partners/ctu.png'
 import desiraLogo from '../assets/partners/desira.png'
-import euLogo from '../assets/partners/eu.png'
+import euLogo from '../assets/partners/eu-global-gateway.svg'
 import faoLogo from '../assets/partners/fao-blue.png'
+import ispaeLogo from '../assets/partners/ispae.png'
+import vaasLogo from '../assets/partners/vaas.png'
 
 const partners = [
-  { name: 'IRD', className: 'ird', label: 'Institut de recherche pour le développement', href: 'https://www.ird.fr/', logo: irdLogo, width: 640, height: 300 },
   { name: 'CIRAD', className: 'cirad', label: 'CIRAD', href: 'https://www.cirad.fr/', logo: ciradLogo, width: 290, height: 198 },
   { name: 'CTU', className: 'ctu', label: 'Đại học Cần Thơ · Can Tho University', href: 'https://www.ctu.edu.vn/', logo: ctuLogo, width: 320, height: 320 },
-  { name: 'DeSIRA', className: 'desira', label: 'DeSIRA — Partnerships for Innovation · European Union', href: 'https://capacity4dev.europa.eu/projects/desira_en', logo: desiraLogo, width: 362, height: 103 },
-  { name: 'FAO', className: 'fao', label: 'Food and Agriculture Organization of the United Nations', href: 'https://www.fao.org/', logo: faoLogo, width: 250, height: 255 },
+  { name: 'IRD', className: 'ird', label: 'Institut de recherche pour le développement', href: 'https://www.ird.fr/', logo: irdLogo, width: 640, height: 300 },
+  { name: 'ISPAE', className: 'ispae', label: 'ISPAE', href: 'https://ispae.vn/', logo: ispaeLogo, width: 267, height: 90 },
+  { name: 'VAAS', className: 'vaas', label: 'Vietnam Academy of Agricultural Sciences', href: 'https://vaas.vn/', logo: vaasLogo, width: 114, height: 114 },
 ]
 
 export default function SiteFooter({ language }: { language: Language }) {
@@ -28,13 +30,25 @@ export default function SiteFooter({ language }: { language: Language }) {
           </div>
           <section className="partners-section" id="partners" aria-label={t.partners}>
             <div className="partners-inner">
-              <p>{t.partners}</p>
+              <div className="project-role-row">
+                <section className="project-funders" aria-labelledby="funders-title">
+                  <h2 id="funders-title">{language === 'vi' ? 'Đơn vị tài trợ' : 'Funded by'}</h2>
+                  <div className="funder-logos">
+                    <a className="partner-link funding-eu" href="https://international-partnerships.ec.europa.eu/policies/global-gateway_en" target="_blank" rel="noopener noreferrer" aria-label="European Union · Global Gateway"><img src={euLogo} alt="European Union · Global Gateway" width="742" height="338" loading="lazy" decoding="async" /></a>
+                    <a className="partner-link funding-desira" href="https://capacity4dev.europa.eu/projects/desira_en" target="_blank" rel="noopener noreferrer" aria-label="DeSIRA"><img src={desiraLogo} alt="DeSIRA — Partnerships for Innovation" width="362" height="103" loading="lazy" decoding="async" /></a>
+                  </div>
+                </section>
+                <section className="project-coordinator" aria-labelledby="coordinator-title">
+                  <h2 id="coordinator-title">{language === 'vi' ? 'Điều phối dự án' : 'Project coordinator'}</h2>
+                  <a className="partner-link partner-fao" href="https://www.fao.org/" target="_blank" rel="noopener noreferrer" aria-label="Food and Agriculture Organization of the United Nations"><img className="partner-image" src={faoLogo} alt="FAO" width="250" height="255" loading="lazy" decoding="async" /></a>
+                </section>
+              </div>
+              <h2 className="project-partners-title">{language === 'vi' ? 'Đối tác dự án' : 'Project partners'}</h2>
               <ul className="partner-list">
                 {partners.map((partner) => (
                   <li className={`partner-item partner-${partner.className}`} key={partner.name}>
                     <a className="partner-link" href={partner.href} target="_blank" rel="noopener noreferrer" aria-label={partner.label}>
-                      <img className="partner-image" src={partner.logo} alt={partner.name === 'DeSIRA' ? 'DeSIRA — Partnerships for Innovation' : partner.label} width={partner.width} height={partner.height} loading="lazy" decoding="async" />
-                      {partner.name === 'DeSIRA' && <img className="eu-emblem" src={euLogo} alt="European Union" width="250" height="167" loading="lazy" decoding="async" />}
+                      <img className="partner-image" src={partner.logo} alt={partner.label} width={partner.width} height={partner.height} loading="lazy" decoding="async" />
                     </a>
                   </li>
                 ))}

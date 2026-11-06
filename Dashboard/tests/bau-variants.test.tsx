@@ -70,7 +70,7 @@ describe('BAU 2 seasons and sustainable comparisons', () => {
     const income = screen.getByRole('region', { name: 'Thu nhập ròng' })
     const pair = within(income).getAllByRole('article')
     expect(pair).toHaveLength(1)
-    for (const card of pair) expect([...card.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#3478c6', '#9362bc', '#ce762b', '#589044']))
+    for (const card of pair) expect([...card.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#2868b2', '#8650a8', '#b65b15', '#287447']))
     rerender(<Component language="en" />)
     expect(screen.getByRole('heading', { name: englishTitle })).toBeInTheDocument()
     const translated = within(screen.getByRole('region', { name: 'Net income' })).getAllByRole('article')

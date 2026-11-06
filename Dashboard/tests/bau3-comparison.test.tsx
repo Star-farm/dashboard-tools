@@ -117,13 +117,13 @@ describe('BAU 3 seasons comparison page', () => {
     for (const card of pair) {
       const paths = [...card.querySelectorAll('path.recharts-line-curve')]
       expect(paths).toHaveLength(8)
-      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#3478c6', '#9362bc', '#ce762b', '#589044']))
-      expect(paths.slice(0, 4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('0.42'))
+      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#2868b2', '#8650a8', '#b65b15', '#287447']))
+      expect(paths.slice(0, 4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
       expect(paths.slice(4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
       for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
       for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
       for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
-      expect(card.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
+      expect(card.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)
       expect(card.querySelector('header')).toHaveTextContent('Đơn vị: VNĐ/ha')
     }
     for (const insight of screen.getAllByRole('complementary')) {
@@ -139,8 +139,8 @@ describe('BAU 3 seasons comparison page', () => {
     Object.defineProperty(wrapper, 'offsetWidth', { value: 620 })
     Object.defineProperty(wrapper, 'offsetHeight', { value: 310 })
     vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 620, height: 310, right: 620, bottom: 310, toJSON: () => ({}) })
-    const dots = container.querySelectorAll('circle.recharts-line-dot')
-    const hover = (dot: Element) => fireEvent.mouseMove(dot, { clientX: Number(dot.getAttribute('cx')), clientY: Number(dot.getAttribute('cy')) })
+    const dots = container.querySelectorAll('.recharts-line-dots .scenario-dot')
+    const hover = (dot: Element) => fireEvent.mouseMove(dot, { clientX: Number(dot.getAttribute('data-cx')), clientY: Number(dot.getAttribute('data-cy')) })
     hover(dots[0])
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))

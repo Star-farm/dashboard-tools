@@ -3,8 +3,8 @@
 .topic-control { display: flex; align-items: center; justify-content: center; gap: 4px; }
 .topic-control > .topic-trigger.topic-link { flex: 0 1 auto; width: auto; }
 .topic-control > .topic-trigger.topic-toggle { flex: 0 0 24px; justify-content: center; width: 24px; padding-inline: 0; }
-.site-header .topic-control[data-current="true"] > .topic-link, .mobile-navigation .topic-control[data-current="true"] > .topic-link { color: var(--gold-bright); text-shadow: 0 0 8px #ffeaa880, 0 0 18px #ffeaa840; }
-.site-header .topic-trigger[aria-current="true"], .mobile-navigation .topic-trigger[aria-current="true"] { color: var(--gold-bright); text-shadow: 0 0 8px #ffeaa880, 0 0 18px #ffeaa840; }
+.site-header .topic-control[data-current="true"] > .topic-link, .mobile-navigation .topic-control[data-current="true"] > .topic-link { color: var(--gold); text-shadow: none; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+.site-header .topic-trigger[aria-current="true"], .mobile-navigation .topic-trigger[aria-current="true"] { color: var(--gold); text-shadow: none; }
 .topic-chevron { display: inline-flex; align-items: center; justify-content: center; width: .75em; height: 1em; flex: 0 0 .75em; font: inherit; line-height: 1; }
 .topic-chevron.down::before { content: ''; width: .42em; height: .42em; margin-top: -.2em; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
 .topic-dropdown { position: absolute; top: 100%; right: 0; z-index: 5; width: 248px; padding-top: 8px; }
@@ -20,7 +20,7 @@
 .topic-menu-button:active { transform: none; }
 .topic-leaf { cursor: default; }
 .topic-menu-button[href] { text-decoration: none; cursor: pointer; }
-.topic-branch-link[aria-current="page"] { color: var(--gold-bright); text-shadow: 0 0 8px #ffeaa880; }
+.topic-menu-button[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .topic-leaf:hover { color: #586253; background: #f1f3ea; }
 .topic-flyout { position: absolute; right: calc(100% - 1px); top: -6px; width: 224px; z-index: 1; }
 

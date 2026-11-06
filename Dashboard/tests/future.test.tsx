@@ -77,7 +77,7 @@ describe('chart observations', () => {
     expect(result.trend).toContain('1Mha giảm')
     expect(result.conclusion).toContain('đề xuất triển khai 1Mha')
     expect(result.conclusion).toContain('nhu cầu lao động tăng thêm so với thường lệ')
-    expect(SERIES_COLORS).toEqual({ first: '#2f8050', second: '#bf554c' })
+    expect(SERIES_COLORS).toEqual({ first: '#217348', second: '#b8322b' })
   })
 
   it('groups methane by AWD and derives lower emissions and trends from data', () => {
@@ -131,7 +131,7 @@ describe('future page interactions', () => {
   it('renders straight lines, annual dots and one analysis paragraph, with currency following language', async () => {
     const { container, rerender } = render(<FuturePage language="vi" />)
     await waitFor(() => expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(6))
-    expect(container.querySelectorAll('circle.recharts-line-dot')).toHaveLength(144)
+    expect(container.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(144)
     expect(screen.getAllByRole('article')).toHaveLength(3)
     for (const article of screen.getAllByRole('article')) {
       expect([...article.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([SERIES_COLORS.first, SERIES_COLORS.second])
@@ -164,13 +164,13 @@ describe('future page interactions', () => {
   it('shows both scenario values and units for the hovered year and updates on movement', async () => {
     const points = [{ year: 2027, first: 20, second: 100 }, { year: 2028, first: 30, second: 80 }]
     const { container } = render(<TimeSeriesChart metric="income" points={points} currency="USD" language="en" />)
-    await waitFor(() => expect(container.querySelectorAll('circle.recharts-line-dot')).toHaveLength(4))
+    await waitFor(() => expect(container.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(4))
     const wrapper = container.querySelector<HTMLElement>('.recharts-wrapper')!
     Object.defineProperty(wrapper, 'offsetWidth', { value: 800 })
     Object.defineProperty(wrapper, 'offsetHeight', { value: 310 })
     vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 800, height: 310, right: 800, bottom: 310, toJSON: () => ({}) })
-    const dots = container.querySelectorAll('circle.recharts-line-dot')
-    const hover = (dot: Element) => fireEvent.mouseMove(dot, { clientX: Number(dot.getAttribute('cx')), clientY: Number(dot.getAttribute('cy')) })
+    const dots = container.querySelectorAll('.recharts-line-dots .scenario-dot')
+    const hover = (dot: Element) => fireEvent.mouseMove(dot, { clientX: Number(dot.getAttribute('data-cx')), clientY: Number(dot.getAttribute('data-cy')) })
     hover(dots[0])
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
@@ -192,7 +192,7 @@ describe('future page interactions', () => {
     for (const article of screen.getAllByRole('article')) {
       expect(article.querySelector('.chart-insight')).toHaveTextContent('Năm 2030:')
       expect(article.querySelector('.chart-insight')).toHaveTextContent('Chọn nhiều năm để theo dõi xu hướng thay đổi.')
-      expect(article.querySelectorAll('circle.recharts-line-dot')).toHaveLength(2)
+      expect(article.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(2)
     }
   })
 

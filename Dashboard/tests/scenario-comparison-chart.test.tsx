@@ -15,7 +15,7 @@ function selectChartYear(container: HTMLElement, year: number, touch = false) {
   Object.defineProperty(wrapper, 'offsetWidth', { value: 620, configurable: true })
   Object.defineProperty(wrapper, 'offsetHeight', { value: 340, configurable: true })
   vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 620, height: 340, right: 620, bottom: 340, toJSON: () => ({}) })
-  const positions = [...container.querySelectorAll('circle.recharts-line-dot')].map((dot) => Number(dot.getAttribute('cx')))
+  const positions = [...container.querySelectorAll('.recharts-line-dots .scenario-dot')].map((dot) => Number(dot.getAttribute('data-cx')))
   const firstX = Math.min(...positions), lastX = Math.max(...positions)
   const clientX = firstX + (year - props.startYear) / (props.endYear - props.startYear) * (lastX - firstX)
   if (touch) {
@@ -54,7 +54,7 @@ describe('combined scenario chart', () => {
     fireEvent.click(screen.getByRole('button', { name: bau3Text.en.mildShortage }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(2)
     expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(2)
-    expect([...container.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(['#ce762b', '#ce762b'])
+    expect([...container.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(['#b65b15', '#b65b15'])
     selectChartYear(container, 2050)
     await screen.findByRole('table', { name: 'Net income · Year 2050 · USD/ha' })
     rerender(<ScenarioComparisonChart {...props} language="vi" baselineLabel="BAU 3 vụ" />)
@@ -69,13 +69,13 @@ describe('combined scenario chart', () => {
     const wrapper = container.querySelector<HTMLElement>('.recharts-wrapper')!
     Object.defineProperty(wrapper, 'offsetWidth', { value: 620 }); Object.defineProperty(wrapper, 'offsetHeight', { value: 340 })
     vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 620, height: 340, right: 620, bottom: 340, toJSON: () => ({}) })
-    const dot = container.querySelectorAll('circle.recharts-line-dot')[23]
-    fireEvent.click(dot, { clientX: Number(dot.getAttribute('cx')), clientY: Number(dot.getAttribute('cy')) })
+    const dot = container.querySelectorAll('.recharts-line-dots .scenario-dot')[23]
+    fireEvent.click(dot, { clientX: Number(dot.getAttribute('data-cx')), clientY: Number(dot.getAttribute('data-cy')) })
     await waitFor(() => expect(screen.getByRole('table', { name: 'Net income · Year 2050 · USD/ha' })).toBeInTheDocument())
     const table = screen.getByRole('table', { name: 'Net income · Year 2050 · USD/ha' })
     const row = within(table).getByRole('row', { name: /Severe weather · Resource shortage/ })
     expect(within(row).getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['23.00', '200.00'])
-    fireEvent.mouseMove(container.querySelector('circle.recharts-line-dot')!, { clientX: 68, clientY: 150 })
+    fireEvent.mouseMove(container.querySelector('.recharts-line-dots .scenario-dot')!, { clientX: 68, clientY: 150 })
     fireEvent.mouseLeave(wrapper)
     expect(screen.getByRole('table', { name: 'Net income · Year 2050 · USD/ha' })).toBeInTheDocument()
   })
@@ -108,7 +108,7 @@ describe('combined scenario chart', () => {
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(4)
     for (const path of container.querySelectorAll('path.recharts-line-curve')) expect(path).not.toHaveAttribute('stroke-dasharray')
     expect(screen.queryByRole('columnheader', { name: 'BAU 3 seasons' })).not.toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'BAU 3 seasons · faint dashed line' }))
+    fireEvent.click(screen.getByRole('button', { name: 'BAU 3 seasons · dashed line' }))
     expect(screen.queryByRole('columnheader', { name: '1Mha' })).not.toBeInTheDocument()
     for (const path of container.querySelectorAll('path.recharts-line-curve')) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
     fireEvent.click(screen.getByRole('button', { name: bau3Text.en.mildShortage }))

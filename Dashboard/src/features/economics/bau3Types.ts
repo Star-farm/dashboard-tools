@@ -5,12 +5,6 @@ export type Bau3Family = BauVariant | 'oneMha'
 export type Bau3Currency = 'USD' | 'VND'
 export const bau3Conditions = ['severeShortage', 'severeNormal', 'mildShortage', 'mildNormal'] as const
 export type Bau3Condition = typeof bau3Conditions[number]
-export const conditionColors: Record<Bau3Condition, string> = {
-  severeShortage: '#3478c6',
-  severeNormal: '#9362bc',
-  mildShortage: '#ce762b',
-  mildNormal: '#589044',
-}
 export interface Bau3Point extends Record<Bau3Metric, number | null> { year: number; count: number }
 export interface Bau3Series { family: Bau3Family; condition: Bau3Condition; USD: Bau3Point[]; VND: Bau3Point[] }
 export interface Bau3Data { variant?: BauVariant; startYear: number; endYear: number; series: Bau3Series[] }

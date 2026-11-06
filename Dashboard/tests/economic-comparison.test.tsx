@@ -100,7 +100,7 @@ describe('economic comparison interface', () => {
     for (const card of cards) {
       expect(card.querySelector('header')).toHaveTextContent('Period 2027 - 2050')
       const bars = [...card.querySelectorAll('path.recharts-rectangle')]
-      expect(bars.map((path) => path.getAttribute('fill'))).toEqual(['#bf554c', '#2f8050'])
+      expect(bars.map((path) => path.getAttribute('fill'))).toEqual(['#b8322b', '#217348'])
       const zero = Number(card.querySelector('.recharts-reference-line-line')!.getAttribute('y1'))
       for (const bar of bars) expect(Number(bar.getAttribute('y')) + Number(bar.getAttribute('height'))).toBeCloseTo(zero, 4)
     }

@@ -48,6 +48,13 @@ describe('home page', () => {
     expect(screen.queryByRole('link', { name: /Download CSV/ })).not.toBeInTheDocument()
     expect(screen.queryByText('Data for sustainable growing seasons.')).not.toBeInTheDocument()
     expect(screen.getByText('© 2026 STAR-FARM · All rights reserved.')).toBeInTheDocument()
+    const funders = screen.getByRole('region', { name: 'Funded by' })
+    expect(within(funders).getByRole('link', { name: 'European Union · Global Gateway' })).toBeInTheDocument()
+    expect(within(funders).getByRole('link', { name: 'DeSIRA' })).toBeInTheDocument()
+    expect(within(screen.getByRole('region', { name: 'Project coordinator' })).getByRole('img', { name: 'FAO' })).toBeInTheDocument()
+    const partners = document.querySelector('.partner-list')!
+    expect(partners.children).toHaveLength(5)
+    expect([...partners.querySelectorAll('img')].map((image) => image.getAttribute('alt'))).toEqual(['CIRAD', 'Đại học Cần Thơ · Can Tho University', 'Institut de recherche pour le développement', 'ISPAE', 'Vietnam Academy of Agricultural Sciences'])
     expect(screen.queryByText(/^The overall objective of the STAR-FARM project/)).not.toBeInTheDocument()
     expect(within(screen.getByRole('contentinfo')).queryByRole('heading', { name: 'Explore' })).not.toBeInTheDocument()
     expect(screen.queryByText('Sustainable agriculture')).not.toBeInTheDocument()

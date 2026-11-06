@@ -82,9 +82,10 @@ Economics includes income, straw value, cost, yield, and labor. Resources includ
 
 Each indicator uses one combined chart for both models:
 
-- 1Mha uses a bold, solid line.
-- BAU uses a faint, dashed line.
-- Matching colors represent the same weather–resource conditions across both models.
+- 1Mha uses a solid line.
+- BAU uses a dashed line.
+- Each weather and resource condition has its own color, shared across both models.
+- Matching marker shapes represent the same weather and resource conditions across both models: circle, square, triangle, and diamond.
 
 Use the model buttons to display BAU only, 1Mha only, or both. Select a condition to isolate it, or choose All conditions to restore every condition.
 

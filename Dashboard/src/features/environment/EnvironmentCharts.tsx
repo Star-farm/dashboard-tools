@@ -8,7 +8,7 @@ import type { Bau3Family } from '../economics/bau3Types'
 import { economicsText } from '../economics/economicsText'
 import { environmentMetrics } from './environmentTypes'
 import type { EnvironmentData, EnvironmentSeries } from './environmentTypes'
-import { environmentAwdStats, environmentColors, environmentComparisonInsight, environmentDomain, environmentFamilyInsight, environmentFilteredSeries, environmentLinePoints, environmentNumber, environmentStats, environmentSummary, environmentUnit } from './environmentAnalysis'
+import { environmentAwdStats, environmentComparisonInsight, environmentDomain, environmentFamilyInsight, environmentFilteredSeries, environmentLinePoints, environmentNumber, environmentStats, environmentSummary, environmentUnit } from './environmentAnalysis'
 import { environmentText } from './environmentText'
 import { environmentRoutes } from './environmentRoutes'
 import type { EnvironmentContentPage } from './environmentRoutes'
@@ -62,7 +62,7 @@ function EnvironmentPair({ family, language }: { family: Exclude<Bau3Family, 'on
     <Insight label={t.summary} text={environmentSummary(data, selected, language, family, true)} summary />
     <div className="bau3-sections">{environmentMetrics.map((metric) => <section className="bau3-section" key={metric} aria-labelledby={`environment-pair-${metric}-title`}>
       <h2 id={`environment-pair-${metric}-title`}>{t[metric]}</h2>
-      <ScenarioComparisonChart key={family} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={environmentLinePoints(data, family, metric)} oneMha={environmentLinePoints(data, 'oneMha', metric)} startYear={data.startYear} endYear={data.endYear} domain={environmentDomain(selected, metric)} unit={environmentUnit(metric, language)} colors={environmentColors} formatValue={(value) => environmentNumber(value, language)} />
+      <ScenarioComparisonChart key={family} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={environmentLinePoints(data, family, metric)} oneMha={environmentLinePoints(data, 'oneMha', metric)} startYear={data.startYear} endYear={data.endYear} domain={environmentDomain(selected, metric)} unit={environmentUnit(metric, language)} formatValue={(value) => environmentNumber(value, language)} />
       <Insight label={`${t.insight} · ${t[metric]}`} text={environmentComparisonInsight(data, selected, metric, language, family)} />
     </section>)}</div>
   </>

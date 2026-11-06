@@ -1,6 +1,6 @@
 # Seasonal analysis
 
-All Economics, Resources, and Environment information, comparison, and farming-system pages support **Annual averages** and **By crop season** views. The future overview and scenario details also support seasonal analysis. Open any analytics route with `?view=seasonal` before its hash to select the seasonal view directly.
+All Economics, Resources, and Environment information, comparison, and farming-system pages support **Annual averages** and **By crop season** views. The scenario details page also supports seasonal analysis. The future overview uses annual analysis only. Open a supported route with `?view=seasonal` before its hash to select the seasonal view directly.
 
 ## Crop seasons and data
 
@@ -22,12 +22,12 @@ Values average nonblank records within the same system, condition, year, and cro
 
 Percentage changes use positive baselines; nonpositive baselines use absolute differences. Changes in rates use percentage points: `điểm %` in Vietnamese and `pp` in English. Color follows each metric's preferred direction, including lower costs, labor, input use, and emissions.
 
-Within-year mode shows crop bars; across-year mode shows a selected crop's annual trend. Click, tap, or keyboard selection exposes values. Comparison pages show the specified BAU system versus 1Mha; single-system pages show only that system. Information dashboards show seasonal tables and mobile cards, using the same cascading scenario filters as the annual view.
+Crop comparison mode shows one doughnut chart per model and defaults to **All years**. Each crop has a consistent slice color; labels show actual values and units rather than shares of an annual total. Clicking a slice or its crop label selects its values. Uncultivated crops have no slices. A model with negative values shows a neutral ring and preserves its signed values in the crop labels; zeros are retained without positive slices. It averages the available yearly means separately for each scenario and crop; each year has equal weight, missing measurements are excluded, and zero and negative values are retained. Selecting an individual year shows its original crop values. The same option applies to information tables and mobile cards, which display one averaged entry per crop rather than listing every year. Across-year mode still shows a selected crop's annual trend. Click, tap, or keyboard selection exposes values. Comparison pages show the specified BAU system versus 1Mha; single-system pages show only that system. Information dashboards use the same cascading scenario filters as the annual view.
 
 The interface omits percentiles, record counts, crop-timing rows, and the former preview methodology panel. Crop-timing ranges remain internal for source-consistency checks.
 
 ## Build and loading
 
-`npm run data:scenarios` rebuilds separate economics, resources, environment, and combined seasonal datasets. The generated files use compact indexed rows and numeric arrays; `unpackSeasonalData` restores the typed records without rounding or dropping zeroes. It runs before development and production builds. Seasonal code and the applicable dataset load only when that view is opened. The combined dataset is used by scenario details and the future overview.
+`npm run data:scenarios` rebuilds separate economics, resources, environment, and combined seasonal datasets. The generated files use compact indexed rows and numeric arrays; `unpackSeasonalData` restores the typed records without rounding or dropping zeroes. It runs before development and production builds. Seasonal code and the applicable dataset load only when that view is opened. The combined dataset is used by scenario details.
 
 Annual views retain their existing calculations. Seasonal analysis does not sum simulation replicates into annual production, establish agricultural-year boundaries, or claim improved forecast accuracy without validation against observed seasonal outcomes.

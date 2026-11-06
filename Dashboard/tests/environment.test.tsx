@@ -6,7 +6,7 @@ import EconomicExplorePage from '../src/features/economics/EconomicExplorePage'
 import EnvironmentPage from '../src/features/environment/EnvironmentPage'
 import EnvironmentLineChart from '../src/features/environment/EnvironmentLineChart'
 import { environmentPageForHash, environmentPageTitle, environmentRoutes } from '../src/features/environment/environmentRoutes'
-import { environmentAwdStats, environmentColors, environmentDomain, environmentNumber, environmentStats } from '../src/features/environment/environmentAnalysis'
+import { environmentAwdStats, environmentDomain, environmentNumber, environmentStats } from '../src/features/environment/environmentAnalysis'
 import type { EnvironmentContentPage } from '../src/features/environment/environmentRoutes'
 import type { EnvironmentData } from '../src/features/environment/environmentTypes'
 import cached from '../src/data/environment.json'
@@ -70,8 +70,8 @@ describe('environmental model pages', () => {
     expect(screen.getAllByRole('definition')[0]).toHaveTextContent(environmentNumber(environmentStats(selected, 'intensity').mean!, 'vi'))
     expect(screen.getByText('Tỷ lệ áp dụng AWD').parentElement).toHaveTextContent(`${environmentNumber(environmentAwdStats(selected).mean!, 'vi')}%`)
     for (const chart of screen.getAllByRole('article')) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
-      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(Object.values(environmentColors))
+      expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
+      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(environmentRoutes[page].family === 'oneMha' ? '#217348' : '#b8322b'))
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
       expect(chart.nextElementSibling!.querySelectorAll('strong').length).toBeGreaterThan(3)
     }
@@ -86,7 +86,7 @@ describe('environmental model pages', () => {
     expect(screen.getAllByRole('article')).toHaveLength(2)
     expect(screen.getAllByRole('complementary')).toHaveLength(3)
     for (const chart of screen.getAllByRole('article')) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
+      expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)
       expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
       for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
@@ -103,12 +103,12 @@ describe('environmental model pages', () => {
     const wrapper = container.querySelector<HTMLElement>('.recharts-wrapper')!
     Object.defineProperty(wrapper, 'offsetWidth', { value: 620 }); Object.defineProperty(wrapper, 'offsetHeight', { value: 310 })
     vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 620, height: 310, right: 620, bottom: 310, toJSON: () => ({}) })
-    const dots = container.querySelectorAll('circle.recharts-line-dot')
-    fireEvent.mouseMove(dots[0], { clientX: Number(dots[0].getAttribute('cx')), clientY: Number(dots[0].getAttribute('cy')) })
+    const dots = container.querySelectorAll('.recharts-line-dots .scenario-dot')
+    fireEvent.mouseMove(dots[0], { clientX: Number(dots[0].getAttribute('data-cx')), clientY: Number(dots[0].getAttribute('data-cy')) })
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
     for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${environmentNumber(series.points[0].values.intensity!, 'en')} kg Methane/ton rice`)
-    fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('cx')), clientY: Number(dots[23].getAttribute('cy')) })
+    fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('data-cx')), clientY: Number(dots[23].getAttribute('data-cy')) })
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
   })
 })

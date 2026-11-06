@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import SeasonalComparison from '../src/features/economics/SeasonalComparison'
 import SeasonalOverview from '../src/features/economics/SeasonalOverview'
+import SeasonalPieChart from '../src/features/economics/SeasonalPieChart'
 import Bau3ComparisonPage from '../src/features/economics/Bau3ComparisonPage'
 import Bau2ComparisonPage from '../src/features/economics/Bau2ComparisonPage'
 import ResourcesPage from '../src/features/resources/ResourcesPage'
@@ -10,6 +11,7 @@ import EnvironmentPage from '../src/features/environment/EnvironmentPage'
 import { aggregateSeasonalData, cultivatedPeriods, seasonalMetricGroups, seasonalTopicData, packSeasonalData, unpackSeasonalData } from '../src/features/economics/seasonalData'
 import type { SeasonalConfig, PackedSeasonalData } from '../src/features/economics/seasonalData'
 import { seasonalChange } from '../src/features/economics/seasonalFormatting'
+import { averageSeasonalYears } from '../src/features/economics/seasonalYearAverage'
 import cached from '../src/data/economics-seasonal.json'
 import allCached from '../src/data/all-seasonal.json'
 
@@ -81,6 +83,52 @@ describe('seasonal data for all topics and farming systems', () => {
 })
 
 describe('seasonal interface', () => {
+  it('keeps negative and zero crop values intact instead of drawing misleading positive slices', async () => {
+    let selected = ''
+    const { container } = render(<SeasonalPieChart language="en" name="BAU" color="#b8322b" unit="USD/ha" format={String} selected="early" onSelect={(period) => { selected = period }} slices={[
+      { period: 'early', label: 'Winter–Spring', value: -10 },
+      { period: 'middle', label: 'Summer–Fall', value: 0 },
+      { period: 'late', label: 'Fall–Winter', value: null, status: 'Not grown' },
+    ]} />)
+    expect(screen.getByText('Negative values: see the crop values below.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Winter–Spring: -10 USD/ })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /Summer–Fall: 0 USD/ }))
+    expect(selected).toBe('middle')
+    await waitFor(() => expect(container.querySelector('.recharts-sector')).toHaveAttribute('fill', '#dce3d9'))
+  })
+
+  it('defaults to all-year crop means and updates when choosing an individual year', () => {
+    const sample = aggregateSeasonalData(fixture(), fixture(1000))
+    const means = averageSeasonalYears(sample.rows)
+    expect(means.find((row) => row.family === 'oneMha' && row.period === 'middle')!.USD.income!.mean).toBe(50)
+    expect(means.find((row) => row.family === 'oneMha' && row.period === 'middle')!.VND.income!.mean).toBe(50000)
+    expect(means.find((row) => row.family === 'bau3s' && row.period === 'late')!.USD.income!.mean).toBe(-10)
+    expect(means.some((row) => row.family === 'oneMha' && row.period === 'late')).toBe(false)
+    render(<SeasonalComparison language="en" data={sample} config={{ topic: 'economics', kind: 'family', family: 'oneMha', metrics: ['income'] }} />)
+    expect(screen.getByLabelText('Year')).toHaveValue('all')
+    expect(screen.getByRole('complementary', { name: 'Analysis scope' })).toHaveTextContent('All years')
+    const plot = screen.getByRole('group', { name: 'Net income per hectare' })
+    fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    expect(screen.getByRole('region', { name: 'Selected values · Net income per hectare' })).toHaveTextContent('50.00')
+    fireEvent.change(screen.getByLabelText('Year'), { target: { value: '2027' } })
+    fireEvent.keyDown(screen.getByRole('group', { name: 'Net income per hectare' }), { key: 'ArrowRight' })
+    expect(screen.getByRole('region', { name: 'Selected values · Net income per hectare' })).toHaveTextContent('0.00')
+    fireEvent.change(screen.getByLabelText('Year'), { target: { value: 'all' } })
+    fireEvent.keyDown(screen.getByRole('group', { name: 'Net income per hectare' }), { key: 'ArrowRight' })
+    expect(screen.getByRole('region', { name: 'Selected values · Net income per hectare' })).toHaveTextContent('50.00')
+  })
+
+  it('shows one averaged row per crop in the all-years information table', () => {
+    const sample = aggregateSeasonalData(fixture(), fixture(1000))
+    render(<SeasonalOverview language="en" data={sample} metrics={['income']} mode="year" year="all" period="early" />)
+    fireEvent.change(screen.getByLabelText('Scenario group'), { target: { value: 'oneMha' } })
+    const table = screen.getByRole('table')
+    expect(within(table).getAllByRole('row')).toHaveLength(4)
+    expect(within(table).getByRole('row', { name: /Summer–Fall/ })).toHaveTextContent('50.00')
+    expect(within(table).getByRole('row', { name: /Fall–Winter/ })).toHaveTextContent('Not grown')
+    expect(table).toHaveTextContent('All years')
+  })
+
   it.each([
     { name: 'BAU 3 comparison', page: <Bau3ComparisonPage language="vi" />, cards: 7 },
     { name: 'BAU 2 comparison', page: <Bau2ComparisonPage language="vi" />, cards: 7 },
@@ -99,10 +147,10 @@ describe('seasonal interface', () => {
   it('updates crops and years, supports keyboard selection, and labels unplanted 1Mha crops in both languages', () => {
     const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
     const income = screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })
-    expect(income.querySelectorAll('.recharts-bar')).toHaveLength(2)
+    expect(income.querySelectorAll('.seasonal-pie')).toHaveLength(2)
     const plot = within(income).getByRole('group', { name: 'Thu nhập ròng trên hecta' })
     fireEvent.keyDown(plot, { key: 'End' })
-    expect(within(income).getByText('Không canh tác')).toBeInTheDocument()
+    expect(within(income).getAllByText('Không canh tác').length).toBeGreaterThan(0)
     fireEvent.click(screen.getByRole('button', { name: 'Qua nhiều năm' }))
     fireEvent.keyDown(screen.getByRole('group', { name: 'Thu nhập ròng trên hecta' }), { key: 'ArrowRight' })
     expect(screen.getByRole('region', { name: 'Số liệu đang chọn · Thu nhập ròng trên hecta' })).toHaveTextContent('Năm 2028')

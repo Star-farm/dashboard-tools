@@ -6,7 +6,6 @@ import { resourceMetrics } from './resourceTypes'
 import type { ResourceData, ResourceMetric, ResourcePoint, ResourceSeries } from './resourceTypes'
 import { resourceText } from './resourceText'
 
-export { conditionColors as resourceColors } from '../economics/bau3Types'
 export const resourceUnit = (metric: ResourceMetric, language: Language) => resourceText[language][`${metric}Unit`]
 export const resourceNumber = (value: number, language: Language) => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
 export function resourceMean(points: ResourcePoint[], metric: ResourceMetric): number | null {

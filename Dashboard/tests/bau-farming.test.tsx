@@ -79,7 +79,7 @@ describe('three-season business-as-usual page', () => {
     expect(screen.getAllByRole('complementary')).toHaveLength(6)
     for (const card of screen.getAllByRole('article')) {
       expect(card.querySelectorAll('path.recharts-line-curve')).toHaveLength(4)
-      expect(card.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
+      expect(card.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
       const insight = card.nextElementSibling!
       expect(insight).toHaveAttribute('class', 'bau3-insight farming-chart-insight')
       expect(insight.querySelectorAll('p')).toHaveLength(1)

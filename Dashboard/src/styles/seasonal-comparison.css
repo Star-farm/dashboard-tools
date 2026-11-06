@@ -1,55 +1,71 @@
 .seasonal-comparison { margin-top: 30px; }
 .seasonal-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .seasonal-intro h2 { color: #30472d; font-size: var(--section-title-size); margin: 0 0 8px; }
-.seasonal-intro p { color: var(--muted); font-size: 13px; line-height: 1.8; margin: 0; }
+.seasonal-intro p { color: var(--muted); font-size: var(--text-body); line-height: 1.8; margin: 0; }
 .seasonal-controls { display: grid; grid-template-columns: auto minmax(110px, 150px) minmax(260px, 1fr); align-items: end; gap: 20px 28px; padding: 23px 0; margin-top: 18px; border-block: 1px solid var(--line); }
 .seasonal-controls fieldset { margin: 0; padding: 0; min-width: 0; border: 0; }
-.seasonal-controls legend, .seasonal-controls label { color: #30472d; font-size: 12px; font-weight: 600; }
+.seasonal-filters-title { grid-column: 1 / -1; margin: 0; color: #30472d; font-size: var(--text-body); font-weight: 700; line-height: 1.5; }
+.seasonal-controls legend, .seasonal-controls label { color: #30472d; font-size: var(--text-small); font-weight: 600; }
 .seasonal-controls legend { margin-bottom: 10px; padding: 0; }
 .seasonal-controls label { display: grid; gap: 10px; min-width: 0; }
-.seasonal-controls select { width: 100%; min-width: 0; min-height: 42px; padding: 10px 30px 10px 12px; border: 1px solid #bdc9b4; border-radius: 4px; color: #405538; background: #fffefa; font-size: 12px; font-weight: 400; }
+.seasonal-controls select { width: 100%; min-width: 0; min-height: 42px; padding: 10px 30px 10px 12px; border: 1px solid #bdc9b4; border-radius: 4px; color: #405538; background: #fffefa; font-size: var(--text-small); font-weight: 400; }
 .seasonal-mode { display: flex; gap: 6px; }
-.seasonal-mode button { min-height: 42px; padding: 9px 13px; border: 1px solid #bdc9b4; border-radius: 4px; background: transparent; color: #4c6144; font-size: 12px; white-space: nowrap; }
+.seasonal-mode button { min-height: 42px; padding: 9px 13px; border: 1px solid #bdc9b4; border-radius: 4px; background: transparent; color: #4c6144; font-size: var(--text-small); white-space: nowrap; }
 .seasonal-mode button[aria-pressed="true"], .seasonal-mode button:hover { background: #e9efdf; border-color: #527441; color: #254f3d; }
-.seasonal-context { padding: 17px 20px; margin-top: 20px; background: #edf1e4; border-left: 3px solid #9caa70; color: #485d3e; font-size: 12px; line-height: 1.8; }
-.seasonal-context > strong { font-size: 14px; }
+.seasonal-context { padding: 17px 20px; margin-top: 20px; background: #edf1e4; border-left: 3px solid #9caa70; color: #485d3e; font-size: var(--text-small); line-height: 1.8; }
+.seasonal-context > strong { font-size: var(--text-body); }
 .seasonal-context p { margin: 6px 0 0; }
 .seasonal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
 .seasonal-card { min-width: 0; overflow: hidden; border: 1px solid #cddbc4; border-radius: 8px; background: #fffefa; }
 .seasonal-card > header { padding: 20px 20px 15px; border-bottom: 1px solid #e4eadc; }
 .seasonal-card h3 { margin: 0; color: #30472d; font-size: 19px; line-height: 1.5; }
-.seasonal-card > header p { margin: 7px 0 0; color: #637357; font-size: 11px; line-height: 1.7; }
+.seasonal-card > header p { margin: 7px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; }
 .seasonal-card .interactive-chart-legend { padding-inline: 18px; }
 .seasonal-plot { width: 100%; height: 280px; min-width: 0; }
 .seasonal-plot .recharts-wrapper:focus, .seasonal-plot .recharts-surface:focus { outline: none; }
 .seasonal-plot:focus-visible { outline: 2px solid #9caa70; outline-offset: -2px; }
-.seasonal-hint { margin: 4px 20px 16px; font-size: 10px; color: #637357; line-height: 1.7; }
+.seasonal-hint { margin: 4px 20px 16px; font-size: var(--text-small); color: #40533b; line-height: 1.7; }
 .seasonal-values { margin: 0 16px; padding: 15px 14px; border: 1px solid #d8e1d0; border-radius: 5px; background: #f4f6ee; }
-.seasonal-values h4 { margin: 0 0 12px; color: #30472d; font-size: 13px; }
+.seasonal-values h4 { margin: 0 0 12px; color: #30472d; font-size: var(--text-body); }
 .seasonal-values dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; }
 .seasonal-values dl > div { min-width: 0; }
 .seasonal-values dl > div + div { border-left: 1px solid #d5dfcc; padding-left: 14px; }
-.seasonal-values dt { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #52654a; }
+.seasonal-values dt { display: flex; align-items: center; gap: 6px; font-size: var(--text-small); color: #40533b; }
 .seasonal-values dt i { width: 8px; height: 8px; flex-shrink: 0; border-radius: 2px; }
-.seasonal-values dd { display: grid; gap: 5px; margin: 8px 0 0; color: #637357; font-size: 10px; line-height: 1.7; overflow-wrap: anywhere; }
+.seasonal-values dd { display: grid; gap: 5px; margin: 8px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; overflow-wrap: normal; }
 .seasonal-values dd > strong { font-size: clamp(16px, 1.5vw, 22px); color: #254f3d; font-variant-numeric: tabular-nums; }
-.seasonal-values dd small { display: inline-block; font-size: 10px; font-weight: 400; }
+.seasonal-values dd small { display: inline-block; font-size: var(--text-small); font-weight: 400; }
 .seasonal-missing { color: #7d755e; }
-.seasonal-insight { padding: 18px 20px 22px; color: #485d3e; font-size: 12px; line-height: 1.8; }
-.seasonal-insight h4 { font-size: 12px; margin: 0 0 7px; }
+.seasonal-insight { padding: 18px 20px 22px; color: #485d3e; font-size: var(--text-small); line-height: 1.8; }
+.seasonal-insight h4 { font-size: var(--text-small); margin: 0 0 7px; }
 .seasonal-insight p { margin: 0; }
 .seasonal-insight ul { margin: 8px 0 0; padding-left: 18px; }
 .seasonal-insight .scenario-change.good { color: #24734b; }
 .seasonal-insight .scenario-change.bad { color: #b23e45; }
-.seasonal-insight .scenario-change.neutral { color: #637357; }
-.seasonal-empty { padding: 110px 20px; margin: 0; color: #7d755e; text-align: center; font-size: 13px; }
+.seasonal-insight .scenario-change.neutral { color: #40533b; }
+.seasonal-empty { padding: 110px 20px; margin: 0; color: #7d755e; text-align: center; font-size: var(--text-body); }
 .seasonal-values dl[data-single="true"] { grid-template-columns: minmax(0, 1fr); }
+.seasonal-pie-plot { height: auto; padding: 12px 18px 18px; }
+.seasonal-pies { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 24px; }
+.seasonal-pie { margin: 0; min-width: 0; }
+.seasonal-pie figcaption { text-align: center; font-size: var(--text-body); font-weight: 700; }
+.seasonal-pie-canvas { position: relative; width: 100%; height: 210px; max-width: 300px; margin-inline: auto; }
+.seasonal-pie-center { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #40533b; font-size: var(--text-small); pointer-events: none; white-space: nowrap; }
+.seasonal-pie-values { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.seasonal-pie-values button { display: grid; width: 100%; gap: 4px; padding: 8px 10px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: #30472d; text-align: left; font-size: var(--text-small); line-height: 1.5; }
+.seasonal-pie-values button[aria-pressed="true"], .seasonal-pie-values button:hover { border-color: #a8b59a; background: #f0f4e8; }
+.seasonal-pie-crop { display: flex; align-items: center; gap: 8px; }
+.seasonal-pie-crop i { width: 10px; height: 10px; flex-shrink: 0; border-radius: 2px; }
+.seasonal-pie-values strong { padding-left: 18px; font-variant-numeric: tabular-nums; }
+.seasonal-pie-values small { font-size: inherit; font-weight: 400; }
+.seasonal-pie-note { margin: 0 0 10px; color: #40533b; font-size: var(--text-small); line-height: 1.6; }
+.seasonal-pie-filter-label { margin: 0 0 8px; color: #30472d; font-size: var(--text-small); font-weight: 700; line-height: 1.5; }
 .seasonal-overview { margin-top: 24px; }
 .seasonal-table { min-width: 1100px; }
 .seasonal-table th:first-child { min-width: 130px; }
 .seasonal-table th:nth-child(3) { min-width: 110px; }
 .seasonal-not-grown { padding: 16px; color: #7d755e; }
-.seasonal-overview .economic-card header h3 { margin: 0; font-size: 16px; color: #30472d; }
+.seasonal-overview .economic-card header h3 { margin: 0; font-size: var(--text-body); color: #30472d; }
 @media (max-width: 1050px) {
   .seasonal-controls { grid-template-columns: 1fr 1fr; }
   .seasonal-condition { grid-column: 1 / -1; }
@@ -57,7 +73,7 @@
 @media (max-width: 767px) {
   .seasonal-comparison { margin-top: 24px; }
   .seasonal-intro { gap: 10px; }
-  .seasonal-intro p { font-size: 12px; }
+  .seasonal-intro p { font-size: var(--text-small); }
   .seasonal-controls { gap: 18px 14px; grid-template-columns: minmax(0, 1fr); margin-top: 16px; padding-block: 18px; }
   .seasonal-condition { grid-column: auto; }
   .seasonal-mode button { flex: 1; min-height: 44px; }
@@ -68,6 +84,7 @@
   .seasonal-card h3 { font-size: 18px; }
   .seasonal-card .interactive-chart-legend { padding-inline: 12px; }
   .seasonal-plot { height: 250px; }
+  .seasonal-pie-plot { height: auto; padding-inline: 14px; }
   .seasonal-hint { margin-inline: 14px; }
   .seasonal-values { margin-inline: 12px; padding: 13px 11px; }
   .seasonal-values dl { gap: 10px; }

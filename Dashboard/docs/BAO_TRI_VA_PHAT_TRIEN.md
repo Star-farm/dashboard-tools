@@ -112,13 +112,13 @@ Respect `prefers-reduced-motion`. Scroll behavior is defined in `src/app/scrollB
 Preserve these conventions:
 
 - Straight line segments and a point for each year; no curve smoothing.
-- Matching conditions retain matching colors across BAU and 1Mha.
-- Combined comparison charts use faint dashed BAU lines and bold solid 1Mha lines.
+- Model-based charts use red (#b8322b) for BAU and green (#217348) for 1Mha. Combined condition comparisons use a consistent blue, purple, orange, and green palette for the four weather and resource conditions in both models; line patterns identify the models.
+- All line charts use dashed BAU lines and solid 1Mha lines, with shared stroke widths and markers defined in `src/components/chartStyles.ts`.
 - Missing values remain missing; do not convert them to zero or connect across gaps.
 - Selecting a year by click/tap updates the corresponding value readout.
 - Analysis reflects the visible scope and conditions and distinguishes relative percentages from percentage points.
 
-Do not apply the dashed BAU convention indiscriminately to every chart. About the future and bar charts have their own conventions in their respective components.
+The same palette and line conventions apply to About the future and seasonal charts. Bar charts use the same scenario colors without line patterns. Shared responsive text sizes and chart axis sizes are defined in `src/styles/index.css`. The home navbar retains its gradient; other pages use a solid forest background. Current navigation links are underlined.
 
 ## 6. Testing changes
 

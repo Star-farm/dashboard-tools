@@ -95,6 +95,11 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
         const left = Math.max(gutter, Math.min(triggerBounds.left, window.innerWidth - gutter - panelBounds.width))
         panel.style.left = `${left - navigationBounds.left}px`
         panel.style.right = 'auto'
+        const flyout = panel.querySelector<HTMLElement>('.topic-flyout')
+        if (flyout) {
+          const bounds = panel.getBoundingClientRect()
+          flyout.dataset.side = bounds.right + flyout.offsetWidth + 6 > window.innerWidth - gutter ? 'left' : 'right'
+        }
       }
     }
     measure()
@@ -227,7 +232,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
                 focusFirst(`topic-${topic.id}-panel`, event.key === 'ArrowUp')
               }
             }}>
-              <a className="topic-trigger topic-link" href={`#${topic.id === 'sustainability' ? 'environment' : topic.id}-explore`} onClick={navigate}>{t[topic.label]}</a>
+              <a className="topic-trigger topic-link" href={`#${topic.id === 'sustainability' ? 'environment' : topic.id}-explore`} aria-current={currentTopic === topic.id ? 'location' : undefined} onClick={navigate}>{t[topic.label]}</a>
               <button className="topic-trigger topic-toggle" id={`topic-${topic.id}-trigger`} type="button" aria-label={t[topic.label]} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${t[topic.label]}`} aria-current={currentTopic === topic.id ? 'true' : undefined} aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)}>
                 <span className="topic-chevron down" aria-hidden="true" />
               </button>

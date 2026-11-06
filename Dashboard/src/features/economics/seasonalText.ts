@@ -1,6 +1,7 @@
 const vi = {
-  title: 'Phân tích theo từng vụ', description: 'So sánh các mùa vụ trong một năm hoặc theo dõi cùng một vụ qua nhiều năm.',
-  withinYear: 'Trong một năm', overTime: 'Qua nhiều năm', view: 'Cách xem', year: 'Năm', period: 'Mùa vụ', condition: 'Điều kiện kịch bản', system: 'Hệ canh tác',
+  filters: 'Bộ lọc phân tích theo vụ',
+  title: 'Phân tích theo từng vụ', description: 'So sánh các mùa vụ theo trung bình toàn bộ giai đoạn, chọn một năm cụ thể hoặc theo dõi cùng một vụ qua nhiều năm.',
+  withinYear: 'Giữa các vụ', overTime: 'Qua nhiều năm', view: 'Cách xem', year: 'Năm', allYears: 'Tất cả năm', period: 'Mùa vụ', condition: 'Điều kiện kịch bản', system: 'Hệ canh tác',
   early: 'Đông Xuân', middle: 'Hè Thu', late: 'Thu Đông',
   notGrown: 'Không canh tác', notGrownNote: 'Hệ canh tác 2 vụ và 1Mha chỉ canh tác Đông Xuân và Hè Thu, không canh tác Thu Đông.',
   average: 'Trung bình theo vụ', noData: 'Không có dữ liệu',
@@ -12,8 +13,9 @@ const vi = {
   trend: 'Thay đổi từ năm đầu đến năm cuối có dữ liệu', highest: 'Cao nhất', lowest: 'thấp nhất', table: 'Bảng thông tin theo mùa vụ',
 }
 const en: Record<keyof typeof vi, string> = {
-  title: 'Seasonal analysis', description: 'Compare crop seasons within a year or follow the same season across years.',
-  withinYear: 'Within a year', overTime: 'Across years', view: 'View', year: 'Year', period: 'Crop season', condition: 'Scenario conditions', system: 'Farming system',
+  filters: 'Seasonal analysis filters',
+  title: 'Seasonal analysis', description: 'Compare crop seasons using averages across all years, select a specific year, or follow the same season across years.',
+  withinYear: 'Across crop seasons', overTime: 'Across years', view: 'View', year: 'Year', allYears: 'All years', period: 'Crop season', condition: 'Scenario conditions', system: 'Farming system',
   early: 'Winter–Spring', middle: 'Summer–Fall', late: 'Fall–Winter',
   notGrown: 'Not grown', notGrownNote: 'The two-crop system and 1Mha grow Winter–Spring and Summer–Fall crops, with no Fall–Winter crop.',
   average: 'Mean by crop season', noData: 'No data', allModels: 'Both models', modelFilter: 'Choose models',

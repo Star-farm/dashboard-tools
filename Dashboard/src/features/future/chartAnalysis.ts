@@ -1,8 +1,9 @@
+import { SCENARIO_COLORS } from '../../components/chartStyles'
 import type { Language } from '../../i18n'
 import type { AnnualSeries, ChartPoint, Currency, Metric } from './futureTypes'
 import { futureText } from './futureText'
 
-export const SERIES_COLORS = { first: '#2f8050', second: '#bf554c' } as const
+export const SERIES_COLORS = { first: SCENARIO_COLORS.oneMha, second: SCENARIO_COLORS.bau } as const
 
 export function selectChartPoints(annual: AnnualSeries[], metric: Metric, currency: Currency, start: number, end: number): ChartPoint[] {
   return annual.filter((row) => row.year >= start && row.year <= end).map((row) => ({

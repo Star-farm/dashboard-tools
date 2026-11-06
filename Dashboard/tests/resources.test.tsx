@@ -6,7 +6,7 @@ import EconomicExplorePage from '../src/features/economics/EconomicExplorePage'
 import ResourcesPage from '../src/features/resources/ResourcesPage'
 import ResourceLineChart from '../src/features/resources/ResourceLineChart'
 import { resourcePageForHash, resourcePageTitle, resourceRoutes } from '../src/features/resources/resourceRoutes'
-import { resourceColors, resourceDomain, resourceNumber, resourceStats } from '../src/features/resources/resourceAnalysis'
+import { resourceDomain, resourceNumber, resourceStats } from '../src/features/resources/resourceAnalysis'
 import type { ResourceContentPage } from '../src/features/resources/resourceRoutes'
 import type { ResourceData } from '../src/features/resources/resourceTypes'
 import cached from '../src/data/resources.json'
@@ -67,8 +67,8 @@ describe('resource model pages', () => {
     const expected = resourceStats(data.series.filter((series) => series.family === resourceRoutes[page].family), 'water').mean!
     expect(screen.getAllByRole('definition')[0]).toHaveTextContent(resourceNumber(expected, 'vi'))
     for (const chart of screen.getAllByRole('article')) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(96)
-      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(Object.values(resourceColors))
+      expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
+      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(resourceRoutes[page].family === 'oneMha' ? '#217348' : '#b8322b'))
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
     }
     rerender(<ResourcesPage page={page} language="en" />)
@@ -83,7 +83,7 @@ describe('resource model pages', () => {
     expect(screen.getAllByRole('complementary')).toHaveLength(4)
     const charts = screen.getAllByRole('article')
     for (const chart of charts) {
-      expect(chart.querySelectorAll('circle.recharts-line-dot')).toHaveLength(192)
+      expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)
       expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
       for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
@@ -99,13 +99,13 @@ describe('resource model pages', () => {
     const wrapper = container.querySelector<HTMLElement>('.recharts-wrapper')!
     Object.defineProperty(wrapper, 'offsetWidth', { value: 620 }); Object.defineProperty(wrapper, 'offsetHeight', { value: 310 })
     vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 620, height: 310, right: 620, bottom: 310, toJSON: () => ({}) })
-    const dots = container.querySelectorAll('circle.recharts-line-dot')
-    fireEvent.mouseMove(dots[0], { clientX: Number(dots[0].getAttribute('cx')), clientY: Number(dots[0].getAttribute('cy')) })
+    const dots = container.querySelectorAll('.recharts-line-dots .scenario-dot')
+    fireEvent.mouseMove(dots[0], { clientX: Number(dots[0].getAttribute('data-cx')), clientY: Number(dots[0].getAttribute('data-cy')) })
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
     expect(tooltip).toHaveStyle({ visibility: 'visible' })
     for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${resourceNumber(series.points[0].values.water!, 'en')} mm`)
-    fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('cx')), clientY: Number(dots[23].getAttribute('cy')) })
+    fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('data-cx')), clientY: Number(dots[23].getAttribute('data-cy')) })
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
   })
 })

@@ -6,7 +6,6 @@ import { environmentMetrics } from './environmentTypes'
 import type { EnvironmentData, EnvironmentMetric, EnvironmentPoint, EnvironmentSeries } from './environmentTypes'
 import { environmentText } from './environmentText'
 
-export { conditionColors as environmentColors } from '../economics/bau3Types'
 export const environmentUnit = (metric: EnvironmentMetric, language: Language) => environmentText[language][`${metric}Unit`]
 export const environmentNumber = (value: number, language: Language) => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
 function environmentMean(points: EnvironmentPoint[], metric: EnvironmentMetric): number | null {

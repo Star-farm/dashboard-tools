@@ -1,3 +1,4 @@
+import { CHART_TICK, CHART_TOOLTIP, scenarioLineStyle } from '../../components/chartStyles'
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -41,12 +42,12 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
                 <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 800, height: 310 }} onResize={setChartWidth}>
                   <LineChart data={points} accessibilityLayer margin={{ top: 12, right: 18, left: 0, bottom: 8 }}>
                     <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
-                    <XAxis dataKey="year" type="number" domain={yearDomain} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={{ fill: '#64735b', fontSize: 11 }} />
-                    <YAxis width={62} domain={metric === 'labor' ? laborAxisDomain(points) : [(min: number) => Math.min(0, min), 'auto']} tickFormatter={(value) => compactNumber.format(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={8} tick={{ fill: '#64735b', fontSize: 11 }} />
+                    <XAxis dataKey="year" type="number" domain={yearDomain} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={CHART_TICK} />
+                    <YAxis width={62} domain={metric === 'labor' ? laborAxisDomain(points) : [(min: number) => Math.min(0, min), 'auto']} tickFormatter={(value) => compactNumber.format(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={8} tick={CHART_TICK} />
                     {metric !== 'labor' && <ReferenceLine y={0} stroke="#819275" />}
-                    <Tooltip shared isAnimationActive={false} labelFormatter={(value) => `${t.year} ${value}`} formatter={(value) => `${formatValue(Number(value), metric, currency, language)} ${unit}`} contentStyle={{ background: '#fffef9', border: '1px solid #d7dfcc', borderRadius: 8, fontSize: 12, lineHeight: 1.8 }} wrapperStyle={{ maxWidth: 'min(300px, 85vw)', whiteSpace: 'normal' }} cursor={{ stroke: '#abb99d', strokeDasharray: '3 3' }} />
-                    {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} stroke={SERIES_COLORS.first} strokeWidth={3} dot={{ r: 3, fill: SERIES_COLORS.first, stroke: '#fffefa', strokeWidth: 1 }} activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }} connectNulls={false} isAnimationActive={false} />}
-                    {selection !== 'first' && <Line type="linear" strokeDasharray="6 4" dataKey="second" name={analysis.secondLabel} stroke={SERIES_COLORS.second} strokeWidth={3} dot={{ r: 3, fill: SERIES_COLORS.second, stroke: '#fffefa', strokeWidth: 1 }} activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }} connectNulls={false} isAnimationActive={false} />}
+                    <Tooltip shared isAnimationActive={false} labelFormatter={(value) => `${t.year} ${value}`} formatter={(value) => `${formatValue(Number(value), metric, currency, language)} ${unit}`} contentStyle={CHART_TOOLTIP} wrapperStyle={{ maxWidth: 'min(300px, 85vw)', whiteSpace: 'normal' }} cursor={{ stroke: '#abb99d', strokeDasharray: '3 3' }} />
+                    {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} {...scenarioLineStyle('oneMha')} connectNulls={false} isAnimationActive={false} />}
+                    {selection !== 'first' && <Line type="linear" dataKey="second" name={analysis.secondLabel} {...scenarioLineStyle('bau')} connectNulls={false} isAnimationActive={false} />}
                   </LineChart>
                 </ResponsiveContainer>
               </div>

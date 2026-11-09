@@ -219,9 +219,9 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
     <nav className={`top-navigation${mobile ? ' mobile-navigation' : ''}`} aria-label={t.mainNavigation} ref={navigationRef} onKeyDown={handleKeys} onMouseLeave={mobile ? undefined : close}>
       <ul className="topic-list" onScroll={mobile ? undefined : close}>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#home" aria-current={page === 'home' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navHome}</a></li>
-        <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#glossary" aria-current={page === 'glossary' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navGlossary}</a></li>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#future" aria-current={page === 'future' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navFuture}</a></li>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#scenario-details" aria-current={page === 'scenario' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navScenarioDetails}</a></li>
+        <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#map" aria-current={page === 'map' ? 'page' : undefined} onFocus={close} onClick={navigate}>{language === 'vi' ? 'Bản đồ' : 'Map'}</a></li>
         {topics.map((topic) => (
           <li className="topic-item" key={topic.id} onMouseEnter={mobile ? undefined : () => open(topic.id)}>
             <div className="topic-control" data-current={currentTopic === topic.id} onKeyDown={(event) => {

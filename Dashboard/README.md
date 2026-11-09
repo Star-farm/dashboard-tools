@@ -8,6 +8,8 @@ Documentation reviewed against the source code on **October 29, 2026**.
 
 ## Documentation
 
+- [Bản đồ vùng canh tác](docs/BAN_DO.md): dữ liệu GIS, kết quả theo vùng, cách tính và cập nhật trang `/#map`.
+
 | Document | Contents |
 | --- | --- |
 | [User guide](docs/HUONG_DAN_SU_DUNG.md) | Pages, menus, filters, charts, and interpreting KPIs |

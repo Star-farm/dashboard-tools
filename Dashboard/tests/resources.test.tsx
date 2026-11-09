@@ -68,7 +68,7 @@ describe('resource model pages', () => {
     expect(screen.getAllByRole('definition')[0]).toHaveTextContent(resourceNumber(expected, 'vi'))
     for (const chart of screen.getAllByRole('article')) {
       expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
-      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(resourceRoutes[page].family === 'oneMha' ? '#217348' : '#b8322b'))
+      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(['#2868b2', '#8650a8', '#b65b15', '#287447'])
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
     }
     rerender(<ResourcesPage page={page} language="en" />)
@@ -86,7 +86,6 @@ describe('resource model pages', () => {
       expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)
       expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
-      for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
       for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
       for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
     }

@@ -18,13 +18,13 @@ export function scenarioColor(family: string) {
   return family === 'oneMha' ? SCENARIO_COLORS.oneMha : SCENARIO_COLORS.bau
 }
 
-export function scenarioLineStyle(family: string, condition?: Bau3Condition, compareConditions = false) {
+export function scenarioLineStyle(family: string, condition?: Bau3Condition, compareConditions = false, singleLine = false) {
   const color = condition && compareConditions ? CONDITION_COLORS[condition] : scenarioColor(family)
   const shape = condition ? CONDITION_MARKERS[condition] : 'circle'
   const marker = (active: boolean) => ({ cx, cy }: { cx?: number; cy?: number }) => createElement(ChartMarker, { shape, color, cx, cy, active })
   return {
     stroke: color, strokeWidth: 3, strokeOpacity: 1,
-    strokeDasharray: family === 'oneMha' ? undefined : '6 4',
+    strokeDasharray: family === 'oneMha' || singleLine ? undefined : '6 4',
     dot: marker(false), activeDot: marker(true),
   }
 }

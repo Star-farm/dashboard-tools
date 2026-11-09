@@ -46,10 +46,6 @@ export default function HomePage({ language }: { language: Language }) {
       </section>
 
       <section className="home-explore content-width" id="home-explore" aria-label={t.homeExplore}>
-        <aside className="glossary-callout" aria-labelledby="glossary-callout-title">
-          <div><p className="eyebrow">{t.glossaryCtaEyebrow}</p><h2 id="glossary-callout-title">{t.glossaryCtaTitle}</h2><p>{t.glossaryCtaDescription}</p></div>
-          <a href="#glossary">{t.heroGlossary}<span aria-hidden="true">{'>'}</span></a>
-        </aside>
         <aside className="glossary-callout" aria-labelledby="future-callout-title">
           <div><p className="eyebrow">{t.futureCtaEyebrow}</p><h2 id="future-callout-title">{t.navFuture}</h2><p>{t.futureCtaDescription}</p></div>
           <a href="#future">{t.navFuture}<span aria-hidden="true">{'>'}</span></a>
@@ -57,6 +53,10 @@ export default function HomePage({ language }: { language: Language }) {
         <aside className="glossary-callout" aria-labelledby="scenario-callout-title">
           <div><p className="eyebrow">{t.scenarioCtaEyebrow}</p><h2 id="scenario-callout-title">{t.navScenarioDetails}</h2><p>{t.scenarioCtaDescription}</p></div>
           <a href="#scenario-details">{t.navScenarioDetails}<span aria-hidden="true">{'>'}</span></a>
+        </aside>
+        <aside className="glossary-callout" aria-labelledby="map-callout-title">
+          <div><p className="eyebrow">{t.mapCtaEyebrow} </p><h2 id="map-callout-title">{t.navMap}</h2><p>{t.mapCtaDescription}</p></div>
+          <a href="#map">{t.navMap}<span aria-hidden="true">{'>'}</span></a>
         </aside>
         {navigationTopics.map((topic) => (
           <aside className="glossary-callout" key={topic.id} aria-labelledby={`${topic.id}-callout-title`}>

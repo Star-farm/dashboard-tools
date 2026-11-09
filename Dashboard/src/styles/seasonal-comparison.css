@@ -16,6 +16,7 @@
 .seasonal-context > strong { font-size: var(--text-body); }
 .seasonal-context p { margin: 6px 0 0; }
 .seasonal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
+.seasonal-chart-type { grid-column: 1 / -1; margin: 8px 0 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; }
 .seasonal-card { min-width: 0; overflow: hidden; border: 1px solid #cddbc4; border-radius: 8px; background: #fffefa; }
 .seasonal-card > header { padding: 20px 20px 15px; border-bottom: 1px solid #e4eadc; }
 .seasonal-card h3 { margin: 0; color: #30472d; font-size: 19px; line-height: 1.5; }
@@ -38,6 +39,8 @@
 .seasonal-missing { color: #7d755e; }
 .seasonal-insight { padding: 18px 20px 22px; color: #485d3e; font-size: var(--text-small); line-height: 1.8; }
 .seasonal-insight h4 { font-size: var(--text-small); margin: 0 0 7px; }
+.seasonal-crop-insights { display: grid; gap: 12px; }
+.seasonal-crop-insights h5 { font-size: inherit; margin: 0 0 4px; color: #30472d; }
 .seasonal-insight p { margin: 0; }
 .seasonal-insight ul { margin: 8px 0 0; padding-left: 18px; }
 .seasonal-insight .scenario-change.good { color: #24734b; }

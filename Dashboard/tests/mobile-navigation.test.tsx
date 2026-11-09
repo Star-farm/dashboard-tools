@@ -29,7 +29,7 @@ describe('mobile header menu', () => {
     Reflect.deleteProperty(HTMLDialogElement.prototype, 'close')
   })
 
-  it('hides on downward page scroll, returns on upward scroll, and remains visible while the menu is open', () => {
+  it('remains visible on page scroll and while the menu is open', () => {
     render(<App />)
     const header = screen.getByRole('banner')
     const scroll = (y: number) => {
@@ -38,9 +38,9 @@ describe('mobile header menu', () => {
     }
 
     scroll(150)
-    expect(header).toHaveClass('header-hidden')
+    expect(header).not.toHaveClass('header-hidden')
     scroll(148)
-    expect(header).toHaveClass('header-hidden')
+    expect(header).not.toHaveClass('header-hidden')
     scroll(130)
     expect(header).not.toHaveClass('header-hidden')
     scroll(0)
@@ -52,7 +52,7 @@ describe('mobile header menu', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Đóng menu' }))
     scroll(340)
-    expect(header).toHaveClass('header-hidden')
+    expect(header).not.toHaveClass('header-hidden')
     scroll(0)
     expect(header).not.toHaveClass('header-hidden')
   })

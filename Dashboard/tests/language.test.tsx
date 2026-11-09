@@ -86,14 +86,14 @@ describe('bilingual glossary and navigation', () => {
   it('provides translated menu links between home and glossary', async () => {
     render(<App />)
     const menu = screen.getByRole('navigation', { name: 'Menu chính' })
-    expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Trang chủ', 'Bảng định nghĩa', 'Về tương lai', 'Chi tiết kịch bản', 'Kinh tế', 'Tài nguyên', 'Môi trường'])
+    expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Trang chủ', 'Về tương lai', 'Chi tiết kịch bản', 'Bản đồ', 'Kinh tế', 'Tài nguyên', 'Môi trường'])
     fireEvent.click(within(menu).getByRole('link', { name: 'Trang chủ' }))
     expect(await screen.findByRole('heading', { name: /Tác động của đề án/ })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(within(screen.getByRole('navigation', { name: 'Main menu' })).queryByRole('link', { name: 'Data' })).not.toBeInTheDocument()
-    expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Home', 'Glossary', 'About the future', 'Scenario details', 'Economics', 'Resources', 'Environment'])
-    fireEvent.click(within(menu).getByRole('link', { name: 'Glossary' }))
-    expect(await screen.findByRole('heading', { name: 'Glossary' })).toBeInTheDocument()
+    expect(within(menu).getAllByRole('link').map((link) => link.textContent)).toEqual(['Home', 'About the future', 'Scenario details', 'Map', 'Economics', 'Resources', 'Environment'])
+    expect(screen.getByRole('button', { name: 'Look up terms' })).toBeInTheDocument()
+    expect(within(menu).queryByRole('link', { name: 'Glossary' })).not.toBeInTheDocument()
   })
 
   it('localizes the error fallback', () => {

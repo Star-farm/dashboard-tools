@@ -1,4 +1,5 @@
-import { CHART_TICK, CHART_TOOLTIP, scenarioColor } from '../../components/chartStyles'
+import ChartInfo from '../../components/ChartInfo'
+import { CHART_TICK, scenarioColor } from '../../components/chartStyles'
 import { useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartLegend from '../../components/ChartLegend'
@@ -37,7 +38,7 @@ export default function ComparisonBarChart({ metric, cohort, language, startYear
             <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
             <YAxis width={62} domain={[(min: number) => min < 0 ? min * 1.15 : 0, (max: number) => max > 0 ? max * 1.2 : 1]} tickFormatter={(value) => compact.format(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
             <ReferenceLine y={0} stroke="#819275" />
-            <Tooltip isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} formatter={(value) => [`${number.format(Number(value))} ${unit}`, title]} contentStyle={CHART_TOOLTIP} wrapperStyle={{ maxWidth: 'min(300px, 85vw)', whiteSpace: 'normal' }} />
+            <Tooltip position={{ x: 0, y: 0 }} isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} content={(props) => <ChartInfo {...props} format={(value) => `${number.format(value)} ${unit}`} />} />
             <Bar dataKey="value" name={title} maxBarSize={84} radius={[4, 4, 0, 0]} isAnimationActive={false}>
               {visiblePoints.map((point) => <Cell key={point.group} fill={point.color} />)}
               <LabelList dataKey="value" position="top" formatter={(value) => value === null ? '' : number.format(Number(value))} style={{ fontFamily: 'inherit', fontSize: 'var(--chart-axis-size)', fontWeight: 700, fill: '#30472d' }} />

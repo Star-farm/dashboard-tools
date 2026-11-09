@@ -27,6 +27,16 @@ function selectChartYear(container: HTMLElement, year: number, touch = false) {
 }
 
 describe('combined scenario chart', () => {
+  it('renders grouped bars for rates and retains model and condition filtering', async () => {
+    const { container } = render(<ScenarioComparisonChart {...props} chartType="bar" />)
+    await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(8))
+    expect(container.querySelectorAll('.recharts-line')).toHaveLength(0)
+    fireEvent.click(screen.getByRole('button', { name: /1Mha · solid bars/ }))
+    await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(4))
+    fireEvent.click(screen.getByRole('button', { name: 'Normal weather · Normal resources' }))
+    await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(1))
+    expect(screen.getByRole('table')).toHaveTextContent('103.00')
+  })
   it('selects years directly on the chart without a slider and preserves negative, zero and missing values', async () => {
     const { container } = render(<ScenarioComparisonChart {...props} baseline={[...props.baseline, { ...point(2030, 0), mildNormal: null }]} />)
     expect(screen.queryByRole('slider')).not.toBeInTheDocument()
@@ -102,18 +112,19 @@ describe('combined scenario chart', () => {
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
 
-  it('filters models and conditions independently and keeps BAU dashed', () => {
+  it('uses solid lines for either model alone and dashed BAU when both models are shown', () => {
     const { container } = render(<ScenarioComparisonChart {...props} />)
     fireEvent.click(screen.getByRole('button', { name: '1Mha · bold line' }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(4)
     for (const path of container.querySelectorAll('path.recharts-line-curve')) expect(path).not.toHaveAttribute('stroke-dasharray')
     expect(screen.queryByRole('columnheader', { name: 'BAU 3 seasons' })).not.toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'BAU 3 seasons · dashed line' }))
+    fireEvent.click(screen.getByRole('button', { name: 'BAU 3 seasons · solid line' }))
     expect(screen.queryByRole('columnheader', { name: '1Mha' })).not.toBeInTheDocument()
-    for (const path of container.querySelectorAll('path.recharts-line-curve')) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
+    for (const path of container.querySelectorAll('path.recharts-line-curve')) expect(path).not.toHaveAttribute('stroke-dasharray')
     fireEvent.click(screen.getByRole('button', { name: bau3Text.en.mildShortage }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(1)
     fireEvent.click(screen.getByRole('button', { name: 'All models' }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(2)
+    expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke-dasharray', '6 4')
   })
 })

@@ -1,3 +1,4 @@
+import PageDescription from '../../components/PageDescription'
 import { useEffect, useState } from 'react'
 import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
@@ -37,13 +38,14 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
   return (
     <div className="scenario-page page-shell" id="scenario-details">
       <section className="intro" aria-labelledby="scenario-title">
-        <h1 id="scenario-title">{t.title}</h1>
+        <h1 id="scenario-title">{t.title}</h1><PageDescription language={language} kind="scenario" />
       </section>
       <div className="scenario-selector">
+        <h2 className="filter-group-title">{language === 'vi' ? 'Bộ lọc kịch bản' : 'Scenario filter'}</h2>
         <label htmlFor="scenario-select">{t.select}</label>
         <div className="scenario-select-control">
           <span className="scenario-selected-name" aria-hidden="true">{selected.name[language]}</span>
-          <select id="scenario-select" title={selected.name[language]} value={selected.code} onChange={(event) => setSelectedCode(event.target.value)}>{families.map((family) => <optgroup label={t[`group${family}`]} key={family}>{scenarios.scenarios.filter((scenario) => scenario.family === family).map((scenario) => <option value={scenario.code} key={scenario.code}>{scenario.name[language]}</option>)}</optgroup>)}</select>
+          <select id="scenario-select" title={`${t.select}: ${selected.name[language]}`} value={selected.code} onChange={(event) => setSelectedCode(event.target.value)}>{families.map((family) => <optgroup label={t[`group${family}`]} key={family}>{scenarios.scenarios.filter((scenario) => scenario.family === family).map((scenario) => <option value={scenario.code} key={scenario.code}>{scenario.name[language]}</option>)}</optgroup>)}</select>
         </div>
       </div>
       <AnalysisView language={language} config={{ topic: 'all', kind: 'family', family: ({ threeSeasons: 'bau3s', twoSeasons: 'bau2s', sustainable: 'bauss', oneMha: 'oneMha' } as const)[selected.family], scenarioCode: selected.code }}>

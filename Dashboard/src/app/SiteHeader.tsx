@@ -3,7 +3,7 @@ import { translations } from '../i18n'
 import type { Language } from '../i18n'
 import type { Page } from './usePageNavigation'
 import HeaderNavigation from './HeaderNavigation'
-import { useHeaderScroll } from './useHeaderScroll'
+import QuickGlossary from '../features/glossary/QuickGlossary'
 import '../styles/mobile-navigation.css'
 import '../styles/desktop-navigation.css'
 
@@ -85,15 +85,14 @@ type HeaderProps = {
 }
 
 function DesktopHeader({ language, page, changeLanguage }: HeaderProps) {
-  const { hidden, showHeader } = useHeaderScroll()
   const t = translations[language]
 
   return (
-    <header className={`site-header desktop-header${page === 'home' ? ' header-home' : ''}${hidden ? ' header-hidden' : ''}`} onFocusCapture={showHeader}>
+    <header className={`site-header desktop-header${page === 'home' ? ' header-home' : ''}`}>
       <div className="header-inner">
         <a className="brand" href="#home" aria-label={t.homeLabel}><span className="brand-name">STAR-FARM</span></a>
         <HeaderNavigation language={language} page={page} />
-        <LanguageSwitcher language={language} changeLanguage={changeLanguage} />
+        <div className="header-actions"><QuickGlossary language={language} /><LanguageSwitcher language={language} changeLanguage={changeLanguage} /></div>
       </div>
     </header>
   )
@@ -101,12 +100,12 @@ function DesktopHeader({ language, page, changeLanguage }: HeaderProps) {
 
 function MobileHeader(props: HeaderProps) {
   const [open, setOpen] = useState(false)
-  const { hidden, showHeader } = useHeaderScroll(open)
   const t = translations[props.language]
   return (
-    <header className={`site-header mobile-header${props.page === 'home' ? ' header-home' : ''}${hidden ? ' header-hidden' : ''}`} onFocusCapture={showHeader}>
+    <header className={`site-header mobile-header${props.page === 'home' ? ' header-home' : ''}`}>
       <div className="header-inner mobile-header-inner">
         <a className="brand" href="#home" aria-label={t.homeLabel}><span className="brand-name">STAR-FARM</span></a>
+        <div className="header-actions"><QuickGlossary language={props.language} /></div>
         <MobileMenu {...props} open={open} setOpen={setOpen} />
       </div>
     </header>

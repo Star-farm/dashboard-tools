@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useDashboardFilters } from '../../app/useDashboardFilters'
+import { mapContextRows } from '../../app/mapNavigation'
 import type { Language } from '../../i18n'
 import { emptyEconomicFilters, filterEconomicRows } from '../economics/economicsData'
-import type { EconomicFilters } from '../economics/economicsData'
 import { economicFacets, economicsText } from '../economics/economicsText'
 import ScenarioFilters from '../economics/ScenarioFilters'
 import { environmentMetrics } from './environmentTypes'
@@ -10,14 +10,14 @@ import { environmentNumber, environmentUnit } from './environmentAnalysis'
 import { environmentText } from './environmentText'
 
 export default function EnvironmentOverview({ data, language }: { data: Pick<EnvironmentData, 'rows'>; language: Language }) {
-  const [filters, setFilters] = useState<EconomicFilters>(emptyEconomicFilters)
+  const { filters, setFilters, scope } = useDashboardFilters()
   const t = economicsText[language], text = environmentText[language]
-  const visible = filterEconomicRows(data.rows, filters)
+  const visible = filterEconomicRows(mapContextRows(data.rows, scope), filters)
   const filtered = Object.values(filters).some((value) => value !== 'all')
   const period = (row: EnvironmentRow) => `${row.historical ? `${t.historical} · ` : ''}${row.startYear}–${row.endYear}`
   return <>
     <ScenarioFilters rows={data.rows} filters={filters} onChange={setFilters} language={language} idPrefix="environment-filter" />
-    <div className="economic-results-toolbar"><p role="status"><strong>{visible.length}</strong> {t.scenario}</p>{filtered && <button type="button" className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}<span aria-hidden="true"> ↺</span></button>}</div>
+    <div className="economic-results-toolbar"><p role="status"><strong>{visible.length}</strong> {t.scenario}</p>{filtered && <button type="button" title={t.reset} className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}<span aria-hidden="true"> ↺</span></button>}</div>
     {!visible.length ? <div className="economic-empty"><h2>{t.noResults}</h2><p>{t.noResultsDescription}</p></div> : <>
       <div className="economic-table-region" role="region" aria-label={text.table} tabIndex={0}><table className="economic-table environment-table">
         <caption className="sr-only">{text.table}</caption>

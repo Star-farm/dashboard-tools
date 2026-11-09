@@ -32,6 +32,7 @@ export function useLanguage(page: Page = 'glossary', branch?: ExploreBranch) {
       return
     }
     const titles = {
+      map: language === 'vi' ? 'Bản đồ vùng canh tác | STAR FARM' : 'Farming area map | STAR FARM',
       home: t.homePageTitle, future: t.futurePageTitle, scenario: t.scenarioPageTitle,
       economics: t.economicsPageTitle, economicExplore: t.economicExplorePageTitle, economicComparison: t.economicComparisonPageTitle,
       bau3Comparison: t.bau3ComparisonPageTitle, bau2Comparison: t.bau2ComparisonPageTitle, baussComparison: t.baussComparisonPageTitle,
@@ -39,6 +40,7 @@ export function useLanguage(page: Page = 'glossary', branch?: ExploreBranch) {
       glossary: t.pageTitle, notFound: '404 | STAR FARM',
     }
     const descriptions = {
+      map: language === 'vi' ? 'Bản đồ năng suất và thu nhập theo mùa vụ tại 992 vùng canh tác mô phỏng ở Đồng Tháp.' : 'Explore yield and income by crop season across 992 simulated farming areas in Dong Thap.',
       home: t.homePageDescription, future: t.futurePageDescription, scenario: t.scenarioPageDescription,
       economics: t.economicsPageDescription, economicExplore: t.economicExplorePageDescription, economicComparison: t.economicComparisonPageDescription,
       bau3Comparison: t.bau3ComparisonPageDescription, bau2Comparison: t.bau2ComparisonPageDescription, baussComparison: t.baussComparisonPageDescription,

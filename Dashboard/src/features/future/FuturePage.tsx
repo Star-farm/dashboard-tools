@@ -1,3 +1,4 @@
+import PageDescription from '../../components/PageDescription'
 import { useEffect, useState } from 'react'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/future-series.json'
@@ -21,12 +22,13 @@ export default function FuturePage({ language }: { language: Language }) {
   return (
     <div className="future-page page-shell" id="future">
       <section className="intro future-intro" aria-labelledby="future-title">
-        <div><h1 id="future-title">{t.title}</h1></div>
+        <div><h1 id="future-title">{t.title}</h1><PageDescription language={language} kind="future" /></div>
         <span className="future-period">{startYear}<span aria-hidden="true">—</span>{endYear}</span>
       </section>
 
       <section className="future-controls" aria-label={t.controls}>
-        <div className="year-controls"><label>{t.fromYear}<select value={startYear} onChange={(event) => setStartYear(Number(event.target.value))}>{data.annual.map(({ year }) => <option value={year} key={year} disabled={year > endYear}>{year}</option>)}</select></label><span className="year-control-divider" aria-hidden="true">{'>'}</span><label>{t.toYear}<select value={endYear} onChange={(event) => setEndYear(Number(event.target.value))}>{data.annual.map(({ year }) => <option value={year} key={year} disabled={year < startYear}>{year}</option>)}</select></label></div>
+        <h2 className="filter-group-title">{language === 'vi' ? 'Khoảng thời gian' : 'Year range'}</h2>
+        <div className="year-controls"><label>{t.fromYear}<select title={t.fromYear} value={startYear} onChange={(event) => setStartYear(Number(event.target.value))}>{data.annual.map(({ year }) => <option value={year} key={year} disabled={year > endYear}>{year}</option>)}</select></label><span className="year-control-divider" aria-hidden="true">{'>'}</span><label>{t.toYear}<select title={t.toYear} value={endYear} onChange={(event) => setEndYear(Number(event.target.value))}>{data.annual.map(({ year }) => <option value={year} key={year} disabled={year < startYear}>{year}</option>)}</select></label></div>
       </section>
 
       <div className="future-charts">{(['income', 'labor', 'methane'] as const).map((metric) => <TimeSeriesChart key={metric} metric={metric} points={selectChartPoints(data.annual, metric, currency, startYear, endYear)} currency={currency} language={language} />)}</div>

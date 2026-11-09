@@ -26,6 +26,7 @@ export default function ScenarioFilters({ rows, filters, onChange, language, idP
     onChange(next)
   }
   return <form className="economic-filters" aria-label={t.filters} onSubmit={(event) => event.preventDefault()}>
+    <h2 className="economic-filters-title">{t.filters}</h2>
     {economicFacets.map(({ key, options }, index) => {
       const available = availableValues(index, filters)
       const id = `${idPrefix}-${key}`
@@ -33,7 +34,7 @@ export default function ScenarioFilters({ rows, filters, onChange, language, idP
         <label htmlFor={id}>{key === 'season' && seasonLabel ? seasonLabel : t[key]}</label>
         <div className="economic-select-control">
           <span className="economic-selected-label" aria-hidden="true">{filters[key] === 'all' ? t.all : t[filters[key] as keyof typeof t]}</span>
-          <select id={id} value={filters[key]} onChange={(event) => changeFilter(index, event.target.value)}>
+          <select id={id} title={key === 'season' && seasonLabel ? seasonLabel : t[key]} value={filters[key]} onChange={(event) => changeFilter(index, event.target.value)}>
             <option value="all">{t.all}</option>
             {options.filter((option) => available.has(option)).map((option) => <option key={option} value={option}>{t[option]}</option>)}
           </select>

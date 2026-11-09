@@ -1,4 +1,5 @@
-import { CHART_TICK, CHART_TOOLTIP, scenarioLineStyle } from '../../components/chartStyles'
+import ChartInfo from '../../components/ChartInfo'
+import { CHART_TICK, scenarioLineStyle } from '../../components/chartStyles'
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -25,7 +26,6 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
   const unit = metricUnit(metric, currency, language)
   const compactNumber = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   const ticks = yearTicks(points[0]?.year, points.at(-1)?.year ?? points[0]?.year, chartWidth, 80)
-  const yearDomain = points.length === 1 ? [points[0].year - 0.5, points[0].year + 0.5] : ['dataMin', 'dataMax']
 
   return (
     <article className="future-chart-card" id={`future-${metric}`} aria-labelledby={`${metric}-title`}>
@@ -37,17 +37,17 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
         <>
           <div className="chart-and-insight">
             <div className="chart-area">
-              <div className="chart-meta"><span className="chart-unit">{t.unit}: {unit}</span><ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={[{ key: 'first', label: analysis.firstLabel, color: SERIES_COLORS.first }, { key: 'second', label: analysis.secondLabel, color: SERIES_COLORS.second, dashed: true }]} selected={selection} onSelect={setSelection} /></div>
+              <div className="chart-meta"><span className="chart-unit">{t.unit}: {unit}</span><ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={[{ key: 'first', label: analysis.firstLabel, color: SERIES_COLORS.first }, { key: 'second', label: analysis.secondLabel, color: SERIES_COLORS.second, dashed: selection === 'all' }]} selected={selection} onSelect={setSelection} /></div>
               <div className="timeseries-plot" role="group" aria-label={`${title} · ${points[0]?.year}–${points.at(-1)?.year} · ${unit}`}>
                 <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 800, height: 310 }} onResize={setChartWidth}>
                   <LineChart data={points} accessibilityLayer margin={{ top: 12, right: 18, left: 0, bottom: 8 }}>
                     <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
-                    <XAxis dataKey="year" type="number" domain={yearDomain} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={CHART_TICK} />
+                    <XAxis dataKey="year" type="number" domain={points.length === 1 ? [points[0].year - .5, points[0].year + .5] : ['dataMin', 'dataMax']} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={CHART_TICK} />
                     <YAxis width={62} domain={metric === 'labor' ? laborAxisDomain(points) : [(min: number) => Math.min(0, min), 'auto']} tickFormatter={(value) => compactNumber.format(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={8} tick={CHART_TICK} />
                     {metric !== 'labor' && <ReferenceLine y={0} stroke="#819275" />}
-                    <Tooltip shared isAnimationActive={false} labelFormatter={(value) => `${t.year} ${value}`} formatter={(value) => `${formatValue(Number(value), metric, currency, language)} ${unit}`} contentStyle={CHART_TOOLTIP} wrapperStyle={{ maxWidth: 'min(300px, 85vw)', whiteSpace: 'normal' }} cursor={{ stroke: '#abb99d', strokeDasharray: '3 3' }} />
-                    {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} {...scenarioLineStyle('oneMha')} connectNulls={false} isAnimationActive={false} />}
-                    {selection !== 'first' && <Line type="linear" dataKey="second" name={analysis.secondLabel} {...scenarioLineStyle('bau')} connectNulls={false} isAnimationActive={false} />}
+                    <Tooltip position={{ x: 0, y: 0 }} shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => `${formatValue(value, metric, currency, language)} ${unit}`} />} cursor={{ fill: '#254f3d0a' }} />
+                    {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} {...scenarioLineStyle('oneMha', undefined, false, selection !== 'all')} connectNulls={false} isAnimationActive={false} />}
+                    {selection !== 'first' && <Line type="linear" dataKey="second" name={analysis.secondLabel} {...scenarioLineStyle('bau', undefined, false, selection !== 'all')} connectNulls={false} isAnimationActive={false} />}
                   </LineChart>
                 </ResponsiveContainer>
               </div>

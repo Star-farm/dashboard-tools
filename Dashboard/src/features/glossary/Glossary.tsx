@@ -1,3 +1,4 @@
+import PageDescription from '../../components/PageDescription'
 import { useMemo, useState } from 'react'
 import csv from '../../data/indicators.csv?raw'
 import { CATEGORIES, readIndicators, selectIndicators } from './glossaryData'
@@ -22,7 +23,7 @@ export default function Glossary({ language }: { language: Language }) {
   return (
       <div className="page-shell glossary-page" id="glossary">
         <section className="intro" aria-labelledby="page-title">
-          <h1 id="page-title">{t.title}</h1>
+          <h1 id="page-title">{t.title}</h1><PageDescription language={language} kind="glossary" />
         </section>
 
         <section className="dictionary" id="search-panel" aria-label={t.dictionary}>
@@ -30,14 +31,15 @@ export default function Glossary({ language }: { language: Language }) {
             <label htmlFor="term-search">{t.search}</label>
             <div className="search-field">
               <span className="search-icon" aria-hidden="true" />
-              <input id="term-search" type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} />
-              {query && <button type="button" className="clear-search" onClick={() => setQuery('')} aria-label={t.clearSearch}>{t.clear}</button>}
+              <input id="term-search" title={t.search} type="search" placeholder={t.searchPlaceholder} value={query} onChange={(event) => setQuery(event.target.value)} />
+              {query && <button type="button" title={t.clearSearch} className="clear-search" onClick={() => setQuery('')} aria-label={t.clearSearch}>{t.clear}</button>}
             </div>
           </div>
 
           <div className="category-filters" role="group" aria-label={t.filterByTopic}>
+            <h2 className="filter-group-title">{t.filterByTopic}</h2>
             {categories.map((item) => (
-              <button className={`category-button${category === item ? ' is-active' : ''}`} key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>
+              <button className={`category-button${category === item ? ' is-active' : ''}`} key={item} title={`${t.filterByTopic}: ${categoryLabels[language][item]}`} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>
                 {categoryLabels[language][item]}<span className="category-count">{item === 'Tất cả' ? indicators.length : indicators.filter((indicator) => indicator.category === item).length}</span>
               </button>
             ))}
@@ -46,7 +48,7 @@ export default function Glossary({ language }: { language: Language }) {
           <div className="results-toolbar">
             <p className="results-count" role="status" aria-live="polite" aria-atomic="true"><strong>{visible.length}</strong> / {indicators.length} {t.termsCount}<span className="selected-category">{category === 'Tất cả' ? t.allTopics : categoryLabels[language][category]}</span></p>
             <button type="button" className="mobile-sort" onClick={() => setAscending(!ascending)}>{t.sortName} {ascending ? 'A > Z' : 'Z > A'}</button>
-            {(query || category !== 'Tất cả') && <button className="reset-filters" onClick={resetFilters}>{t.resetFilters}</button>}
+            {(query || category !== 'Tất cả') && <button title={t.resetFilters} className="reset-filters" onClick={resetFilters}>{t.resetFilters}</button>}
           </div>
 
           <div className="table-container" id="definitions" tabIndex={-1}>

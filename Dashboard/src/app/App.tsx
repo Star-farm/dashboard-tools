@@ -18,6 +18,7 @@ import { environmentText } from '../features/environment/environmentText'
 import '../styles/motion.css'
 
 const FuturePage = lazy(() => import('../features/future/FuturePage'))
+const MapPage = lazy(() => import('../features/map/MapPage'))
 const ScenarioDetailsPage = lazy(() => import('../features/scenarios/ScenarioDetailsPage'))
 const EconomicOverviewPage = lazy(() => import('../features/economics/EconomicOverviewPage'))
 const EconomicExplorePage = lazy(() => import('../features/economics/EconomicExplorePage'))
@@ -33,7 +34,7 @@ const ResourcesPage = lazy(() => import('../features/resources/ResourcesPage'))
 const EnvironmentPage = lazy(() => import('../features/environment/EnvironmentPage'))
 
 export default function App() {
-  const { page, branch } = usePageNavigation()
+  const { page, branch, hash } = usePageNavigation()
   const { language, changeLanguage, t } = useLanguage(page, branch)
   const resourcePages = Object.fromEntries((Object.keys(resourceRoutes) as ResourceContentPage[]).map((key) => [key, <ResourcesPage key={key} page={key} language={language} />])) as Record<ResourceContentPage, ReactElement>
   const environmentPages = Object.fromEntries((Object.keys(environmentRoutes) as EnvironmentContentPage[]).map((key) => [key, <EnvironmentPage key={key} page={key} language={language} />])) as Record<EnvironmentContentPage, ReactElement>
@@ -43,6 +44,7 @@ export default function App() {
     environmentExplore: <EconomicExplorePage language={language} topic="sustainability" branch={branch} />,
     resourceExplore: <EconomicExplorePage language={language} topic="resources" branch={branch} />,
     home: <HomePage language={language} />,
+    map: <MapPage language={language} />,
     notFound: <NotFoundPage language={language} />,
     glossary: <Glossary language={language} />,
     future: <FuturePage language={language} />,
@@ -59,7 +61,7 @@ export default function App() {
     oneMhaFarming: <OneMhaFarmingPage language={language} />,
   }
   const loadingText = isEnvironmentPage(page) ? environmentText[language].loading : isResourcePage(page) ? resourceText[language].loading : {
-    home: '', glossary: '', notFound: '', future: t.futureLoading, scenario: t.scenarioLoading,
+    home: '', glossary: '', notFound: '', map: language === 'vi' ? 'Đang tải bản đồ…' : 'Loading map…', future: t.futureLoading, scenario: t.scenarioLoading,
     economics: t.economicsLoading, economicComparison: t.economicComparisonLoading,
     economicExplore: t.economicExploreLoading,
     bau3Comparison: t.bau3ComparisonLoading, bau2Comparison: t.bau2ComparisonLoading,
@@ -75,7 +77,7 @@ export default function App() {
       <a className="skip-link" href="#main-content">{t.skipContent}</a>
       <SiteHeader language={language} page={page} changeLanguage={changeLanguage} />
       <main id="main-content" tabIndex={-1}>
-        <div className="page-transition" key={`${page}-${branch ?? 'root'}`}>
+        <div className="page-transition" key={`${page}-${branch ?? 'root'}-${hash.split('?')[1] ?? ''}`}>
           <PageBreadcrumbs page={page} language={language} branch={branch} />
           <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
         </div>

@@ -1,0 +1,33 @@
+.intro:has(> .page-description) { flex-wrap: wrap; }
+.intro > .page-description { flex: 0 0 100%; order: 2; }
+.intro .page-description { margin: 12px 0 0; max-width: 960px; color: #40533b; font-size: var(--text-body); font-weight: 400; line-height: 1.7; }
+.intro.bau3-intro:has(> .page-description) { row-gap: 0; }
+.header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.desktop-header .header-actions { grid-column: 3; grid-row: 1; justify-self: end; }
+.mobile-header .header-actions { margin-left: auto; }
+.mobile-header .mobile-menu-toggle { margin-left: 0; }
+.quick-glossary-trigger { flex-shrink: 0; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 5px; background: transparent; color: var(--gold); }
+.filter-group-title { flex-basis: 100%; grid-column: 1 / -1; margin: 0 0 12px; color: var(--forest); font-size: var(--text-body); font-weight: 700; line-height: 1.5; }
+.analysis-view-switch > .filter-group-title, .comparison-filters > .filter-group-title, .scenario-selector > .filter-group-title { margin-bottom: 0; }
+.quick-glossary-trigger:hover { background: #28523f; color: #fff0b8; }
+.quick-glossary { width: min(680px, calc(100% - 32px)); max-height: calc(100dvh - 40px); padding: 0; border: 1px solid var(--line); border-radius: 12px; color: var(--forest); background: #fffefa; box-shadow: 0 16px 64px #102a224d; }
+.quick-glossary::backdrop { background: #102a2277; }
+.quick-glossary-panel { display: flex; flex-direction: column; max-height: calc(100dvh - 42px); padding: 24px; }
+.quick-glossary header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.quick-glossary h2 { margin: 0; font-size: var(--section-title-size); }
+.quick-glossary header button { flex-shrink: 0; border: 0; background: transparent; color: var(--forest); font-size: 28px; width: 44px; height: 44px; }
+.quick-glossary label { margin-bottom: 8px; font-weight: 700; }
+.quick-glossary input { flex-shrink: 0; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #819275; border-radius: 4px; background: white; color: var(--forest); font: inherit; }
+.quick-glossary-categories { display: flex; flex-wrap: wrap; gap: 7px; flex-shrink: 0; min-width: 0; margin: 14px 0 0; padding: 0; border: 0; }
+.quick-glossary-categories legend { padding: 0 0 8px; font-weight: 700; }
+.quick-glossary-categories .category-button { min-height: 38px; padding: 7px 10px; font-size: var(--text-small); }
+.quick-glossary-panel > p { margin: 12px 0; font-size: var(--text-small); }
+.quick-glossary-results { overflow: auto; overscroll-behavior: contain; min-height: 0; }
+.quick-glossary-group { padding: 16px 0; border-top: 1px solid var(--line); }
+.quick-glossary-group > h3 { margin: 0 0 12px; padding: 8px 10px; background: #edf1e4; font-size: var(--text-body); }
+.quick-glossary-group article { padding: 12px 0; }
+.quick-glossary-group article + article { border-top: 1px solid var(--line); }
+.quick-glossary h4 { margin: 0 0 4px; font-size: var(--text-body); }
+.quick-glossary-results small { color: #52634b; }
+.quick-glossary-results p { margin: 8px 0 0; line-height: 1.7; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .quick-glossary-panel { padding: 16px; } }

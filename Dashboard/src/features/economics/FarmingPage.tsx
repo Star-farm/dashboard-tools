@@ -1,3 +1,4 @@
+import PageDescription from '../../components/PageDescription'
 import { useEffect } from 'react'
 import AnalysisView from '../../components/AnalysisView'
 import type { Language } from '../../i18n'
@@ -29,7 +30,7 @@ export default function FarmingPage({ language, data, family }: { language: Lang
 
   return (
     <div className="bau-farming-page bau3-page page-shell" id={anchor}>
-      <section className="intro bau3-intro" aria-labelledby="bau-farming-title"><h1 id="bau-farming-title">{title}</h1><span>{farming.startYear}–{farming.endYear}</span></section>
+      <section className="intro bau3-intro" aria-labelledby="bau-farming-title"><h1 id="bau-farming-title">{title}</h1><PageDescription language={language} kind="farming" topic="economics" /><span>{farming.startYear}–{farming.endYear}</span></section>
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'family', family }}>
       <section className="farming-indicators" aria-labelledby="farming-kpis-title">
         <div className="farming-section-heading"><h2 id="farming-kpis-title">{t.kpis}</h2><p>{t.average} {farming.startYear}–{farming.endYear}</p></div>

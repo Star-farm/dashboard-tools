@@ -1,6 +1,7 @@
 .economics-page { padding-bottom: 64px; }
 .economic-filters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; padding: 24px 0; border-block: 1px solid var(--line); }
 .economic-filter { min-width: 0; }
+.economic-filters-title { grid-column: 1 / -1; margin: 0; color: var(--green); font-size: var(--text-body); font-weight: 700; line-height: 1.5; }
 .economic-select-control { position: relative; }
 .economic-selected-label { display: none; }
 .economic-filter label { display: block; margin-bottom: 9px; font-size: var(--text-body); font-weight: 700; color: var(--green); }

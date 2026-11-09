@@ -18,9 +18,6 @@
     .desktop-header:has(.topic-trigger:hover)::after { opacity: 1; }
     .desktop-header:has(.topic-trigger:hover)::before { opacity: 0; }
   }
-  .desktop-header.header-hidden { transform: translateY(calc(-100% - 1px)); pointer-events: none; }
-  .desktop-header.header-hidden::before, .desktop-header.header-hidden::after { opacity: 0; }
-  .desktop-header.header-hidden .topic-dropdown { visibility: hidden; }
   .desktop-header .header-inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; width: 100%; height: var(--desktop-header-height); min-height: 0; gap: clamp(10px, 1vw, 20px); padding: 6px var(--header-gutter); margin: 0; }
   .desktop-header .brand { grid-column: 1; grid-row: 1; padding-left: clamp(12px, 1vw, 20px); margin-right: clamp(16px, 2vw, 40px); }
   .desktop-header .brand-name { font-size: clamp(18px, 1.4vw, 24px); letter-spacing: normal; text-shadow: 0 1px 4px #0d2c2273; }

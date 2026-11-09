@@ -1,4 +1,5 @@
-import { CHART_TICK, CHART_TOOLTIP, CONDITION_MARKERS, scenarioColor, scenarioLineStyle } from '../../components/chartStyles'
+import ChartInfo from '../../components/ChartInfo'
+import { CHART_TICK, CONDITION_MARKERS, CONDITION_COLORS, scenarioLineStyle } from '../../components/chartStyles'
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -26,12 +27,11 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
   const unit = bau3Unit(metric, language)
   const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   const ticks = yearTicks(data.startYear, data.endYear, chartWidth, 88)
-  const overlap = bau3Conditions.some((first, index) => bau3Conditions.slice(index + 1).some((second) => points.some((point) => point[first] !== null && point[second] !== null) && points.every((point) => point[first] === null && point[second] === null || point[first] !== null && point[second] !== null && Math.abs(point[first] - point[second]) < .000001)))
   const hasData = points.some((point) => visibleConditions.some((condition) => point[condition] !== null))
   return (
     <article className={`bau3-chart bau3-chart-${family}`} aria-labelledby={`bau3-${metric}-${family}-title`}>
       <header><h3 id={`bau3-${metric}-${family}-title`} title={family === 'oneMha' ? t.oneMhaDescription : undefined}>{title ?? t[family]}</h3><p>{t.unit}: <strong>{unit}</strong></p></header>
-      <ChartLegend language={language} label={language === 'vi' ? 'Chọn điều kiện kịch bản' : 'Choose scenario conditions'} items={bau3Conditions.map((key) => ({ key, label: t[key], color: scenarioColor(family), marker: CONDITION_MARKERS[key], dashed: family !== 'oneMha' }))} selected={selection} onSelect={setSelection} allLabel={language === 'vi' ? 'Tất cả điều kiện' : 'All conditions'} />
+      <ChartLegend language={language} label={language === 'vi' ? 'Chọn điều kiện kịch bản' : 'Choose scenario conditions'} items={bau3Conditions.map((key) => ({ key, label: t[key], color: CONDITION_COLORS[key], marker: CONDITION_MARKERS[key] }))} selected={selection} onSelect={setSelection} allLabel={language === 'vi' ? 'Tất cả điều kiện' : 'All conditions'} />
       {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${data.startYear}–${data.endYear} · ${unit}`}>
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 310 }} onResize={setChartWidth}>
           <LineChart data={points} accessibilityLayer margin={{ top: 12, right: 20, left: 0, bottom: 8 }}>
@@ -39,12 +39,12 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
             <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             <YAxis width={68} domain={domain} allowDataOverflow tickFormatter={(value) => `${compact.format(Number(value))}${metric === 'margin' ? '%' : ''}`} tickLine={false} tickMargin={8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
-            <Tooltip shared isAnimationActive={false} labelFormatter={(year) => `${t.year} ${year}`} formatter={(value) => `${formatBau3Value(Number(value), metric, language)} ${unit}`} contentStyle={CHART_TOOLTIP} wrapperStyle={{ maxWidth: 'min(340px, 86vw)', whiteSpace: 'normal' }} cursor={{ stroke: '#819275' }} />
-            {visibleConditions.map((condition) => <Line key={condition} type="linear" dataKey={condition} name={t[condition]} {...scenarioLineStyle(family, condition)} connectNulls={false} isAnimationActive={false} />)}
+            <Tooltip position={{ x: 0, y: 0 }} shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => `${formatBau3Value(Number(value), metric, language)} ${unit}`} />} cursor={{ fill: '#254f3d0a' }} />
+            {visibleConditions.map((condition) => <Line key={condition} type="linear" dataKey={condition} name={t[condition]} {...scenarioLineStyle(family, condition, true, true)} connectNulls={false} isAnimationActive={false} />)}
           </LineChart>
         </ResponsiveContainer>
       </div> : <p className="bau3-no-data">{t.noData}</p>}
-      <p className="bau3-chart-note">{selection === 'all' && overlap ? t.overlap : `${data.startYear}–${data.endYear}`}</p>
+      <p className="bau3-chart-note">{`${data.startYear}–${data.endYear}`}</p>
     </article>
   )
 }

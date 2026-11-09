@@ -1,3 +1,4 @@
+import PageDescription from '../../components/PageDescription'
 import { useEffect, useState } from 'react'
 import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
@@ -27,12 +28,13 @@ export default function EconomicComparisonPage({ language }: { language: Languag
 
   return (
     <div className="economic-comparison-page page-shell" id="economics-comparison">
-      <section className="intro" aria-labelledby="economic-comparison-title"><h1 id="economic-comparison-title">{text.title}</h1></section>
+      <section className="intro" aria-labelledby="economic-comparison-title"><h1 id="economic-comparison-title">{text.title}</h1><PageDescription language={language} kind="bars" topic="economics" /></section>
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison' }}>
       <section className="comparison-filters" aria-label={text.filters}>
-        <fieldset><legend>{t.climate}</legend><div className="comparison-segmented">{(['all', 'severe', 'mild'] as const).map((option) => <button key={option} type="button" aria-pressed={climate === option} aria-label={option === 'all' ? text.allWeather : undefined} onClick={() => setClimate(option)}>{option === 'all' ? t.all : t[option]}</button>)}</div></fieldset>
-        <fieldset><legend>{t.resource}</legend><div className="comparison-segmented">{(['all', 'shortage', 'normal'] as const).map((option) => <button key={option} type="button" aria-pressed={resource === option} aria-label={option === 'all' ? text.allResources : undefined} onClick={() => setResource(option)}>{option === 'all' ? t.all : option === 'normal' ? text.normalResource : t.shortage}</button>)}</div></fieldset>
-        {(climate !== 'all' || resource !== 'all') && <button className="comparison-reset" type="button" onClick={() => { setClimate('all'); setResource('all') }}>{text.reset}<span aria-hidden="true"> ↺</span></button>}
+        <h2 className="filter-group-title">{language === 'vi' ? 'Bộ lọc điều kiện' : 'Condition filters'}</h2>
+        <fieldset><legend>{t.climate}</legend><div className="comparison-segmented">{(['all', 'severe', 'mild'] as const).map((option) => <button key={option} type="button" title={`${t.climate}: ${option === 'all' ? t.all : t[option]}`} aria-pressed={climate === option} aria-label={option === 'all' ? text.allWeather : undefined} onClick={() => setClimate(option)}>{option === 'all' ? t.all : t[option]}</button>)}</div></fieldset>
+        <fieldset><legend>{t.resource}</legend><div className="comparison-segmented">{(['all', 'shortage', 'normal'] as const).map((option) => <button key={option} type="button" title={`${t.resource}: ${option === 'all' ? t.all : option === 'normal' ? text.normalResource : t.shortage}`} aria-pressed={resource === option} aria-label={option === 'all' ? text.allResources : undefined} onClick={() => setResource(option)}>{option === 'all' ? t.all : option === 'normal' ? text.normalResource : t.shortage}</button>)}</div></fieldset>
+        {(climate !== 'all' || resource !== 'all') && <button title={text.reset} className="comparison-reset" type="button" onClick={() => { setClimate('all'); setResource('all') }}>{text.reset}<span aria-hidden="true"> ↺</span></button>}
       </section>
       <p className="sr-only" role="status">{t.climate}: {climate === 'all' ? t.all : t[climate]}. {t.resource}: {resource === 'all' ? t.all : resource === 'normal' ? text.normalResource : t.shortage}.</p>
       {cohort && <aside className="comparison-summary" aria-labelledby="comparison-summary-title"><h2 id="comparison-summary-title">{text.summary}</h2><p><EmphasizedNumbers text={comparisonSummary(cohort, language, comparison.startYear, comparison.endYear)} /></p></aside>}

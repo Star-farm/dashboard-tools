@@ -46,7 +46,7 @@ export function PageBreadcrumbs({ page, language, branch }: { page: Page; langua
       }
     }
   } else {
-    items.push({ label: { glossary: t.navGlossary, future: t.navFuture, scenario: t.navScenarioDetails }[page as 'glossary' | 'future' | 'scenario'] })
+    items.push({ label: { map: language === 'vi' ? 'Bản đồ' : 'Map', glossary: t.navGlossary, future: t.navFuture, scenario: t.navScenarioDetails }[page as 'map' | 'glossary' | 'future' | 'scenario'] })
   }
 
   return <nav className="page-breadcrumbs page-shell" aria-label={language === 'vi' ? 'Đường dẫn trang' : 'Breadcrumb'}>

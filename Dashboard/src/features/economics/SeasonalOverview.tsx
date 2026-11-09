@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useDashboardFilters } from '../../app/useDashboardFilters'
+import { mapContextRows } from '../../app/mapNavigation'
 import type { Language } from '../../i18n'
 import ScenarioFilters from './ScenarioFilters'
 import { emptyEconomicFilters, filterEconomicRows } from './economicsData'
@@ -11,15 +12,15 @@ import type { CropPeriod, SeasonalData, SeasonalMetric, SeasonalRow } from './se
 import { seasonalLabel, seasonalNumber, seasonalUnit } from './seasonalFormatting'
 import '../../styles/economics.css'
 
-export default function SeasonalOverview({ data, metrics, language, mode, year, period }: { data: SeasonalData; metrics: SeasonalMetric[]; language: Language; mode: 'year' | 'trend'; year: SeasonalYear; period: CropPeriod }) {
-  const [filters, setFilters] = useState(emptyEconomicFilters)
+export default function SeasonalOverview({ data, metrics, language, mode, year, period, singlePeriod = false }: { data: SeasonalData; metrics: SeasonalMetric[]; language: Language; mode: 'year' | 'trend'; year: SeasonalYear; period: CropPeriod; singlePeriod?: boolean }) {
+  const { filters, setFilters, scope } = useDashboardFilters()
   const t = seasonalText[language], labels = economicsText[language], currency = language === 'vi' ? 'VND' : 'USD'
   const allYears = mode === 'year' && year === 'all'
   const sourceRows = allYears ? averageSeasonalYears(data.rows) : data.rows
-  const candidates = filterEconomicRows(sourceRows, filters).filter((row) => mode === 'trend' || year === 'all' || row.year === year)
+  const candidates = filterEconomicRows(mapContextRows(sourceRows, scope), filters).filter((row) => mode === 'trend' || year === 'all' || row.year === year)
   const yearLabel = (value: number) => allYears ? `${t.allYears} (${data.startYear}–${data.endYear})` : value
   const bases = [...new Map(candidates.map((row) => [`${row.family}:${row.condition}:${allYears ? 'all' : row.year}`, row])).values()]
-  const entries = bases.flatMap((base) => (mode === 'year' ? cropPeriods : [period]).flatMap((crop) => {
+  const entries = bases.flatMap((base) => (mode === 'year' && !singlePeriod ? cropPeriods : [period]).flatMap((crop) => {
     const row = sourceRows.find((item) => item.family === base.family && item.condition === base.condition && (allYears || item.year === base.year) && item.period === crop)
     if (row && !filterEconomicRows([row], filters).length) return []
     return [{ base, row, period: crop, notGrown: !cultivatedPeriods(base.family).includes(crop) }]
@@ -30,7 +31,7 @@ export default function SeasonalOverview({ data, metrics, language, mode, year, 
   }
   return <div className="seasonal-overview">
     <ScenarioFilters rows={sourceRows} filters={filters} onChange={setFilters} language={language} idPrefix="seasonal-filter" seasonLabel={t.system} />
-    <div className="economic-results-toolbar"><p role="status"><strong>{entries.length}</strong> {language === 'vi' ? 'mục' : 'entries'}</p>{Object.values(filters).some((value) => value !== 'all') && <button type="button" className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{labels.reset}</button>}</div>
+    <div className="economic-results-toolbar"><p role="status"><strong>{entries.length}</strong> {language === 'vi' ? 'mục' : 'entries'}</p>{Object.values(filters).some((value) => value !== 'all') && <button type="button" title={labels.reset} className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{labels.reset}</button>}</div>
     {!entries.length ? <p>{labels.noResults}</p> : <>
       <div className="economic-table-region" role="region" aria-label={t.table} tabIndex={0}><table className="economic-table seasonal-table"><caption className="sr-only">{t.table}</caption>
         <thead><tr><th scope="col">{t.system}</th><th scope="col" className="economic-numeric">{t.year}</th><th scope="col">{t.period}</th><th scope="col">{labels.climate}</th><th scope="col">{labels.resource}</th><th scope="col">{labels.awd}</th>{metrics.map((metric) => <th scope="col" key={metric} className="economic-numeric"><span>{seasonalLabel(metric, language)}</span><small>{seasonalUnit(metric, language)}</small></th>)}</tr></thead>

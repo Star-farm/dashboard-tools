@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useDashboardFilters } from '../../app/useDashboardFilters'
+import { mapContextRows } from '../../app/mapNavigation'
+import PageDescription from '../../components/PageDescription'
+import { useEffect } from 'react'
 import AnalysisView from '../../components/AnalysisView'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/economics-overview.json'
 import type { Language } from '../../i18n'
 import { economicMetrics, emptyEconomicFilters, filterEconomicRows } from './economicsData'
-import type { EconomicFilters, EconomicRow } from './economicsData'
+import type { EconomicRow } from './economicsData'
 import { economicFacets, economicMetricUnits, economicsText } from './economicsText'
 import ScenarioFilters from './ScenarioFilters'
 import '../../styles/economics.css'
@@ -13,8 +16,8 @@ const rows = data as EconomicRow[]
 
 export default function EconomicOverviewPage({ language }: { language: Language }) {
   const t = economicsText[language]
-  const [filters, setFilters] = useState<EconomicFilters>(emptyEconomicFilters)
-  const visible = filterEconomicRows(rows, filters).sort((a, b) => Number(b.historical) - Number(a.historical))
+  const { filters, setFilters, scope } = useDashboardFilters()
+  const visible = filterEconomicRows(mapContextRows(rows, scope), filters).sort((a, b) => Number(b.historical) - Number(a.historical))
   const filtered = Object.values(filters).some((value) => value !== 'all')
   const currency = language === 'vi' ? 'VND' : 'USD'
   const decimal = new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -32,12 +35,12 @@ export default function EconomicOverviewPage({ language }: { language: Language 
 
   return (
     <div className="economics-page page-shell" id="economics-overview">
-      <section className="intro" aria-labelledby="economics-title"><h1 id="economics-title">{t.title}</h1></section>
+      <section className="intro" aria-labelledby="economics-title"><h1 id="economics-title">{t.title}</h1><PageDescription language={language} kind="overview" topic="economics" /></section>
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'overview' }}>
       <ScenarioFilters rows={rows} filters={filters} onChange={setFilters} language={language} idPrefix="economic" />
       <div className="economic-results-toolbar">
         <p role="status"><strong>{visible.length}</strong> {t.scenario}</p>
-        {filtered && visible.length > 0 && <button type="button" className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}<span aria-hidden="true"> ↺</span></button>}
+        {filtered && visible.length > 0 && <button type="button" title={t.reset} className="economic-reset" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}<span aria-hidden="true"> ↺</span></button>}
       </div>
       {visible.length === 0 ? <div className="economic-empty"><h2>{t.noResults}</h2><p>{t.noResultsDescription}</p><button type="button" className="primary-button" onClick={() => setFilters(emptyEconomicFilters)}>{t.reset}</button></div> : <>
         <div className="economic-table-region" role="region" aria-label={t.tableCaption} tabIndex={0}>

@@ -2,3 +2,5 @@
 .analysis-view-switch button { min-height: 42px; padding: 10px 16px; border: 1px solid #bdc9b4; border-radius: 5px; background: transparent; color: #4c6144; font-size: var(--text-body); transition: background-color .18s, border-color .18s; }
 .analysis-view-switch button[aria-pressed="true"], .analysis-view-switch button:hover { background: #e9efdf; color: #254f3d; border-color: #527441; }
 @media (prefers-reduced-motion: reduce) { .analysis-view-switch button { transition: none; } }
+.dashboard-map-context { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 6px; background: #edf1e4; color: var(--green); font-size: var(--text-small); line-height: 1.7; }
+.dashboard-map-context a { text-underline-offset: 4px; }

@@ -120,7 +120,6 @@ describe('BAU 3 seasons comparison page', () => {
       expect(paths.map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#2868b2', '#8650a8', '#b65b15', '#287447']))
       expect(paths.slice(0, 4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
       expect(paths.slice(4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
-      for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
       for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
       for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
       expect(card.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)

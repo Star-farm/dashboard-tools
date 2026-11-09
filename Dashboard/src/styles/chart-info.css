@@ -1,0 +1,7 @@
+.chart-info { box-sizing: border-box; width: min(320px, calc(100vw - 48px)); max-height: min(440px, 65dvh); overflow-y: auto; padding: 12px 14px; border: 1px solid #9bac90; border-radius: 7px; background: #fffefa; color: #26382e; font-size: var(--text-small); line-height: 1.5; box-shadow: 0 4px 16px #102a2226; white-space: normal; overflow-wrap: anywhere; }
+.chart-info-title { margin: 0 0 8px; font-weight: 700; }
+.chart-info dl { margin: 0; }
+.chart-info dl > div { padding: 7px 0; border-top: 1px solid #dce3d5; }
+.chart-info dt { display: flex; align-items: baseline; gap: 7px; }
+.chart-info dt i { display: inline-block; width: 9px; height: 9px; flex-shrink: 0; }
+.chart-info dd { margin: 3px 0 0 16px; font-weight: 700; font-variant-numeric: tabular-nums; }

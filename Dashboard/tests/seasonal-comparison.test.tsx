@@ -124,7 +124,7 @@ describe('seasonal interface', () => {
     fireEvent.change(screen.getByLabelText('Scenario group'), { target: { value: 'oneMha' } })
     const table = screen.getByRole('table')
     expect(within(table).getAllByRole('row')).toHaveLength(4)
-    expect(within(table).getByRole('row', { name: /Summer–Fall/ })).toHaveTextContent('50.00')
+    expect(within(table).getByRole('row', { name: /Spring–Summer/ })).toHaveTextContent('50.00')
     expect(within(table).getByRole('row', { name: /Fall–Winter/ })).toHaveTextContent('Not grown')
     expect(table).toHaveTextContent('All years')
   })
@@ -148,6 +148,13 @@ describe('seasonal interface', () => {
     const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
     const income = screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })
     expect(income.querySelectorAll('.seasonal-pie')).toHaveLength(2)
+    const insight = within(income).getByRole('complementary')
+    expect(insight).toHaveTextContent('BAU 3 vụ')
+    expect(insight).toHaveTextContent('1Mha')
+    expect(insight).toHaveTextContent('Tổng cả năm')
+    expect(insight).toHaveTextContent('Cơ cấu mùa vụ')
+    expect(insight).not.toHaveTextContent('1Mha so với')
+    expect(insight.querySelector('.scenario-change')).not.toBeNull()
     const plot = within(income).getByRole('group', { name: 'Thu nhập ròng trên hecta' })
     fireEvent.keyDown(plot, { key: 'End' })
     expect(within(income).getAllByText('Không canh tác').length).toBeGreaterThan(0)
@@ -164,6 +171,24 @@ describe('seasonal interface', () => {
     expect(translated).toHaveTextContent('USD/ha')
     fireEvent.click(within(translated).getByRole('button', { name: '1Mha' }))
     expect(translated.querySelectorAll('.recharts-line-curve')).toHaveLength(0)
+  })
+
+  it('uses columns for seasonal rates and lines across years', async () => {
+    render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['roi', 'margin'] }} />)
+    await waitFor(() => expect(document.querySelectorAll('.recharts-bar')).toHaveLength(4))
+    expect(document.querySelector('.seasonal-pie')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Across years' }))
+    await waitFor(() => expect(document.querySelectorAll('.recharts-line')).toHaveLength(4))
+    expect(document.querySelector('.recharts-bar')).toBeNull()
+  })
+
+  it('groups columns before doughnuts and labels every cultivated crop bar', async () => {
+    render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['income', 'roi', 'cost', 'margin'] }} />)
+    expect(screen.getAllByRole('article').map((card) => card.querySelector('h3')?.textContent)).toEqual(['Return on investment (ROI)', 'Profit margin', 'Net income per hectare', 'Production cost'])
+    expect(screen.getAllByRole('heading', { name: /^(Bar charts|Doughnut charts)$/ }).map((heading) => heading.textContent)).toEqual(['Bar charts', 'Doughnut charts'])
+    const roi = screen.getByRole('article', { name: 'Return on investment (ROI)' })
+    await waitFor(() => expect(roi.querySelectorAll('.recharts-label-list text')).toHaveLength(5))
+    for (const label of roi.querySelectorAll('.recharts-label-list text')) expect(label).toHaveTextContent('%')
   })
 
   it('renders seasonal tables and mobile cards with linked filters and an explicit unplanted third crop', () => {

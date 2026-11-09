@@ -6,9 +6,11 @@ import type { ResourcePage } from '../features/resources/resourceRoutes'
 import { environmentPageForHash } from '../features/environment/environmentRoutes'
 import type { EnvironmentPage } from '../features/environment/environmentRoutes'
 
-export type Page = 'home' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
+export type Page = 'home' | 'map' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
+  hash = hash.split('?')[0]
+  if (hash === '#map') return 'map'
   const exploreSection = exploreRouteForHash(hash)
   if (exploreSection) return ({ economics: 'economicExplore', resources: 'resourceExplore', environment: 'environmentExplore' } as const)[exploreSection.prefix]
   const environmentPage = environmentPageForHash(hash)
@@ -47,7 +49,7 @@ export function usePageNavigation() {
   }, [])
 
   useEffect(() => {
-    const target = document.getElementById(hash.slice(1) || 'home') ?? document.getElementById('main-content')
+    const target = document.getElementById(hash.split('?')[0].slice(1) || 'home') ?? document.getElementById('main-content')
     target?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [hash, page])
 

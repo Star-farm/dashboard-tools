@@ -35,14 +35,14 @@
 .funding-eu img { width: 138px; max-height: 66px; }
 .funding-desira { flex: 0 1 132px; }
 .funding-desira img { width: 132px; }
-.partner-fao .partner-image { max-height: 58px; }
+.partner-fao .partner-image { width: 57px; max-height: 58px; }
 .partners-inner .project-partners-title { margin: 24px 0 12px; }
 .partner-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; gap: 12px 20px; }
 .partner-item { min-width: 0; }
 .partner-cirad .partner-image { max-width: 105px; width: 100%; }
 .partner-ird .partner-image { max-width: 110px; width: 100%; }
 .partner-ispae .partner-image { max-width: 120px; width: 100%; }
-.partner-ctu .partner-image, .partner-vaas .partner-image { max-height: 56px; }
+.partner-ctu .partner-image, .partner-vaas .partner-image { width: 56px; max-height: 56px; }
 .footer-main { --footer-small-font-size: var(--text-small); color: #d5dfcf; background: var(--forest); border-top: 3px solid #adba7b; }
 .footer-content { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.4fr); align-items: start; gap: 20px 5%; padding-block: 38px 28px; }
 .footer-about { grid-column: 1; grid-row: 1; min-width: 0; }
@@ -81,7 +81,7 @@
   .partner-image, .eu-emblem { max-height: 42px; }
   .partner-ird .partner-image { max-width: 78px; }
   .partner-cirad .partner-image { max-width: 95px; }
-  .partner-ctu .partner-image, .partner-fao .partner-image, .partner-vaas .partner-image { max-height: 48px; }
+  .partner-ctu .partner-image, .partner-fao .partner-image, .partner-vaas .partner-image { width: 48px; max-height: 48px; }
   .footer-content { padding-block: 34px 25px; gap: 24px; }
   .footer-about { grid-column: 1 / -1; }
   .footer-main { --footer-small-font-size: var(--text-small); }

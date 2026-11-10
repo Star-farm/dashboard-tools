@@ -6,9 +6,11 @@
   "scripts": {
     "data:future": "node scripts/build-future-data.mjs",
     "data:scenarios": "node scripts/build-scenario-data.mjs",
-    "predev": "npm run data:future && npm run data:scenarios",
+    "data:map-aggregates": "node scripts/build-map-aggregates.mjs",
+    "data:soil": "node scripts/build-soil-assets.mjs",
+    "predev": "npm run data:future && npm run data:scenarios && npm run data:map-aggregates && npm run data:soil",
     "dev": "vite",
-    "prebuild": "npm run data:future && npm run data:scenarios",
+    "prebuild": "npm run data:future && npm run data:scenarios && npm run data:map-aggregates && npm run data:soil",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest",

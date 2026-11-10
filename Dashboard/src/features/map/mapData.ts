@@ -3,7 +3,7 @@ import type { MapCurrencyCode, MapResults, PlotMetric, PlotRecord } from './mapT
 export function displayMapCurrency(results: MapResults, currency: MapCurrencyCode, vndPerUsd: number): MapResults {
   if (currency === 'USD') return results
   if (!Number.isFinite(vndPerUsd) || vndPerUsd <= 0) throw new Error('Invalid map currency conversion')
-  return { ...results, records: results.records.map((record) => ({ ...record, income: record.income.map((value) => value === null ? null : value * vndPerUsd) })) }
+  return { ...results, breaks: results.breaks && { ...results.breaks, income: results.breaks.income.map((value) => value * vndPerUsd) }, records: results.records.map((record) => ({ ...record, income: record.income.map((value) => value === null ? null : value * vndPerUsd) })) }
 }
 
 export const mapColors = ['#f1ecc4', '#c6d6a4', '#8eb886', '#508a62', '#254f3d']
@@ -31,6 +31,7 @@ export function selectPlotValues(records: readonly PlotRecord[], year: number, s
 // Quantiles use all years/seasons of the selected scenario. The legend therefore
 // stays fixed when the year or harvest changes, so temporal comparisons are valid.
 export function colorBreaks(results: MapResults, metric: PlotMetric): number[] {
+  if (results.breaks) return results.breaks[metric]
   const sorted = results.records.flatMap((record) => record[metric]).filter((value): value is number => value !== null && Number.isFinite(value)).sort((a, b) => a - b)
   if (!sorted.length) return []
   return [0, .2, .4, .6, .8, 1].map((quantile) => sorted[Math.min(sorted.length - 1, Math.floor(quantile * (sorted.length - 1)))])

@@ -42,12 +42,12 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   onTopicOpen?: () => void
 }) {
   const t = translations[language]
-  const [openTopic, setOpenTopic] = useState<Topic | null>(null)
+  const [openTopic, setOpenTopic] = useState<Topic | 'map' | null>(null)
   const [openBranch, setOpenBranch] = useState<Branch | null>(null)
   const navigationRef = useRef<HTMLElement>(null)
   const focusTimer = useRef<number | undefined>(undefined)
 
-  function open(topic: Topic) {
+  function open(topic: Topic | 'map') {
     setOpenTopic(topic)
     setOpenBranch(null)
     onTopicOpen?.()
@@ -212,6 +212,18 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
     )
   }
 
+  const mapLabel = language === 'vi' ? 'Bản đồ' : 'Map'
+  const mapPages = [
+    { href: '#map', page: 'map', label: language === 'vi' ? 'Bản đồ vùng canh tác' : 'Farming area map' },
+    { href: '#soil-map', page: 'soilMap', label: language === 'vi' ? 'Bản đồ đất và ngập' : 'Soil and flooding map' },
+  ]
+  const mapCurrent = ['map', 'mapExplore', 'soilMap'].includes(page)
+  function renderMapPanel() {
+    return <div className="topic-dropdown topic-dropdown-map" id="topic-map-panel"><ul className="topic-panel" aria-label={mapLabel}>
+      {mapPages.map((destination) => <li key={destination.href}><a className="topic-menu-button topic-leaf" href={destination.href} aria-current={page === destination.page ? 'page' : undefined} onClick={navigate}>{destination.label}</a></li>)}
+    </ul></div>
+  }
+
   const activeTopic = topics.find((topic) => topic.id === openTopic)
   const currentTopic: Topic | undefined = page.startsWith('environment') ? 'sustainability' : page.startsWith('resource') ? 'resources' : ['economics', 'economicExplore', 'economicComparison', 'bau3Comparison', 'bau2Comparison', 'baussComparison', 'bau3Farming', 'bau2Farming', 'baussFarming', 'oneMhaFarming'].includes(page) ? 'economics' : undefined
 
@@ -221,7 +233,17 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#home" aria-current={page === 'home' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navHome}</a></li>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#future" aria-current={page === 'future' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navFuture}</a></li>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#scenario-details" aria-current={page === 'scenario' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navScenarioDetails}</a></li>
-        <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#map" aria-current={page === 'map' ? 'page' : undefined} onFocus={close} onClick={navigate}>{language === 'vi' ? 'Bản đồ' : 'Map'}</a></li>
+        <li className="topic-item" onMouseEnter={mobile ? undefined : () => open('map')}>
+          <div className="topic-control" data-current={mapCurrent} onKeyDown={(event) => {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+              event.preventDefault(); event.stopPropagation(); open('map'); focusFirst('topic-map-panel', event.key === 'ArrowUp')
+            }
+          }}>
+            <a className="topic-trigger topic-link" href="#map-explore" aria-current={mapCurrent ? 'location' : undefined} onClick={navigate}>{mapLabel}</a>
+            <button className="topic-trigger topic-toggle" id="topic-map-trigger" type="button" aria-label={mapLabel} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${mapLabel}`} aria-current={mapCurrent ? 'true' : undefined} aria-expanded={openTopic === 'map'} aria-controls="topic-map-panel" onClick={() => mobile && openTopic === 'map' ? close() : open('map')}><span className="topic-chevron down" aria-hidden="true" /></button>
+          </div>
+          {mobile && openTopic === 'map' && renderMapPanel()}
+        </li>
         {topics.map((topic) => (
           <li className="topic-item" key={topic.id} onMouseEnter={mobile ? undefined : () => open(topic.id)}>
             <div className="topic-control" data-current={currentTopic === topic.id} onKeyDown={(event) => {
@@ -242,6 +264,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
         ))}
       </ul>
       {!mobile && activeTopic && renderPanel(activeTopic)}
+      {!mobile && openTopic === 'map' && renderMapPanel()}
     </nav>
   )
 }

@@ -15,7 +15,7 @@ export interface MapScenario {
   source: string
   sha256: string
 }
-export interface MapManifest { plotCount: number; yearStart: number; yearEnd: number; scenarios: MapScenario[] }
+export interface MapManifest { plotCount: number; yearStart: number; yearEnd: number; scenarios: MapScenario[]; aggregates?: Record<string, string> }
 export interface PlotShape { id: number; record: number; areaHa: number; path: string; center: [number, number] }
 export interface MapGeometry {
   width: number
@@ -37,4 +37,4 @@ export interface PlotRecord {
   yieldCounts?: number[]
   incomeCounts?: number[]
 }
-export interface MapResults { id: string; runs: number; records: PlotRecord[]; seeds: Record<string, string>; sourceRows: number }
+export interface MapResults { id: string; runs: number; records: PlotRecord[]; seeds: Record<string, string>; sourceRows: number; breaks?: Record<PlotMetric, number[]> }

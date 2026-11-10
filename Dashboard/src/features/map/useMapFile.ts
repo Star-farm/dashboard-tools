@@ -1,40 +1,166 @@
-import { useEffect, useMemo, useState } from 'react'
 
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
+// Cache parsed JSON
 const cache = new Map<string, unknown>()
 
-export function useMapFiles<T>(filenames: readonly string[]) {
-  const [attempt, setAttempt] = useState(0)
-  const [result, setResult] = useState<{ key: string; data?: T[]; error?: boolean }>({ key: '' })
-  const fileKey = JSON.stringify(filenames)
-  const key = `${fileKey}:${attempt}`
-  const data = useMemo(() => {
-    const files = JSON.parse(fileKey) as string[]
-    if (files.length && files.every((file) => cache.has(file))) return files.map((file) => cache.get(file) as T)
-    return result.key === key ? result.data : undefined
-  }, [fileKey, key, result])
-  useEffect(() => {
-    const files = JSON.parse(fileKey) as string[]
-    if (!files.length || files.every((file) => cache.has(file))) return
-    const controller = new AbortController()
-    Promise.all(files.map(async (filename) => {
-      if (cache.has(filename)) return cache.get(filename) as T
-      const response = await fetch(`${import.meta.env.BASE_URL}map-data/${filename}`, { signal: controller.signal })
-        if (!response.ok) throw new Error(`Map data: ${response.status}`)
-      const value = await response.json() as T
-      if (!controller.signal.aborted) cache.set(filename, value)
-      return value
-    }))
-      .then((data) => {
-        if (controller.signal.aborted) return
-        setResult({ key, data })
-      })
-      .catch(() => { if (!controller.signal.aborted) setResult({ key, error: true }) })
-    return () => controller.abort()
-  }, [fileKey, key])
-  return { data, error: !data && result.key === key && result.error, retry: () => setAttempt((value) => value + 1) }
+// Deduplicate in-flight requests
+const pending = new Map<string, Promise<unknown>>()
+
+async function loadMapFile<T>(
+  filename: string
+): Promise<T> {
+  if (cache.has(filename)) {
+    return cache.get(filename) as T
+  }
+
+  const existing = pending.get(filename)
+
+  if (existing) {
+    return existing as Promise<T>
+  }
+
+  const request = (async () => {
+    const response = await fetch(
+      `${import.meta.env.BASE_URL}map-data/${filename}`
+    )
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to load ${filename}: ${response.status}`
+      )
+    }
+
+    const data = (await response.json()) as T
+
+    cache.set(filename, data)
+
+    return data
+  })()
+
+  pending.set(filename, request)
+
+  try {
+    return await request
+  } finally {
+    if (pending.get(filename) === request) {
+      pending.delete(filename)
+    }
+  }
 }
 
-export function useMapFile<T>(filename: string | undefined) {
-  const result = useMapFiles<T>(filename ? [filename] : [])
-  return { ...result, data: result.data?.[0] }
+type MapFilesResult<T> = {
+  key: string
+  data?: T[]
+  error?: boolean
+}
+
+export function useMapFiles<T>(
+  filenames: readonly string[]
+) {
+  const [attempt, setAttempt] = useState(0)
+
+  const [result, setResult] = useState<
+    MapFilesResult<T>
+  >({ key: '' })
+
+  const fileKey = JSON.stringify(filenames)
+
+  const key = `${fileKey}:${attempt}`
+
+  const files = useMemo(
+    () => JSON.parse(fileKey) as string[],
+    [fileKey]
+  )
+
+  const data = useMemo(() => {
+    if (files.length === 0) {
+      return undefined
+    }
+
+    if (
+      files.every((filename) => cache.has(filename))
+    ) {
+      return files.map(
+        (filename) => cache.get(filename) as T
+      )
+    }
+
+    return result.key === key
+      ? result.data
+      : undefined
+  }, [files, key, result])
+
+  useEffect(() => {
+    if (!files.length) return
+
+    if (
+      files.every((filename) => cache.has(filename))
+    ) {
+      return
+    }
+
+    let cancelled = false
+
+    Promise.all(
+      files.map((filename) =>
+        loadMapFile<T>(filename)
+      )
+    )
+      .then((loaded) => {
+        if (cancelled) return
+
+        setResult({
+          key,
+          data: loaded,
+          error: false,
+        })
+      })
+      .catch((error) => {
+        if (cancelled) return
+
+        console.error('Map loading failed:', error)
+
+        setResult({
+          key,
+          error: true,
+        })
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [files, key, attempt])
+
+  const retry = useCallback(() => {
+    for (const filename of files) cache.delete(filename)
+    setAttempt((current) => current + 1)
+  }, [files])
+
+  return {
+    data,
+    previousData: result.data,
+    error:
+      !data &&
+      result.key === key &&
+      result.error === true,
+    retry,
+  }
+}
+
+export function useMapFile<T>(
+  filename: string | undefined
+) {
+  const filenames = useMemo(
+    () => (filename ? [filename] : []),
+    [filename]
+  )
+
+  const result = useMapFiles<T>(filenames)
+
+  return {
+    ...result,
+    data: result.data?.[0],
+    previousData: result.previousData?.[0],
+  }
 }

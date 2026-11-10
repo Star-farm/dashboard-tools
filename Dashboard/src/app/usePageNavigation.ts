@@ -6,11 +6,13 @@ import type { ResourcePage } from '../features/resources/resourceRoutes'
 import { environmentPageForHash } from '../features/environment/environmentRoutes'
 import type { EnvironmentPage } from '../features/environment/environmentRoutes'
 
-export type Page = 'home' | 'map' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
+export type Page = 'home' | 'map' | 'mapExplore' | 'soilMap' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
   hash = hash.split('?')[0]
   if (hash === '#map') return 'map'
+  if (hash === '#map-explore') return 'mapExplore'
+  if (hash === '#soil-map') return 'soilMap'
   const exploreSection = exploreRouteForHash(hash)
   if (exploreSection) return ({ economics: 'economicExplore', resources: 'resourceExplore', environment: 'environmentExplore' } as const)[exploreSection.prefix]
   const environmentPage = environmentPageForHash(hash)

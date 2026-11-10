@@ -7,6 +7,7 @@ import SiteFooter from './SiteFooter'
 import SiteHeader from './SiteHeader'
 import { PageBreadcrumbs } from './PageBreadcrumbs'
 import BackToTop from './BackToTop'
+import { SoilPageLoading } from '../features/map/SoilMapShell'
 import { useLanguage } from '../i18n/useLanguage'
 import { usePageNavigation } from './usePageNavigation'
 import { isResourcePage, resourceRoutes } from '../features/resources/resourceRoutes'
@@ -19,6 +20,8 @@ import '../styles/motion.css'
 
 const FuturePage = lazy(() => import('../features/future/FuturePage'))
 const MapPage = lazy(() => import('../features/map/MapPage'))
+const MapExplorePage = lazy(() => import('../features/map/MapExplorePage'))
+const SoilMapPage = lazy(() => import('../features/map/SoilMapPage'))
 const ScenarioDetailsPage = lazy(() => import('../features/scenarios/ScenarioDetailsPage'))
 const EconomicOverviewPage = lazy(() => import('../features/economics/EconomicOverviewPage'))
 const EconomicExplorePage = lazy(() => import('../features/economics/EconomicExplorePage'))
@@ -45,6 +48,8 @@ export default function App() {
     resourceExplore: <EconomicExplorePage language={language} topic="resources" branch={branch} />,
     home: <HomePage language={language} />,
     map: <MapPage language={language} />,
+    mapExplore: <MapExplorePage language={language} />,
+    soilMap: <SoilMapPage language={language} />,
     notFound: <NotFoundPage language={language} />,
     glossary: <Glossary language={language} />,
     future: <FuturePage language={language} />,
@@ -61,6 +66,8 @@ export default function App() {
     oneMhaFarming: <OneMhaFarmingPage language={language} />,
   }
   const loadingText = isEnvironmentPage(page) ? environmentText[language].loading : isResourcePage(page) ? resourceText[language].loading : {
+    mapExplore: language === 'vi' ? 'Đang tải bản đồ…' : 'Loading maps…',
+    soilMap: language === 'vi' ? 'Đang tải bản đồ đất và ngập…' : 'Loading soil and flooding map…',
     home: '', glossary: '', notFound: '', map: language === 'vi' ? 'Đang tải bản đồ…' : 'Loading map…', future: t.futureLoading, scenario: t.scenarioLoading,
     economics: t.economicsLoading, economicComparison: t.economicComparisonLoading,
     economicExplore: t.economicExploreLoading,
@@ -79,7 +86,7 @@ export default function App() {
       <main id="main-content" tabIndex={-1}>
         <div className="page-transition" key={`${page}-${branch ?? 'root'}-${hash.split('?')[1] ?? ''}`}>
           <PageBreadcrumbs page={page} language={language} branch={branch} />
-          <Suspense fallback={<div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
+          <Suspense fallback={page === 'soilMap' ? <SoilPageLoading language={language} /> : <div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
         </div>
       </main>
       <SiteFooter language={language} />

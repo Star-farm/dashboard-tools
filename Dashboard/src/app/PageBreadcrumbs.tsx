@@ -24,7 +24,10 @@ export function PageBreadcrumbs({ page, language, branch }: { page: Page; langua
     : resourceRoute || page === 'resourceExplore' ? 'resources'
       : environmentRoute || page === 'environmentExplore' ? 'environment' : undefined
 
-  if (prefix) {
+  if (['map', 'mapExplore', 'soilMap'].includes(page)) {
+    items.push({ label: language === 'vi' ? 'Bản đồ' : 'Map', href: page === 'mapExplore' ? undefined : '#map-explore' })
+    if (page !== 'mapExplore') items.push({ label: page === 'map' ? (language === 'vi' ? 'Bản đồ vùng canh tác' : 'Farming area map') : (language === 'vi' ? 'Bản đồ đất và ngập' : 'Soil and flooding map') })
+  } else if (prefix) {
     const topicLabel = { economics: t.topicEconomics, resources: t.topicResources, environment: t.topicSustainability }[prefix]
     const path = economicsPath ?? (resourceRoute?.anchor ?? environmentRoute?.anchor)?.slice(prefix.length + 1)
     if (!path) {

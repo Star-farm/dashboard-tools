@@ -32,6 +32,8 @@ export function useLanguage(page: Page = 'glossary', branch?: ExploreBranch) {
       return
     }
     const titles = {
+      mapExplore: language === 'vi' ? 'Bản đồ | STAR FARM' : 'Maps | STAR FARM',
+      soilMap: language === 'vi' ? 'Bản đồ đất và ngập | STAR FARM' : 'Soil and flooding map | STAR FARM',
       map: language === 'vi' ? 'Bản đồ vùng canh tác | STAR FARM' : 'Farming area map | STAR FARM',
       home: t.homePageTitle, future: t.futurePageTitle, scenario: t.scenarioPageTitle,
       economics: t.economicsPageTitle, economicExplore: t.economicExplorePageTitle, economicComparison: t.economicComparisonPageTitle,
@@ -40,6 +42,8 @@ export function useLanguage(page: Page = 'glossary', branch?: ExploreBranch) {
       glossary: t.pageTitle, notFound: '404 | STAR FARM',
     }
     const descriptions = {
+      mapExplore: language === 'vi' ? 'Khám phá bản đồ vùng canh tác và các lớp thông tin đất, ngập.' : 'Explore farming area maps and soil and flooding layers.',
+      soilMap: language === 'vi' ? 'Xem thông tin đất, độ sâu ngập và sử dụng đất trên ranh giới vùng canh tác.' : 'View soil, flood depth and land use on farming area boundaries.',
       map: language === 'vi' ? 'Bản đồ năng suất và thu nhập theo mùa vụ tại 992 vùng canh tác mô phỏng ở Đồng Tháp.' : 'Explore yield and income by crop season across 992 simulated farming areas in Dong Thap.',
       home: t.homePageDescription, future: t.futurePageDescription, scenario: t.scenarioPageDescription,
       economics: t.economicsPageDescription, economicExplore: t.economicExplorePageDescription, economicComparison: t.economicComparisonPageDescription,

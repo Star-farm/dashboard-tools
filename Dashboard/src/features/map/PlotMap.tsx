@@ -5,6 +5,9 @@ import { colorFor } from './mapData'
 import { mapText } from './mapText'
 import type { MapGeometry, MapMetric } from './mapTypes'
 import { zoomViewport } from './mapViewport'
+import { soilText } from './soilText'
+import { soilUnknownColor } from './soilTypes'
+import type { SoilLayer } from './soilTypes'
 
 export default function PlotMap({
   geometry,
@@ -16,6 +19,7 @@ export default function PlotMap({
   incomeValues,
   periodLabel,
   scenarioLabel,
+  thematic,
 }: {
   geometry: MapGeometry
   values: (number | null)[]
@@ -26,8 +30,13 @@ export default function PlotMap({
   incomeValues: (number | null)[]
   periodLabel: string
   scenarioLabel: string
+  thematic?: SoilLayer
 }) {
   const t = mapText[language]
+  const st = soilText[language]
+  const plotLabel = thematic ? st.plot : t.plot
+  const mapLabel = thematic ? st.map : t.mapLabel
+  const helpId = thematic ? 'soil-map-interaction-help' : 'map-interaction-help'
 
   const svgRef = useRef<SVGSVGElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
@@ -191,6 +200,11 @@ export default function PlotMap({
 
     updateSize()
 
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateSize)
+      return () => window.removeEventListener('resize', updateSize)
+    }
+
     const observer = new ResizeObserver(updateSize)
     observer.observe(svg)
 
@@ -251,7 +265,7 @@ export default function PlotMap({
           }}
           tabIndex={plot.id === 0 ? 0 : -1}
           role="button"
-          aria-label={`${t.plot} ${plot.id}`}
+          aria-label={`${plotLabel} ${plot.id}`}
           onKeyDown={(event) => {
             if (
               event.key === 'Enter' ||
@@ -262,7 +276,7 @@ export default function PlotMap({
               setSelected(plot.id)
             }
           }}
-          fill={colorFor(
+          fill={thematic ? soilUnknownColor : colorFor(
             values[plot.id] ?? null,
             breaks
           )}
@@ -273,7 +287,7 @@ export default function PlotMap({
           vectorEffect="non-scaling-stroke"
         >
           <title>
-            {`${t.plot} ${plot.id} | ${number.format(
+            {thematic ? `${plotLabel} ${plot.id} | ${thematic.title[language]}` : `${t.plot} ${plot.id} | ${number.format(
               plot.areaHa
             )} ha | ${
               values[plot.id] == null
@@ -293,6 +307,9 @@ export default function PlotMap({
       number,
       metricNumber,
       unit,
+      thematic,
+      plotLabel,
+      language,
     ]
   )
 
@@ -347,6 +364,21 @@ export default function PlotMap({
       ? '—'
       : number.format(value)
 
+  const soilPlot = thematic?.plots.find((item) => item.id === selected)
+  const thematicOutlines = useMemo(() => geometry.plots.map((shape) => <path key={shape.id} d={shape.path} fill="none" stroke="#254f3d" strokeOpacity={0.6} strokeWidth={0.5} vectorEffect="non-scaling-stroke" />), [geometry])
+  const thematicPaths = useMemo(() => {
+    if (!thematic) return null
+    const colors = new Map(thematic.categories.map((category) => [category.id, category.color]))
+    return thematic.features.map((feature, index) => <path
+      key={`${feature.plotId}-${index}`}
+      d={feature.path}
+      fill={colors.get(feature.categoryId) ?? soilUnknownColor}
+      fillRule="evenodd"
+    />)
+  }, [thematic])
+  const soilArea = soilPlot?.areaHa ?? 0
+  const percent = (area: number) => `${number.format(soilArea > 0 ? area / soilArea * 100 : 0)}%`
+
   return (
     <div
       className="plot-map-frame"
@@ -366,7 +398,7 @@ export default function PlotMap({
       <div
         className="plot-map-controls"
         role="group"
-        aria-label={t.mapLabel}
+        aria-label={mapLabel}
       >
         <button
           type="button"
@@ -403,7 +435,7 @@ export default function PlotMap({
         aria-label={t.north}
       >
         <span aria-hidden="true">↑</span>
-        <span>N</span>
+        <span>{language === 'vi' ? 'B' : 'N'}</span>
       </div>
 
       {/* Main map SVG */}
@@ -416,8 +448,8 @@ export default function PlotMap({
           view.y - height / 2
         } ${width} ${height}`}
         role="group"
-        aria-label={t.mapLabel}
-        aria-describedby="map-interaction-help"
+        aria-label={mapLabel}
+        aria-describedby={helpId}
         tabIndex={0}
 
         onKeyDown={(event) => {
@@ -573,6 +605,10 @@ export default function PlotMap({
         }}
       >
         <g>{paths}</g>
+        {thematic && <g pointerEvents="none" aria-hidden="true">
+          {thematicPaths}
+          {thematicOutlines}
+        </g>}
 
         {/* Highlight selected plot */}
         {plot && (
@@ -626,9 +662,9 @@ export default function PlotMap({
         >
           <header>
             <div>
-              <p>{t.plotInfo}</p>
+              <p>{thematic ? thematic.title[language] : t.plotInfo}</p>
               <h3 id={popupTitleId}>
-                {t.plot} {plot.id}
+                {plotLabel} {plot.id}
               </h3>
             </div>
 
@@ -652,7 +688,18 @@ export default function PlotMap({
             </button>
           </header>
 
-          <p className="plot-popup-period">
+          {thematic ? <>
+            <p className="plot-popup-period">{st.shares}</p>
+            <dl>
+              <div><dt>{st.displayArea}</dt><dd>{format(soilArea)} <small>ha</small></dd></div>
+              <div><dt>{st.coverage}</dt><dd>{percent(soilPlot?.knownAreaHa ?? 0)}</dd></div>
+              {soilPlot?.shares.map((share) => <div key={share.categoryId}>
+                <dt>{thematic.categories.find((category) => category.id === share.categoryId)?.label[language] ?? st.unknown}</dt>
+                <dd>{percent(share.areaHa)} <small>({format(share.areaHa)} ha)</small></dd>
+              </div>)}
+              <div><dt>{st.unknown}</dt><dd>{percent(soilPlot?.unknownAreaHa ?? soilArea)} <small>({format(soilPlot?.unknownAreaHa ?? soilArea)} ha)</small></dd></div>
+            </dl>
+          </> : <><p className="plot-popup-period">
             {periodLabel}
           </p>
 
@@ -686,14 +733,15 @@ export default function PlotMap({
               </dd>
             </div>
           </dl>
+          </>}
         </section>
       )}
 
       {/* Map caption */}
       <div className="plot-map-caption">
         {hover !== null
-          ? `${t.plot} ${hover}${
-              values[hover] != null
+          ? `${plotLabel} ${hover}${
+              !thematic && values[hover] != null
                 ? ` · ${metricNumber.format(
                     values[hover]!
                   )} ${unit}`

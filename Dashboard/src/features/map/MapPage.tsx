@@ -68,8 +68,10 @@ export default function MapPage({ language }: { language: Language }) {
   const matchingScenarios = manifest.data?.scenarios.filter((scenario) => codes.has(scenario.code)) ?? []
   const availableSeasons = matchingScenarios.length ? Math.max(...matchingScenarios.map((scenario) => scenario.seasons)) : 2
   const scenarios = matchingScenarios.filter((scenario) => season === 0 || scenario.seasons >= season)
-  const files = useMapFiles<MapResults>(scenarios.map((scenario) => scenario.file))
-  const results = { ...files, data: useMemo(() => files.data ? { id: files.data.map((item) => item.id).join('+'), records: files.data.flatMap((item) => item.records), runs: files.data.reduce((sum, item) => sum + item.runs, 0), seeds: {}, sourceRows: files.data.reduce((sum, item) => sum + item.sourceRows, 0) } : undefined, [files.data]) }
+  const scenarioFiles = scenarios.map((scenario) => scenario.file)
+  const aggregate = manifest.data?.aggregates?.[[...scenarioFiles].sort().join('|')]
+  const files = useMapFiles<MapResults>(aggregate ? [aggregate] : scenarioFiles)
+  const results = { ...files, data: useMemo(() => files.data ? files.data.length === 1 ? files.data[0] : { id: files.data.map((item) => item.id).join('+'), records: files.data.flatMap((item) => item.records), runs: files.data.reduce((sum, item) => sum + item.runs, 0), seeds: {}, sourceRows: files.data.reduce((sum, item) => sum + item.sourceRows, 0) } : undefined, [files.data]) }
   const displayData = useMemo(() => results.data && conversion.data ? displayMapCurrency(results.data, currencyCode, conversion.data.vndPerUsd) : undefined, [results.data, conversion.data, currencyCode])
   const yieldValues = useMemo(() => displayData ? selectPlotValues(displayData.records, year, season, 'yield') : [], [displayData, year, season])
   const incomeValues = useMemo(() => displayData ? selectPlotValues(displayData.records, year, season, 'income') : [], [displayData, year, season])

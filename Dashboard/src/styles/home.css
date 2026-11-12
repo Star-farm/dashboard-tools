@@ -1,3 +1,7 @@
+.home-about { padding-top: 50px; }
+.home-about h2 { margin: 10px 0 12px; font-size: var(--section-title-size); color: var(--forest); }
+.home-about > p:not(.eyebrow) { max-width: 900px; margin: 12px 0 0; color: #40533b; font-size: var(--text-body); line-height: 1.8; }
+.home-about a { color: var(--forest); text-underline-offset: 3px; }
 .home-explore { display: flex; flex-direction: column; gap: 20px; padding-block: 50px; }
 .home-explore .glossary-callout { margin: 0; }
 

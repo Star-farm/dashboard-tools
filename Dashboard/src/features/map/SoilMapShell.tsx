@@ -15,11 +15,13 @@ export function SoilPageShell({ language, children }: { language: Language; chil
   </div>
 }
 
-export default function SoilMapShell({ language, layerId = 'soil_texture', onLayerChange, children }: {
-  language: Language; layerId?: string; onLayerChange?: (id: string) => void; children: ReactNode
+export default function SoilMapShell({ language, layerId = 'soil_texture', onLayerChange, chart, children }: {
+  language: Language; layerId?: string; onLayerChange?: (id: string) => void; chart?: ReactNode; children: ReactNode
 }) {
   const t = soilText[language]
   const layer = soilManifest.layers.find((item) => item.id === layerId) ?? soilManifest.layers[0]
+  const categories = [...layer.categories, { id: 'undetermined', label: { vi: soilText.vi.unknown, en: soilText.en.unknown }, color: soilUnknownColor }]
+  const legendItem = (category: typeof categories[number]) => <span key={category.id}><i aria-hidden="true" style={{ background: category.color }} />{category.label[language]}</span>
   return <section className="soil-map-section map-workspace" aria-labelledby="soil-map-title">
     <div className="map-workspace-heading"><h2 id="soil-map-title">{t.title}</h2></div>
     <div className="soil-map-intro"><p>{t.accuracy}</p></div>
@@ -29,11 +31,15 @@ export default function SoilMapShell({ language, layerId = 'soil_texture', onLay
         {soilManifest.layers.map((item) => <button key={item.id} type="button" disabled={!onLayerChange} aria-pressed={layer.id === item.id} onClick={() => onLayerChange?.(item.id)}>{item.title[language]}</button>)}
       </div>
     </div>
-    <div className="soil-map-stage">{children}</div>
-    <div className="soil-map-legend" aria-label={`${t.legend}: ${layer.title[language]}`}>
-      {[...layer.categories, { id: 'undetermined', label: { vi: soilText.vi.unknown, en: soilText.en.unknown }, color: soilUnknownColor }].map((category) => <span key={category.id}><i aria-hidden="true" style={{ background: category.color }} />{category.label[language]}</span>)}
+    <div className={`soil-map-layout${chart ? ' has-chart' : ''}`}>
+      <div className="soil-map-column"><div className="soil-map-stage">{children}</div>
+      <div className="soil-map-legend" aria-label={`${t.legend}: ${layer.title[language]}`}>
+        {categories.slice(0, 5).map(legendItem)}
+        <div className="soil-legend-desktop">{categories.slice(5).map(legendItem)}</div>
+        {categories.length > 5 && <details className="soil-legend-more"><summary>{language === 'vi' ? 'Xem tất cả chú thích' : 'Show all legend items'} ({categories.length - 5})</summary><div>{categories.slice(5).map(legendItem)}</div></details>}
+      </div>
+      </div>{chart}
     </div>
-    <p className="map-interaction-help" id="soil-map-interaction-help">{t.instructions}</p>
   </section>
 }
 

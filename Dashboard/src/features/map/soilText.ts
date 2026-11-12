@@ -13,7 +13,6 @@ export const soilText = {
     displayArea: 'Diện tích trên bản đồ',
     shares: 'Tỷ lệ diện tích trong vùng',
     legend: 'Chú giải',
-    instructions: 'Cuộn chuột để thu phóng, kéo để di chuyển. Bấm vào một vùng để xem phân loại đất, độ ngập và tỷ lệ diện tích chưa xác định.',
   },
   en: {
     title: 'Soil and flooding information',
@@ -29,6 +28,5 @@ export const soilText = {
     displayArea: 'Area on map',
     shares: 'Area shares within this area',
     legend: 'Legend',
-    instructions: 'Scroll to zoom and drag to pan. Click an area to view soil and flood classifications and the share of undetermined area.',
   },
 } as const

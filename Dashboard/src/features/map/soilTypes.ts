@@ -23,7 +23,7 @@ export interface SoilData {
   layers: SoilLayer[]
 }
 
-export type SoilLayerInfo = Pick<SoilLayer, 'id' | 'title' | 'categories'> & { file: string }
+export type SoilLayerInfo = Pick<SoilLayer, 'id' | 'title' | 'categories'> & { file: string; rasterFile?: string }
 export type SoilManifest = Omit<SoilData, 'layers'> & { geometryFile: string; layers: SoilLayerInfo[] }
 
 export const soilUnknownColor = '#b9bdb6'

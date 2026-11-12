@@ -1,4 +1,5 @@
-import { startTransition, useEffect, useState } from 'react'
+import { startTransition, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { getScrollBehavior } from './scrollBehavior'
 import { exploreRouteForHash } from './exploreNavigation'
 import { resourcePageForHash } from '../features/resources/resourceRoutes'
@@ -32,7 +33,7 @@ function pageForHash(hash: string, previous: Page = 'home'): Page {
   if (['#future', '#future-income', '#future-labor', '#future-methane'].includes(hash)) return 'future'
   if (['#scenario-details', '#scenario-economics', '#scenario-resources', '#scenario-sustainability'].includes(hash)) return 'scenario'
   if (['#glossary', '#search-panel', '#definitions'].includes(hash)) return 'glossary'
-  if (['', '#home', '#home-explore', '#datasets'].includes(hash)) return 'home'
+  if (['', '#home', '#home-about', '#home-explore', '#datasets'].includes(hash)) return 'home'
   if (hash === '#main-content') return previous
   if (hash === '#partners') return 'home'
   return 'notFound'
@@ -40,11 +41,17 @@ function pageForHash(hash: string, previous: Page = 'home'): Page {
 
 export function usePageNavigation() {
   const [{ hash, page, branch }, setLocation] = useState(() => ({ hash: window.location.hash, page: pageForHash(window.location.hash), branch: exploreRouteForHash(window.location.hash)?.branch }))
+  const currentPage = useRef(page)
 
   useEffect(() => {
     const update = () => {
       const nextHash = window.location.hash
-      startTransition(() => setLocation((previous) => ({ hash: nextHash, page: pageForHash(nextHash, previous.page), branch: nextHash === '#main-content' ? previous.branch : exploreRouteForHash(nextHash)?.branch })))
+      const nextPage = pageForHash(nextHash, currentPage.current)
+      const updateLocation = () => setLocation((previous) => ({ hash: nextHash, page: pageForHash(nextHash, previous.page), branch: nextHash === '#main-content' ? previous.branch : exploreRouteForHash(nextHash)?.branch }))
+      const animate = nextPage !== currentPage.current && 'startViewTransition' in document && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      currentPage.current = nextPage
+      if (animate) document.startViewTransition(() => flushSync(updateLocation))
+      else startTransition(updateLocation)
     }
     window.addEventListener('hashchange', update)
     return () => window.removeEventListener('hashchange', update)

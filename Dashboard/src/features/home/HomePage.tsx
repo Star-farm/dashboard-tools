@@ -40,9 +40,21 @@ export default function HomePage({ language }: { language: Language }) {
           <p className="hero-description">{t.heroDescription}</p>
           <p className="hero-project">{t.heroProject}</p>
           <div className="hero-actions">
-            <a className="hero-primary" href="#home-explore" ref={exploreRef}>{t.heroExplore}<span aria-hidden="true">{'>'}</span></a>
+            <a className="hero-primary" href="#home-about" ref={exploreRef}>{t.heroExplore}<span aria-hidden="true">{'>'}</span></a>
           </div>
         </div>
+      </section>
+
+      <section className="home-about content-width" id="home-about" aria-labelledby="home-about-title">
+        <p className="eyebrow">STAR-FARM</p>
+        <h2 id="home-about-title">{language === 'vi' ? 'Về dự án' : 'About the project'}</h2>
+        <p>{language === 'vi'
+          ? 'STAR-FARM là dự án do Liên minh châu Âu (EU) tài trợ với kinh phí 4,15 triệu euro, do Tổ chức Lương thực và Nông nghiệp Liên Hợp Quốc (FAO) triển khai trong giai đoạn 2023–2027. Dự án thúc đẩy chuyển đổi nông nghiệp sinh thái thông minh tại Đồng bằng sông Cửu Long, tăng khả năng chống chịu trước biến đổi khí hậu, suy thoái môi trường và các cú sốc từ bên ngoài.'
+          : 'STAR-FARM is funded by the European Union (EU) with a contribution of €4.15 million and implemented by the Food and Agriculture Organization of the United Nations (FAO) from 2023 to 2027. The project supports smart agroecological transformation in the Mekong Delta and strengthens resilience to climate change, environmental degradation and other external shocks.'}</p>
+        <p>{language === 'vi'
+          ? 'Dự án hướng đến xây dựng chính sách và cơ chế hỗ trợ, củng cố chuỗi giá trị nông nghiệp sinh thái, nâng cao năng lực của các tổ chức nông dân, hợp tác xã và doanh nghiệp nông nghiệp, đồng thời tăng cường học hỏi và tư vấn thích ứng. Trang thông tin này giúp khám phá các kịch bản canh tác lúa ở Đồng Tháp đến năm 2050 qua bản đồ và các chỉ số kinh tế, tài nguyên và môi trường.'
+          : 'The project aims to strengthen supportive policies and frameworks, consolidate agroecological value chains, build the capacity of farmer organizations, cooperatives and agricultural enterprises, and improve adaptive learning and advisory systems. This dashboard explores rice farming scenarios in Dong Thap through 2050 using maps and economic, resource and environmental indicators.'}</p>
+        <p><a href="https://www.eeas.europa.eu/projects-star-farm_en" target="_blank" rel="noreferrer">{language === 'vi' ? 'Tìm hiểu thêm về dự án trên trang EU' : 'Read more about the project on the EU website'}</a></p>
       </section>
 
       <section className="home-explore content-width" id="home-explore" aria-label={t.homeExplore}>

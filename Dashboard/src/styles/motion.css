@@ -16,12 +16,15 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: content-fade-out .25s ease both; }
+  ::view-transition-new(root) { animation: content-fade .35s ease both; }
   .page-transition > :not(.page-breadcrumbs) { animation: page-reveal .32s cubic-bezier(.22, 1, .36, 1); }
   .page-transition > .page-breadcrumbs { animation: content-fade .22s ease-out; }
   .topic-dropdown, .topic-flyout { animation: submenu-reveal .18s ease-out; }
   .mobile-navigation .topic-dropdown, .mobile-navigation .topic-flyout { animation-name: content-fade; }
   .page-transition .economic-explore-card, .page-transition .explore-destination-card { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease; }
 }
+@keyframes content-fade-out { from { opacity: 1; } to { opacity: 0; } }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .economic-explore-card:hover, .explore-destination-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px #254f3d12; }
 }

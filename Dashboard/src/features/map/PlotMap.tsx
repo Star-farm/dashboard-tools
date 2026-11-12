@@ -1,5 +1,6 @@
 
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useId, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import type { Language } from '../../i18n'
 import { colorFor } from './mapData'
 import { mapText } from './mapText'
@@ -8,6 +9,11 @@ import { zoomViewport } from './mapViewport'
 import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
 import type { SoilLayer } from './soilTypes'
+
+const ThematicOverlay = memo(function ThematicOverlay({ paths, outlines }: { paths: ReactNode; outlines: ReactNode }) {
+  return <g pointerEvents="none" aria-hidden="true">{paths}{outlines}</g>
+})
+
 
 export default function PlotMap({
   geometry,
@@ -20,6 +26,8 @@ export default function PlotMap({
   periodLabel,
   scenarioLabel,
   thematic,
+  onSelectionChange,
+  rasterFile,
 }: {
   geometry: MapGeometry
   values: (number | null)[]
@@ -31,12 +39,14 @@ export default function PlotMap({
   periodLabel: string
   scenarioLabel: string
   thematic?: SoilLayer
+  onSelectionChange?: (id: number | null) => void
+  rasterFile?: string
 }) {
   const t = mapText[language]
   const st = soilText[language]
   const plotLabel = thematic ? st.plot : t.plot
   const mapLabel = thematic ? st.map : t.mapLabel
-  const helpId = thematic ? 'soil-map-interaction-help' : 'map-interaction-help'
+  const helpId = thematic ? undefined : 'map-interaction-help'
 
   const svgRef = useRef<SVGSVGElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
@@ -54,6 +64,9 @@ export default function PlotMap({
   } | null>(null)
 
   const suppressClick = useRef(false)
+  const touches = useRef(new Map<number, { x: number; y: number }>())
+  const pinchDistance = useRef<number | null>(null)
+  const pinching = useRef(false)
 
   const [view, setView] = useState({
     zoom: 1,
@@ -63,6 +76,8 @@ export default function PlotMap({
 
   const [hover, setHover] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
+  const [rasterFailed, setRasterFailed] = useState(false)
+  useEffect(() => { onSelectionChange?.(selected) }, [selected, onSelectionChange])
 
   // Track SVG size for an accurate, responsive scale bar
   const [svgSize, setSvgSize] = useState({
@@ -215,7 +230,7 @@ export default function PlotMap({
   // Popup focus and outside click
   // ---------------------------------------
   useEffect(() => {
-    if (selected === null) return
+    if (selected === null || thematic) return
 
     closeRef.current?.focus({
       preventScroll: true,
@@ -243,7 +258,7 @@ export default function PlotMap({
         outside
       )
     }
-  }, [selected])
+  }, [selected, thematic])
 
   // ---------------------------------------
   // Plot paths
@@ -364,10 +379,9 @@ export default function PlotMap({
       ? '—'
       : number.format(value)
 
-  const soilPlot = thematic?.plots.find((item) => item.id === selected)
   const thematicOutlines = useMemo(() => geometry.plots.map((shape) => <path key={shape.id} d={shape.path} fill="none" stroke="#254f3d" strokeOpacity={0.6} strokeWidth={0.5} vectorEffect="non-scaling-stroke" />), [geometry])
   const thematicPaths = useMemo(() => {
-    if (!thematic) return null
+    if (!thematic || (rasterFile && !rasterFailed)) return null
     const colors = new Map(thematic.categories.map((category) => [category.id, category.color]))
     return thematic.features.map((feature, index) => <path
       key={`${feature.plotId}-${index}`}
@@ -375,9 +389,8 @@ export default function PlotMap({
       fill={colors.get(feature.categoryId) ?? soilUnknownColor}
       fillRule="evenodd"
     />)
-  }, [thematic])
-  const soilArea = soilPlot?.areaHa ?? 0
-  const percent = (area: number) => `${number.format(soilArea > 0 ? area / soilArea * 100 : 0)}%`
+  }, [thematic, rasterFile, rasterFailed])
+  const showPopup = !thematic
 
   return (
     <div
@@ -427,6 +440,7 @@ export default function PlotMap({
         >
           {t.resetView}
         </button>
+        {thematic && selected !== null && <button type="button" className="map-fit" onClick={() => setSelected(null)}>{language === 'vi' ? 'Bỏ chọn vùng' : 'Clear selection'}</button>}
       </div>
 
       {/* North indicator */}
@@ -492,6 +506,19 @@ export default function PlotMap({
         onPointerDown={(event) => {
           if (event.button !== 0) return
 
+          if (event.pointerType === 'touch') {
+            touches.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+            event.currentTarget.setPointerCapture(event.pointerId)
+            if (touches.current.size >= 2) {
+              const [a, b] = [...touches.current.values()]
+              pinchDistance.current = Math.hypot(a.x - b.x, a.y - b.y)
+              pinching.current = true
+              suppressClick.current = true
+              drag.current = null
+              return
+            }
+          }
+
           const plot = (
             event.target as Element
           )
@@ -518,6 +545,22 @@ export default function PlotMap({
         }}
 
         onPointerMove={(event) => {
+          if (event.pointerType === 'touch' && touches.current.has(event.pointerId)) {
+            touches.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+            if (pinching.current) {
+              if (touches.current.size >= 2) {
+                const [a, b] = [...touches.current.values()]
+                const distance = Math.hypot(a.x - b.x, a.y - b.y)
+                const anchor = pointToMap({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 })
+                if (anchor && pinchDistance.current && distance > 0) {
+                  const factor = distance / pinchDistance.current
+                  setView((current) => zoomViewport(current, factor, anchor))
+                }
+                pinchDistance.current = distance
+              }
+              return
+            }
+          }
           const active = drag.current
 
           if (!active) {
@@ -576,6 +619,14 @@ export default function PlotMap({
         }}
 
         onPointerUp={(event) => {
+          if (event.pointerType === 'touch') {
+            touches.current.delete(event.pointerId)
+            if (pinching.current) {
+              if (!touches.current.size) { pinching.current = false; pinchDistance.current = null }
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+              return
+            }
+          }
           if (
             drag.current &&
             !drag.current.moved
@@ -596,8 +647,10 @@ export default function PlotMap({
           }
         }}
 
-        onPointerCancel={() => {
+        onPointerCancel={(event) => {
           drag.current = null
+          touches.current.delete(event.pointerId)
+          if (!touches.current.size) { pinching.current = false; pinchDistance.current = null }
         }}
 
         onPointerLeave={() => {
@@ -605,10 +658,7 @@ export default function PlotMap({
         }}
       >
         <g>{paths}</g>
-        {thematic && <g pointerEvents="none" aria-hidden="true">
-          {thematicPaths}
-          {thematicOutlines}
-        </g>}
+        {thematic && <ThematicOverlay paths={rasterFile && !rasterFailed ? <image href={`${import.meta.env.BASE_URL}map-data/${rasterFile}`} x={0} y={0} width={geometry.width} height={geometry.height} preserveAspectRatio="none" onError={() => setRasterFailed(true)} /> : thematicPaths} outlines={thematicOutlines} />}
 
         {/* Highlight selected plot */}
         {plot && (
@@ -653,7 +703,7 @@ export default function PlotMap({
       )}
 
       {/* Plot information popup */}
-      {plot && (
+      {plot && showPopup && (
         <section
           className="plot-map-popup"
           role="dialog"
@@ -662,7 +712,7 @@ export default function PlotMap({
         >
           <header>
             <div>
-              <p>{thematic ? thematic.title[language] : t.plotInfo}</p>
+              <p>{t.plotInfo}</p>
               <h3 id={popupTitleId}>
                 {plotLabel} {plot.id}
               </h3>
@@ -688,18 +738,7 @@ export default function PlotMap({
             </button>
           </header>
 
-          {thematic ? <>
-            <p className="plot-popup-period">{st.shares}</p>
-            <dl>
-              <div><dt>{st.displayArea}</dt><dd>{format(soilArea)} <small>ha</small></dd></div>
-              <div><dt>{st.coverage}</dt><dd>{percent(soilPlot?.knownAreaHa ?? 0)}</dd></div>
-              {soilPlot?.shares.map((share) => <div key={share.categoryId}>
-                <dt>{thematic.categories.find((category) => category.id === share.categoryId)?.label[language] ?? st.unknown}</dt>
-                <dd>{percent(share.areaHa)} <small>({format(share.areaHa)} ha)</small></dd>
-              </div>)}
-              <div><dt>{st.unknown}</dt><dd>{percent(soilPlot?.unknownAreaHa ?? soilArea)} <small>({format(soilPlot?.unknownAreaHa ?? soilArea)} ha)</small></dd></div>
-            </dl>
-          </> : <><p className="plot-popup-period">
+          <p className="plot-popup-period">
             {periodLabel}
           </p>
 
@@ -733,7 +772,6 @@ export default function PlotMap({
               </dd>
             </div>
           </dl>
-          </>}
         </section>
       )}
 

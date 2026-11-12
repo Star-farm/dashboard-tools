@@ -1,5 +1,17 @@
 .soil-map-section { margin-top: 0; }
+#soil-map.page-shell { width: min(100% - 96px, 1582px); }
 .soil-map-stage { position: relative; }
+.soil-map-layout.has-chart { display: grid; grid-template-columns: minmax(0, 1fr) minmax(288px, 345px); align-items: start; }
+.soil-chart { box-sizing: border-box; min-height: clamp(380px, 38vw, 540px); display: flex; flex-direction: column; padding: 24px; border-left: 1px solid var(--line); background: #f7f8f1; color: var(--forest); }
+.soil-chart h3 { margin: 0; font-size: var(--text-body); }
+.soil-chart p { margin: 8px 0; font-size: var(--text-small); line-height: 1.6; color: var(--muted); }
+.soil-chart-figure { height: 200px; flex: 0 0 200px; }
+.soil-chart ul { list-style: none; margin: 0; padding: 0; }
+.soil-chart-more summary { cursor: pointer; padding: 10px 0; color: var(--forest); font-size: var(--text-small); }
+.soil-chart li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--text-small); border-bottom: 1px solid var(--line); }
+.soil-chart li span { display: flex; align-items: center; gap: 8px; }
+.soil-chart i { width: 12px; height: 12px; flex: none; border-radius: 2px; }
+.soil-chart-flooding li { padding-block: 4px; }
 .soil-map-placeholder { display: grid; place-items: center; padding: 24px; color: var(--muted); font-size: var(--text-small); text-align: center; }
 .soil-map-intro { padding: 8px 28px; color: var(--muted); font-size: var(--text-small); line-height: 1.8; }
 .soil-map-intro p { margin: 12px 0; }
@@ -7,17 +19,31 @@
 .soil-layer-control > p { margin: 0; color: var(--green); font-size: var(--text-body); font-weight: 700; }
 .soil-layer-control .map-layer-switch { width: fit-content; }
 .soil-map-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 20px 24px 0; font-size: var(--text-small); color: var(--forest); }
-.soil-map-legend > span { display: flex; align-items: center; gap: 8px; }
+.soil-map-legend span { display: flex; align-items: center; gap: 8px; }
 .soil-map-legend i { display: inline-block; width: 16px; height: 16px; flex-shrink: 0; border: 1px solid #254f3d55; border-radius: 2px; }
+.soil-legend-desktop { display: contents; }
+.soil-legend-more { display: none; }
 .soil-map-note { padding: 0 24px; }
 .soil-map-loading { padding: 20px 28px; font-size: var(--text-small); color: var(--muted); }
 .soil-map-section .plot-map-popup { max-height: calc(100% - 32px); overflow-y: auto; }
 .soil-map-section .plot-map-popup dt { min-width: 0; overflow-wrap: anywhere; }
 .soil-map-section .plot-map-popup dd { white-space: normal; flex-shrink: 0; max-width: 50%; font-size: var(--text-body); }
 .soil-map-section .plot-map-popup dd small { display: block; font-size: var(--text-small); }
+@media (max-width: 900px) {
+  #soil-map.page-shell { width: calc(100% - 48px); }
+}
 @media (max-width: 767px) {
+  #soil-map.page-shell { width: calc(100% - 20px); }
+  .soil-map-layout.has-chart { grid-template-columns: 1fr; }
+  .soil-map-stage, .soil-chart { width: 100%; min-width: 0; }
+  .soil-chart { height: auto; min-height: 0; padding: 20px; border-left: 0; border-top: 1px solid var(--line); }
+  .soil-chart ul { overflow: visible; }
   .soil-map-intro { padding-inline: 20px; }
   .soil-layer-control { grid-template-columns: 1fr; gap: 10px; padding: 16px 20px; }
   .soil-map-legend { padding-inline: 16px; }
+  .soil-legend-desktop { display: none; }
+  .soil-legend-more { display: block; flex-basis: 100%; }
+  .soil-legend-more > summary { display: list-item; cursor: pointer; color: var(--forest); }
+  .soil-legend-more > div { display: flex; flex-wrap: wrap; gap: 12px 24px; padding-top: 12px; }
   .soil-map-note { padding-inline: 16px; }
 }

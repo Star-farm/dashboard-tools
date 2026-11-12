@@ -38,7 +38,7 @@ export default function SeasonalComparison({ language, data, config }: { languag
   const metrics = config.metrics ?? seasonalMetricGroups[config.topic]
   const chartType = (metric: SeasonalMetric) => mode === 'trend' ? 'line' : ['roi', 'margin'].includes(metric) ? 'bar' : 'pie'
   const chartOrder = { bar: 0, pie: 1, line: 2 }
-  const orderedMetrics = [...metrics].sort((a, b) => chartOrder[chartType(a)] - chartOrder[chartType(b)])
+  const orderedMetrics = metrics.filter((metric) => mode !== 'year' || metric !== 'awd').sort((a, b) => chartOrder[chartType(a)] - chartOrder[chartType(b)])
   const chartLabels = language === 'vi' ? { bar: 'Biểu đồ cột', pie: 'Biểu đồ quạt', line: 'Biểu đồ đường' } : { bar: 'Bar charts', pie: 'Doughnut charts', line: 'Line charts' }
   const years = Array.from({ length: data.endYear - data.startYear + 1 }, (_, index) => data.startYear + index)
   const points: Point[] = (mode === 'year' ? cropPeriods : years).map((value) => ({

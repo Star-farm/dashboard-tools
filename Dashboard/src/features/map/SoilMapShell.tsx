@@ -3,7 +3,6 @@ import type { Language } from '../../i18n'
 import { soilManifest } from './soilManifest'
 import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
-import SoilDefinitions from './SoilDefinitions'
 import '../../styles/map.css'
 import '../../styles/soil-map.css'
 
@@ -34,9 +33,7 @@ export default function SoilMapShell({ language, layerId = 'soil_texture', onLay
     <div className="soil-map-legend" aria-label={`${t.legend}: ${layer.title[language]}`}>
       {[...layer.categories, { id: 'undetermined', label: { vi: soilText.vi.unknown, en: soilText.en.unknown }, color: soilUnknownColor }].map((category) => <span key={category.id}><i aria-hidden="true" style={{ background: category.color }} />{category.label[language]}</span>)}
     </div>
-    <p className="map-context-note soil-map-note">{t.unknownNote}</p>
     <p className="map-interaction-help" id="soil-map-interaction-help">{t.instructions}</p>
-    <SoilDefinitions language={language} />
   </section>
 }
 

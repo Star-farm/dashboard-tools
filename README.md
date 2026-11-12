@@ -28,23 +28,6 @@ Service-specific documentation:
 - [Frontend](./Web%20App/frontend/README.md)
 - [Model formulas and prediction flow](./Web%20App/MODEL.md)
 
-## Production Architecture
-
-```text
-Browser
-  |
-  v
-Vercel Frontend + /api/proxy/*
-  |
-  v
-VPS reverse proxy
-  |
-  v
-Docker/FastAPI
-```
-
-The frontend only calls its same-origin proxy. The server-side proxy attaches the production API key, so the key is never exposed to the browser or client bundle.
-
 ## Security Notes
 
 - Never commit `.env` files, API keys, GCP credentials, or sensitive data.

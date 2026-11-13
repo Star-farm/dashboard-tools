@@ -6,14 +6,14 @@
 .economic-explore-card h2 { margin: 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; letter-spacing: normal; }
 .economic-explore-card p { margin: 12px 0 0; color: #40533b; font-size: var(--text-body); line-height: 1.8; }
 .economic-explore-card a { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 156px; height: 100%; padding: 26px 28px; color: #345130; text-decoration: none; transition: color .15s, background .15s; }
-.economic-explore-card a > span:last-child { flex-shrink: 0; font-size: 18px; transition: transform .15s; }
+.economic-explore-card a > span:last-child { flex-shrink: 0; font-size: calc(18px + 1px); transition: transform .15s; }
 .economic-explore-card a:hover { color: #172f20; background: #e8eedc; }
 .economic-explore-card a:hover > span:last-child { transform: translateX(4px); }
 .economic-explore-card a:focus-visible { outline: 2px solid #759b7f; outline-offset: -3px; border-radius: 3px; }
 .explore-destinations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
 .explore-destination-card { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 156px; padding: 30px; border: 1px solid #cddbc4; border-top: 3px solid #9caa70; border-radius: 8px; background: #f1f4e8; color: #30472d; text-decoration: none; transition: background .15s, border-color .15s; }
 .explore-destination-card h2 { margin: 0; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; }
-.explore-destination-card > span { flex-shrink: 0; font-size: 24px; transition: transform .15s; }
+.explore-destination-card > span { flex-shrink: 0; font-size: calc(24px + 1px); transition: transform .15s; }
 .explore-destination-card:hover { border-color: #8aa083; background: #e8eedc; }
 .explore-destination-card:hover > span { transform: translateX(4px); }
 @media (min-width: 1100px) { .explore-destinations[data-count="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

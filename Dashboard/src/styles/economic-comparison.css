@@ -27,7 +27,7 @@
 .comparison-swatch { flex: 0 0 9px; width: 9px; height: 9px; border-radius: 2px; background: var(--scenario-bau); }
 .comparison-swatch.oneMha { background: var(--scenario-one-mha); }
 .comparison-values dd { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; margin: 7px 0 0; font-variant-numeric: tabular-nums; }
-.comparison-values dd > strong { color: var(--forest); font-size: 20px; font-weight: 600; }
+.comparison-values dd > strong { color: var(--forest); font-size: calc(20px + 1px); font-weight: 600; }
 .comparison-values dd > span { color: var(--muted); font-size: var(--text-small); }
 .comparison-no-data { padding: 40px 24px; color: var(--muted); font-size: var(--text-body); }
 @media (max-width: 1000px) { .comparison-filters { gap: 18px 24px; } .comparison-segmented button { padding-inline: 12px; } }
@@ -47,6 +47,6 @@
   .comparison-values { padding: 15px 17px 18px; gap: 10px; }
   .comparison-values > div + div { padding-left: 12px; }
   .comparison-values dt { font-size: var(--text-small); }
-  .comparison-values dd > strong { font-size: clamp(17px, 4.6vw, 20px); }
+  .comparison-values dd > strong { font-size: calc(clamp(17px, 4.6vw, 20px) + 1px); }
 }
 @media (prefers-reduced-motion: reduce) { .comparison-segmented button { transition: none; } }

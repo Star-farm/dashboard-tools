@@ -1,12 +1,12 @@
 .bau3-page { padding-bottom: 64px; }
 .bau3-intro { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; border-bottom: 1px solid var(--line); }
-.bau3-intro > span { color: #40533b; font-size: 20px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.bau3-intro > span { color: #40533b; font-size: calc(20px + 1px); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .bau3-sections { display: grid; gap: 40px; margin-top: 28px; }
 .bau3-section { min-width: 0; }
 .bau3-section > h2 { color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; margin: 0 0 17px; letter-spacing: normal; }
 .bau3-chart { min-width: 0; border: 1px solid #cddbc4; border-radius: 8px; background: #fffefa; }
 .bau3-chart > header { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 19px 22px 16px; border-bottom: 1px solid #e4eadc; }
-.bau3-chart h3 { color: var(--scenario-bau); font-size: 17px; font-weight: 600; line-height: 1.5; margin: 0; }
+.bau3-chart h3 { color: var(--scenario-bau); font-size: calc(17px + 1px); font-weight: 600; line-height: 1.5; margin: 0; }
 .bau3-chart-oneMha h3 { color: var(--scenario-one-mha); }
 .bau3-chart > header p { margin: 0; color: #40533b; font-size: var(--text-small); line-height: 1.5; }
 .bau3-chart > header strong { font-weight: 600; }
@@ -22,7 +22,7 @@
 @media (max-width: 767px) {
   .bau3-page { padding-bottom: 40px; }
   .bau3-intro { display: block; }
-  .bau3-intro > span { display: inline-block; margin-top: 12px; font-size: 17px; }
+  .bau3-intro > span { display: inline-block; margin-top: 12px; font-size: calc(17px + 1px); }
   .bau3-sections { gap: 30px; margin-top: 24px; }
   .bau3-chart > header { padding: 16px; }
   .bau3-chart h3 { font-size: var(--text-body); }

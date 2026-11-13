@@ -1,6 +1,6 @@
 .future-page { padding-bottom: 64px; }
 .future-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; }
-.future-period { display: inline-flex; align-items: center; gap: 13px; color: #40533b; font-size: 22px; white-space: nowrap; letter-spacing: normal; font-variant-numeric: tabular-nums; padding-bottom: 5px; }
+.future-period { display: inline-flex; align-items: center; gap: 13px; color: #40533b; font-size: calc(22px + 1px); white-space: nowrap; letter-spacing: normal; font-variant-numeric: tabular-nums; padding-bottom: 5px; }
 .future-period > span { color: #acb99c; font-size: var(--text-body); }
 .future-controls { padding: 24px 0; border-block: 1px solid #dce2d3; }
 .year-controls { display: flex; align-items: flex-end; gap: 14px; }
@@ -32,7 +32,7 @@
 
 @media (max-width: 800px) {
   .chart-area { padding-inline: 13px; }
-  .future-period { font-size: 18px; gap: 9px; }
+  .future-period { font-size: calc(18px + 1px); gap: 9px; }
   .chart-card-header { padding-inline: 22px; }
   .chart-direction { max-width: 150px; }
 }
@@ -40,7 +40,7 @@
 @media (max-width: 600px) {
   .future-page { padding-bottom: 40px; }
   .future-intro { display: block; }
-  .future-period { margin-top: 18px; padding: 0; font-size: 17px; }
+  .future-period { margin-top: 18px; padding: 0; font-size: calc(17px + 1px); }
   .future-controls { padding-block: 21px; }
   .year-controls { width: 100%; gap: 12px; }
   .year-controls label { flex: 1; font-size: var(--text-small); }

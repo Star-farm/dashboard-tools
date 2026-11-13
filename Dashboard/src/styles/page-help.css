@@ -15,7 +15,7 @@
 .quick-glossary-panel { display: flex; flex-direction: column; max-height: calc(100dvh - 42px); padding: 24px; }
 .quick-glossary header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .quick-glossary h2 { margin: 0; font-size: var(--section-title-size); }
-.quick-glossary header button { flex-shrink: 0; border: 0; background: transparent; color: var(--forest); font-size: 28px; width: 44px; height: 44px; }
+.quick-glossary header button { flex-shrink: 0; border: 0; background: transparent; color: var(--forest); font-size: calc(28px + 1px); width: 44px; height: 44px; }
 .quick-glossary label { margin-bottom: 8px; font-weight: 700; }
 .quick-glossary input { flex-shrink: 0; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #819275; border-radius: 4px; background: white; color: var(--forest); font: inherit; }
 .quick-glossary-categories { display: flex; flex-wrap: wrap; gap: 7px; flex-shrink: 0; min-width: 0; margin: 14px 0 0; padding: 0; border: 0; }

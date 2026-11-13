@@ -79,7 +79,7 @@ const vi = {
   scenarioCtaEyebrow: 'TỪNG KỊCH BẢN, TỪNG CHỈ SỐ',
   scenarioCtaDescription: 'Xem các chỉ số kinh tế, nguồn lực và bền vững của từng kịch bản đến năm 2050.',
   futureCtaDescription: 'Xem diễn biến các chỉ số và nhận xét cho giai đoạn 2027 – 2050.',
-  mapCtaDescription: 'Khám phá năng suất và thu nhập theo năm, mùa vụ tại 992 vùng mô phỏng.',
+  mapCtaDescription: 'Khám phá năng suất và thu nhập theo năm, mùa vụ tại Đồng Tháp.',
   topicsCtaEyebrow: 'KHÁM PHÁ THEO CHỦ ĐỀ',
   economicsCtaDescription: 'Khám phá thu nhập và các lựa chọn so sánh giữa những kịch bản canh tác lúa.',
   economicExploreTitle: 'Khám phá Kinh tế',

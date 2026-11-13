@@ -19,7 +19,7 @@
 .seasonal-chart-type { grid-column: 1 / -1; margin: 8px 0 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; }
 .seasonal-card { min-width: 0; overflow: hidden; border: 1px solid #cddbc4; border-radius: 8px; background: #fffefa; }
 .seasonal-card > header { padding: 20px 20px 15px; border-bottom: 1px solid #e4eadc; }
-.seasonal-card h3 { margin: 0; color: #30472d; font-size: 19px; line-height: 1.5; }
+.seasonal-card h3 { margin: 0; color: #30472d; font-size: calc(19px + 1px); line-height: 1.5; }
 .seasonal-card > header p { margin: 7px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; }
 .seasonal-card .interactive-chart-legend { padding-inline: 18px; }
 .seasonal-plot { width: 100%; height: 280px; min-width: 0; }
@@ -34,7 +34,7 @@
 .seasonal-values dt { display: flex; align-items: center; gap: 6px; font-size: var(--text-small); color: #40533b; }
 .seasonal-values dt i { width: 8px; height: 8px; flex-shrink: 0; border-radius: 2px; }
 .seasonal-values dd { display: grid; gap: 5px; margin: 8px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; overflow-wrap: normal; }
-.seasonal-values dd > strong { font-size: clamp(16px, 1.5vw, 22px); color: #254f3d; font-variant-numeric: tabular-nums; }
+.seasonal-values dd > strong { font-size: calc(clamp(16px, 1.5vw, 22px) + 1px); color: #254f3d; font-variant-numeric: tabular-nums; }
 .seasonal-values dd small { display: inline-block; font-size: var(--text-small); font-weight: 400; }
 .seasonal-missing { color: #7d755e; }
 .seasonal-insight { padding: 18px 20px 22px; color: #485d3e; font-size: var(--text-small); line-height: 1.8; }
@@ -84,7 +84,7 @@
   .seasonal-context { padding: 15px 16px; }
   .seasonal-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; margin-top: 20px; }
   .seasonal-card > header { padding: 18px 16px 14px; }
-  .seasonal-card h3 { font-size: 18px; }
+  .seasonal-card h3 { font-size: calc(18px + 1px); }
   .seasonal-card .interactive-chart-legend { padding-inline: 12px; }
   .seasonal-plot { height: 250px; }
   .seasonal-pie-plot { height: auto; padding-inline: 14px; }
@@ -92,6 +92,6 @@
   .seasonal-values { margin-inline: 12px; padding: 13px 11px; }
   .seasonal-values dl { gap: 10px; }
   .seasonal-values dl > div + div { padding-left: 10px; }
-  .seasonal-values dd > strong { font-size: 18px; }
+  .seasonal-values dd > strong { font-size: calc(18px + 1px); }
   .seasonal-insight { padding: 17px 16px 20px; }
 }

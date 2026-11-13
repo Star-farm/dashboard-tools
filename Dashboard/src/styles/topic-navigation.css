@@ -14,7 +14,7 @@
 .topic-branch-row { display: flex; align-items: center; }
 .topic-branch-row > .topic-branch-link { flex: 1 1 auto; min-width: 0; }
 .topic-branch-row > .topic-menu-button.topic-branch-toggle { flex: 0 0 32px; justify-content: center; width: 32px; padding-inline: 0; }
-.topic-menu-button { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 44px; padding: 11px 16px; border: 0; border-radius: 0; background: transparent; color: #586253; font-size: 13px; line-height: 1.6; text-align: left; }
+.topic-menu-button { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 44px; padding: 11px 16px; border: 0; border-radius: 0; background: transparent; color: #586253; font-size: calc(13px + 1px); line-height: 1.6; text-align: left; }
 .topic-menu-button:hover, .topic-menu-button[aria-expanded="true"] { background: #e9eddf; color: #294b37; }
 .topic-menu-button:focus-visible { position: relative; z-index: 1; outline-offset: -3px; }
 .topic-menu-button:active { transform: none; }
@@ -35,5 +35,5 @@
 
 @media (max-width: 600px) {
   .topic-list { gap: 4px; }
-  .topic-menu-button { min-height: 44px; padding-inline: 14px; font-size: 12px; }
+  .topic-menu-button { min-height: 44px; padding-inline: 14px; font-size: calc(12px + 1px); }
 }

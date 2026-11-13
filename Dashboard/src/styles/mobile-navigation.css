@@ -7,7 +7,7 @@
 .mobile-menu[open] { display: flex; flex-direction: column; animation: mobile-menu-enter .2s ease-out; }
 .mobile-menu::backdrop { background: #071c17b3; }
 .mobile-menu-heading { position: sticky; top: 0; z-index: 1; display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 20px; min-height: clamp(56px, 8svh, 68px); padding-block: 6px; background: var(--forest); outline: none; }
-.mobile-menu-heading .brand-name { font-size: clamp(23px, 3.7svh, 27px); }
+.mobile-menu-heading .brand-name { font-size: calc(clamp(23px, 3.7svh, 27px) + 1px); }
 .mobile-menu-heading .brand { padding-left: 0; }
 .mobile-menu-heading .brand:focus-visible { outline: none; text-decoration: underline; text-underline-offset: 6px; }
 .mobile-menu-close { margin-right: 0; }
@@ -29,11 +29,11 @@
 .mobile-navigation .topic-leaf { color: var(--gold); }
 .mobile-navigation > .topic-list > li > a, .mobile-navigation .topic-trigger, .mobile-navigation .topic-menu-button { font-family: var(--font-family); font-size: var(--mobile-menu-font-size); font-weight: 600; line-height: 1.4; letter-spacing: normal; }
 .mobile-menu-language { display: flex; flex-shrink: 0; align-items: center; gap: 10px; margin-top: auto; border: 0; padding-top: 6px; }
-.mobile-menu-language > p { flex-shrink: 0; margin: 0; color: #b4c7b7; font-size: 10px; letter-spacing: normal; text-transform: uppercase; }
+.mobile-menu-language > p { flex-shrink: 0; margin: 0; color: #b4c7b7; font-size: calc(10px + 1px); letter-spacing: normal; text-transform: uppercase; }
 .mobile-menu-language .language-switcher { flex: 0 1 auto; width: auto; margin: 0; padding: 0; gap: 2px; border: 0; border-radius: 0; background: transparent; }
-.mobile-menu-language .language-switcher button { width: auto; height: auto; flex: 0 1 auto; min-height: 32px; padding: 6px 8px; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: 11.83px; color: var(--gold); transition: color .15s; }
+.mobile-menu-language .language-switcher button { width: auto; height: auto; flex: 0 1 auto; min-height: 32px; padding: 6px 8px; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: calc(11.83px + 1px); color: var(--gold); transition: color .15s; }
 .mobile-menu-language .language-switcher button:hover, .mobile-menu-language .language-switcher button[aria-pressed="true"] { color: var(--gold-bright); background: transparent; }
-.mobile-menu-language .language-divider { font-size: 10px; }
+.mobile-menu-language .language-divider { font-size: calc(10px + 1px); }
 
 @keyframes mobile-menu-enter { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @media (max-width: 767px) {

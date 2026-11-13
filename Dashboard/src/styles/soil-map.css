@@ -1,5 +1,4 @@
 .soil-map-section { margin-top: 0; }
-#soil-map.page-shell { width: min(100% - 96px, 1582px); }
 .soil-map-stage { position: relative; }
 .soil-map-layout.has-chart { display: grid; grid-template-columns: minmax(0, 1fr) minmax(288px, 345px); align-items: start; }
 .soil-chart { box-sizing: border-box; min-height: clamp(380px, 38vw, 540px); display: flex; flex-direction: column; padding: 24px; border-left: 1px solid var(--line); background: #f7f8f1; color: var(--forest); }
@@ -29,11 +28,7 @@
 .soil-map-section .plot-map-popup dt { min-width: 0; overflow-wrap: anywhere; }
 .soil-map-section .plot-map-popup dd { white-space: normal; flex-shrink: 0; max-width: 50%; font-size: var(--text-body); }
 .soil-map-section .plot-map-popup dd small { display: block; font-size: var(--text-small); }
-@media (max-width: 900px) {
-  #soil-map.page-shell { width: calc(100% - 48px); }
-}
 @media (max-width: 767px) {
-  #soil-map.page-shell { width: calc(100% - 20px); }
   .soil-map-layout.has-chart { grid-template-columns: 1fr; }
   .soil-map-stage, .soil-chart { width: 100%; min-width: 0; }
   .soil-chart { height: auto; min-height: 0; padding: 20px; border-left: 0; border-top: 1px solid var(--line); }

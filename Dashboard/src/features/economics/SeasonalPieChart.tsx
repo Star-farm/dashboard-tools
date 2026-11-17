@@ -55,7 +55,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
         </PieChart>
       </ResponsiveContainer>
     </div>
-    {active && <div className="seasonal-pie-tooltip" role="status"><strong><span className="seasonal-pie-tooltip-desktop-name">{active.label}</span><span className="seasonal-pie-tooltip-mobile-name">{name.replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')} · {active.label}</span></strong><span>{active.value === null ? active.status : <>{format(active.value)} <span className="chart-info-unit">{unit}</span></>}{percent(active) ? ` · ${percent(active)}` : ''}</span></div>}
+    {active && <div className="seasonal-pie-tooltip" role="status"><strong><span className="seasonal-pie-tooltip-desktop-name">{active.label}</span><span className="seasonal-pie-tooltip-mobile-name">{name.replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')} · {active.label}</span></strong><span>{active.value === null ? active.status : <>{format(active.value)} <span className="seasonal-pie-tooltip-unit">{unit}</span></>}{percent(active) ? ` · ${percent(active)}` : ''}</span></div>}
 
     {showLegend && <p className="chart-legend-caption seasonal-pie-legend-caption">{vi ? 'Chú giải' : 'Legend'}</p>}
     {showLegend && <div

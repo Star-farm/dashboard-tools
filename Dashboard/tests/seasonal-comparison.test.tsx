@@ -148,15 +148,15 @@ describe('seasonal interface', () => {
     render(<SeasonalComparison language="en" data={sample} config={{ topic: 'economics', kind: 'family', family: 'oneMha', metrics: ['income'] }} />)
     expect(screen.getByLabelText('Year')).toHaveValue('all')
     expect(screen.queryByRole('complementary', { name: 'Analysis scope' })).not.toBeInTheDocument()
-    const plot = screen.getByRole('group', { name: 'Net income per hectare' })
+    const plot = screen.getByRole('group', { name: 'Composition net income per hectare' })
     fireEvent.keyDown(plot, { key: 'ArrowRight' })
-    expect(screen.queryByRole('region', { name: 'Selected values · Net income per hectare' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Selected values · Composition net income per hectare' })).not.toBeInTheDocument()
     expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 50\.00/ })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Year'), { target: { value: '2027' } })
-    fireEvent.keyDown(screen.getByRole('group', { name: 'Net income per hectare' }), { key: 'ArrowRight' })
+    fireEvent.keyDown(screen.getByRole('group', { name: 'Composition net income per hectare' }), { key: 'ArrowRight' })
     expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 0\.00/ })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Year'), { target: { value: 'all' } })
-    fireEvent.keyDown(screen.getByRole('group', { name: 'Net income per hectare' }), { key: 'ArrowRight' })
+    fireEvent.keyDown(screen.getByRole('group', { name: 'Composition net income per hectare' }), { key: 'ArrowRight' })
     expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 50\.00/ })).toBeInTheDocument()
   })
 
@@ -209,11 +209,13 @@ describe('seasonal interface', () => {
 
   it('groups columns before doughnuts and labels every cultivated crop bar', async () => {
     render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['income', 'roi', 'cost', 'margin'] }} />)
-    expect(screen.getAllByRole('article').map((card) => card.querySelector('h3')?.textContent)).toEqual(['Return on investment (ROI)', 'Profit margin', 'Net income per hectare', 'Production cost'])
+    expect(screen.getAllByRole('article').map((card) => card.querySelector('h3')?.textContent)).toEqual(['Return on investment (ROI)', 'Profit margin', 'Composition net income per hectare', 'Composition production cost'])
     expect(screen.getAllByRole('heading', { name: /^(Bar charts|Doughnut charts)$/ }).map((heading) => heading.textContent)).toEqual(['Bar charts', 'Doughnut charts'])
+    const doughnut = screen.getByRole('article', { name: 'Composition net income per hectare' })
+    expect(doughnut.querySelector('.chart-unit-label')).toHaveTextContent('%')
     const roi = screen.getByRole('article', { name: 'Return on investment (ROI)' })
     await waitFor(() => expect(roi.querySelectorAll('.recharts-label-list text')).toHaveLength(5))
-    for (const label of roi.querySelectorAll('.recharts-label-list text')) expect(label).toHaveTextContent('%')
+    for (const label of roi.querySelectorAll('.recharts-label-list text')) expect(label).not.toHaveTextContent('%')
   })
 
   it('renders seasonal tables and mobile cards with linked filters and an explicit unplanted third crop', () => {

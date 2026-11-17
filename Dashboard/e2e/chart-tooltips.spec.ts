@@ -70,7 +70,8 @@ for (const chart of charts) {
         expect(bounds.top).toBeGreaterThanOrEqual(-1)
         expect(bounds.bottom).toBeLessThanOrEqual(901)
 
-        const hiddenUnit = await page.locator('.chart-info-unit').first().evaluate((element) => getComputedStyle(element).display === 'none')
+        const unitSelector = chart.name === 'seasonal pie' ? '.seasonal-pie-tooltip-unit' : '.chart-info-unit'
+        const hiddenUnit = await page.locator(unitSelector).first().evaluate((element) => getComputedStyle(element).display === 'none')
         expect(hiddenUnit).toBe(width <= 767)
         if (chart.name === 'bar') {
           await expect(page.locator('.chart-info dd').first()).toContainText(/\d/)

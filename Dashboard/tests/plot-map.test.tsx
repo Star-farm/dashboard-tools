@@ -60,6 +60,14 @@ describe('interactive plot map', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
+  it.each(['Enter', ' '])('opens a plot popup with %s from the keyboard', (key) => {
+    render(<PlotMap {...props} />)
+    const plot = screen.getByRole('button', { name: 'Area 0' })
+    plot.focus()
+    fireEvent.keyDown(plot, { key })
+    expect(screen.getByRole('dialog', { name: 'Area 0' })).toBeInTheDocument()
+  })
+
   it('distinguishes dragging from clicking a plot and supports pointer capture selection', () => {
     vi.stubGlobal('PointerEvent', MouseEvent)
     const { container } = render(<PlotMap {...props} />)

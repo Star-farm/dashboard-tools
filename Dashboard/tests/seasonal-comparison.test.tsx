@@ -83,6 +83,24 @@ describe('seasonal data for all topics and farming systems', () => {
 })
 
 describe('seasonal interface', () => {
+  it('shows crop details on hover, click and keyboard without a crop selector list', () => {
+    let selected = ''
+    const { container } = render(<SeasonalPieChart language="en" name="BAU" color="#b8322b" unit="kg" format={String} selected="early" onSelect={(period) => { selected = period }} slices={[
+      { period: 'early', label: 'Winter–Spring', value: 10 }, { period: 'middle', label: 'Spring–Summer', value: 30 }, { period: 'late', label: 'Fall–Winter', value: 10 },
+    ]} />)
+    expect(screen.queryByText('Choose crop season')).not.toBeInTheDocument()
+    const sectors = container.querySelectorAll('.recharts-pie-sector')
+    fireEvent.mouseEnter(sectors[1])
+    expect(screen.getByRole('status')).toHaveTextContent('Spring–Summer')
+    expect(screen.getByRole('status')).toHaveTextContent('30 kg')
+    fireEvent.click(container.querySelectorAll('.recharts-pie-sector')[1])
+    expect(selected).toBe('middle')
+    fireEvent.mouseLeave(container.querySelectorAll('.recharts-pie-sector')[1])
+    expect(screen.getByRole('status')).toHaveTextContent('Spring–Summer')
+    fireEvent.keyDown(screen.getByRole('group', { name: /BAU: Winter–Spring/ }), { key: 'ArrowRight' })
+    expect(screen.getByRole('status')).toHaveTextContent('Fall–Winter')
+  })
+
   it('keeps negative and zero crop values intact instead of drawing misleading positive slices', async () => {
     let selected = ''
     const { container } = render(<SeasonalPieChart language="en" name="BAU" color="#b8322b" unit="USD/ha" format={String} selected="early" onSelect={(period) => { selected = period }} slices={[
@@ -90,10 +108,10 @@ describe('seasonal interface', () => {
       { period: 'middle', label: 'Summer–Fall', value: 0 },
       { period: 'late', label: 'Fall–Winter', value: null, status: 'Not grown' },
     ]} />)
-    expect(screen.getByText('Negative values: see the crop values below.')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Winter–Spring: -10 USD/ })).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: /Summer–Fall: 0 USD/ }))
+    expect(screen.getByText(/Negative values cannot be shown as shares/)).toHaveTextContent('Winter–Spring: -10 USD/ha')
+    fireEvent.keyDown(screen.getByRole('group', { name: /BAU: Winter–Spring/ }), { key: 'ArrowRight' })
     expect(selected).toBe('middle')
+    expect(screen.getByRole('status')).toHaveTextContent('Summer–Fall')
     await waitFor(() => expect(container.querySelector('.recharts-sector')).toHaveAttribute('fill', '#dce3d9'))
   })
 
@@ -106,16 +124,17 @@ describe('seasonal interface', () => {
     expect(means.some((row) => row.family === 'oneMha' && row.period === 'late')).toBe(false)
     render(<SeasonalComparison language="en" data={sample} config={{ topic: 'economics', kind: 'family', family: 'oneMha', metrics: ['income'] }} />)
     expect(screen.getByLabelText('Year')).toHaveValue('all')
-    expect(screen.getByRole('complementary', { name: 'Analysis scope' })).toHaveTextContent('All years')
+    expect(screen.queryByRole('complementary', { name: 'Analysis scope' })).not.toBeInTheDocument()
     const plot = screen.getByRole('group', { name: 'Net income per hectare' })
     fireEvent.keyDown(plot, { key: 'ArrowRight' })
-    expect(screen.getByRole('region', { name: 'Selected values · Net income per hectare' })).toHaveTextContent('50.00')
+    expect(screen.queryByRole('region', { name: 'Selected values · Net income per hectare' })).not.toBeInTheDocument()
+    expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 50\.00/ })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Year'), { target: { value: '2027' } })
     fireEvent.keyDown(screen.getByRole('group', { name: 'Net income per hectare' }), { key: 'ArrowRight' })
-    expect(screen.getByRole('region', { name: 'Selected values · Net income per hectare' })).toHaveTextContent('0.00')
+    expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 0\.00/ })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Year'), { target: { value: 'all' } })
     fireEvent.keyDown(screen.getByRole('group', { name: 'Net income per hectare' }), { key: 'ArrowRight' })
-    expect(screen.getByRole('region', { name: 'Selected values · Net income per hectare' })).toHaveTextContent('50.00')
+    expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 50\.00/ })).toBeInTheDocument()
   })
 
   it('shows one averaged row per crop in the all-years information table', () => {
@@ -129,11 +148,27 @@ describe('seasonal interface', () => {
     expect(table).toHaveTextContent('All years')
   })
 
+  it('changes weather and resources independently in seasonal analysis', () => {
+    render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['income'] }} />)
+    fireEvent.change(screen.getByLabelText('Weather'), { target: { value: 'severe' } })
+    expect(screen.getByLabelText('Resource scenario')).toHaveValue('Normal')
+    fireEvent.change(screen.getByLabelText('Resource scenario'), { target: { value: 'Shortage' } })
+    expect(screen.getByLabelText('Weather')).toHaveValue('severe')
+    expect(screen.getByLabelText('Resource scenario')).toHaveValue('Shortage')
+    expect(screen.queryByText(/Only crops grown in both systems/)).not.toBeInTheDocument()
+  })
+
+  it('uses the existing BAU3 reference without a baseline selector on overall comparisons', () => {
+    render(<SeasonalComparison language="vi" data={data} config={{ topic: 'economics', kind: 'comparison', metrics: ['income'] }} />)
+    expect(screen.queryByLabelText('Hệ canh tác đối chiếu')).not.toBeInTheDocument()
+    expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })).toHaveTextContent('BAU 3 vụ')
+  })
+
   it.each([
     { name: 'BAU 3 comparison', page: <Bau3ComparisonPage language="vi" />, cards: 7 },
     { name: 'BAU 2 comparison', page: <Bau2ComparisonPage language="vi" />, cards: 7 },
     { name: 'resource farming', page: <ResourcesPage page="resourceOneMha" language="vi" />, cards: 3 },
-    { name: 'environment comparison', page: <EnvironmentPage page="environmentBaussComparison" language="vi" />, cards: 3 },
+    { name: 'environment comparison', page: <EnvironmentPage page="environmentBaussComparison" language="vi" />, cards: 2 },
   ])('offers a seasonal view for $name with all relevant metrics and no removed helper content', async ({ page, cards }) => {
     render(page)
     fireEvent.click(screen.getByRole('button', { name: 'Theo từng vụ' }))
@@ -157,10 +192,11 @@ describe('seasonal interface', () => {
     expect(insight.querySelector('.scenario-change')).not.toBeNull()
     const plot = within(income).getByRole('group', { name: 'Thu nhập ròng trên hecta' })
     fireEvent.keyDown(plot, { key: 'End' })
-    expect(within(income).getAllByText('Không canh tác').length).toBeGreaterThan(0)
+    expect(income).toHaveTextContent('Không canh tác')
     fireEvent.click(screen.getByRole('button', { name: 'Qua nhiều năm' }))
     fireEvent.keyDown(screen.getByRole('group', { name: 'Thu nhập ròng trên hecta' }), { key: 'ArrowRight' })
-    expect(screen.getByRole('region', { name: 'Số liệu đang chọn · Thu nhập ròng trên hecta' })).toHaveTextContent('Năm 2028')
+    expect(screen.queryByRole('region', { name: 'Số liệu đang chọn · Thu nhập ròng trên hecta' })).not.toBeInTheDocument()
+    expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' }).querySelector('.sr-only[aria-live]')).toHaveTextContent('Năm 2028')
     fireEvent.change(screen.getByLabelText('Mùa vụ'), { target: { value: 'late' } })
     expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })).toHaveTextContent('Không canh tác')
     expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' }).querySelectorAll('.recharts-line-curve')).toHaveLength(1)

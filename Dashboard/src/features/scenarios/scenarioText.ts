@@ -23,10 +23,10 @@ const vi = {
   laborUnit: 'giờ/ha',
   yieldUnit: 'tấn/ha',
   waterUnit: 'mm',
-  fertilizerUnit: 'kg Nito/ha',
+  fertilizerUnit: 'kg nito/ha',
   pesticidesUnit: 'lần',
-  methaneUnit: 'kg Metan/ha',
-  intensityUnit: 'kg Metan/kg gạo',
+  methaneUnit: 'kg metan/ha',
+  intensityUnit: 'kg metan/tấn gạo',
 }
 
 const en: Record<keyof typeof vi, string> = {
@@ -51,14 +51,14 @@ const en: Record<keyof typeof vi, string> = {
   laborUnit: 'hours/ha',
   yieldUnit: 'ton/ha',
   waterUnit: 'mm',
-  fertilizerUnit: 'kg Nitrogen/ha',
+  fertilizerUnit: 'kg nitrogen/ha',
   pesticidesUnit: 'applications',
-  methaneUnit: 'kg Methane/ha',
-  intensityUnit: 'kg Methane/kg rice',
+  methaneUnit: 'kg methane/ha',
+  intensityUnit: 'kg methane/ton rice',
 }
 
 export const scenarioText = { vi, en }
 export const scenarioMetricLabels: Record<Language, Record<ScenarioMetric, string>> = {
-  vi: { income: 'Thu nhập ròng trên hecta', straw: 'Giá trị rơm trên hecta', cost: 'Chi phí sản xuất', labor: 'Thời gian lao động', yield: 'Năng suất trung bình', margin: 'Tỷ suất lợi nhuận', roi: 'Tỷ suất hoàn vốn (ROI)', water: 'Sử dụng nước', fertilizer: 'Sử dụng phân bón gốc Nito', pesticides: 'Sử dụng thuốc trừ sâu', methane: 'Phát thải khí Metan', intensity: 'Cường độ phát thải' },
+  vi: { income: 'Thu nhập ròng trên hecta', straw: 'Giá trị rơm trên hecta', cost: 'Chi phí sản xuất', labor: 'Thời gian lao động', yield: 'Năng suất trung bình', margin: 'Tỷ suất lợi nhuận', roi: 'Tỷ suất hoàn vốn (ROI)', water: 'Sử dụng nước', fertilizer: 'Sử dụng phân bón gốc nito', pesticides: 'Sử dụng thuốc trừ sâu', methane: 'Phát thải khí metan', intensity: 'Cường độ phát thải' },
   en: { income: 'Net income per hectare', straw: 'Straw value per hectare', cost: 'Production cost', labor: 'Labor requirements', yield: 'Average yield', margin: 'Profit margin', roi: 'Return on investment (ROI)', water: 'Water usage', fertilizer: 'Nitrogen-based fertilizer usage', pesticides: 'Pesticide usage', methane: 'Methane emissions', intensity: 'Emission intensity' },
 }

@@ -17,6 +17,8 @@ import { environmentRoutes, isEnvironmentPage } from '../features/environment/en
 import type { EnvironmentContentPage } from '../features/environment/environmentRoutes'
 import { environmentText } from '../features/environment/environmentText'
 import '../styles/motion.css'
+import '../styles/filter-buttons.css'
+import { ChartSelectionProvider } from '../components/ChartSelection'
 
 const FuturePage = lazy(() => import('../features/future/FuturePage'))
 const MapPage = lazy(() => import('../features/map/MapPage'))
@@ -86,7 +88,7 @@ export default function App() {
       <main id="main-content" tabIndex={-1}>
         <div className="page-transition" key={`${page}-${branch ?? 'root'}-${hash.split('?')[1] ?? ''}`}>
           <PageBreadcrumbs page={page} language={language} branch={branch} />
-          <Suspense fallback={page === 'soilMap' ? <SoilPageLoading language={language} /> : <div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense>
+          <ChartSelectionProvider><Suspense fallback={page === 'soilMap' ? <SoilPageLoading language={language} /> : <div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense></ChartSelectionProvider>
         </div>
       </main>
       <SiteFooter language={language} />

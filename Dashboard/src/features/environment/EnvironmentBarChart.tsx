@@ -1,6 +1,6 @@
 import ChartInfo from '../../components/ChartInfo'
 import { CHART_TICK, scenarioColor } from '../../components/chartStyles'
-import { useState } from 'react'
+import { useChartSelection } from '../../components/chartSelectionContext'
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartLegend from '../../components/ChartLegend'
 import type { Language } from '../../i18n'
@@ -10,7 +10,7 @@ import { environmentText } from './environmentText'
 
 export default function EnvironmentBarChart({ data, series, metric, language }: { data: EnvironmentData; series: EnvironmentSeries[]; metric: EnvironmentMetric; language: Language }) {
   const t = environmentText[language], unit = environmentUnit(metric, language)
-  const [selection, setSelection] = useState<'bau' | 'oneMha' | 'all'>('all')
+  const [selection, setSelection] = useChartSelection<'bau' | 'oneMha' | 'all'>('model', 'all')
   const points = (['bau', 'oneMha'] as const).map((group) => ({ group, label: t[group], value: environmentStats(series.filter((item) => (item.family === 'oneMha') === (group === 'oneMha')), metric, data.startYear, data.endYear).mean, color: scenarioColor(group) }))
   const visiblePoints = points.filter((point) => selection === 'all' || point.group === selection)
   return <article className="comparison-chart-card" aria-labelledby={`environment-bar-${metric}-title`}>

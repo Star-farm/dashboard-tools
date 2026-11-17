@@ -2,8 +2,7 @@
 .farming-section-heading { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-bottom: 18px; }
 .farming-section-heading h2, .farming-trends > h2, .farming-summary h2 { margin: 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; letter-spacing: normal; }
 .farming-section-heading p { margin: 0; color: #40533b; font-size: var(--text-small); line-height: 1.6; }
-.farming-kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.farming-kpis .scenario-kpi-change { flex-direction: column; align-items: flex-start; }
+.farming-kpis.scenario-kpis { grid-template-columns: repeat(auto-fit, minmax(0, min(100%, 300px))); }
 .farming-method { margin: 12px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; }
 .farming-summary { margin-top: 26px; }
 .farming-summary h2 { margin-bottom: 12px; }

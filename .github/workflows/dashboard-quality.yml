@@ -1,0 +1,34 @@
+name: Dashboard quality
+
+on:
+  push:
+    paths:
+      - 'Dashboard/**'
+      - '.github/workflows/dashboard-quality.yml'
+  pull_request:
+    paths:
+      - 'Dashboard/**'
+      - '.github/workflows/dashboard-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Dashboard/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:run
+      - run: npm run build

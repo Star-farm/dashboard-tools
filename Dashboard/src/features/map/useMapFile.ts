@@ -1,51 +1,65 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-// Cache parsed JSON
+// Bound retained files. Active components keep their own results after eviction.
+const MAX_CACHED_FILES = 8
 const cache = new Map<string, unknown>()
 
-// Deduplicate in-flight requests
-const pending = new Map<string, Promise<unknown>>()
+type PendingRequest = {
+  controller: AbortController
+  consumers: number
+  promise: Promise<unknown>
+}
 
-async function loadMapFile<T>(
-  filename: string
-): Promise<T> {
+const pending = new Map<string, PendingRequest>()
+
+function acquireMapFile<T>(filename: string): { promise: Promise<T>; release: () => void } {
   if (cache.has(filename)) {
-    return cache.get(filename) as T
+    return { promise: Promise.resolve(cache.get(filename) as T), release: () => {} }
   }
 
-  const existing = pending.get(filename)
-
-  if (existing) {
-    return existing as Promise<T>
-  }
-
-  const request = (async () => {
-    const response = await fetch(
-      `${import.meta.env.BASE_URL}map-data/${filename}`
-    )
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to load ${filename}: ${response.status}`
+  let entry = pending.get(filename)
+  if (!entry) {
+    const controller = new AbortController()
+    const promise = (async () => {
+      const response = await fetch(
+        `${import.meta.env.BASE_URL}map-data/${filename}`,
+        { signal: controller.signal }
       )
-    }
-
-    const data = (await response.json()) as T
-
-    cache.set(filename, data)
-
-    return data
-  })()
-
-  pending.set(filename, request)
-
-  try {
-    return await request
-  } finally {
-    if (pending.get(filename) === request) {
-      pending.delete(filename)
-    }
+      if (!response.ok) throw new Error(`Failed to load ${filename}: ${response.status}`)
+      const data = await response.json() as T
+      // A fetch implementation can finish parsing after its request was aborted.
+      if (controller.signal.aborted) throw new DOMException('Request aborted', 'AbortError')
+      cache.delete(filename)
+      cache.set(filename, data)
+      while (cache.size > MAX_CACHED_FILES) cache.delete(cache.keys().next().value!)
+      return data
+    })()
+    entry = { controller, consumers: 0, promise }
+    pending.set(filename, entry)
+    const request = entry
+    void promise.then(
+      () => { if (pending.get(filename) === request) pending.delete(filename) },
+      () => { if (pending.get(filename) === request) pending.delete(filename) },
+    )
+  }
+  const request = entry
+  request.consumers++
+  let released = false
+  return {
+    promise: request.promise as Promise<T>,
+    release: () => {
+      if (released) return
+      released = true
+      request.consumers--
+      // Allow StrictMode's immediate effect re-subscription to share the request.
+      queueMicrotask(() => {
+        if (request.consumers === 0 && pending.get(filename) === request) {
+          pending.delete(filename)
+          request.controller.abort()
+        }
+      })
+    },
   }
 }
 
@@ -62,7 +76,9 @@ export function useMapFiles<T>(
 
   const [result, setResult] = useState<
     MapFilesResult<T>
-  >({ key: '' })
+  >(() => filenames.length && filenames.every((filename) => cache.has(filename))
+    ? { key: `${JSON.stringify(filenames)}:0`, data: filenames.map((filename) => cache.get(filename) as T) }
+    : { key: '' })
 
   const fileKey = JSON.stringify(filenames)
 
@@ -94,19 +110,11 @@ export function useMapFiles<T>(
   useEffect(() => {
     if (!files.length) return
 
-    if (
-      files.every((filename) => cache.has(filename))
-    ) {
-      return
-    }
-
     let cancelled = false
 
-    Promise.all(
-      files.map((filename) =>
-        loadMapFile<T>(filename)
-      )
-    )
+    const requests = files.map((filename) => acquireMapFile<T>(filename))
+    const release = () => requests.forEach((request) => request.release())
+    Promise.all(requests.map((request) => request.promise))
       .then((loaded) => {
         if (cancelled) return
 
@@ -126,9 +134,11 @@ export function useMapFiles<T>(
           error: true,
         })
       })
+      .finally(release)
 
     return () => {
       cancelled = true
+      release()
     }
   }, [files, key, attempt])
 

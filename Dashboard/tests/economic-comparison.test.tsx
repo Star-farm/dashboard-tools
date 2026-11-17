@@ -30,7 +30,7 @@ describe('economic comparison aggregation', () => {
   it('summarizes all five indicators, reports trade-offs and handles a zero baseline or missing values', () => {
     const cohort = selectComparisonCohort(data, 'all', 'all')!
     const summary = comparisonSummary(cohort, 'vi', 2027, 2050)
-    for (const value of ['25.961.407 VNĐ/ha', '13.814.629 VNĐ/ha', '87,9%', 'chi phí sản xuất cao hơn', 'giá trị rơm thấp hơn', 'năng suất thấp hơn', 'cường độ lao động cao hơn', 'nên ưu tiên 1Mha', 'chuẩn bị vốn sản xuất', 'bố trí nhân công', 'cải thiện năng suất']) expect(summary).toContain(value)
+    for (const value of ['25.961.407 VNĐ/ha', '13.814.629 VNĐ/ha', '87,9%', 'chi phí sản xuất cao hơn', 'giá trị rơm thấp hơn', 'năng suất thấp hơn', 'cường độ lao động cao hơn', 'Kết quả mô phỏng', 'chuẩn bị vốn sản xuất', 'bố trí nhân công', 'cải thiện năng suất']) expect(summary).toContain(value)
     const changed = structuredClone(cohort)
     changed.groups.oneMha.USD.income = changed.groups.bau.USD.income! / 2
     expect(comparisonSummary(changed, 'en', 2027, 2050)).toContain('no net income advantage')

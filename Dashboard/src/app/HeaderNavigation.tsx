@@ -232,7 +232,6 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
       <ul className="topic-list" onScroll={mobile ? undefined : close}>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#home" aria-current={page === 'home' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navHome}</a></li>
         <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#future" aria-current={page === 'future' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navFuture}</a></li>
-        <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#scenario-details" aria-current={page === 'scenario' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navScenarioDetails}</a></li>
         <li className="topic-item" onMouseEnter={mobile ? undefined : () => open('map')}>
           <div className="topic-control" data-current={mapCurrent} onKeyDown={(event) => {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -262,6 +261,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
             {mobile && openTopic === topic.id && renderPanel(topic)}
           </li>
         ))}
+        <li className="header-page-item" onMouseEnter={mobile ? undefined : close}><a href="#scenario-details" aria-current={page === 'scenario' ? 'page' : undefined} onFocus={close} onClick={navigate}>{t.navScenarioDetails}</a></li>
       </ul>
       {!mobile && activeTopic && renderPanel(activeTopic)}
       {!mobile && openTopic === 'map' && renderMapPanel()}

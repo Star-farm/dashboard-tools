@@ -94,7 +94,7 @@ Use the URL printed by Vite (normally port 5173). To reserve a specific local ad
 npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-`npm run dev` and `npm run build` automatically execute **four** generators in this order: `data:future`, `data:scenarios`, `data:map-aggregates`, `data:soil`. They rewrite generated JSON and can add content-hashed map files. Inspect the working tree after running them, especially when changing source CSVs. Keep generated outputs with the source changes that produced them. A running Vite session does not rerun these lifecycle scripts for later CSV edits: rerun the relevant generator or restart `npm run dev`.
+`npm run dev` and `npm run build` use the checked-in generated data and do not regenerate it. After changing source data or a generator, run the relevant `data:*` command explicitly. `npm run data:all` runs all four generators in order: future, scenarios, map aggregates, soil. These commands rewrite generated JSON and can add content-hashed map files. Inspect and keep the resulting outputs with the source changes that produced them.
 
 | Command (from `Dashboard`) | Behavior |
 | --- | --- |
@@ -102,12 +102,15 @@ npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 | `npm run data:scenarios` | Generate scenario, economics, resource, environment and seasonal JSON from those CSVs. |
 | `npm run data:map-aggregates` | Read `public/map-data/manifest.json` and its scenario files; write hashed aggregate files and update the manifest. |
 | `npm run data:soil` | Split existing `public/map-data/soil-overlay.json` into hashed layer files and regenerate `src/data/soil-manifest.json`; does not recalculate GIS intersections. |
-| `npm run dev` | Run all four generators, then start Vite with development reload support. |
+| `npm run data:all` | Run all four data generators in dependency order. |
+| `npm run dev` | Start Vite using the existing generated data. |
 | `npm test` | Start Vitest in its default interactive/watch mode. |
 | `npm test -- --run` | Run tests once. |
 | `npm run test:coverage` | Run tests once with V8 coverage. |
 | `npm run lint` | Check TypeScript/TSX with ESLint. |
-| `npm run build` | Run all four generators, check TypeScript with `tsc -b`, then create `dist/` with Vite. |
+| `npm run typecheck` | Check TypeScript project references with `tsc -b`. |
+| `npm run test:run` | Run the test suite once with two workers. |
+| `npm run build` | Check TypeScript, then create `dist/` with Vite without regenerating data. |
 | `npm run preview` | Serve the existing `dist/`; does not build or regenerate data. |
 | `npm run images:optimize` | Regenerate hero WebP variants from `src/assets/mekong-landscape.jpg` using Sharp. |
 | `npm run fonts:sync` | Fetch and update bundled Lora fonts, stylesheet and licenses; this optional command needs internet. |
@@ -192,13 +195,16 @@ In About the future, income and labor compare business as usual with 1Mha; metha
 
 Scenario details defaults to one scenario and lets you choose among grouped farming systems. In annual view, KPI values are averages over 2027–2050 compared with averages over 2016–2022. They are not all individual 2050 observations. Favorable and unfavorable colors depend on the indicator: higher income is favorable, while lower cost is favorable.
 
+
 The three topics share the same exploration hierarchy. Information dashboards combine five filters with AND: scenario group, season type, weather, resource condition, and AWD adoption. Historical/current conditions appear first when they match. Desktop tables keep descriptions left-aligned and values right-aligned; narrow layouts use labeled cards. Empty states explain when no scenario matches and provide a reset action.
 
 Comparison dashboards compare aggregate BAU and 1Mha results over 2027–2050 under selected weather and resource conditions. Annual BAU-versus-1Mha pages place both models in one chart per indicator. Use the model buttons for BAU, 1Mha, or both and the condition legend to isolate conditions. Click or tap a chart year to update its readout; with the chart focused, use Left/Right or Home/End to change the year. These annual comparison charts do not use sliders. Identical results may overlap, so a line that is not separately visible does not necessarily mean data is missing.
 
+Chart selections are shared across charts on the same page when they represent the same model or scenario condition. Weather and resource controls can be selected independently; the condition key identifies the visible combinations. Future income and labor share BAU/1Mha selection; methane's AWD selection stays separate because it represents different groups. Seasonal model selections are shared within the seasonal view. These controls change chart visibility; explanatory summaries that aggregate the full dataset do not change with a chart selection.
+
 Individual farming-system pages show KPIs and charts for three-season BAU, two-season BAU, sustainable BAU, or 1Mha. Their end-to-start KPI changes compare 2050 with 2027. This differs from the historical baseline on Scenario details.
 
-Many topic and scenario pages also offer **Annual averages** and **By crop season** under Analysis scope. Seasonal view has **Across crop seasons** and **Across years** modes. Across crop seasons, choose one year or All years; across years, choose a crop period. Depending on the page, choose a weather/resource condition or BAU baseline. Financial ratios use bar charts, other within-year indicators use doughnut charts, and trends use line charts. The UI distinguishes a crop period that is not grown from an observation with no data. Use the readout and explanation alongside the visualization rather than interpreting slice size alone.
+Many topic and scenario pages also offer **Annual averages** and **By crop season** under Analysis scope. Seasonal view has **Across crop seasons** and **Across years** modes. Across crop seasons, choose one year or All years; across years, choose a crop period. Depending on the page, choose weather and resource conditions. The overall comparison's seasonal view uses BAU3S as its reference; a specific BAU comparison page uses its named system. Financial ratios use bar charts, other within-year indicators use doughnut charts, and trends use line charts. The UI distinguishes a crop period that is not grown from an observation with no data. Use the readout and explanation alongside the visualization rather than interpreting slice size alone.
 
 Map-to-dashboard links carry a validated context in the hash query: `from=map`, year, harvest, scenario codes, and scenario facets. `mapNavigation.ts` creates and parses this context, `useDashboardFilters.ts` initializes dashboard filters, and `AnalysisView.tsx` offers a return link. A selected map harvest initially opens seasonal analysis. Editing dashboard filters clears the table's inherited scenario scope. Keep this context when changing navigation behavior.
 
@@ -255,11 +261,11 @@ The two model CSVs describe corresponding observations in different languages an
 | Same command | `src/data/resources.json`, `environment.json`, `resources-overview.json`, `environment-overview.json` |
 | Same command | `src/data/economics-seasonal.json`, `resources-seasonal.json`, `environment-seasonal.json`, `all-seasonal.json` |
 | `npm run data:map-aggregates` | Content-hashed `public/map-data/aggregate-*.json` files and updated `public/map-data/manifest.json` |
-| `npm run data:soil` | Five content-hashed `public/map-data/soil-layer-*.json` files and `src/data/soil-manifest.json` |
+| `npm run data:soil` | Five content-hashed `public/map-data/soil-layer-*.json` files, the Land Use WebP, and `src/data/soil-manifest.json` |
 
 The resource and environment `*-overview.json` files include period metadata and table rows, omitting annual series to reduce initial downloads. Seasonal JSON uses compact indexed rows and numeric arrays. `packSeasonalData` and `unpackSeasonalData` in `src/features/economics/seasonalData.ts` define that format and restore typed records without rounding or dropping zeroes. Scenario details consumes `all-seasonal.json`; each topic loads its narrower seasonal dataset when needed.
 
-`predev` and `prebuild` execute all four npm data commands in this order: future, scenarios, map aggregates, soil. They do not reconstruct map geometry, raw map scenarios, or the complete soil overlay from external GIS. Those assets are already included in the project. A normal website build needs Node dependencies, not Python or the external model/GIS directories.
+Run `npm run data:all` explicitly to execute the four npm data commands in dependency order. They do not reconstruct map geometry, raw map scenarios, or the complete soil overlay from external GIS. Those assets are already included in the project. A normal website build needs Node dependencies, not Python or the external model/GIS directories.
 
 Do not hand-edit generated JSON to change a number: the next regeneration overwrites it. Change the source CSV or relevant aggregation code, then regenerate and review the results.
 
@@ -295,7 +301,7 @@ Supported category values are `Kinh tế`, `Khí hậu`, `Phát thải`, `Canh t
 3. Update `catalog.json` manually if row counts, column counts, periods, scenario counts, filenames, or size metadata change.
 4. Run `npm run data:future` and `npm run data:scenarios` from `Dashboard/`.
 5. If relevant source pairs changed, refresh map currency using `python scripts/build-map-data.py --currency-only`.
-6. Run the project's checks and inspect representative scenarios, baseline comparisons, both currencies, seasonal values, zero/negative cases, and missing-data behavior. A subsequent `npm run build` regenerates all four npm data pipelines again.
+6. Run the project's checks and inspect representative scenarios, baseline comparisons, both currencies, seasonal values, zero/negative cases, and missing-data behavior. Run the relevant data generators explicitly before building.
 7. Publish the complete new build. Editing a local CSV does not update the deployed site.
 
 ## 6. Calculations, units, and interpretation
@@ -317,6 +323,8 @@ Blank numeric cells represent missing data. Keep valid zero and negative values.
 
 A 2027–2050 mean is not an individual 2050 result. Do not replace these page-specific references with a 2050-versus-2022 comparison from a different application.
 
+Future chart commentary averages the displayed annual means only for years where both compared groups have a finite value. The reported number of shared years makes missing coverage visible; when no year is shared the comparison is unavailable. This does not establish that the groups have identical underlying scenario or run populations.
+
 ROI is net income divided by production cost, multiplied by 100. Scenario details calculates each record's ROI for positive costs and then averages those ratios. The economic information dashboard and seasonal aggregation instead divide mean income by positive mean cost. Both behaviors exist intentionally in the current implementation; they can produce different numbers. Profit margin uses its source field and is distinct from ROI.
 
 Annual scenario details calculates relative change as `(scenario - baseline) / abs(baseline) * 100` when the baseline is nonzero and present. Zero or absent baselines produce an unavailable result. Seasonal changes use relative percentages only for positive baselines, and otherwise show an absolute difference. Seasonal ROI, profit-margin, and AWD changes use percentage points; single-system annual profit-margin changes and AWD adoption changes also use percentage points. For example, 40% to 30% is a decline of 10 percentage points, equivalent to a relative decline of 25%. English labels use `pp`; Vietnamese labels use `điểm %`.
@@ -336,13 +344,13 @@ Metric direction determines improvement colors: higher income, straw value, yiel
 | Methane | kg methane/ha |
 | ROI, margin, AWD adoption | Percent; changes may use percentage points |
 | Annual Environment emission intensity | kg methane/ton rice |
-| Scenario details and seasonal emission intensity | kg methane/kg rice |
+| Scenario details and seasonal emission intensity | kg methane/ton rice |
 
 Source emission intensity is per kilogram of rice. `aggregateEnvironment.ts` multiplies it by 1,000 for annual Environment output. Seasonal data reuses the scenario metrics and scenario unit labels, retaining the source per-kilogram unit. Do not apply the Environment multiplier again in components, or assume that seasonal Environment output has the annual unit. Water depth is not m³/ha without conversion. Pesticide applications are not pesticide mass.
 
 Dashboard does not fetch daily exchange rates. Most Dashboard pages select VND data from the Vietnamese CSV or USD data from the Master CSV according to language. Map income is the exception: it originates in USD/ha and uses the verified conversion in `public/map-data/currency.json` for Vietnamese display. The current value is 26,322 VND/USD, derived from 19,404 matched production-cost pairs using id/date/scenario code. The source `Currency Ratio` column says 25,874 and does not match the actual paired monetary values; it is not the map conversion source. Two source VND income values depart from the common ratio; Dashboard keeps those source values, while map conversion uses the verified production-cost ratio consistently.
 
-`displayMapCurrency` converts plot incomes before subsequent display aggregation and also converts income thresholds, preserving zero, negative values, missing values, and color classification. VND display has no decimal places; map CSV exports use `income_vnd_ha` or `income_usd_ha`. This is a model-data conversion, not a current market exchange rate. Adding a live exchange rate would require a separate feature, explicit rate dates, caching/fallback decisions, and consistent treatment of historical and projected values.
+`displayMapCurrency` converts plot incomes before subsequent display aggregation and also converts income thresholds, preserving zero, negative values, missing values, and color classification. VND display has no decimal places. This is a model-data conversion, not a current market exchange rate. Adding a live exchange rate would require a separate feature, explicit rate dates, caching/fallback decisions, and consistent treatment of historical and projected values.
 
 ## 7. Seasonal analysis
 
@@ -360,7 +368,7 @@ BAU two-season and 1Mha cultivate only early and middle crops. BAU three-season 
 
 Each seasonal row averages nonblank observations within system, condition, year, and crop. ROI uses mean income / positive mean cost × 100. AWD adoption is the percentage of records marked with AWD. All years averages the available yearly means with equal year weights, keeping crop/scenario/condition separate. Missing observations are excluded; zero and negative values remain. The information table and mobile cards then show one entry per crop rather than every year.
 
-Across crop seasons defaults to All years. ROI and profit margin use bar charts; other metrics use one doughnut per visible system, with a consistent color for each crop. Slices and crop labels support selection; actual values and units remain available. Missing and uncultivated crops have no slices. A system with negative crop values shows a neutral ring and retains the signed label values; zero values remain visible as data without positive slices. Across years uses line charts for the selected crop, with missing-data gaps.
+Across crop seasons defaults to All years. ROI and profit margin use bar charts; other metrics use one doughnut per visible system, with a consistent color for each crop. Hovering a slice reveals its crop, value and share; clicking or tapping keeps those details visible. The focused chart also supports arrow keys, Home and End. Missing and uncultivated crops have no slices and are identified in the accompanying text. A system with negative crop values shows a neutral ring and signed values; zero values remain visible without positive slices. Across years uses line charts for the selected crop, with missing-data gaps.
 
 The current seasonal insight explicitly distinguishes two summaries. For income, cost, straw, labor, water, fertilizer, pesticide applications, and methane, `annualSeasonalValue` adds the cultivated crop means and labels the result Annual total. For yield, ROI, margin, emission intensity, and AWD, it calculates Mean across crops within the year. Any missing cultivated crop value makes that summary unavailable. Seasonal composition requires complete, nonnegative crop values with a positive sum. For rates and other nonadditive metrics, normalized doughnut shares are not contributions to an annual total. These seasonal crop summaries are different from the annual CSV aggregators' observation means and must not silently replace them.
 
@@ -380,7 +388,7 @@ Use the same cascading scenario dimensions as the Dashboard. Only dimensions pre
 
 Scroll to zoom around the pointer, drag to pan, use plus/minus to zoom, and Fit map to reset. Arrow keys, plus/minus, and Home support keyboard map movement. Clicking a plot opens area, yield, income, and selected-period details. Values update with filters and time. Dragging does not select a plot. Close the popup using its close control, Escape, or an outside click.
 
-Play advances one year per second through 2050 while retaining the harvest. Starting again at the endpoint returns to 2027. Changing filters or the year stops playback. Charts and CSV exports use the same selected scenario population, year, harvest, and currency. CSV headers explicitly identify per-hectare units and include the scenario codes actually combined.
+Play advances one year per second through 2050 while retaining the harvest. Starting again at the endpoint returns to 2027. Changing filters or the year stops playback. Charts use the selected scenario population, year, harvest, and currency.
 
 Five quantile color classes use values across all years, harvests, and plots of the matched scenario population. Thresholds remain fixed when changing only year or harvest, allowing temporal comparison; changing scenario filters can change the thresholds. Currency conversion scales both incomes and thresholds, retaining classification. Map-wide averages give each plot equal weight, not weights proportional to area.
 
@@ -416,7 +424,7 @@ For only the Dashboard-derived currency conversion:
 python scripts/build-map-data.py --currency-only
 ```
 
-The Node aggregate builder precomputes all scenarios, all BAU, each individual farming system, and the three-harvest subset. Other filter combinations load the constituent scenario JSON files. Aggregates retain metric-specific counts and thresholds from original scenario means. The browser caches successful loads in memory for the session. Hashed filenames permit long caching; keep old hashed files while a deployed/cached manifest can reference them.
+The Node aggregate builder precomputes all scenarios, all BAU, each individual farming system, and the three-harvest subset. Other filter combinations load the constituent scenario JSON files. Aggregates retain metric-specific counts and thresholds from original scenario means. The browser keeps a bounded cache of successful map file loads. Hashed filenames permit long caching; keep old hashed files while a deployed/cached manifest can reference them.
 
 ## 9. Soil and flood map
 
@@ -445,9 +453,9 @@ python -m unittest discover -s scripts -p test_soil_overlay.py
 
 The Python script requires Shapely (currently pinned to 2.2.0 in `scripts/soil-requirements.txt`), reads its sources without changing them, and prepares `public/map-data/soil-overlay.json`. Source and plot geometry must share EPSG:32648. Repeat it after changing GIS or `geometry.json`; running only `data:soil` does not recalculate intersections.
 
-`data:soil` splits that prepared overlay into five hashed layer files and writes the imported manifest. Splitting does not simplify coordinates further or change category/area data. The browser downloads only the active layer and caches it for the session; it does not normally fetch the full overlay. Keep referenced hashed layer files in deployments.
+`data:soil` writes five hashed layer files and the imported manifest. Four layers retain their vector paths. Land Use retains the original categories and per-plot area statistics but omits its detailed paths from the browser JSON; the generator renders those paths to a 3072 × 1625 WebP instead. This changes display resolution, not the source geometry or area calculations. The browser loads the active layer and uses a bounded in-memory file cache; it does not normally fetch the full overlay. Keep referenced hashed layer and raster files in deployments.
 
-The route shell, layer controls, legends, definitions, and fixed-size map frame render before geometry and layer downloads finish. Loading and error states keep the frame size stable to avoid shifting the footer. Errors offer retry. Layer changes preserve viewport and plot selection, while old layer interactions are hidden during loading. Runtime checks validate CRS, geometry identity, plot IDs, and property shapes before rendering. Soil tests verify current geometry hashes, conservation of areas, all 992 plot IDs across all five layers, and equivalence between split assets and the full source.
+The route shell, layer controls, legends, definitions, and fixed-size map frame render before geometry and layer downloads finish. Loading and error states keep the frame size stable to avoid shifting the footer. Errors offer retry. Layer changes preserve viewport and plot selection, while old layer interactions are hidden during loading. Runtime checks validate CRS, geometry identity, plot IDs, and property shapes before rendering. Soil tests verify geometry hashes, conservation of areas, plot IDs, and that browser statistics agree with the full source.
 
 ### Focused verification for data and map changes
 
@@ -461,7 +469,7 @@ npm run lint
 npm run build
 ```
 
-Map aggregate tests compare original versus precomputed values across years, crops, currencies, and thresholds. Soil checks protect overlay identity and area preservation. Seasonal composition checks protect the difference between additive totals and nonadditive crop means. In a browser, also verify both languages, scenario cascades, unavailable crops, negative/zero incomes, map currency switching, play/pause behavior, map-to-analysis links and return context, downloads, layer retry, and a narrow viewport.
+Map aggregate tests compare original versus precomputed values across years, crops, currencies, and thresholds. Soil checks protect overlay identity and area preservation. Seasonal composition checks protect the difference between additive totals and nonadditive crop means. In a browser, also verify both languages, scenario cascades, unavailable crops, negative/zero incomes, map currency switching, play/pause behavior, map-to-analysis links and return context, layer retry, and a narrow viewport.
 
 ## 10. Making changes
 
@@ -589,13 +597,14 @@ ISPAE, VAAS, and Global Gateway assets were reused from the local Dashboard_v2.0
 Before releasing functional changes:
 
 ```powershell
-npm test -- --run
+npm run test:run
 npm run lint
+npm run typecheck
 npm run build
 npm run preview -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-Vitest is configured inside `vite.config.ts`, with jsdom and `tests/setup.ts`. Shared setup clears local storage, restores mocks, resets the URL to `#glossary` and mocks the browser language as Vietnamese before each test. Override those defaults in a test when testing another language or route. Tests cover data aggregation, currency and units, navigation and breadcrumbs, mobile menus, topic pages, seasonal charts, plot maps and soil layers. TypeScript build checks include both `src/` and `tests/`. There is no repository `.github` workflow directory in the inspected checkout; do not assume these checks run automatically in CI.
+Vitest is configured inside `vite.config.ts`, with jsdom and `tests/setup.ts`. Shared setup clears local storage, restores mocks, resets the URL to `#glossary` and mocks the browser language as Vietnamese before each test. Override those defaults in a test when testing another language or route. Tests cover data aggregation, currency and units, navigation and breadcrumbs, mobile menus, topic pages, seasonal charts, plot maps and soil layers. TypeScript build checks include both `src/` and `tests/`. The `Dashboard quality` GitHub Actions workflow runs lint, typecheck, tests, and build for Dashboard changes; check the actual workflow result before claiming CI passed.
 
 Examples of focused checks:
 
@@ -605,7 +614,9 @@ npm test -- --run tests/map-data.test.ts tests/map-aggregates.test.ts tests/map-
 npm test -- --run tests/soil-data.test.ts tests/soil-map.test.tsx
 ```
 
-Manually check both languages, glossary accent-insensitive search, each affected overview/exploration/comparison route, direct hash URLs, reload and browser Back/Forward, year/filter controls and units, mobile menus, footer logos and back-to-top. For maps, also check pan/zoom, selection, timeline/season, loading/error/retry, CSV export and soil layer switching. Use the build preview to check production policy and loading behavior. Automated jsdom tests do not replace visual verification.
+Manually check both languages, glossary accent-insensitive search, each affected overview/exploration/comparison route, direct hash URLs, reload and browser Back/Forward, year/filter controls and units, mobile menus, footer logos and back-to-top. For maps, also check pan/zoom, selection, timeline/season, loading/error/retry and soil layer switching. Use the build preview to check production policy and loading behavior. Automated jsdom tests do not replace visual verification.
+
+For the Land Use map, follow the [device verification procedure](docs/map-verification.md) and record the browser, network requests, zoom fidelity, and memory or reload evidence.
 
 
 When testing lazy pages or charts, wait for their visible content before asserting controls or SVG details. For statistical changes, cover USD and VND, historical conditions, missing observations, zero baselines, and negative values. Check annual Environment and Scenario details or seasonal views independently when changing emission intensity because their denominator units differ. Keep keyboard focus visible and verify reduced-motion behavior.
@@ -645,7 +656,7 @@ Deploy the updated manifest and new hashed map files together; keep previously r
 | --- | --- |
 | Node cannot import `.ts` modules | Use Node.js 24 and reinstall with `npm ci`. |
 | Missing column, invalid CSV or source mismatch | Compare source headers/records with the relevant aggregator and align both currency sources; fix source/schema rather than patching generated JSON. |
-| Missing map/soil input during `npm run dev` or build | Ensure the committed `public/map-data/manifest.json`, referenced scenario JSONs and `soil-overlay.json` are present. The npm generators require these prepared inputs. |
+| Missing map/soil data during development or build | Ensure the committed `public/map-data/manifest.json` and referenced assets are present. Data regeneration also requires `soil-overlay.json` and the other prepared inputs. |
 | Soil layer fails validation after geometry update | Rebuild the soil overlay against the new `geometry.json`, then run `npm run data:soil` and deploy the related files together. |
 | Definition or CSV changes do not appear | Edit the intended source (`indicators.csv` for glossary); rerun generators/restart dev, rebuild and deploy. |
 | Preview looks outdated | Rebuild first, verify URL/port and reload with cache bypass. |

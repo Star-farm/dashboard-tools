@@ -101,7 +101,7 @@ describe('mobile header menu', () => {
     fireEvent.click(trigger)
     const economics = screen.getByRole('button', { name: 'Kinh tế' })
     fireEvent.click(economics)
-    const comparison = screen.getByRole('button', { name: 'So sánh' })
+    const comparison = screen.getByRole('button', { name: 'So sánh chi tiết' })
     fireEvent.click(comparison)
     expect(screen.getByRole('link', { name: 'BAU3S vs 1Mha' })).toBeInTheDocument()
     fireEvent.click(comparison)

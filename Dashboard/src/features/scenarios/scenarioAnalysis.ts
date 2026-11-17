@@ -42,7 +42,7 @@ export function scenarioSummaryParts(values: ScenarioSnapshot['values'], baselin
     conclusion = language === 'vi' ? 'Nhìn chung, cần xem đồng thời các chỉ số kinh tế, nguồn lực và phát thải để lựa chọn kịch bản phù hợp.' : 'Overall, economic, resource and emissions indicators should be considered together when selecting a suitable scenario.'
   }
   const parts = language === 'vi'
-    ? ['Trong giai đoạn 2027–2050, thu nhập ròng ', describe('income'), ' và năng suất trung bình ', describe('yield'), ' so với giai đoạn 2016–2022. Chi phí sản xuất ', describe('cost'), ', tỷ suất lợi nhuận ', describe('margin'), ' và ROI ', describe('roi'), '. Giá trị rơm ', describe('straw'), ', lượng nước sử dụng ', describe('water'), ' và phát thải Metan ', describe('methane'), `. ${conclusion}`]
+    ? ['Trong giai đoạn 2027–2050, thu nhập ròng ', describe('income'), ' và năng suất trung bình ', describe('yield'), ' so với giai đoạn 2016–2022. Chi phí sản xuất ', describe('cost'), ', tỷ suất lợi nhuận ', describe('margin'), ' và ROI ', describe('roi'), '. Giá trị rơm ', describe('straw'), ', lượng nước sử dụng ', describe('water'), ' và phát thải metan ', describe('methane'), `. ${conclusion}`]
     : ['For 2027–2050, net income ', describe('income'), ' and average yield ', describe('yield'), ' relative to the 2016–2022 baseline. Production cost ', describe('cost'), ', profit margin ', describe('margin'), ', and ROI ', describe('roi'), '. Straw value ', describe('straw'), ', water usage ', describe('water'), ', and methane emissions ', describe('methane'), `. ${conclusion}`]
   return parts.flatMap((part) => typeof part === 'string' ? [{ text: part }] : part)
 }

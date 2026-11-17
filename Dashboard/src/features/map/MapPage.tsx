@@ -12,7 +12,14 @@ import type { EconomicFilters, EconomicRow } from '../economics/economicsData'
 import economics from '../../data/economics-overview.json'
 import resources from '../../data/resources-overview.json'
 import environment from '../../data/environment-overview.json'
-import { colorBreaks, csvForPlots, displayMapCurrency, mapColors, mean, plotTrend, selectPlotValues } from './mapData'
+import {
+  displayMapCurrency,
+  mapColors,
+  incomeMapColors,
+  mean,
+  plotTrend,
+  selectPlotValues,
+} from './mapData'
 import { mapText } from './mapText'
 import type { MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario, PlotMetric } from './mapTypes'
 import PlotMap from './PlotMap'
@@ -75,7 +82,36 @@ export default function MapPage({ language }: { language: Language }) {
   const displayData = useMemo(() => results.data && conversion.data ? displayMapCurrency(results.data, currencyCode, conversion.data.vndPerUsd) : undefined, [results.data, conversion.data, currencyCode])
   const yieldValues = useMemo(() => displayData ? selectPlotValues(displayData.records, year, season, 'yield') : [], [displayData, year, season])
   const incomeValues = useMemo(() => displayData ? selectPlotValues(displayData.records, year, season, 'income') : [], [displayData, year, season])
-  const breaks = useMemo(() => displayData ? colorBreaks(displayData, metric) : [], [displayData, metric])
+  const breaks = useMemo(() => {
+    if (!displayData) return []
+
+    // Yield: 4–5, 5–6, 6–7, 7–8, 8–9 tons/ha
+    if (metric === 'yield') {
+      return [4, 5, 6, 7, 8, 9]
+    }
+
+    // Net income: fixed intervals in VND/ha
+    const incomeBreaksVND = [
+      -10_000_000,
+      0,
+      10_000_000,
+      20_000_000,
+      30_000_000,
+      50_000_000,
+    ]
+
+    if (currencyCode === 'VND') {
+      return incomeBreaksVND
+    }
+
+    // Convert thresholds to USD
+    const rate = conversion.data?.vndPerUsd
+
+    if (!rate || rate <= 0) return []
+
+    return incomeBreaksVND.map(value => value / rate)
+  }, [displayData, metric, currencyCode, conversion.data])
+
   const trend = useMemo(() => displayData ? plotTrend(displayData, season, trendMetric, null) : [], [displayData, season, trendMetric])
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const money = new Intl.NumberFormat(language, { maximumFractionDigits: language === 'vi' ? 0 : 2 })
@@ -91,7 +127,7 @@ export default function MapPage({ language }: { language: Language }) {
   const period = `${year} · ${season === 0 ? t.allHarvests : seasonalText[language][cropPeriods[season - 1]]}`
   const hasError = manifest.error || geometry.error || results.error || conversion.error
   const loading = !manifest.data || !geometry.data || !displayData
-  const colors = mapColors
+  const colors = metric === 'income' ? incomeMapColors : mapColors
   const facets = economicFacets.slice(0, 4)
   const isPlaying = playing && year < 2050
   useEffect(() => {
@@ -106,15 +142,6 @@ export default function MapPage({ language }: { language: Language }) {
     const nextCodes = new Set(filterEconomicRows(mapRows, next).map((row) => row.code))
     if (!manifest.data?.scenarios.some((scenario) => nextCodes.has(scenario.code) && scenario.seasons >= season)) setSeason(0)
     setFilters(next); setPlaying(false)
-  }
-  function download() {
-    if (!geometry.data || !displayData) return
-    const scenarioId = scenarios.length === 1 ? scenarios[0].id : `combined-${scenarios.length}-scenarios`
-    const text = csvForPlots(geometry.data.plots.map((shape) => ({ id: shape.id, areaHa: shape.areaHa, yield: yieldValues[shape.id] ?? null, income: incomeValues[shape.id] ?? null })), scenarios.map((scenario) => scenario.code).join('|'), year, season, currencyCode)
-    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8;' }))
-    const link = document.createElement('a')
-    link.href = url; link.download = `star-farm-${scenarioId}-${year}-harvest-${season}-${currencyCode}.csv`; link.click()
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
   return <div className="map-page page-shell" id="map">
     <section className="intro" aria-labelledby="map-title"><h1 id="map-title">{t.title}</h1><p className="map-description">{t.description}</p></section>
@@ -175,12 +202,26 @@ export default function MapPage({ language }: { language: Language }) {
         <div><span>{t.averageYield}</span><strong>{format(selectedYield)} <small>{t.yieldUnit}</small></strong></div>
         <div><span>{t.averageIncome}</span><strong>{formatMoney(selectedIncome)} <small>{t.incomeUnit}</small></strong></div>
         <div className="map-summary-period"><span>{t.selectedPeriod}</span><strong>{period}</strong></div>
-        <button type="button" className="map-download" onClick={download} disabled={loading || !!hasError}>{t.download}</button>
       </div>
       <div className="map-explorer-grid" aria-busy={loading && !hasError}>
         <div className="map-visual-column">
           <div className="map-canvas-container">
-            {geometry.data ? <PlotMap geometry={geometry.data} values={values} metric={metric} breaks={breaks} language={language} yieldValues={yieldValues} incomeValues={incomeValues} periodLabel={period} scenarioLabel={scenarios.length === 1 ? scenarios[0].code : `${scenarios.length} ${filterText.scenario}`} /> : <div className="map-canvas-skeleton" />}
+            {geometry.data ? <PlotMap
+  geometry={geometry.data}
+  values={values}
+  metric={metric}
+  breaks={breaks}
+  colors={colors}
+  language={language}
+  yieldValues={yieldValues}
+  incomeValues={incomeValues}
+  periodLabel={period}
+  scenarioLabel={
+    scenarios.length === 1
+      ? scenarios[0].code
+      : `${scenarios.length} ${filterText.scenario}`
+  }
+/> : <div className="map-canvas-skeleton" />}
             {loading && !hasError && <div className="map-loading-overlay" role="status">{t.loading}</div>}
           </div>
           <div className="map-legend" aria-label={`${t[metric]} (${unit})`}><div className="map-legend-title"><strong>{t[metric]}</strong><span>{unit}</span></div>

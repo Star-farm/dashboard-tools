@@ -7,8 +7,10 @@ import { yearTicks } from '../utils/yearTicks'
 import { bau3Conditions } from '../features/economics/bau3Types'
 import type { Bau3Condition } from '../features/economics/bau3Types'
 import { bau3Text } from '../features/economics/bau3Text'
-import ChartLegend from './ChartLegend'
+import ConditionFilters from './ConditionFilters'
+import { useConditionFilters } from './useConditionFilters'
 import '../styles/scenario-comparison-chart.css'
+import { useChartSelection } from './chartSelectionContext'
 
 type ConditionPoint = { year: number } & Record<Bau3Condition, number | null>
 interface Props {
@@ -30,12 +32,12 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
   const bars = chartType === 'bar'
   const id = useId()
   const [width, setWidth] = useState(620)
-  const [condition, setCondition] = useState<Bau3Condition | 'all'>('all')
-  const [model, setModel] = useState<'all' | 'bau' | 'oneMha'>('all')
+  const filters = useConditionFilters()
+  const [model, setModel] = useChartSelection<'all' | 'bau' | 'oneMha'>('model', 'all')
   const [year, setYear] = useState(startYear)
   const t = bau3Text[language]
   const vi = language === 'vi'
-  const visible = condition === 'all' ? bau3Conditions : [condition]
+  const visible = filters.visible
   const visibleModels = (['bau', 'oneMha'] as const).filter((key) => model === 'all' || model === key)
   const baselineYears = new Map(baseline.map((point) => [point.year, point]))
   const oneMhaYears = new Map(oneMha.map((point) => [point.year, point]))
@@ -66,9 +68,9 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
       <button type="button" title="1Mha" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}><i className="model-line model-line-oneMha" aria-hidden="true" />1Mha · {bars ? vi ? 'cột đậm' : 'solid bars' : vi ? 'nét đậm' : 'bold line'}</button>
       <button type="button" title={baselineLabel} aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><i className="model-line model-line-bau" aria-hidden="true" />{baselineLabel} · {bars ? vi ? 'cột nhạt' : 'faint bars' : singleModel ? vi ? 'nét liền' : 'solid line' : vi ? 'nét đứt' : 'dashed line'}</button>
     </div>
-    <ChartLegend language={language} label={vi ? 'Chọn điều kiện kịch bản' : 'Choose scenario conditions'} items={bau3Conditions.map((key) => ({ key, label: t[key], color: CONDITION_COLORS[key], marker: CONDITION_MARKERS[key] }))} selected={condition} onSelect={setCondition} allLabel={vi ? 'Tất cả điều kiện' : 'All conditions'} />
+    <ConditionFilters language={language} filters={filters} />
     {hasData ? <>
-      <div className="bau3-plot comparison-combined-plot" role="group" tabIndex={0} aria-describedby={`${id}-hint`} aria-label={`${title} · ${baselineLabel} / 1Mha · ${startYear}–${endYear} · ${unit}`} onKeyDownCapture={(event) => {
+      <div className="bau3-plot comparison-combined-plot" role="group" tabIndex={0} aria-label={`${title} · ${baselineLabel} / 1Mha · ${startYear}–${endYear} · ${unit}`} onKeyDownCapture={(event) => {
         if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
         event.preventDefault()
         event.stopPropagation()
@@ -82,18 +84,18 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
             <ReferenceLine x={selectedYear} stroke="#687a5c" strokeWidth={1} />
             <Tooltip trigger="click" content={() => null} cursor={false} isAnimationActive={false} />
-            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={CONDITION_COLORS[key]} fillOpacity={group === 'bau' ? .35 : 1} stroke={CONDITION_COLORS[key]} strokeDasharray={group === 'bau' ? '3 2' : undefined} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key, true, singleModel)} connectNulls={false} isAnimationActive={false} />))}
+            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={CONDITION_COLORS[key]} fillOpacity={group === 'bau' ? .35 : 1} stroke={CONDITION_COLORS[key]} strokeDasharray={group === 'bau' ? '3 2' : undefined} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key, true, false)} connectNulls={false} isAnimationActive={false} />))}
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <p className="comparison-year-hint" id={`${id}-hint`}>{vi ? 'Bấm hoặc chạm vào biểu đồ để xem năm và số liệu.' : 'Click or tap the chart to view the year and values.'}</p>
-      <div className="comparison-year-details">
+      {visible.length * visibleModels.length > 1 && <div className="comparison-year-details">
         <p className="comparison-selected-year">{t.year} <strong>{selectedYear}</strong></p>
         <table className="comparison-year-values" aria-label={`${title} · ${t.year} ${selectedYear} · ${unit}`}>
           <thead><tr><th scope="col">{vi ? 'Điều kiện kịch bản' : 'Scenario conditions'}</th>{model !== 'oneMha' && <th scope="col">{baselineLabel}</th>}{model !== 'bau' && <th scope="col">1Mha</th>}</tr></thead>
           <tbody>{visible.map((key) => <tr key={key}><th scope="row"><svg className="condition-marker" viewBox="-7 -7 14 14" aria-hidden="true"><ChartMarker shape={CONDITION_MARKERS[key]} color={CONDITION_COLORS[key]} /></svg>{t[key]}</th>{model !== 'oneMha' && <td>{display(baselineYears.get(selectedYear)?.[key])}</td>}{model !== 'bau' && <td><strong>{display(oneMhaYears.get(selectedYear)?.[key])}</strong></td>}</tr>)}</tbody>
         </table>
-      </div>
+      </div>}
+      {visible.length * visibleModels.length === 1 && <p className="sr-only" aria-live="polite">{t.year} {selectedYear} · {t[visible[0]]} · {visibleModels[0] === 'bau' ? baselineLabel : '1Mha'}: {display((visibleModels[0] === 'bau' ? baselineYears : oneMhaYears).get(selectedYear)?.[visible[0]])} {unit}</p>}
     </> : <p className="bau3-no-data">{t.noData}</p>}
     <p className="bau3-chart-note">{!bars && singleModel ? vi ? 'Biểu đồ chỉ hiển thị một mô hình: tất cả các đường dùng nét liền.' : 'When only one model is shown, all its lines are solid.' : bars ? vi ? 'Màu cột thể hiện điều kiện kịch bản. BAU: cột nhạt, viền đứt. 1Mha: cột đậm.' : 'Bar colors identify scenario conditions. BAU: faint bars with dashed borders. 1Mha: solid bars.' : vi ? 'Màu và hình dấu điểm thể hiện điều kiện kịch bản. BAU: nét đứt. 1Mha: nét liền. Các đường có cùng số liệu có thể trùng nhau.' : 'Colors and marker shapes identify scenario conditions. BAU: dashed. 1Mha: solid. Lines with identical values may overlap.'}</p>
   </article>

@@ -7,12 +7,12 @@ describe('economics exploration page', () => {
   it('shows four parent cards and leaves their child destinations on separate pages', () => {
     render(<EconomicExplorePage language="vi" />)
     expect(screen.getByRole('heading', { level: 1, name: 'Khám phá Kinh tế' })).toBeInTheDocument()
-    for (const name of ['Tổng quan', 'So sánh', 'Canh tác như thường lệ', 'Một triệu hecta lúa']) {
+    for (const name of ['Tổng quan', 'So sánh chi tiết', 'Canh tác như thường lệ', 'Một triệu hecta lúa']) {
       expect(screen.getByRole('region', { name })).toBeInTheDocument()
     }
     const destinations = {
       'Tổng quan': '#economics-explore-overview',
-      'So sánh': '#economics-explore-comparison',
+      'So sánh chi tiết': '#economics-explore-comparison',
       'Canh tác như thường lệ': '#economics-explore-bau',
       'Một triệu hecta lúa': '#economics-1mha',
     }

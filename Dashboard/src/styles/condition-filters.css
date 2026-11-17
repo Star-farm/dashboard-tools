@@ -1,0 +1,7 @@
+.condition-filters { padding: 12px 22px 16px; display: flex; flex-wrap: wrap; gap: 14px 24px; }
+.condition-filters .comparison-segmented { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.condition-filters button { border: 1px solid #bdc9b4; border-radius: 4px; color: #40533b; background: transparent; cursor: pointer; }
+.condition-filters button[aria-pressed="true"], .condition-filters button:hover { border-color: #527441; background: #edf1e4; color: #254f3d; }
+.condition-key { display: flex; flex-wrap: wrap; gap: 8px 18px; flex-basis: 100%; margin: 0; padding: 0; list-style: none; color: #40533b; font-size: var(--text-small); }
+.condition-key li { display: inline-flex; align-items: center; gap: 7px; }
+@media (max-width: 767px) { .condition-filters { padding-inline: 14px; } }

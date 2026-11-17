@@ -12,7 +12,13 @@ export function mean(values: readonly (number | null)[]): number | null {
   const valid = values.filter((value): value is number => value !== null && Number.isFinite(value))
   return valid.length ? valid.reduce((sum, value) => sum + value, 0) / valid.length : null
 }
-
+export const incomeMapColors = [
+  '#c7443e', // Negative income
+  '#dce9c8', // 0–10 million
+  '#a5c796', // 10–20 million
+  '#60976e', // 20–30 million
+  '#284f3c', // 30–50 million
+]
 export function selectPlotValues(records: readonly PlotRecord[], year: number, season: number, metric: PlotMetric): (number | null)[] {
   const selected = records.filter((record) => record.year === year && (season === 0 || record.season === season))
   if (!selected.length) return []

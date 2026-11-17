@@ -75,8 +75,7 @@ describe('chart observations', () => {
     expect(result.difference).toBeGreaterThan(0)
     expect(result.comparison).toContain('1Mha cao hơn Thường lệ')
     expect(result.trend).toContain('1Mha giảm')
-    expect(result.conclusion).toContain('đề xuất triển khai 1Mha')
-    expect(result.conclusion).toContain('nhu cầu lao động tăng thêm so với thường lệ')
+    expect(result.conclusion).toContain('nhu cầu lao động bình quân cao hơn')
     expect(SERIES_COLORS).toEqual({ first: '#217348', second: '#b8322b' })
   })
 
@@ -86,18 +85,17 @@ describe('chart observations', () => {
     expect(result.comparison).toContain('Có AWD thấp hơn Không có AWD')
     expect(result.trend).toContain('Có AWD giảm')
     expect(result.latest).toContain('2050')
-    expect(result.latest).toContain('kg Metan/ha')
+    expect(result.latest).toContain('kg metan/ha')
     expect(result.paragraph.endsWith(result.conclusion)).toBe(true)
-    expect(result.conclusion).toContain('Mức phát thải Metan bình quân thấp hơn')
-    expect(result.conclusion).toContain('đề xuất ưu tiên AWD')
+    expect(result.conclusion).toContain('không tự chứng minh quan hệ nhân quả')
   })
 
-  it('recommends 1Mha and AWD in both languages when supported by the selected data', () => {
+  it('qualifies modeled advantages in both languages', () => {
     const income = selectChartPoints(data.annual, 'income', 'USD', 2027, 2050)
     const methane = selectChartPoints(data.annual, 'methane', 'USD', 2027, 2050)
-    expect(analyzeChart(income, 'income', 'USD', 'vi')!.conclusion).toContain('ưu tiên áp dụng 1Mha')
-    expect(analyzeChart(income, 'income', 'USD', 'en')!.conclusion).toContain('prioritizing 1Mha')
-    expect(analyzeChart(methane, 'methane', 'USD', 'en')!.conclusion).toContain('prioritizing AWD')
+    expect(analyzeChart(income, 'income', 'USD', 'vi')!.conclusion).toContain('mô phỏng')
+    expect(analyzeChart(income, 'income', 'USD', 'en')!.conclusion).toContain('simulation')
+    expect(analyzeChart(methane, 'methane', 'USD', 'en')!.conclusion).toContain('does not establish causation')
     const lowerIncome = analyzeChart([{ year: 2027, first: 10, second: 20 }], 'income', 'USD', 'en')!
     expect(lowerIncome.conclusion).toContain('do not show an income advantage')
   })
@@ -108,7 +106,15 @@ describe('chart observations', () => {
     expect(single.statistic).not.toMatch(/Infinity|NaN/)
     expect(single.statistic).toBe('-10 USD/ha')
     expect(single.trend).toContain('multiple years')
-    expect(analyzeChart([{ year: 2027, first: 5, second: 5 }], 'labor', 'USD', 'en')!.comparison).toContain('equal period averages')
+    expect(analyzeChart([{ year: 2027, first: 5, second: 5 }], 'labor', 'USD', 'en')!.comparison).toContain('equal averages')
+  })
+
+  it('compares only years with observations for both groups', () => {
+    const result = analyzeChart([{ year: 2027, first: 10, second: 5 }, { year: 2028, first: 100, second: null }, { year: 2029, first: null, second: 50 }], 'income', 'USD', 'en')!
+    expect(result.firstMean).toBe(10)
+    expect(result.secondMean).toBe(5)
+    expect(result.comparison).toContain('1 year')
+    expect(analyzeChart([{ year: 2027, first: 10, second: null }, { year: 2028, first: null, second: 5 }], 'income', 'USD', 'en')).toBeNull()
   })
 
   it('zooms the labor axis around the observed values without clipping either series', () => {

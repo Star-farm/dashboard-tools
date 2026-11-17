@@ -6,6 +6,7 @@ import type { Language } from '../../i18n'
 import { yearTicks } from '../../utils/yearTicks'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import ChartLegend from '../../components/ChartLegend'
+import { useChartSelection } from '../../components/chartSelectionContext'
 import type { ChartPoint, Currency, Metric } from './futureTypes'
 import { analyzeChart, formatValue, laborAxisDomain, metricUnit, SERIES_COLORS } from './chartAnalysis'
 import { futureText } from './futureText'
@@ -19,7 +20,7 @@ interface Props {
 
 export default function TimeSeriesChart({ metric, points, currency, language }: Props) {
   const [chartWidth, setChartWidth] = useState(800)
-  const [selection, setSelection] = useState<'first' | 'second' | 'all'>('all')
+  const [selection, setSelection] = useChartSelection<'first' | 'second' | 'all'>(metric === 'methane' ? 'futureAwd' : 'futureModel', 'all')
   const t = futureText[language]
   const analysis = analyzeChart(points, metric, currency, language)
   const title = t[`${metric}Title`]

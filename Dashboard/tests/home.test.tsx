@@ -8,6 +8,13 @@ import catalog from '../src/data/catalog.json'
 import { parseCsv } from '../src/utils/csv'
 
 describe('home page', () => {
+  it('places scenario details last in the explore section', () => {
+    render(<HomePage language="vi" />)
+    const cards = document.querySelectorAll('#home-explore > aside')
+    expect(cards[cards.length - 1]).toHaveTextContent('Chi tiết kịch bản')
+    expect(within(cards[cards.length - 1] as HTMLElement).getByRole('link')).toHaveAttribute('href', '#scenario-details')
+  })
+
   it('clears browser-restored focus on the mobile explore button while preserving intentional focus', () => {
     vi.stubGlobal('matchMedia', () => ({ matches: true }))
     const app = render(<HomePage language="vi" />)

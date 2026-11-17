@@ -8,6 +8,12 @@
 .economic-filter select { width: 100%; min-height: 46px; padding: 10px 30px 10px 12px; border: 1px solid #becdb8; border-radius: 5px; color: #26382e; background: #fffefa; font-size: var(--text-body); cursor: pointer; }
 .economic-filter select:hover { border-color: #71926c; }
 .economic-filter select:focus-visible { outline: 3px solid #759b7f; outline-offset: 2px; }
+@media (min-width: 768px) {
+  .economic-filters { display: flex; flex-wrap: wrap; align-items: end; }
+  .economic-filters-title { flex-basis: 100%; }
+  .economic-filter { flex: 0 1 auto; max-width: 100%; }
+  .economic-filter select { width: max-content; max-width: 100%; }
+}
 .economic-results-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 62px; }
 .economic-results-toolbar p { margin: 0; font-size: var(--text-body); color: var(--muted); line-height: 1.6; }
 .economic-results-toolbar strong { color: var(--green); }

@@ -33,6 +33,7 @@ export default function AnalysisView({ language, config, children }: Props) {
       <button type="button" title={language === 'vi' ? 'Trung bình năm' : 'Annual averages'} aria-pressed={!seasonal} onClick={() => setSeasonal(false)}>{language === 'vi' ? 'Trung bình năm' : 'Annual averages'}</button>
       <button type="button" title={language === 'vi' ? 'Theo từng vụ' : 'By crop season'} aria-pressed={seasonal} onClick={() => setSeasonal(true)}>{language === 'vi' ? 'Theo từng vụ' : 'By crop season'}</button>
     </div>
+    {config.kind === 'comparison'}
     {seasonal ? <Suspense fallback={<p role="status">{language === 'vi' ? 'Đang tải dữ liệu theo vụ…' : 'Loading seasonal data…'}</p>}><View key={config.scenarioCode ?? config.family ?? config.kind} language={language} config={config} /></Suspense> : children}
   </>
 }

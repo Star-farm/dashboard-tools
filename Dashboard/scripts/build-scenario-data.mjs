@@ -31,9 +31,37 @@ const bau3 = aggregateBau3Data(master, combined)
 writeFileSync(new URL('economics-bau3-series.json', directory), JSON.stringify(bau3, null, 2) + '\n')
 console.log(`BAU 3S comparison: ${bau3.series.length} annual series.`)
 const seasonal = aggregateSeasonalData(master, combined)
-for (const topic of ['economics', 'resources', 'environment', 'all']) {
-  writeFileSync(new URL(`${topic}-seasonal.json`, directory), JSON.stringify(packSeasonalData(seasonal, topic)) + '\n')
+const seasonalOverall = aggregateSeasonalData(master, combined, true)
+
+// Combine detailed BAU variants with overall BAU
+const seasonalMerged = {
+  startYear: seasonal.startYear,
+  endYear: seasonal.endYear,
+  rows: [
+    ...seasonal.rows,
+    ...seasonalOverall.rows.filter(row => row.family === 'bau')
+  ]
 }
+
+for (const topic of ['economics', 'resources', 'environment', 'all']) {
+  writeFileSync(
+    new URL(`${topic}-seasonal.json`, directory),
+    JSON.stringify(packSeasonalData(seasonalMerged, topic)) + '\n'
+  )
+
+  // Keep existing overall files for compatibility
+  writeFileSync(
+    new URL(`${topic}-seasonal-overall.json`, directory),
+    JSON.stringify(packSeasonalData(seasonalOverall, topic)) + '\n'
+  )
+}
+
+console.table(
+  ['bau', 'bau3s', 'bau2s', 'bauss', 'oneMha'].map(family => ({
+    family,
+    count: seasonalMerged.rows.filter(row => row.family === family).length
+  }))
+)
 console.log(`Seasonal comparison: ${seasonal.rows.length} recording-period groups.`)
 for (const [variant, filename] of [['bau2s', 'economics-bau2-series.json'], ['bauss', 'economics-bauss-series.json']]) {
   const comparison = aggregateBauComparisonData(master, combined, variant)

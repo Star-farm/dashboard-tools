@@ -19,7 +19,7 @@ describe('resource overview and comparison', () => {
     expect(within(table).getAllByRole('row')).toHaveLength(19)
     expect(table.querySelector('tbody tr')).toHaveTextContent('Hiện trạng · 2016–2022')
     expect(table.querySelectorAll('thead tr:last-child th')).toHaveLength(8)
-    expect(table).toHaveTextContent('kg Nito/ha')
+    expect(table).toHaveTextContent('kg nito/ha')
     expect(screen.getAllByRole('article')).toHaveLength(17)
     expect(screen.getAllByRole('article')[0]).toHaveTextContent('Hiện trạng · 2016–2022')
     expect(screen.getAllByRole('combobox')).toHaveLength(5)
@@ -113,7 +113,7 @@ describe('resource navigation', () => {
   it.each([false, true])('connects all resource branches on the header (mobile: %s)', (mobile) => {
     render(<HeaderNavigation language="vi" page="resourceBau2" mobile={mobile} />)
     fireEvent.click(screen.getByRole('button', { name: 'Tài nguyên' }))
-    for (const [branch, names] of [ ['Tổng quan', ['Bảng thông tin', 'Bảng so sánh']], ['So sánh', ['BAU3S vs 1Mha', 'BAU2S vs 1Mha', 'BAUSS vs 1Mha']], ['Canh tác như thường lệ', ['3 mùa vụ', '2 mùa vụ', 'Bền vững']] ] as const) {
+    for (const [branch, names] of [ ['Tổng quan', ['Bảng thông tin', 'Bảng so sánh']], ['So sánh chi tiết', ['BAU3S vs 1Mha', 'BAU2S vs 1Mha', 'BAUSS vs 1Mha']], ['Canh tác như thường lệ', ['3 mùa vụ', '2 mùa vụ', 'Bền vững']] ] as const) {
       fireEvent.click(screen.getByRole('button', { name: branch }))
       for (const name of names) expect(screen.getByRole('link', { name }).getAttribute('href')).toMatch(/^#resources-/)
     }

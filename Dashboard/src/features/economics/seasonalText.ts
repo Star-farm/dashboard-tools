@@ -1,7 +1,5 @@
 const vi = {
   filters: 'Bộ lọc phân tích theo vụ',
-  totalShareNote: ' Phần trăm thể hiện tỷ trọng từng vụ trong tổng cả năm. Khi chọn tất cả năm, kết quả là bình quân cả giai đoạn.',
-  meanShareNote: ' Phần trăm được chuẩn hóa từ giá trị các vụ, không phải đóng góp vào tổng năm. Kết quả cả năm dùng bình quân các vụ, không cộng các chỉ số bình quân hoặc tỷ lệ.',
   annualTotal: 'Tổng cả năm', annualMean: 'Bình quân các vụ trong năm', composition: 'Cơ cấu mùa vụ', largestShare: 'Tỷ trọng lớn nhất', noComposition: 'Không tính cơ cấu khi thiếu dữ liệu, có giá trị âm hoặc tổng bằng 0.',
   equalSeasons: 'Các vụ có cùng giá trị',
   title: 'Phân tích theo từng vụ', description: 'So sánh các mùa vụ theo trung bình toàn bộ giai đoạn, chọn một năm cụ thể hoặc theo dõi cùng một vụ qua nhiều năm.',
@@ -9,8 +7,8 @@ const vi = {
   early: 'Đông Xuân', middle: 'Xuân Hè', late: 'Thu Đông',
   notGrown: 'Không canh tác', notGrownNote: 'Hệ canh tác 2 vụ và 1Mha chỉ canh tác Đông Xuân và Xuân Hè, không canh tác Thu Đông.',
   average: 'Trung bình theo vụ', noData: 'Không có dữ liệu',
-  allModels: 'Cả hai mô hình', modelFilter: 'Chọn mô hình', bau3s: 'BAU 3 vụ', bau2s: 'BAU 2 vụ', bauss: 'BAU bền vững', oneMha: '1Mha',
-  baseline: 'Hệ canh tác đối chiếu', hint: 'Bấm hoặc chạm vào biểu đồ để xem số liệu.',
+  allModels: 'Cả hai mô hình', modelFilter: 'Chọn mô hình', bau: 'Canh tác như thường lệ', bau3s: 'BAU 3 vụ', bau2s: 'BAU 2 vụ', bauss: 'BAU bền vững', oneMha: '1Mha',
+  baseline: 'Hệ canh tác đối chiếu',
   insight: 'Nhận xét', common: 'Chỉ so sánh các vụ được canh tác ở cả hai mô hình.',
   noPair: 'Chưa có đủ dữ liệu chung để tính chênh lệch giữa hai mô hình.', selected: 'Số liệu đang chọn', summary: 'Phạm vi phân tích',
   comparison: '1Mha so với', periodMean: 'Chênh lệch trung bình trên những năm có dữ liệu chung',
@@ -18,8 +16,6 @@ const vi = {
 }
 const en: Record<keyof typeof vi, string> = {
   filters: 'Seasonal analysis filters',
-  totalShareNote: ' Percentages show each crop’s share of the annual total. All years shows the average across the full period.',
-  meanShareNote: ' Percentages normalize crop values; they are not contributions to an annual total. The annual result is the mean across crops; averages and rates are not added.',
   annualTotal: 'Annual total', annualMean: 'Mean across crops within the year', composition: 'Crop composition', largestShare: 'Largest share', noComposition: 'Composition is unavailable with missing data, negative values, or a zero total.',
   equalSeasons: 'The crop seasons have equal values',
   title: 'Seasonal analysis', description: 'Compare crop seasons using averages across all years, select a specific year, or follow the same season across years.',
@@ -27,8 +23,8 @@ const en: Record<keyof typeof vi, string> = {
   early: 'Winter–Spring', middle: 'Spring–Summer', late: 'Fall–Winter',
   notGrown: 'Not grown', notGrownNote: 'The two-crop system and 1Mha grow Winter–Spring and Spring–Summer crops, with no Fall–Winter crop.',
   average: 'Mean by crop season', noData: 'No data', allModels: 'Both models', modelFilter: 'Choose models',
-  bau3s: 'BAU 3 seasons', bau2s: 'BAU 2 seasons', bauss: 'BAU sustainable', oneMha: '1Mha',
-  baseline: 'Baseline farming system', hint: 'Click or tap the chart to inspect values.',
+  bau: 'Business As Usual', bau3s: 'BAU 3 seasons', bau2s: 'BAU 2 seasons', bauss: 'BAU sustainable', oneMha: '1Mha',
+  baseline: 'Baseline farming system',
   insight: 'What the comparison shows', common: 'Comparisons use only seasons cultivated by both models.',
   noPair: 'There is not enough shared data to calculate a difference between the models.', selected: 'Selected values', summary: 'Analysis scope',
   comparison: '1Mha versus', periodMean: 'Mean difference across years with data for both models',

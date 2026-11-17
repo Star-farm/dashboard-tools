@@ -9,7 +9,7 @@ import type { EconomicRow, EconomicFilters } from './economicsData.ts'
 export const cropPeriods = ['early', 'middle', 'late'] as const
 export type CropPeriod = typeof cropPeriods[number]
 export type SeasonalMetric = ScenarioMetric | 'awd'
-export type SeasonalFamily = Bau3Family
+export type SeasonalFamily = Bau3Family | 'bau'
 export type SeasonalTopic = 'economics' | 'resources' | 'environment' | 'all'
 export interface SeasonalConfig { topic: SeasonalTopic; kind: 'overview' | 'comparison' | 'family'; family?: SeasonalFamily; scenarioCode?: string; metrics?: SeasonalMetric[] }
 export const seasonalMetricGroups: Record<SeasonalTopic, SeasonalMetric[]> = {
@@ -18,7 +18,7 @@ export const seasonalMetricGroups: Record<SeasonalTopic, SeasonalMetric[]> = {
   environment: ['methane', 'intensity', 'awd'],
   all: [...scenarioMetrics.map((metric) => metric.id), 'awd'],
 }
-export const cropFamilies: SeasonalFamily[] = ['bau3s', 'bau2s', 'bauss', 'oneMha']
+export const cropFamilies: SeasonalFamily[] = ['bau3s', 'bau2s', 'bauss', 'oneMha', 'bau']
 export const cultivatedPeriods = (family: SeasonalFamily) => family === 'oneMha' || family === 'bau2s' ? cropPeriods.slice(0, 2) : [...cropPeriods]
 export interface SeasonalStats { mean: number }
 export interface SeasonalRow extends Pick<EconomicRow, keyof EconomicFilters> {
@@ -46,7 +46,7 @@ function summarize(values: number[]): SeasonalStats | null {
   return { mean: values.reduce((sum, value) => sum + value, 0) / values.length }
 }
 
-function aggregate(source: string) {
+function aggregate(source: string, overallBau = false) {
   const [headers, ...records] = parseCsv(source)
   const required = ['datetime', 'Scenario Group', 'Season Type', 'Climate Type', 'Resource Scenario', 'Net Income', 'Avg Yield']
   if (!headers || required.some((column) => !headers.includes(column))) throw new Error('Seasonal CSV is missing required columns.')
@@ -60,7 +60,7 @@ function aggregate(source: string) {
     if (year < 2027 || year > 2050) continue
     const group = cell('Scenario Group')
     const system = cell('Season Type')
-    const family: SeasonalFamily | null = group === '1Mha' ? 'oneMha' : !['Business As Usual', 'Thường lệ'].includes(group) ? null : ['3 Seasons', '3 vụ'].includes(system) ? 'bau3s' : ['2 Seasons', '2 vụ'].includes(system) ? 'bau2s' : ['Sustainable', 'Bền vững'].includes(system) ? 'bauss' : null
+    const family: SeasonalFamily | null = group === '1Mha' ? 'oneMha' : !['Business As Usual', 'Thường lệ'].includes(group) ? null : overallBau ? 'bau' : ['3 Seasons', '3 vụ'].includes(system) ? 'bau3s' : ['2 Seasons', '2 vụ'].includes(system) ? 'bau2s' : ['Sustainable', 'Bền vững'].includes(system) ? 'bauss' : null
     if (!family) continue
     const climate = cell('Climate Type'), resource = cell('Resource Scenario')
     const mild = ['Mild Climate', 'Khí hậu ôn hòa'].includes(climate)
@@ -69,7 +69,7 @@ function aggregate(source: string) {
     if (!shortage && !['Normal Economy', 'Nền kinh tế bình thường'].includes(resource)) throw new Error('Seasonal CSV contains unknown resources.')
     const condition: Bau3Condition = mild ? shortage ? 'mildShortage' : 'mildNormal' : shortage ? 'severeShortage' : 'severeNormal'
     const period = recordingPeriod(month), key = `${family}:${condition}:${year}:${period}`
-    if (!buckets.has(key)) buckets.set(key, { family, condition, year, period, dates: [date, date], code: headers.includes('Scenario Code') ? cell('Scenario Code') : `${family}:${condition}`, values: Object.fromEntries(seasonalMetricGroups.all.map((metric) => [metric, [] as number[]])) as Record<SeasonalMetric, number[]>, count: 0 })
+    if (!buckets.has(key)) buckets.set(key, { family, condition, year, period, dates: [date, date], code: family === 'bau' ? `bau:${condition}` : headers.includes('Scenario Code') ? cell('Scenario Code') : `${family}:${condition}`, values: Object.fromEntries(seasonalMetricGroups.all.map((metric) => [metric, [] as number[]])) as Record<SeasonalMetric, number[]>, count: 0 })
     const bucket = buckets.get(key)!
     bucket.count++
     if (date < bucket.dates[0]) bucket.dates[0] = date
@@ -93,8 +93,8 @@ function aggregate(source: string) {
   return buckets
 }
 
-export function aggregateSeasonalData(master: string, combined: string): SeasonalData {
-  const usd = aggregate(master), vnd = aggregate(combined)
+export function aggregateSeasonalData(master: string, combined: string, overallBau = false): SeasonalData {
+  const usd = aggregate(master, overallBau), vnd = aggregate(combined, overallBau)
   if (!usd.size || usd.size !== vnd.size) throw new Error('Seasonal sources have different populations.')
   const rows = [...usd.entries()].map(([key, bucket]): SeasonalRow => {
     const other = vnd.get(key)

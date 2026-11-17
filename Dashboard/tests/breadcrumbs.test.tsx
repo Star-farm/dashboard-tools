@@ -36,7 +36,7 @@ describe('page breadcrumbs', () => {
 
   it.each([
     ['economics-overview', 'Tổng quan', 'economics-explore-overview'],
-    ['resources-bau2-vs-1mha', 'So sánh', 'resources-explore-comparison'],
+    ['resources-bau2-vs-1mha', 'So sánh chi tiết', 'resources-explore-comparison'],
     ['environment-bauss', 'Canh tác như thường lệ', 'environment-explore-bau'],
   ])('opens the real parent page from #%s and keeps its destination links usable', async (anchor, branch, destination) => {
     window.history.replaceState(null, '', `#${anchor}`)

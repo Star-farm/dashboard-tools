@@ -1,0 +1,17 @@
+/* Match the dropdown controls; long labels may wrap on narrow screens. */
+.page-shell .analysis-view-switch button,
+.page-shell .comparison-segmented button,
+.page-shell .seasonal-mode button,
+.page-shell .comparison-model-key > button,
+.page-shell .interactive-chart-legend .chart-legend-option,
+.page-shell .map-layer-switch button,
+.page-shell .map-workspace-heading .map-layer-switch button {
+  width: max-content;
+  max-width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  flex: 0 1 auto;
+  font-size: var(--text-body);
+  line-height: 1.4;
+  white-space: normal;
+}

@@ -10,7 +10,7 @@ const topics = [
 ]
 const branches = [
   { id: 'overview', vi: 'Tổng quan', en: 'Overview', count: 2 },
-  { id: 'comparison', vi: 'So sánh', en: 'Comparison', count: 3 },
+  { id: 'comparison', vi: 'So sánh chi tiết', en: 'Comparison', count: 3 },
   { id: 'bau', vi: 'Canh tác như thường lệ', en: 'Business as usual', count: 3 },
 ]
 

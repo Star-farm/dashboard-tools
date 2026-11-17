@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { gzipSync } from 'node:zlib'
+import sharp from 'sharp'
 import manifest from '../src/data/soil-manifest.json'
 import type { SoilData } from '../src/features/map/soilTypes'
 import type { MapGeometry } from '../src/features/map/mapTypes'
@@ -11,17 +12,32 @@ const geometry = JSON.parse(geometryBytes.toString()) as MapGeometry
 const data = JSON.parse(readFileSync('public/map-data/soil-overlay.json', 'utf8')) as SoilData
 
 describe('packaged soil GIS overlay', () => {
-  it('splits layers without losing any classifications, geometry or area shares', () => {
+  it('splits layers without changing classifications or area shares', () => {
     for (const metadata of manifest.layers) {
       const bytes = readFileSync(`public/map-data/${metadata.file}`)
       const split = JSON.parse(bytes.toString()) as SoilData
       expect(metadata.file).toBe(`soil-layer-${createHash('sha256').update(bytes).digest('hex').slice(0, 16)}.json`)
-      expect(split.layers).toEqual([data.layers.find((layer) => layer.id === metadata.id)])
+      const original = data.layers.find((layer) => layer.id === metadata.id)!
+      expect(split.layers).toEqual([metadata.id === 'landuse' ? { ...original, features: [] } : original])
       expect(split.sourceGeometrySha256).toBe(data.sourceGeometrySha256)
       expect(split.geometrySha256).toBe(data.geometrySha256)
     }
     const first = readFileSync(`public/map-data/${manifest.layers[0].file}`)
     expect(gzipSync(first).length).toBeLessThan(gzipSync(readFileSync('public/map-data/soil-overlay.json')).length / 5)
+  })
+  it('ships compact land use statistics and a bounded raster', async () => {
+    const landuse = manifest.layers.find((layer) => layer.id === 'landuse')!
+    const stats = readFileSync(`public/map-data/${landuse.file}`)
+    const original = data.layers.find((layer) => layer.id === 'landuse')!
+    const parsed = JSON.parse(stats.toString()) as SoilData
+    expect(original.features.length).toBeGreaterThan(4000)
+    expect(parsed.layers[0].features).toEqual([])
+    expect(parsed.layers[0].plots).toEqual(original.plots)
+    expect(gzipSync(stats).length).toBeLessThan(150_000)
+    expect('rasterFile' in landuse && landuse.rasterFile).toBeTruthy()
+    const image = await sharp(`public/map-data/${landuse.rasterFile}`).metadata()
+    expect(image.width).toBe(3072)
+    expect(image.height).toBe(Math.ceil(3072 * geometry.height / geometry.width))
   })
   it('matches the shipped map and contains every region in all five layers', () => {
     expect(data.geometrySha256).toBe(createHash('sha256').update(geometryBytes).digest('hex'))

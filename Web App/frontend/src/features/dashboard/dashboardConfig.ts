@@ -8,8 +8,8 @@ export const METRIC_GROUPS = {
         right: { key: 'Net Income', unit: 'USD/ha' },
     },
     environment: {
-        left: { key: 'Methane Emissions', unit: 'kg Methane/ha' },
-        right: { key: 'Emission Intensity', unit: 'kg Methane/ton rice' },
+        left: { key: 'Methane Emissions', unit: 'kg methane/ha' },
+        right: { key: 'Emission Intensity', unit: 'kg methane/ton rice' },
     },
 } as const;
 

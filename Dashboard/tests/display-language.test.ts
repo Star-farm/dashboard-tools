@@ -14,10 +14,10 @@ describe('consistent display language', () => {
     expect(bau3Unit('income', 'en')).toBe(economicsText.en.moneyUnit)
     expect(bau3Unit('yield', 'en')).toBe('ton/ha')
     expect(scenarioText.en.yieldUnit).toBe('ton/ha')
-    expect(environmentUnit('intensity', 'en')).toBe('kg Methane/ton rice')
+    expect(environmentUnit('intensity', 'en')).toBe('kg methane/ton rice')
   })
   it.each(['vi', 'en'] as const)('spells out methane and nitrogen in %s', (language) => {
-    const methane = language === 'vi' ? 'Metan' : 'Methane', nitrogen = language === 'vi' ? 'Nito' : 'Nitrogen'
+    const methane = language === 'vi' ? 'metan' : 'Methane', nitrogen = language === 'vi' ? 'nito' : 'nitrogen'
     expect(metricUnit('methane', 'USD', language)).toBe(`kg ${methane}/ha`)
     expect(environmentUnit('methane', language)).toBe(`kg ${methane}/ha`)
     expect(scenarioText[language].methaneUnit).toBe(`kg ${methane}/ha`)

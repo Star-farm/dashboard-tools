@@ -62,10 +62,6 @@ export default function HomePage({ language }: { language: Language }) {
           <div><p className="eyebrow">{t.futureCtaEyebrow}</p><h2 id="future-callout-title">{t.navFuture}</h2><p>{t.futureCtaDescription}</p></div>
           <a href="#future">{t.navFuture}<span aria-hidden="true">{'>'}</span></a>
         </aside>
-        <aside className="glossary-callout" aria-labelledby="scenario-callout-title">
-          <div><p className="eyebrow">{t.scenarioCtaEyebrow}</p><h2 id="scenario-callout-title">{t.navScenarioDetails}</h2><p>{t.scenarioCtaDescription}</p></div>
-          <a href="#scenario-details">{t.navScenarioDetails}<span aria-hidden="true">{'>'}</span></a>
-        </aside>
         <aside className="glossary-callout" aria-labelledby="map-callout-title">
           <div><p className="eyebrow">{t.mapCtaEyebrow} </p><h2 id="map-callout-title">{t.navMap}</h2><p>{t.mapCtaDescription}</p></div>
           <a href="#map">{t.navMap}<span aria-hidden="true">{'>'}</span></a>
@@ -78,6 +74,10 @@ export default function HomePage({ language }: { language: Language }) {
               : <a href="#environment-explore">{t.environmentExploreTitle}<span aria-hidden="true">{'>'}</span></a>}
           </aside>
         ))}
+        <aside className="glossary-callout" aria-labelledby="scenario-callout-title">
+          <div><p className="eyebrow">{t.scenarioCtaEyebrow}</p><h2 id="scenario-callout-title">{t.navScenarioDetails}</h2><p>{t.scenarioCtaDescription}</p></div>
+          <a href="#scenario-details">{t.navScenarioDetails}<span aria-hidden="true">{'>'}</span></a>
+        </aside>
       </section>
     </>
   )

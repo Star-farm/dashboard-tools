@@ -5,7 +5,5 @@
 .environment-table .environment-resource-column { width: 14%; }
 .environment-table .environment-awd-column { width: 12%; }
 .environment-table .environment-number-column { width: 15%; }
-.environment-kpis.scenario-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.environment-kpis.scenario-kpis { grid-template-columns: repeat(auto-fit, minmax(0, min(100%, 300px))); }
 .environment-bar-grid { margin-top: 26px; }
-@media (max-width: 800px) { .environment-kpis.scenario-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 520px) { .environment-kpis.scenario-kpis { grid-template-columns: minmax(0, 1fr); } }

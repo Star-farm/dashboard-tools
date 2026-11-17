@@ -44,8 +44,8 @@ export function comparisonSummary(cohort: ComparisonCohort, language: Language, 
     ? language === 'vi' ? 'Cần bổ sung dữ liệu thu nhập trước khi kết luận về lợi thế kinh tế của 1Mha.' : 'Net income data is needed before drawing a conclusion about the economic advantage of 1Mha.'
     : incomeDelta > .000001
       ? language === 'vi'
-        ? `Nhìn chung, nên ưu tiên 1Mha để cải thiện thu nhập${actions ? `, đồng thời ${actions}` : ''}.`
-        : `Overall, the income advantage supports prioritizing 1Mha${actions ? `; implementation should ${actions}` : ''}.`
+        ? `Kết quả mô phỏng cho thấy thu nhập 1Mha cao hơn trong nhóm được chọn${actions ? `; khi cân nhắc áp dụng cần xem xét việc ${actions}` : '; cần xem xét thêm tài nguyên và phát thải'}.`
+        : `The simulation shows higher income for 1Mha in the selected groups${actions ? `; application would require consideration of how to ${actions}` : '; resources and emissions also need consideration'}.`
       : language === 'vi'
         ? 'Với lựa chọn này, 1Mha chưa có lợi thế về thu nhập ròng; cần xem xét chi phí, nguồn lao động và khả năng cải thiện năng suất trước khi triển khai.'
         : 'Under this selection, 1Mha has no net income advantage; production costs, labor availability and opportunities to improve yields need consideration before implementation.'

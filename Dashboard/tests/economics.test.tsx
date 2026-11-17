@@ -82,7 +82,7 @@ describe('economic overview interface', () => {
   it('filters both views, keeps selections when translating and reads native USD amounts', () => {
     const { rerender } = render(<EconomicOverviewPage language="vi" />)
     fireEvent.change(screen.getByLabelText('Nhóm kịch bản'), { target: { value: 'bau' } })
-    fireEvent.change(screen.getByLabelText('Mùa vụ'), { target: { value: 'sustainable' } })
+    fireEvent.change(screen.getByLabelText('Hệ canh tác'), { target: { value: 'sustainable' } })
     fireEvent.change(screen.getByLabelText('Thời tiết'), { target: { value: 'mild' } })
     fireEvent.change(screen.getByLabelText('Tài nguyên'), { target: { value: 'shortage' } })
     expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(3)

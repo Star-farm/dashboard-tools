@@ -75,7 +75,7 @@ describe.each(models)('$family standalone farming page', (model) => {
     for (const chart of screen.getAllByRole('article')) {
       expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
-      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(model.family === 'oneMha' ? '#217348' : '#b8322b'))
+      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(['#2868b2', '#8650a8', '#b65b15', '#287447'])
       for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
       expect(chart.nextElementSibling!.querySelectorAll('strong').length).toBeGreaterThan(3)

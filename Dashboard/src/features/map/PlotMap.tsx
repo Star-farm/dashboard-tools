@@ -1,25 +1,58 @@
 
-import { memo, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Language } from '../../i18n'
-import { colorFor } from './mapData'
+import { colorFor, mapColors  } from './mapData'
 import { mapText } from './mapText'
 import type { MapGeometry, MapMetric } from './mapTypes'
 import { zoomViewport } from './mapViewport'
 import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
 import type { SoilLayer } from './soilTypes'
+import PlotMapPopup from './PlotMapPopup'
 
 const ThematicOverlay = memo(function ThematicOverlay({ paths, outlines }: { paths: ReactNode; outlines: ReactNode }) {
   return <g pointerEvents="none" aria-hidden="true">{paths}{outlines}</g>
 })
 
 
+
+function incomePlotColor(
+  value: number | null,
+  breaks: number[],
+  colors: readonly string[]
+): string {
+  // Preserve the existing no-data color
+  if (value === null || !Number.isFinite(value)) {
+    return colorFor(null, breaks)
+  }
+
+  if (breaks.length !== colors.length + 1) {
+    return colorFor(value, breaks)
+  }
+
+  // All negative income values are red
+  if (value < 0) {
+    return colors[0]
+  }
+
+  // Positive income: light to dark green
+  for (let i = 1; i < colors.length - 1; i++) {
+    if (value < breaks[i + 1]) {
+      return colors[i]
+    }
+  }
+
+  // Highest income, including values above the final break
+  return colors[colors.length - 1]
+}
+
 export default function PlotMap({
   geometry,
   values,
   metric,
   breaks,
+  colors = mapColors,
   language,
   yieldValues,
   incomeValues,
@@ -41,6 +74,7 @@ export default function PlotMap({
   thematic?: SoilLayer
   onSelectionChange?: (id: number | null) => void
   rasterFile?: string
+  colors?: readonly string[]
 }) {
   const t = mapText[language]
   const st = soilText[language]
@@ -51,8 +85,6 @@ export default function PlotMap({
   const svgRef = useRef<SVGSVGElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
-
-  const popupTitleId = useId()
 
   const drag = useRef<{
     x: number
@@ -76,7 +108,8 @@ export default function PlotMap({
 
   const [hover, setHover] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
-  const [rasterFailed, setRasterFailed] = useState(false)
+  const [failedRaster, setFailedRaster] = useState<string | null>(null)
+  const rasterFailed = !!rasterFile && failedRaster === rasterFile
   useEffect(() => { onSelectionChange?.(selected) }, [selected, onSelectionChange])
 
   // Track SVG size for an accurate, responsive scale bar
@@ -291,10 +324,22 @@ export default function PlotMap({
               setSelected(plot.id)
             }
           }}
-          fill={thematic ? soilUnknownColor : colorFor(
-            values[plot.id] ?? null,
-            breaks
-          )}
+          
+fill={
+  thematic
+    ? soilUnknownColor
+    : metric === 'income'
+      ? incomePlotColor(
+          values[plot.id] ?? null,
+          breaks,
+          colors
+        )
+      : colorFor(
+          values[plot.id] ?? null,
+          breaks
+        )
+}
+
           fillRule="evenodd"
           stroke="#254f3d"
           strokeOpacity={0.6}
@@ -317,7 +362,7 @@ export default function PlotMap({
     [
       geometry,
       values,
-      breaks,
+      breaks,metric,colors,
       t,
       number,
       metricNumber,
@@ -372,16 +417,9 @@ export default function PlotMap({
           (shape) => shape.id === selected
         )
 
-  const format = (
-    value: number | null | undefined
-  ) =>
-    value == null
-      ? '—'
-      : number.format(value)
-
   const thematicOutlines = useMemo(() => geometry.plots.map((shape) => <path key={shape.id} d={shape.path} fill="none" stroke="#254f3d" strokeOpacity={0.6} strokeWidth={0.5} vectorEffect="non-scaling-stroke" />), [geometry])
   const thematicPaths = useMemo(() => {
-    if (!thematic || (rasterFile && !rasterFailed)) return null
+    if (!thematic || rasterFile) return null
     const colors = new Map(thematic.categories.map((category) => [category.id, category.color]))
     return thematic.features.map((feature, index) => <path
       key={`${feature.plotId}-${index}`}
@@ -389,7 +427,7 @@ export default function PlotMap({
       fill={colors.get(feature.categoryId) ?? soilUnknownColor}
       fillRule="evenodd"
     />)
-  }, [thematic, rasterFile, rasterFailed])
+  }, [thematic, rasterFile])
   const showPopup = !thematic
 
   return (
@@ -658,7 +696,7 @@ export default function PlotMap({
         }}
       >
         <g>{paths}</g>
-        {thematic && <ThematicOverlay paths={rasterFile && !rasterFailed ? <image href={`${import.meta.env.BASE_URL}map-data/${rasterFile}`} x={0} y={0} width={geometry.width} height={geometry.height} preserveAspectRatio="none" onError={() => setRasterFailed(true)} /> : thematicPaths} outlines={thematicOutlines} />}
+        {thematic && <ThematicOverlay paths={rasterFile ? !rasterFailed && <image href={`${import.meta.env.BASE_URL}map-data/${rasterFile}`} x={0} y={0} width={geometry.width} height={geometry.height} preserveAspectRatio="none" onError={() => setFailedRaster(rasterFile)} /> : thematicPaths} outlines={thematicOutlines} />}
 
         {/* Highlight selected plot */}
         {plot && (
@@ -672,6 +710,8 @@ export default function PlotMap({
           />
         )}
       </svg>
+
+      {rasterFailed && <div className="map-loading-overlay"><div className="map-error" role="alert"><p>{st.error}</p><button type="button" className="primary-button" onClick={() => setFailedRaster(null)}>{st.retry}</button></div></div>}
 
       {/* Fixed geographic scale overlay */}
       {showScale && (
@@ -702,78 +742,16 @@ export default function PlotMap({
         </div>
       )}
 
-      {/* Plot information popup */}
-      {plot && showPopup && (
-        <section
-          className="plot-map-popup"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby={popupTitleId}
-        >
-          <header>
-            <div>
-              <p>{t.plotInfo}</p>
-              <h3 id={popupTitleId}>
-                {plotLabel} {plot.id}
-              </h3>
-            </div>
-
-            <button
-              type="button"
-              ref={closeRef}
-              aria-label={t.closePopup}
-              onClick={closePopup}
-            >
-              <svg
-                aria-hidden="true"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="m4 4 10 10M14 4 4 14" />
-              </svg>
-            </button>
-          </header>
-
-          <p className="plot-popup-period">
-            {periodLabel}
-          </p>
-
-          <p className="plot-popup-scenario">
-            {scenarioLabel}
-          </p>
-
-          <dl>
-            <div>
-              <dt>{t.area}</dt>
-              <dd>
-                {format(plot.areaHa)} <small>ha</small>
-              </dd>
-            </div>
-
-            <div>
-              <dt>{t.yield}</dt>
-              <dd>
-                {format(yieldValues[plot.id])}{' '}
-                <small>{t.yieldUnit}</small>
-              </dd>
-            </div>
-
-            <div>
-              <dt>{t.income}</dt>
-              <dd>
-                {incomeValues[plot.id] == null
-                  ? '—'
-                  : money.format(incomeValues[plot.id]!)}{' '}
-                <small>{t.incomeUnit}</small>
-              </dd>
-            </div>
-          </dl>
-        </section>
-      )}
+      {plot && showPopup && <PlotMapPopup
+        plot={plot}
+        language={language}
+        yieldValue={yieldValues[plot.id]}
+        incomeValue={incomeValues[plot.id]}
+        periodLabel={periodLabel}
+        scenarioLabel={scenarioLabel}
+        closeRef={closeRef}
+        onClose={closePopup}
+      />}
 
       {/* Map caption */}
       <div className="plot-map-caption">
@@ -785,7 +763,7 @@ export default function PlotMap({
                   )} ${unit}`
                 : ''
             }`
-          : 'WGS 84 / UTM 48N'}
+          : 'WGS 84'}
       </div>
     </div>
   )

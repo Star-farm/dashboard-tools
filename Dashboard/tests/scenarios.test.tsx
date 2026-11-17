@@ -89,7 +89,7 @@ describe('scenario details page', () => {
     expect(screen.getByRole('heading', { name: '3. Môi trường' })).toBeInTheDocument()
     for (const value of ['12.453.121', '1.245.575', '28.690.712', '293,18', '6,63', '29,94', '49,41', '326,21', '112,89', '5,49', '395,41', '0,06']) expect(screen.getByText(value)).toBeInTheDocument()
     expect(screen.getAllByText('VNĐ/ha')).toHaveLength(3)
-    expect(screen.getByText('kg Metan/kg gạo')).toBeInTheDocument()
+    expect(screen.getByText('kg metan/tấn gạo')).toBeInTheDocument()
     expect(screen.getByText('Sử dụng AWD')).toBeInTheDocument()
     expect(screen.getByLabelText('Nhận xét tổng quan')).toHaveTextContent('giảm 14,1%')
     const summary = screen.getByLabelText('Nhận xét tổng quan')

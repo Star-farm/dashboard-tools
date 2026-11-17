@@ -39,7 +39,7 @@ function aggregate(source: string) {
     const group = category<EconomicGroup>(cell('Scenario Group'), { 'Business As Usual': 'bau', 'Thường lệ': 'bau', '1Mha': 'oneMha' })
     const season = category<EconomicSeason>(cell('Season Type'), { '3 Seasons': 'threeSeasons', '3 vụ': 'threeSeasons', '2 Seasons': 'twoSeasons', '2 vụ': 'twoSeasons', Sustainable: 'sustainable', 'Bền vững': 'sustainable' })
     const climate = category<EconomicClimate>(cell('Climate Type'), { 'Mild Climate': 'mild', 'Khí hậu ôn hòa': 'mild', 'Serve Climate': 'severe', 'Severe Climate': 'severe', 'Khí hậu khắc nghiệt': 'severe' })
-    const rawResource = category<EconomicResource>(cell('Resource Scenario'), { 'Normal Economy': 'normal', 'Nền kinh tế bình thường': 'normal', Neutral: 'neutral', 'Trung tính': 'neutral', 'Resource Shortage': 'shortage', 'Khan hiếm tài nguyên': 'shortage' })
+    const rawResource = category<EconomicResource>(cell('Resource Scenario'), { 'Normal Economy': 'normal', 'Nền kinh tế bình thường': 'normal', Neutral: 'neutral', 'Hiện trạng tính': 'neutral', 'Resource Shortage': 'shortage', 'Khan hiếm tài nguyên': 'shortage' })
     const resource = historical ? 'neutral' : rawResource
     if (!historical && resource === 'neutral') throw new Error('Environment CSV has an unsupported future resource category.')
     const awd = category<'with' | 'without'>(cell('AWD Adoption'), { 'With AWD': 'with', 'Sử dụng AWD': 'with', 'Có AWD': 'with', 'Without AWD': 'without', 'Không có AWD': 'without', 'Không sử dụng AWD': 'without' })

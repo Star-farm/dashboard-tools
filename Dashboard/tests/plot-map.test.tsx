@@ -13,6 +13,19 @@ const props = { geometry, values: [6.5], yieldValues: [6.5], incomeValues: [-10]
 afterEach(() => vi.unstubAllGlobals())
 
 describe('interactive plot map', () => {
+  it('offers a retry when a raster fails without rendering its vector fallback', () => {
+    const thematic = { id: 'landuse', title: { vi: 'Land', en: 'Land' }, categories: [], plots: [], features: [{ plotId: 0, categoryId: 'x', path: 'M0 0H1V1Z' }] }
+    const { container, rerender } = render(<PlotMap {...props} thematic={thematic} rasterFile="land.webp" />)
+    fireEvent.error(container.querySelector('image')!)
+    expect(screen.getByRole('alert')).toBeInTheDocument()
+    expect(container.querySelector('path[d="M0 0H1V1Z"]')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
+    expect(container.querySelector('image')).toBeInTheDocument()
+    fireEvent.error(container.querySelector('image')!)
+    rerender(<PlotMap {...props} thematic={thematic} rasterFile="other.webp" />)
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(container.querySelector('image')).toBeInTheDocument()
+  })
   it('zooms around the cursor, clamps bounds, and prevents page scrolling inside the map', () => {
     expect(zoomViewport({ zoom: 1, x: 500, y: 250 }, 2, { x: 300, y: 100 })).toEqual({ zoom: 2, x: 400, y: 175 })
     expect(zoomViewport({ zoom: 12, x: 1, y: 2 }, 100).zoom).toBe(12)

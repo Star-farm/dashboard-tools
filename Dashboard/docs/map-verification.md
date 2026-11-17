@@ -1,0 +1,11 @@
+# Land Use map verification
+
+Use a production build and a representative affected phone, including its browser and OS version. Record the device, available storage, browser version, build revision, network conditions, and whether the browser cache is cold or warm. Repeat the same steps on the previous build and this build. Keep the previous assets available for comparison.
+
+1. Open `#soil-map`, select Land use, and record whether the page loads or reloads. In the network panel, confirm the selected `soil-layer-*.json` matches `src/data/soil-manifest.json` and that the 12.65 MB `soil-layer-c050b64b6cf86483.json` is not requested. Confirm the raster request succeeds. Record transferred bytes and load timing, including errors and cache hits.
+2. Compare the map at the initial view and at several zoom levels, including maximum zoom, against the previous build. Check the extent and boundaries line up with plot outlines. Record any blurred or missing small categories. The 3072-pixel raster has less detail than the old 8000-pixel image; an equality of plot statistics does not prove equal visual detail.
+3. Pan, pinch zoom, reset the view, select several plots, and compare their area composition and legends. Check keyboard zoom and selection on a keyboard-capable device, both languages, and other soil layers. Use the legend disclosure on a narrow screen.
+4. Switch layers rapidly while requests are pending, return to Land use, and navigate away and back repeatedly. Record reloads, browser termination messages, failed requests, and any retained memory trend available in browser or device tooling. Repeat enough cycles to distinguish warm-cache behavior from growth. A fixed eight-entry JSON cache does not bound browser image or GPU memory.
+5. Block or fail the Land Use image request. Confirm an error and retry control appear without thousands of vector fragments. Restore the request and confirm retry renders the map.
+
+Run `npm run test:run` for data-integrity and interaction regressions. The automated jsdom tests verify the selected JSON filename and per-plot values but do not decode the image, render the SVG, measure browser memory, or prove mobile stability. Save device logs or a performance trace when a reload occurs; do not infer its cause from asset size alone.

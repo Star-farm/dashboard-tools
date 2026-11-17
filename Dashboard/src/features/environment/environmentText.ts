@@ -1,8 +1,8 @@
 const vi = {
   title: 'Tổng quan môi trường', comparisonTitle: 'So sánh môi trường', exploreTitle: 'Khám phá Môi trường',
-  description: 'Khám phá phát thải Metan, cường độ phát thải và việc áp dụng AWD theo các kịch bản canh tác lúa giai đoạn 2027–2050.',
-  intensity: 'Cường độ phát thải', methane: 'Phát thải khí Metan',
-  intensityUnit: 'kg Metan/tấn gạo', methaneUnit: 'kg Metan/ha',
+  description: 'Khám phá phát thải metan, cường độ phát thải và việc áp dụng AWD theo các kịch bản canh tác lúa giai đoạn 2027–2050.',
+  intensity: 'Cường độ phát thải', methane: 'Phát thải khí metan',
+  intensityUnit: 'kg metan/tấn gạo', methaneUnit: 'kg metan/ha',
   indicators: 'Các chỉ số môi trường', trends: 'Diễn biến các chỉ số theo năm', summary: 'Nhận xét tổng hợp', insight: 'Nhận xét',
   table: 'Các chỉ số môi trường trung bình theo kịch bản', mobile: 'Các kịch bản môi trường',
   unit: 'Đơn vị', year: 'Năm', period: 'Giai đoạn', average: 'Giá trị bình quân giai đoạn',
@@ -13,14 +13,14 @@ const vi = {
   awd: 'Tỷ lệ áp dụng AWD', points: 'điểm %',
   method: 'Hai chỉ số phát thải là bình quân của bốn nhóm điều kiện thời tiết–tài nguyên; cường độ phát thải được tính trên mỗi tấn gạo. Tỷ lệ AWD là tỷ lệ bản ghi mô phỏng sử dụng AWD. Mức thay đổi so sánh năm 2050 với 2027; tỷ lệ AWD so sánh bằng điểm %.',
   conclusion: 'Nên ưu tiên phương án có cả phát thải trên diện tích và cường độ phát thải thấp, đồng thời cân đối năng suất, chế độ tưới và điều kiện áp dụng AWD.',
-  intensityConclusion: 'Cường độ phát thải cần được đánh giá cùng năng suất: mức thấp hơn cho thấy ít Metan hơn trên cùng khối lượng gạo. Nên kết hợp quản lý nước theo AWD khi phù hợp với điều kiện đồng ruộng và duy trì năng suất.',
+  intensityConclusion: 'Cường độ phát thải cần được đánh giá cùng năng suất: mức thấp hơn cho thấy ít metan hơn trên cùng khối lượng gạo. Nên kết hợp quản lý nước theo AWD khi phù hợp với điều kiện đồng ruộng và duy trì năng suất.',
   methaneConclusion: 'Cần đối chiếu phát thải trên hecta với cường độ phát thải và năng suất. Nên xem xét AWD trong điều kiện phù hợp và theo dõi chế độ tưới; số liệu so sánh phản ánh cả gói kỹ thuật canh tác.',
 }
 const en: Record<keyof typeof vi, string> = {
   title: 'Environment overview', comparisonTitle: 'Environmental comparison', exploreTitle: 'Explore the environment',
   description: 'Explore methane emissions, emission intensity and AWD adoption across rice-farming scenarios over 2027–2050.',
   intensity: 'Emission intensity', methane: 'Methane emissions',
-  intensityUnit: 'kg Methane/ton rice', methaneUnit: 'kg Methane/ha',
+  intensityUnit: 'kg methane/ton rice', methaneUnit: 'kg methane/ha',
   indicators: 'Environmental indicators', trends: 'Indicator trends by year', summary: 'Overall assessment', insight: 'What the chart shows',
   table: 'Mean environmental indicators by scenario', mobile: 'Environmental scenarios',
   unit: 'Unit', year: 'Year', period: 'Period', average: 'Period average',

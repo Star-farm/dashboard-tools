@@ -68,7 +68,7 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const range = minimum === maximum ? minimum : `${minimum}–${maximum}`
   const changeUnit = relative ? '%' : metric === 'margin' ? language === 'vi' ? 'điểm %' : 'pp' : bau3Unit(metric, language)
   const metricName = metric === 'yield' ? language === 'vi' ? 'năng suất' : 'yield' : t[metric].toLocaleLowerCase(language)
-  const change = `${range}${relative ? '%' : ` ${changeUnit}`}`
+  const change = `${range}${relative ? ' %' : ` ${changeUnit}`}`
   const comparison = language === 'vi'
     ? `Trong ${period}, ${metricName} bình quân của 1Mha ${direction} thời tiết–tài nguyên so với ${baseline}; mức chênh lệch ${change}.`
     : `Over ${period}, average ${metricName} under 1Mha is ${direction} compared with ${baseline}, with a difference of ${change}.`
@@ -80,8 +80,8 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   let conclusion: string
   if (metric === 'income' || metric === 'margin') {
     conclusion = language === 'vi'
-      ? higher === count ? 'Vì vậy, nên ưu tiên 1Mha để cải thiện hiệu quả kinh tế, đồng thời bảo đảm nguồn vốn và kiểm soát chi phí khi triển khai.' : 'Việc triển khai 1Mha cần chọn điều kiện có lợi thế về khả năng sinh lời và kiểm soát chi phí theo từng nhóm điều kiện.'
-      : higher === count ? 'This supports prioritizing 1Mha to improve economic performance, with sufficient financing and cost control during implementation.' : 'Implementation of 1Mha should target conditions with a profitability advantage and manage costs for each combination.'
+      ? 'Cần xem kết quả mô phỏng này cùng chi phí, tài nguyên và phát thải khi cân nhắc áp dụng cho từng nhóm điều kiện.'
+      : 'Consider these simulation results alongside costs, resources and emissions when assessing application under each condition.'
   } else if (metric === 'cost') {
     conclusion = language === 'vi'
       ? higher === count ? 'Do đó, triển khai 1Mha cần dự trù vốn cao hơn, tối ưu vật tư và bảo đảm khả năng tiếp cận tài nguyên, nhất là khi khan hiếm.' : 'Cần lựa chọn nhóm điều kiện có chi phí phù hợp và lập kế hoạch vốn, vật tư trước khi triển khai 1Mha.'

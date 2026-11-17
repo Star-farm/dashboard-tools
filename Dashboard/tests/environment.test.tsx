@@ -19,8 +19,8 @@ describe('environmental overview and comparison', () => {
     expect(within(table).getAllByRole('row')).toHaveLength(19)
     expect(table.querySelector('tbody tr')).toHaveTextContent('Hiện trạng · 2016–2022')
     expect(table.querySelectorAll('thead tr:last-child th')).toHaveLength(7)
-    expect(table).toHaveTextContent('kg Metan/tấn gạo')
-    expect(table).toHaveTextContent('kg Metan/ha')
+    expect(table).toHaveTextContent('kg metan/tấn gạo')
+    expect(table).toHaveTextContent('kg metan/ha')
     expect(screen.getAllByRole('article')).toHaveLength(17)
     expect(screen.getAllByRole('combobox')).toHaveLength(5)
     fireEvent.change(screen.getByLabelText('Nhóm kịch bản'), { target: { value: 'oneMha' } })
@@ -29,7 +29,7 @@ describe('environmental overview and comparison', () => {
     rerender(<EnvironmentPage page="environmentOverview" language="en" />)
     expect(screen.getByLabelText('Scenario group')).toHaveValue('oneMha')
     expect(screen.getByLabelText('Weather')).toHaveValue('severe')
-    expect(screen.getByRole('table')).toHaveTextContent('kg Methane/ton rice')
+    expect(screen.getByRole('table')).toHaveTextContent('kg methane/ton rice')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
     expect(screen.getAllByRole('article')).toHaveLength(17)
     fireEvent.change(screen.getByLabelText('AWD adoption'), { target: { value: 'with' } })
@@ -106,7 +106,7 @@ describe('environmental model pages', () => {
     fireEvent.mouseMove(dots[0], { clientX: Number(dots[0].getAttribute('data-cx')), clientY: Number(dots[0].getAttribute('data-cy')) })
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
-    for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${environmentNumber(series.points[0].values.intensity!, 'en')} kg Methane/ton rice`)
+    for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${environmentNumber(series.points[0].values.intensity!, 'en')} kg methane/ton rice`)
     fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('data-cx')), clientY: Number(dots[23].getAttribute('data-cy')) })
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
   })
@@ -116,7 +116,7 @@ describe('environmental navigation', () => {
   it.each([false, true])('connects all environment menu branches (mobile: %s)', (mobile) => {
     render(<HeaderNavigation language="vi" page="environmentBau2" mobile={mobile} />)
     fireEvent.click(screen.getByRole('button', { name: 'Môi trường' }))
-    for (const [branch, names] of [ ['Tổng quan', ['Bảng thông tin', 'Bảng so sánh']], ['So sánh', ['BAU3S vs 1Mha', 'BAU2S vs 1Mha', 'BAUSS vs 1Mha']], ['Canh tác như thường lệ', ['3 mùa vụ', '2 mùa vụ', 'Bền vững']] ] as const) {
+    for (const [branch, names] of [ ['Tổng quan', ['Bảng thông tin', 'Bảng so sánh']], ['So sánh chi tiết', ['BAU3S vs 1Mha', 'BAU2S vs 1Mha', 'BAUSS vs 1Mha']], ['Canh tác như thường lệ', ['3 mùa vụ', '2 mùa vụ', 'Bền vững']] ] as const) {
       fireEvent.click(screen.getByRole('button', { name: branch }))
       for (const name of names) expect(screen.getByRole('link', { name }).getAttribute('href')).toMatch(/^#environment-/)
     }

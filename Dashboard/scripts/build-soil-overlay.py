@@ -18,6 +18,18 @@ from shapely.geometry import MultiLineString, Polygon
 
 ROOT = Path(__file__).resolve().parents[1]
 PALETTE = ['#799a75', '#d6c182', '#9cadc3', '#c49972', '#9b8caa', '#81aaa4', '#b0b97c', '#c39899']
+LANDUSE_GROUPS = [
+    ('1', 'Đất trồng lúa', 'Rice cultivation', '#E8C547', {'4', '5', '6'}),
+    ('2', 'Đất trồng cây khác', 'Other crop cultivation', '#81B65D', {'11', '12', '13', '14'}),
+    ('3', 'Đất lâm nghiệp', 'Forestry land', '#26734D', {'19', '24', '29'}),
+    ('4', 'Đất nuôi trồng thủy sản', 'Aquaculture', '#39B9C5', {'34'}),
+    ('5', 'Đất nông nghiệp khác', 'Other agricultural land', '#B2C998', {'38'}),
+    ('6', 'Đất ở và khu dân cư', 'Residential and settlement land', '#E88D86', {'41', '42'}),
+    ('7', 'Đất công nghiệp, sản xuất và thương mại', 'Industrial, production and commercial land', '#A978BD', {'55', '56', '57', '58', '61', '62'}),
+    ('8', 'Đất hạ tầng và công trình công cộng', 'Infrastructure and public facilities', '#D59C6B', {'59', '60', '63', '66', '67', '68', '69', '70', '72', '75', '78', '79', '80', '81', '84', '85'}),
+    ('9', 'Đất sông ngòi và mặt nước', 'Rivers and water bodies', '#4A90D6', {'91', '92'}),
+    ('10', 'Khác', 'Other', '#A9ADB4', {'93'}),
+]
 CONFIG = [
     ('soil_texture', 'soil_texture', 'Soil_Textu', 'Thành phần cơ giới đất', 'Soil texture'),
     ('flooding', 'flooding', 'DoNgap', 'Độ ngập', 'Flood depth'),
@@ -181,19 +193,23 @@ def main():
             if layer_id == 'landuse':
                 if not row['landuse_vi'] or not row['landuse_en']:
                     continue
-                label = dict(vi=row['landuse_vi'], en=row['landuse_en'])
+                group = next((item for item in LANDUSE_GROUPS if key in item[4]), None)
+                if not group:
+                    continue
+                key = group[0]
+                label = dict(vi=group[1], en=group[2])
             else:
                 label = translated_label(layer_id, key)
             labels[key] = label
             usable.append(shape)
             keys.append(key)
-        category_keys = sorted(labels)
+        category_keys = [item[0] for item in LANDUSE_GROUPS] if layer_id == 'landuse' else sorted(labels)
         def category_color(index):
             if len(category_keys) <= len(PALETTE):
                 return PALETTE[index]
             rgb = colorsys.hls_to_rgb((.25 + index*.61803398875) % 1, .49 + (index%3)*.10, .30)
             return '#' + ''.join(f'{round(value*255):02x}' for value in rgb)
-        categories = [dict(id=key, label=labels[key], color=category_color(i)) for i,key in enumerate(category_keys)]
+        categories = [dict(id=key, label=labels.get(key, dict(vi=LANDUSE_GROUPS[int(key)-1][1], en=LANDUSE_GROUPS[int(key)-1][2])) if layer_id == 'landuse' else labels[key], color=LANDUSE_GROUPS[int(key)-1][3] if layer_id == 'landuse' else category_color(i)) for i,key in enumerate(category_keys)]
         tree = STRtree(usable)
         layer = dict(id=layer_id, title=dict(vi=vi,en=en), categories=categories, features=[], plots=[],
                      sources={suffix:hashlib.sha256(source.with_suffix(suffix).read_bytes()).hexdigest() for suffix in ('.shp','.dbf','.prj')}, conflictingAreaHa=0)

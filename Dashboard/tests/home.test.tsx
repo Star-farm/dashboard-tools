@@ -36,7 +36,7 @@ describe('home page', () => {
     window.history.replaceState(null, '', window.location.pathname)
     render(<App />)
     expect(screen.getByRole('heading', { name: /Tác động của đề án/ })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Khám phá' })).toHaveAttribute('href', '#home-explore')
+    expect(screen.getByRole('link', { name: 'Khám phá' })).toHaveAttribute('href', '#home-about')
     for (const name of ['Về tương lai', 'Kinh tế', 'Tài nguyên', 'Môi trường']) expect(within(screen.getByRole('main')).getByRole('heading', { name })).toBeInTheDocument()
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     expect(screen.queryByText('Thư viện dữ liệu')).not.toBeInTheDocument()
@@ -49,7 +49,7 @@ describe('home page', () => {
     expect(within(screen.getByRole('contentinfo')).queryByRole('heading', { name: 'Khám phá' })).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(screen.getByRole('heading', { name: /The impact of the/ })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Explore' })).toHaveAttribute('href', '#home-explore')
+    expect(screen.getByRole('link', { name: 'Explore' })).toHaveAttribute('href', '#home-about')
     for (const name of ['About the future', 'Economics', 'Resources', 'Environment']) expect(within(screen.getByRole('main')).getByRole('heading', { name })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Download CSV/ })).not.toBeInTheDocument()
     expect(screen.queryByText('Data for sustainable growing seasons.')).not.toBeInTheDocument()
@@ -110,16 +110,16 @@ describe('home page', () => {
     expect(screen.getByRole('button', { name: 'Economics' })).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it('smoothly scrolls from the hero to the explore section while staying on the homepage', async () => {
+  it('smoothly scrolls from the hero to the project section while staying on the homepage', async () => {
     window.history.replaceState(null, '', '#home')
     render(<App />)
-    const explore = screen.getByRole('region', { name: 'Khám phá nội dung' })
+    const explore = screen.getByRole('region', { name: 'Về dự án' })
     const scrollIntoView = vi.fn()
     explore.scrollIntoView = scrollIntoView
     fireEvent.click(screen.getByRole('link', { name: 'Khám phá' }))
 
     await waitFor(() => expect(scrollIntoView).toHaveBeenCalledWith({ block: 'start', behavior: 'smooth' }))
-    expect(window.location.hash).toBe('#home-explore')
+    expect(window.location.hash).toBe('#home-about')
     expect(screen.getByRole('heading', { name: /Tác động của đề án/ })).toBeInTheDocument()
   })
 

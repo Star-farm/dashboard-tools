@@ -5,7 +5,7 @@ const vi = {
   bau3Short: 'BAU 3 vụ', bau2Short: 'BAU 2 vụ', baussShort: 'BAU bền vững',
   oneMhaDescription: 'Lúa chất lượng cao, phát thải thấp',
   income: 'Thu nhập ròng', yield: 'Năng suất trung bình', labor: 'Cường độ lao động', cost: 'Chi phí sản xuất', margin: 'Tỷ suất lợi nhuận',
-  severeShortage: 'Khắc nghiệt · Thiếu tài nguyên', severeNormal: 'Khắc nghiệt · Tài nguyên bình thường', mildShortage: 'Bình thường · Thiếu tài nguyên', mildNormal: 'Bình thường · Tài nguyên bình thường',
+  severeShortage: 'Khắc nghiệt · Khan hiếm tài nguyên', severeNormal: 'Khắc nghiệt · Tài nguyên bình thường', mildShortage: 'Bình thường · Khan hiếm tài nguyên', mildNormal: 'Bình thường · Tài nguyên bình thường',
   unit: 'Đơn vị', moneyUnit: 'VNĐ/ha', yieldUnit: 'tấn/ha', laborUnit: 'giờ/ha', year: 'Năm', insight: 'Nhận xét', noData: 'Chưa đủ số liệu để so sánh.',
   overlap: 'Một số đường trùng nhau vì có cùng số liệu.',
 }

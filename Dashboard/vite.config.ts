@@ -23,6 +23,7 @@ export default defineConfig({
   preview: { headers: securityHeaders },
   test: {
     environment: 'jsdom',
+    include: ['tests/**/*.test.{ts,tsx}'],
     setupFiles: './tests/setup.ts',
   },
 })

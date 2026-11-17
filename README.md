@@ -6,7 +6,7 @@ This workspace contains the source code and documentation for the Star Farm agri
 
 | Directory | Purpose |
 | --- | --- |
-| [`Dashboard`](./Dashboard/) | Static bilingual scenario dashboard; [usage, data, maintenance, and deployment documentation](./Dashboard/README.md) |
+| [`Dashboard`](./Dashboard/) | Static bilingual scenario dashboard; start with [the developer overview](./Dashboard/README.md), then see the [architecture](./Dashboard/docs/ARCHITECTURE.md), [data and GIS pipeline](./Dashboard/docs/DATA_PIPELINE.md), [development](./Dashboard/docs/DEVELOPMENT.md), [testing](./Dashboard/docs/TESTING.md), and [deployment](./Dashboard/docs/DEPLOYMENT.md) guides |
 | [`Web App`](./Web%20App/) | Complete dashboard application |
 | [`Data Studio guide`](./Data%20Studio%20guide/) | Data dashboard documentation and resources |
 

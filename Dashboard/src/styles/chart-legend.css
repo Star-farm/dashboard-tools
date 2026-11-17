@@ -20,3 +20,4 @@
 
 .chart-legend-marker { display: inline-block; width: 18px; height: 18px; flex: 0 0 18px; overflow: visible; }
 .chart-legend-label { flex: 0 0 100%; grid-column: 1 / -1; margin: 0; color: #30472d; font-size: var(--text-small); font-weight: 700; line-height: 1.5; }
+.chart-legend-caption { flex: 0 0 100%; grid-column: 1 / -1; margin: 0; color: #30472d; font-size: var(--text-small); font-weight: 700; line-height: 1.5; }

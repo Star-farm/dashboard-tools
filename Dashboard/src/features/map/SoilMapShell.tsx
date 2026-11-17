@@ -20,7 +20,7 @@ export default function SoilMapShell({ language, layerId = 'soil_texture', onLay
 }) {
   const t = soilText[language]
   const layer = soilManifest.layers.find((item) => item.id === layerId) ?? soilManifest.layers[0]
-  const categories = [...layer.categories, { id: 'undetermined', label: { vi: soilText.vi.unknown, en: soilText.en.unknown }, color: soilUnknownColor }]
+  const categories = layer.id === 'landuse' ? layer.categories : [...layer.categories, { id: 'undetermined', label: { vi: soilText.vi.unknown, en: soilText.en.unknown }, color: soilUnknownColor }]
   const legendItem = (category: typeof categories[number]) => <span key={category.id}><i aria-hidden="true" style={{ background: category.color }} />{category.label[language]}</span>
   return <section className="soil-map-section map-workspace" aria-labelledby="soil-map-title">
     <div className="map-workspace-heading"><h2 id="soil-map-title">{t.title}</h2></div>

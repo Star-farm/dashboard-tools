@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import type { Language } from '../../i18n'
 import { colorFor, mapColors  } from './mapData'
 import { mapText } from './mapText'
-import type { MapGeometry, MapMetric } from './mapTypes'
+import type { AdminBoundaryData, MapGeometry, MapMetric } from './mapTypes'
 import { zoomViewport } from './mapViewport'
 import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
@@ -49,6 +49,7 @@ function incomePlotColor(
 
 export default function PlotMap({
   geometry,
+  adminBoundaries,
   values,
   metric,
   breaks,
@@ -56,21 +57,18 @@ export default function PlotMap({
   language,
   yieldValues,
   incomeValues,
-  periodLabel,
-  scenarioLabel,
   thematic,
   onSelectionChange,
   rasterFile,
 }: {
   geometry: MapGeometry
+  adminBoundaries?: AdminBoundaryData
   values: (number | null)[]
   metric: MapMetric
   breaks: number[]
   language: Language
   yieldValues: (number | null)[]
   incomeValues: (number | null)[]
-  periodLabel: string
-  scenarioLabel: string
   thematic?: SoilLayer
   onSelectionChange?: (id: number | null) => void
   rasterFile?: string
@@ -100,11 +98,32 @@ export default function PlotMap({
   const pinchDistance = useRef<number | null>(null)
   const pinching = useRef(false)
 
-  const [view, setView] = useState({
-    zoom: 1,
-    x: geometry.width / 2,
-    y: geometry.height / 2,
-  })
+  const [storedView, setView] = useState<{ zoom: number; x: number; y: number } | null>(null)
+
+  const validAdminBoundaries = adminBoundaries
+    && Array.isArray(adminBoundaries.bounds)
+    && adminBoundaries.bounds.length === 4
+    && adminBoundaries.bounds.every(Number.isFinite)
+    && Array.isArray(adminBoundaries.features)
+    ? adminBoundaries
+    : undefined
+  const adminRegion = useMemo(() => {
+    if (!validAdminBoundaries) return null
+    const [xmin, ymin, xmax, ymax] = validAdminBoundaries.bounds
+    const [originX, , , originY] = geometry.bounds
+    return {
+      x: [(xmin - originX) / geometry.metersPerUnit, (xmax - originX) / geometry.metersPerUnit] as const,
+      y: [(originY - ymax) / geometry.metersPerUnit, (originY - ymin) / geometry.metersPerUnit] as const,
+    }
+  }, [validAdminBoundaries, geometry])
+
+  const mapCenter = useMemo(() => adminRegion
+    ? { x: (adminRegion.x[0] + adminRegion.x[1]) / 2, y: (adminRegion.y[0] + adminRegion.y[1]) / 2 }
+    : { x: geometry.width / 2, y: geometry.height / 2 }, [adminRegion, geometry])
+  const initialView = useMemo(() => ({ zoom: 1, ...mapCenter }), [mapCenter])
+  const view = storedView ?? initialView
+  const mapWidth = adminRegion ? Math.max(geometry.width + 70, (adminRegion.x[1] - adminRegion.x[0]) * 1.22) : geometry.width + 70
+  const mapHeight = adminRegion ? Math.max(geometry.height + 120, (adminRegion.y[1] - adminRegion.y[0]) * 1.22) : geometry.height + 120
 
   const [hover, setHover] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
@@ -118,8 +137,8 @@ export default function PlotMap({
     height: 0,
   })
 
-  const width = (geometry.width + 70) / view.zoom
-  const height = (geometry.height + 120) / view.zoom
+  const width = mapWidth / view.zoom
+  const height = mapHeight / view.zoom
 
   const number = useMemo(
     () =>
@@ -144,15 +163,11 @@ export default function PlotMap({
     : t.yieldUnit
 
   function zoom(factor: number) {
-    setView((current) => zoomViewport(current, factor))
+    setView((current) => zoomViewport(current ?? initialView, factor))
   }
 
   function reset() {
-    setView({
-      zoom: 1,
-      x: geometry.width / 2,
-      y: geometry.height / 2,
-    })
+    setView({ zoom: 1, ...mapCenter })
   }
 
   function pointToMap(event: {
@@ -216,9 +231,7 @@ export default function PlotMap({
           ).matrixTransform(inverse)
         : undefined
 
-      setView((current) =>
-        zoomViewport(current, factor, anchor)
-      )
+      setView((current) => zoomViewport(current ?? initialView, factor, anchor))
     }
 
     svg.addEventListener('wheel', wheel, {
@@ -228,7 +241,7 @@ export default function PlotMap({
     return () => {
       svg.removeEventListener('wheel', wheel)
     }
-  }, [])
+  }, [initialView])
 
   // ---------------------------------------
   // Observe map size for responsive scale
@@ -324,7 +337,7 @@ export default function PlotMap({
               setSelected(plot.id)
             }
           }}
-          
+
 fill={
   thematic
     ? soilUnknownColor
@@ -416,6 +429,28 @@ fill={
       : geometry.plots.find(
           (shape) => shape.id === selected
         )
+  const plotWardName = useMemo(() => {
+    if (!plot || !validAdminBoundaries) return undefined
+    const point = [
+      geometry.bounds[0] + plot.center[0] * geometry.metersPerUnit,
+      geometry.bounds[3] - plot.center[1] * geometry.metersPerUnit,
+    ]
+    const insideRing = (ring: number[][]) => {
+      let inside = false
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const [xi, yi] = ring[i], [xj, yj] = ring[j]
+        if ((yi > point[1]) !== (yj > point[1]) && point[0] < ((xj - xi) * (point[1] - yi)) / (yj - yi) + xi) inside = !inside
+      }
+      return inside
+    }
+    return validAdminBoundaries.features.find((feature) => {
+      if (feature.properties.kind !== 'ward') return false
+      const polygons = feature.geometry.type === 'Polygon'
+        ? [feature.geometry.coordinates as number[][][]]
+        : feature.geometry.coordinates as number[][][][]
+      return polygons.some((polygon) => insideRing(polygon[0]) && !polygon.slice(1).some(insideRing))
+    })?.properties.fullName
+  }, [plot, validAdminBoundaries, geometry])
 
   const thematicOutlines = useMemo(() => geometry.plots.map((shape) => <path key={shape.id} d={shape.path} fill="none" stroke="#254f3d" strokeOpacity={0.6} strokeWidth={0.5} vectorEffect="non-scaling-stroke" />), [geometry])
   const thematicPaths = useMemo(() => {
@@ -428,7 +463,92 @@ fill={
       fillRule="evenodd"
     />)
   }, [thematic, rasterFile])
-  const showPopup = !thematic
+  const adminPaths = useMemo(() => {
+    if (!validAdminBoundaries) return null
+    const toMap = ([x, y]: number[]) => [
+      (x - geometry.bounds[0]) / geometry.metersPerUnit,
+      (geometry.bounds[3] - y) / geometry.metersPerUnit,
+    ]
+    const crossSectionSpan = (point: number[], fixedAxis: 0 | 1, polygons: number[][][][]) => {
+      const value = point[fixedAxis], otherAxis = fixedAxis === 0 ? 1 : 0
+      const crossings: number[] = []
+      for (const polygon of polygons) for (const ring of polygon) {
+        const points = ring.map(toMap)
+        for (let index = 0; index < points.length; index++) {
+          const a = points[index], b = points[(index + 1) % points.length]
+          if ((a[fixedAxis] <= value && b[fixedAxis] > value) || (b[fixedAxis] <= value && a[fixedAxis] > value)) {
+            const ratio = (value - a[fixedAxis]) / (b[fixedAxis] - a[fixedAxis])
+            crossings.push(a[otherAxis] + ratio * (b[otherAxis] - a[otherAxis]))
+          }
+        }
+      }
+      const before = crossings.filter((crossing) => crossing < point[otherAxis]).sort((a, b) => b - a)[0]
+      const after = crossings.filter((crossing) => crossing > point[otherAxis]).sort((a, b) => a - b)[0]
+      return before === undefined || after === undefined ? 0 : after - before
+    }
+    const labelPlacement = (feature: AdminBoundaryData['features'][number]) => {
+      const point = toMap(feature.properties.center)
+      const viewBounds = [view.x - width / 2, view.y - height / 2, view.x + width / 2, view.y + height / 2]
+      if (point[0] <= viewBounds[0] || point[0] >= viewBounds[2] || point[1] <= viewBounds[1] || point[1] >= viewBounds[3]) return null
+      const polygons = feature.geometry.type === 'Polygon'
+        ? [feature.geometry.coordinates as number[][][]]
+        : feature.geometry.coordinates as number[][][][]
+      const horizontalSpan = Math.min(crossSectionSpan(point, 1, polygons), 2 * Math.min(point[0] - viewBounds[0], viewBounds[2] - point[0]))
+      const verticalSpan = Math.min(crossSectionSpan(point, 0, polygons), 2 * Math.min(point[1] - viewBounds[1], viewBounds[3] - point[1]))
+      return { point, horizontalSpan, verticalSpan }
+    }
+    const d = (feature: AdminBoundaryData['features'][number]) => {
+      const polygons = feature.geometry.type === 'Polygon'
+        ? [feature.geometry.coordinates as number[][][]]
+        : feature.geometry.coordinates as number[][][][]
+      return polygons.flatMap((polygon) => polygon.map((ring) => {
+        const points = ring.map(toMap)
+        return points.length ? `M${points.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join('L')}Z` : ''
+      })).join('')
+    }
+    const provinces = validAdminBoundaries.features.filter((feature) => feature.properties.kind === 'province')
+    const wards = validAdminBoundaries.features.filter((feature) => feature.properties.kind === 'ward')
+    const fontSizeFor = (placement: NonNullable<ReturnType<typeof labelPlacement>>, line1: string, line2: string) => Math.min(
+      Math.max(8, width * 0.018),
+      placement.horizontalSpan / (Math.max(line1.length, line2.length) * 0.64),
+      placement.verticalSpan / ((line2 ? 2 : 1) * 1.2),
+    )
+    const canThoFeature = provinces.find((feature) => feature.properties.provinceCode === '92')
+    const canThoPlacement = canThoFeature ? labelPlacement(canThoFeature) : null
+    const canThoLine1 = language === 'vi' ? canThoFeature?.properties.name ?? '' : canThoFeature?.properties.nameEn ?? ''
+    const defaultProvinceFontSize = canThoPlacement
+      ? fontSizeFor(canThoPlacement, canThoLine1, '')
+      : Math.max(8, width * 0.018)
+    return {
+      boundaries: <g pointerEvents="none" aria-hidden="true" className="admin-boundary-layer">
+        {provinces.map((feature) => <path key={`province-${feature.properties.provinceCode}`} d={d(feature)} fill="#f2f5ed" fillRule="evenodd" stroke="#526b55" strokeWidth={1.6} vectorEffect="non-scaling-stroke"><title>{feature.properties.provinceName}</title></path>)}
+        {wards.map((feature) => <path key={`ward-${feature.properties.code}`} d={d(feature)} fill={feature.properties.provinceCode === '82' ? '#e8efdf' : 'none'} fillOpacity={0.58} fillRule="evenodd" stroke="#899b84" strokeOpacity={0.85} strokeWidth={0.65} vectorEffect="non-scaling-stroke"><title>{feature.properties.fullName}</title></path>)}
+      </g>,
+      labels: <g pointerEvents="none" aria-hidden="true" className="admin-label-layer">
+      {provinces.map((feature) => {
+        const placement = labelPlacement(feature)
+        if (!placement) return null
+        const isHoChiMinh = feature.properties.provinceCode === '79'
+        const line1 = isHoChiMinh ? (language === 'vi' ? 'Thành phố' : 'Ho Chi Minh') : (language === 'vi' ? feature.properties.name : feature.properties.nameEn)
+        const line2 = isHoChiMinh ? (language === 'vi' ? 'Hồ Chí Minh' : 'City') : ''
+        const [x, y] = placement.point
+        const fitFontSize = fontSizeFor(placement, line1, line2)
+        const fontSize = view.zoom === 1 ? defaultProvinceFontSize : Math.min(Math.max(8, width * 0.018), fitFontSize)
+        if (fontSize < 4.5) return null
+        return <text key={`province-label-${feature.properties.provinceCode}`} x={x} y={isHoChiMinh ? y - fontSize * 0.55 : y} textAnchor="middle" fontSize={fontSize} fontWeight="700" fill="#344b37" stroke="#fffefa" strokeWidth={2} paintOrder="stroke">
+          {isHoChiMinh
+            ? <><tspan x={x}>{language === 'vi' ? 'Thành phố' : 'Ho Chi Minh'}</tspan><tspan x={x} dy={fontSize * 1.1}>{language === 'vi' ? 'Hồ Chí Minh' : 'City'}</tspan></>
+            : (language === 'vi' ? feature.properties.name : feature.properties.nameEn)}
+        </text>
+      })}
+      {view.zoom >= 3 && wards.map((feature) => {
+        const [labelX, labelY] = toMap(feature.properties.center)
+        return <text key={`ward-label-${feature.properties.code}`} x={labelX} y={labelY} textAnchor="middle" fontSize={Math.max(2.4, width * 0.011)} fill="#354d38" stroke="#fffefa" strokeWidth={0.9} paintOrder="stroke">{language === 'vi' ? feature.properties.name : feature.properties.nameEn}</text>
+      })}
+      </g>,
+    }
+  }, [validAdminBoundaries, geometry, view.x, view.y, view.zoom, width, height, language])
+  const showPopup = true
 
   return (
     <div
@@ -533,11 +653,14 @@ fill={
           if (direction) {
             event.preventDefault()
 
-            setView((v) => ({
-              ...v,
-              x: v.x + direction[0] * width / 8,
-              y: v.y + direction[1] * height / 8,
-            }))
+            setView((current) => {
+              const currentView = current ?? initialView
+              return {
+                ...currentView,
+                x: currentView.x + direction[0] * width / 8,
+                y: currentView.y + direction[1] * height / 8,
+              }
+            })
           }
         }}
 
@@ -592,7 +715,7 @@ fill={
                 const anchor = pointToMap({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 })
                 if (anchor && pinchDistance.current && distance > 0) {
                   const factor = distance / pinchDistance.current
-                  setView((current) => zoomViewport(current, factor, anchor))
+                  setView((current) => zoomViewport(current ?? initialView, factor, anchor))
                 }
                 pinchDistance.current = distance
               }
@@ -640,15 +763,14 @@ fill={
                 active.lastY
               ).matrixTransform(inverse)
 
-              setView((v) => ({
-                ...v,
-                x:
-                  v.x -
-                  (point.x - previous.x),
-                y:
-                  v.y -
-                  (point.y - previous.y),
-              }))
+              setView((current) => {
+                const currentView = current ?? initialView
+                return {
+                  ...currentView,
+                  x: currentView.x - (point.x - previous.x),
+                  y: currentView.y - (point.y - previous.y),
+                }
+              })
             }
           }
 
@@ -695,8 +817,10 @@ fill={
           setHover(null)
         }}
       >
+        {adminPaths?.boundaries}
         <g>{paths}</g>
         {thematic && <ThematicOverlay paths={rasterFile ? !rasterFailed && <image href={`${import.meta.env.BASE_URL}map-data/${rasterFile}`} x={0} y={0} width={geometry.width} height={geometry.height} preserveAspectRatio="none" onError={() => setFailedRaster(rasterFile)} /> : thematicPaths} outlines={thematicOutlines} />}
+        {adminPaths?.labels}
 
         {/* Highlight selected plot */}
         {plot && (
@@ -744,11 +868,12 @@ fill={
 
       {plot && showPopup && <PlotMapPopup
         plot={plot}
+        wardName={plotWardName}
+        thematic={!!thematic}
+        placement={`${plot.center[1] <= view.y ? 'bottom' : 'top'}-${plot.center[0] <= view.x ? 'right' : 'left'}`}
         language={language}
         yieldValue={yieldValues[plot.id]}
         incomeValue={incomeValues[plot.id]}
-        periodLabel={periodLabel}
-        scenarioLabel={scenarioLabel}
         closeRef={closeRef}
         onClose={closePopup}
       />}

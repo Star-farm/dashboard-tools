@@ -91,7 +91,7 @@ describe('routed map experience', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Tiếng Việt' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Bản đồ vùng canh tác' })).toBeInTheDocument()
     expect(screen.getByLabelText('Nhóm kịch bản')).toHaveValue('bau')
-    expect(within(screen.getByLabelText('Vụ thu hoạch')).getAllByRole('option').map((option) => option.textContent)).toEqual(['Trung bình các vụ', 'Đông Xuân', 'Xuân Hè', 'Thu Đông'])
+    expect(within(screen.getByLabelText('Vụ thu hoạch')).getAllByRole('option').map((option) => option.textContent)).toEqual(['Trung bình các vụ', 'Đông-Xuân', 'Xuân-Hè', 'Thu-Đông'])
     expect(screen.getByText('VNĐ/ha', { selector: '.map-summary small' })).toBeInTheDocument()
     expect(screen.getByText(new Intl.NumberFormat('vi', { maximumFractionDigits: 0 }).format(expectedIncome * 26322), { selector: '.map-summary strong' })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Vùng 0' }))

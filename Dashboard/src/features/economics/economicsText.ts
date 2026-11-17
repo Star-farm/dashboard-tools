@@ -5,10 +5,10 @@ const vi = {
   historical: 'Hiện trạng', noResults: 'Không có kịch bản phù hợp', noResultsDescription: 'Thử thay đổi lựa chọn hoặc xóa bộ lọc để xem tất cả kịch bản.',
   scenarioColumns: 'Thông tin kịch bản', financialColumns: 'Hiệu quả tài chính', productionColumns: 'Sản xuất',
   tableCaption: 'Các chỉ số kinh tế trung bình theo kịch bản', mobileResults: 'Các kịch bản kinh tế', unit: 'Đơn vị',
-  roiNote: 'Thu nhập ròng bình quân / Chi phí sản xuất bình quân × 100%.',
+  roiNote: 'Thu nhập ròng bình quân / Chi phí sản xuất bình quân × 100 %.',
   moneyUnit: 'VNĐ/ha', yieldUnit: 'tấn/ha', laborUnit: 'giờ/ha',
   group: 'Nhóm kịch bản', season: 'Hệ canh tác', climate: 'Thời tiết', resource: 'Tài nguyên', awd: 'Áp dụng AWD',
-  bau: 'Thường lệ', oneMha: '1Mha', sustainable: 'Bền vững', threeSeasons: '3 mùa vụ', twoSeasons: '2 mùa vụ', mild: 'Bình thường', severe: 'Khắc nghiệt', normal: 'Kinh tế bình thường', neutral: 'Hiện trạng', shortage: 'Thiếu tài nguyên', with: 'Có AWD', without: 'Không có AWD', mixed: 'Có và không AWD',
+  bau: 'Thường lệ', oneMha: '1Mha', sustainable: 'Bền vững', threeSeasons: '3 mùa vụ', twoSeasons: '2 mùa vụ', mild: 'Bình thường', severe: 'Khắc nghiệt', normal: 'Kinh tế bình thường', neutral: 'Hiện trạng', shortage: 'Khan hiếm tài nguyên', with: 'Có AWD', without: 'Không có AWD', mixed: 'Có và không AWD',
   income: 'Thu nhập ròng', cost: 'Chi phí sản xuất', straw: 'Giá trị rơm', roi: 'Tỷ suất hoàn vốn', margin: 'Tỷ suất lợi nhuận', yield: 'Năng suất trung bình', labor: 'Cường độ lao động',
 }
 const en: Record<keyof typeof vi, string> = {
@@ -16,7 +16,7 @@ const en: Record<keyof typeof vi, string> = {
   historical: 'Current conditions', noResults: 'No matching scenarios', noResultsDescription: 'Change your selection or clear filters to view every scenario.',
   scenarioColumns: 'Scenario information', financialColumns: 'Financial performance', productionColumns: 'Production',
   tableCaption: 'Mean economic indicators by scenario', mobileResults: 'Economic scenarios', unit: 'Unit',
-  roiNote: 'Mean net income / Mean production cost × 100%.',
+  roiNote: 'Mean net income / Mean production cost × 100 %.',
   moneyUnit: 'USD/ha', yieldUnit: 'ton/ha', laborUnit: 'hours/ha',
   group: 'Scenario group', season: 'Farming system', climate: 'Weather', resource: 'Resource scenario', awd: 'AWD adoption',
   bau: 'Business as usual', oneMha: '1Mha', sustainable: 'Sustainable', threeSeasons: '3 seasons', twoSeasons: '2 seasons', mild: 'Normal', severe: 'Severe weather', normal: 'Normal economy', neutral: 'Neutral', shortage: 'Resource shortage', with: 'With AWD', without: 'Without AWD', mixed: 'With and without AWD',

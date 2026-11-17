@@ -1,4 +1,4 @@
-.economic-table.resource-table { min-width: 1060px; }
+.economic-table.resource-table { min-width: 0; }
 .resource-table .resource-group-column { width: 18%; }
 .resource-table .resource-season-column { width: 13%; }
 .resource-table .resource-climate-column { width: 12%; }

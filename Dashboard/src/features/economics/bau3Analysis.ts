@@ -7,13 +7,17 @@ export function selectBau3Points(data: Bau3Data, family: Bau3Family, metric: Bau
   const series = new Map(bau3Conditions.map((condition) => [condition, new Map((data.series.find((item) => item.family === family && item.condition === condition)?.[currency] ?? []).map((point) => [point.year, point[metric]]))]))
   return Array.from({ length: data.endYear - data.startYear + 1 }, (_, index) => {
     const year = data.startYear + index
-    return { year, ...Object.fromEntries(bau3Conditions.map((condition) => [condition, series.get(condition)?.get(year) ?? null])) } as { year: number } & Record<Bau3Condition, number | null>
+    return { year, ...Object.fromEntries(bau3Conditions.map((condition) => { const value = series.get(condition)?.get(year) ?? null; return [condition, value === null ? null : value / (currency === 'VND' && (metric === 'income' || metric === 'cost') ? 1_000_000 : 1)] })) } as { year: number } & Record<Bau3Condition, number | null>
   })
 }
 
 export function bau3Unit(metric: Bau3Metric, language: Language) {
   const t = bau3Text[language]
   return metric === 'income' || metric === 'cost' ? t.moneyUnit : metric === 'margin' ? '%' : metric === 'yield' ? t.yieldUnit : t.laborUnit
+}
+
+export function bau3ChartUnit(metric: Bau3Metric, language: Language) {
+  return language === 'vi' && (metric === 'income' || metric === 'cost') ? 'triệu VNĐ/ha' : bau3Unit(metric, language)
 }
 
 export function formatBau3Value(value: number, metric: Bau3Metric, language: Language) {
@@ -32,7 +36,8 @@ export function bau3Domain(data: Bau3Data, metric: Bau3Metric, currency: Bau3Cur
   const padding = span * .08
   const low = min === 0 && includeZero ? 0 : Math.floor((min - padding) / step) * step
   const high = Math.ceil((max + padding) / step) * step
-  return [low, high > low ? high : low + step]
+  const scale = currency === 'VND' && (metric === 'income' || metric === 'cost') ? 1_000_000 : 1
+  return [low / scale, (high > low ? high : low + step) / scale]
 }
 
 export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Language) {

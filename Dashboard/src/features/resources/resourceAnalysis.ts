@@ -37,7 +37,7 @@ export function resourceFilteredSeries(data: ResourceData, climate: string, reso
 function changeText(change: number | null, language: Language) {
   if (change === null) return language === 'vi' ? 'chưa đủ số liệu để tính tỷ lệ thay đổi' : 'a percentage change cannot be calculated'
   const amount = new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))
-  return language === 'vi' ? Math.abs(change) < .000001 ? 'không đổi' : `${change < 0 ? 'giảm' : 'tăng'} ${amount}%` : Math.abs(change) < .000001 ? 'is unchanged' : `${change < 0 ? 'decreases' : 'increases'} by ${amount}%`
+  return language === 'vi' ? Math.abs(change) < .000001 ? 'không đổi' : `${change < 0 ? 'giảm' : 'tăng'} ${amount} %` : Math.abs(change) < .000001 ? 'is unchanged' : `${change < 0 ? 'decreases' : 'increases'} by ${amount} %`
 }
 export function resourceFamilyInsight(data: ResourceData, family: Bau3Family, metric: ResourceMetric, language: Language) {
   const t = resourceText[language], names = bau3Text[language], vi = language === 'vi'
@@ -59,7 +59,7 @@ export function resourceComparisonInsight(data: ResourceData, selected: Resource
   const name = family ? t[family] : t.bau
   const relative = a === 0 ? null : (b - a) / Math.abs(a) * 100
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
-  const comparison = relative === null ? vi ? `chênh lệch ${resourceNumber(b - a, language)} ${resourceUnit(metric, language)}` : `a difference of ${resourceNumber(b - a, language)} ${resourceUnit(metric, language)}` : Math.abs(relative) < .000001 ? vi ? 'tương đương nhau' : 'similar use' : vi ? `${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))}%` : `${number.format(Math.abs(relative))}% ${b < a ? 'lower' : 'higher'} use`
+  const comparison = relative === null ? vi ? `chênh lệch ${resourceNumber(b - a, language)} ${resourceUnit(metric, language)}` : `a difference of ${resourceNumber(b - a, language)} ${resourceUnit(metric, language)}` : Math.abs(relative) < .000001 ? vi ? 'tương đương nhau' : 'similar use' : vi ? `${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))} %` : `${number.format(Math.abs(relative))} % ${b < a ? 'lower' : 'higher'} use`
   const differences = bau3Conditions.flatMap((condition) => {
     const left = baseline.filter((item) => item.condition === condition).flatMap((item) => item.points)
     const right = one.filter((item) => item.condition === condition).flatMap((item) => item.points)

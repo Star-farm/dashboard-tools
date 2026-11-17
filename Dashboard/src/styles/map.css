@@ -219,6 +219,8 @@
 }
 .map-year-labels { display: flex; justify-content: space-between; gap: 4px; color: var(--muted); font-size: calc(11px + 1px); font-variant-numeric: tabular-nums; }
 .plot-map-popup { position: absolute; z-index: 1; top: 70px; right: 16px; width: 280px; max-width: calc(100% - 32px); max-height: calc(100% - 86px); overflow-y: auto; overscroll-behavior: contain; padding: 0 18px 10px; border: 1px solid #bac8b9; border-radius: 8px; background: #fffefa; color: var(--forest); box-shadow: 0 5px 20px #163d3026; }
+.plot-map-popup[data-placement$="-left"] { right: auto; left: 16px; }
+.plot-map-popup[data-placement^="bottom-"] { top: auto; bottom: 16px; }
 .plot-map-popup header { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; background: #fffefa; }
 .plot-map-popup header p { margin: 0 0 5px; color: var(--muted); font-size: calc(11px + 1px); }
 .plot-map-popup h3 { margin: 0; font-size: calc(19px + 1px); font-weight: 600; line-height: 1.5; }
@@ -231,4 +233,6 @@
 .plot-map-popup dl > div { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
 .plot-map-popup dt { color: var(--muted); font-size: calc(12px + 1px); line-height: 1.7; }
 .plot-map-popup dd { margin: 0; text-align: right; white-space: nowrap; font-size: calc(17px + 1px); font-variant-numeric: tabular-nums; }
+.plot-map-popup .plot-map-popup-ward { align-items: flex-start; }
+.plot-map-popup .plot-map-popup-ward-name { display: -webkit-box; flex: 0 1 68%; max-width: 68%; overflow: hidden; overflow-wrap: anywhere; white-space: normal; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .plot-map-popup dd small { font-size: calc(11px + 1px); font-weight: 400; color: var(--muted); }

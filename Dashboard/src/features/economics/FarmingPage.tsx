@@ -40,7 +40,7 @@ export default function FarmingPage({ language, data, family }: { language: Lang
           return <div className="scenario-kpi" key={metric}>
             <dt>{labels[metric]}</dt>
             <dd className="scenario-kpi-value"><strong>{stats.mean === null ? '—' : formatBau3Value(stats.mean, metric, language)}</strong><span>{bau3Unit(metric, language)}</span></dd>
-            <dd className="scenario-kpi-change">{change === null ? <span>{t.unavailable}</span> : <><span className={`scenario-change ${farmingTone(stats)}`}><span aria-hidden="true">{Math.abs(change) < .000001 ? '−' : change > 0 ? '↑' : '↓'}</span> {number.format(Math.abs(change))}{metric === 'margin' ? ` ${t.points}` : '%'}</span><span>{t.change}</span></>}</dd>
+            <dd className="scenario-kpi-change">{change === null ? <span>{t.unavailable}</span> : <><span className={`scenario-change ${farmingTone(stats)}`}><span aria-hidden="true">{Math.abs(change) < .000001 ? '−' : change > 0 ? '↑' : '↓'}</span> {number.format(Math.abs(change))} {metric === 'margin' ? t.points : '%'}</span><span>{t.change}</span></>}</dd>
           </div>
         })}</dl>
         <p className="farming-method">{t.method}</p>

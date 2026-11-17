@@ -13,7 +13,10 @@
 .comparison-summary h2 { margin: 0 0 10px; color: #526447; font-size: var(--text-body); font-weight: 700; line-height: 1.5; }
 .comparison-summary p { margin: 0; color: #485d3e; font-size: var(--text-body); line-height: 1.9; }
 .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
-.comparison-chart-card { min-width: 0; border: 1px solid #cddbc4; border-radius: 9px; background: #fffefa; }
+.comparison-chart-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid #cddbc4; border-radius: 9px; background: #fffefa; }
+.comparison-chart-card > .comparison-plot { order: 2; }
+.comparison-chart-card > .interactive-chart-legend { order: 3; }
+.comparison-chart-card > .comparison-values { order: 4; }
 .comparison-chart-card > header { padding: 22px 24px 18px; border-bottom: 1px solid #e4eadc; }
 .comparison-chart-card h2 { margin: 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; letter-spacing: normal; }
 .comparison-chart-card > header p { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px; margin: 10px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.5; }

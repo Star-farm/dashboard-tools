@@ -9,7 +9,7 @@ const geometry: MapGeometry = {
   plots: [{ id: 0, record: 1, areaHa: 52.5, path: 'M0,0L100,0L100,100L0,100Z', center: [50, 50] }],
   raster: { columns: 0, rows: 0, values: [], x: 0, y: 0, cellWidth: 0, cellHeight: 0, resolutionMeters: [] },
 }
-const props = { geometry, values: [6.5], yieldValues: [6.5], incomeValues: [-10], metric: 'yield' as const, breaks: [0, 2, 4, 6, 8, 10], language: 'en' as const, periodLabel: '2035 · Winter–Spring', scenarioLabel: 'BAU-3V-OH-BT' }
+const props = { geometry, values: [6.5], yieldValues: [6.5], incomeValues: [-10], metric: 'yield' as const, breaks: [0, 2, 4, 6, 8, 10], language: 'en' as const }
 afterEach(() => vi.unstubAllGlobals())
 
 describe('interactive plot map', () => {
@@ -43,19 +43,19 @@ describe('interactive plot map', () => {
     expect(svg).toHaveAttribute('viewBox', initial)
   })
 
-  it('opens a plot popup, updates values with the current time/filter and closes with Escape', () => {
+  it('opens a plot popup with plot values only and closes with Escape', () => {
     const { rerender } = render(<PlotMap {...props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Area 0' }))
     const popup = screen.getByRole('dialog', { name: 'Area 0' })
     expect(within(popup).getByText('52.5')).toBeInTheDocument()
     expect(within(popup).getByText('6.5')).toBeInTheDocument()
     expect(within(popup).getByText('-10')).toBeInTheDocument()
-    expect(within(popup).getByText('2035 · Winter–Spring')).toBeInTheDocument()
-    expect(within(popup).getByText('BAU-3V-OH-BT')).toBeInTheDocument()
-    rerender(<PlotMap {...props} yieldValues={[7]} incomeValues={[100]} periodLabel="2036 · Winter–Spring" />)
+    expect(popup).not.toHaveTextContent('2035 · Winter–Spring')
+    expect(popup).not.toHaveTextContent('BAU-3V-OH-BT')
+    rerender(<PlotMap {...props} yieldValues={[7]} incomeValues={[100]} />)
     expect(within(popup).getByText('7')).toBeInTheDocument()
     expect(within(popup).getByText('100')).toBeInTheDocument()
-    expect(within(popup).getByText('2036 · Winter–Spring')).toBeInTheDocument()
+    expect(popup).not.toHaveTextContent('2036 · Winter–Spring')
     fireEvent.keyDown(screen.getByRole('button', { name: 'Close plot information' }), { key: 'Escape' })
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })

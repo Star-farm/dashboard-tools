@@ -1,7 +1,7 @@
-import ChartInfo from '../../components/ChartInfo'
+import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { CHART_TICK, scenarioColor } from '../../components/chartStyles'
 import { useChartSelection } from '../../components/chartSelectionContext'
-import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import ChartLegend from '../../components/ChartLegend'
 import type { Language } from '../../i18n'
 import type { ComparisonCohort, ComparisonMetric } from './comparisonData'
@@ -21,46 +21,29 @@ export default function ComparisonBarChart({ metric, cohort, language, startYear
   const currency = language === 'vi' ? 'VND' : 'USD'
   const money = economicMetricUnits[metric] === 'moneyUnit'
   const unit = money ? t.moneyUnit : metric === 'yield' ? t.yieldUnit : t.laborUnit
+  const chartUnit = money && currency === 'VND' ? 'triệu VNĐ/ha' : unit
   const number = new Intl.NumberFormat(language, { minimumFractionDigits: money && language === 'vi' ? 0 : 2, maximumFractionDigits: money && language === 'vi' ? 0 : 2 })
   const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   const points = (['bau', 'oneMha'] as const).map((group) => ({ group, label: t[group], value: cohort.groups[group][currency][metric], color: scenarioColor(group) }))
   const title = text[metric]
   const visiblePoints = points.filter((point) => selection === 'all' || point.group === selection)
+  const visibleChartPoints = visiblePoints.map((point) => ({ ...point, value: point.value === null ? null : point.value / (currency === 'VND' && money ? 1_000_000 : 1) }))
 
   return (
     <article className="comparison-chart-card" aria-labelledby={`comparison-${metric}-title`}>
-      <header><h2 id={`comparison-${metric}-title`}>{title}</h2><p>{t.unit}: <strong>{unit}</strong><span>{text.period} {startYear} - {endYear}</span></p></header>
+      <header><h2 id={`comparison-${metric}-title`}>{title}</h2><p><span>{text.period} {startYear} - {endYear}</span></p></header>
       <ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={points.map((point) => ({ key: point.group, label: point.label, color: point.color }))} selected={selection} onSelect={setSelection} />
-      {visiblePoints.some((point) => point.value !== null) ? <div className="comparison-plot" role="group" aria-label={`${title} · ${startYear}–${endYear} · ${unit}`}>
+      {visibleChartPoints.some((point) => point.value !== null) ? <div className="comparison-plot" role="group" aria-label={`${title} · ${startYear}–${endYear} · ${chartUnit}`}>
+        <ChartUnitLabel unit={chartUnit} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 600, height: 280 }}>
-          <BarChart data={visiblePoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
+          <BarChart data={visibleChartPoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
             <CartesianGrid vertical={false} stroke="#b5c2aa" />
             <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
             <YAxis width={62} domain={[(min: number) => min < 0 ? min * 1.15 : 0, (max: number) => max > 0 ? max * 1.2 : 1]} tickFormatter={(value) => compact.format(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
             <ReferenceLine y={0} stroke="#819275" />
-            
-            <Tooltip
-              isAnimationActive={false}
-              cursor={{ fill: '#254f3d0a' }}
-              content={(props) => {
-                const hoveredPoint = visiblePoints.find(
-                  (point) => point.label === props.label
-                )
 
-                return (
-                  <ChartInfo
-                    {...props}
-                    payload={props.payload?.map((entry) => ({
-                      ...entry,
-                      color: hoveredPoint?.color ?? entry.color,
-                    }))}
-                    format={(value) => `${number.format(value)} ${unit}`}
-                  />
-                )
-              }}
-            />
             <Bar dataKey="value" name={title} maxBarSize={84} radius={[4, 4, 0, 0]} isAnimationActive={false}>
-              {visiblePoints.map((point) => <Cell key={point.group} fill={point.color} />)}
+              {visibleChartPoints.map((point) => <Cell key={point.group} fill={point.color} />)}
               <LabelList dataKey="value" position="top" formatter={(value) => value === null ? '' : number.format(Number(value))} style={{ fontFamily: 'inherit', fontSize: 'var(--chart-axis-size)', fontWeight: 700, fill: '#30472d' }} />
             </Bar>
           </BarChart>

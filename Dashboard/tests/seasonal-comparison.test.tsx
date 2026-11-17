@@ -60,9 +60,16 @@ describe('seasonal data for all topics and farming systems', () => {
     expect(Object.keys(seasonalTopicData(all, 'resources').rows[0].USD)).toEqual(['water', 'fertilizer', 'pesticides'])
   })
 
-  it('matches all source CSVs and generates every topic for 960 seasonal groups', () => {
-    expect(aggregateSeasonalData(readFileSync('src/data/STAR_FARM CSV - Master file.csv', 'utf8'), readFileSync('src/data/STAR_FARM CSV - Dữ liệu tổng.csv', 'utf8'))).toEqual(all)
-    expect(all.rows).toHaveLength(960)
+  it('matches all source CSVs and includes the combined business-as-usual baseline', () => {
+    const master = readFileSync('src/data/STAR_FARM CSV - Master file.csv', 'utf8')
+    const combined = readFileSync('src/data/STAR_FARM CSV - Dữ liệu tổng.csv', 'utf8')
+    const detailed = aggregateSeasonalData(master, combined)
+    const overall = aggregateSeasonalData(master, combined, true)
+    const merged = { ...detailed, rows: [...detailed.rows, ...overall.rows.filter((row) => row.family === 'bau')] }
+    expect(merged).toEqual(all)
+    expect(all.rows).toHaveLength(1248)
+    expect(overall.rows.filter((row) => row.family === 'bau')).toHaveLength(288)
+    expect(all.rows.filter((row) => row.family === 'bau')).toHaveLength(288)
     expect(seasonalTopicData(all, 'economics')).toEqual(data)
     expect(unpackSeasonalData(packSeasonalData(all, 'all'))).toEqual(all)
     for (const row of all.rows) {

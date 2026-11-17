@@ -54,7 +54,7 @@ export default function EconomicOverviewPage({ language }: { language: Language 
             <tbody>{visible.map((row, index) => <tr key={`${row.code}-${row.historical}`} className={[row.historical ? 'economic-historical' : '', index > 0 && (visible[index - 1].group !== row.group || visible[index - 1].season !== row.season) ? 'economic-section-start' : ''].filter(Boolean).join(' ') || undefined}>
               <th scope="row"><span className={`economic-group ${row.group}`}>{t[row.group]}</span>{' '}<small className="economic-row-period">{period(row)}</small></th>
               <td>{t[row.season]}</td><td>{t[row.climate]}</td><td>{t[row.resource]}</td><td className="economic-divider"><span className={`economic-awd ${row.awd}`}>{t[row.awd]}</span></td>
-              {economicMetrics.map((metric) => <td className={`economic-numeric${metric === 'income' ? ' economic-income' : ''}${metric === 'margin' ? ' economic-divider' : ''}`} key={metric}>{value(row, metric)}{unit(metric) === '%' ? '%' : ''}</td>)}
+              {economicMetrics.map((metric) => <td className={`economic-numeric${metric === 'income' ? ' economic-income' : ''}${metric === 'margin' ? ' economic-divider' : ''}`} key={metric}>{value(row, metric)}{unit(metric) === '%' ? ' %' : ''}</td>)}
             </tr>)}</tbody>
           </table>
         </div>

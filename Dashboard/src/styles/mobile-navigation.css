@@ -39,7 +39,7 @@
 @media (max-width: 767px) {
   :root { --mobile-header-height: 114px; }
   html { scroll-padding-top: calc(var(--mobile-header-height) + 16px); }
-  .mobile-header { position: fixed; inset: 0 0 auto; background: transparent; border: 0; box-shadow: none; isolation: isolate; transition: transform .24s ease; }
+  .mobile-header { position: fixed; z-index: 1000; inset: 0 0 auto; background: transparent; border: 0; box-shadow: none; isolation: isolate; transition: transform .24s ease; }
   .mobile-header::before { content: ''; position: absolute; inset: 0 0 auto; height: calc(100% + 64px); z-index: -1; pointer-events: none; background: linear-gradient(180deg, #163d308a 0%, #163d3052 48%, #163d301a 82%, #163d3000 100%); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); -webkit-mask-image: linear-gradient(#000 25%, transparent); mask-image: linear-gradient(#000 25%, transparent); transition: opacity .22s ease; }
   .mobile-header:not(.header-home) { background: var(--forest); }
   .mobile-header:not(.header-home)::before { display: none; }

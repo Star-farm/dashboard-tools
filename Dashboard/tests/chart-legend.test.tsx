@@ -91,7 +91,7 @@ describe('interactive legends across chart pages', () => {
       expect(line).toHaveAttribute('stroke-opacity', '1')
     }
     fireEvent.click(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Khắc nghiệt' }))
-    fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Thiếu tài nguyên' }))
+    fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Khan hiếm tài nguyên' }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(1)
     expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke', CONDITION_COLORS.severeShortage)
     expect(container.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(24)

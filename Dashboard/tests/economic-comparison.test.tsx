@@ -117,8 +117,8 @@ describe('economic comparison interface', () => {
   it('combines filters across every chart, preserves selections and currencies when translating, and resets', () => {
     const { rerender } = render(<EconomicComparisonPage language="vi" />)
     fireEvent.click(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Khắc nghiệt' }))
-    fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Thiếu tài nguyên' }))
-    expect(screen.getByRole('status')).toHaveTextContent('Thời tiết: Khắc nghiệt. Tài nguyên: Thiếu tài nguyên.')
+    fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Khan hiếm tài nguyên' }))
+    expect(screen.getByRole('status')).toHaveTextContent('Thời tiết: Khắc nghiệt. Tài nguyên: Khan hiếm tài nguyên.')
     expect(screen.getByRole('complementary', { name: 'Nhận xét tổng kết' })).toHaveTextContent('21.458.536 VNĐ/ha')
     expect(screen.getAllByText('Giai đoạn 2027 - 2050')).toHaveLength(5)
     expect(screen.getByRole('article', { name: 'Thu nhập ròng trung bình' }).querySelector('.comparison-values')).toHaveTextContent('21.458.536 VNĐ/ha')

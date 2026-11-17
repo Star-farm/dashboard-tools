@@ -49,7 +49,7 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
   const format = (value: number) => `${formatValue(value, metric, currency, language)} ${unit}`
   const percent = new Intl.NumberFormat(language, { maximumFractionDigits: 1, signDisplay: 'always' })
   const relativeDifference = secondMean > 0 ? difference / secondMean * 100 : null
-  const statistic = relativeDifference !== null ? `${percent.format(relativeDifference)}%` : `${difference > 0 ? '+' : ''}${format(difference)}`
+  const statistic = relativeDifference !== null ? `${percent.format(relativeDifference)} %` : `${difference > 0 ? '+' : ''}${format(difference)}`
   const direction = difference > 0 ? t.higher : difference < 0 ? t.lower : t.equal
   const years = `${paired.length} ${paired.length === 1 ? 'year' : 'years'}`
   const comparison = language === 'vi'

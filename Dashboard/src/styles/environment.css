@@ -1,4 +1,4 @@
-.economic-table.environment-table { min-width: 1060px; }
+.economic-table.environment-table { min-width: 0; }
 .environment-table .environment-group-column { width: 19%; }
 .environment-table .environment-season-column { width: 13%; }
 .environment-table .environment-climate-column { width: 12%; }

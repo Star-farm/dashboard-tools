@@ -8,6 +8,10 @@ export function seasonalUnit(metric: SeasonalMetric, language: Language) {
   const kind = metric === 'awd' ? 'percentage' : scenarioMetrics.find((item) => item.id === metric)!.kind
   return kind === 'money' ? language === 'vi' ? 'VNĐ/ha' : 'USD/ha' : kind === 'percentage' ? '%' : scenarioText[language][`${kind}Unit`]
 }
+export function seasonalChartUnit(metric: SeasonalMetric, language: Language) {
+  const unit = seasonalUnit(metric, language)
+  return language === 'vi' && ['income', 'cost', 'straw'].includes(metric) ? 'triệu VNĐ/ha' : unit
+}
 export function seasonalNumber(value: number, metric: SeasonalMetric, language: Language) {
   const digits = language === 'vi' && ['income', 'cost', 'straw'].includes(metric) ? 0 : 2
   return new Intl.NumberFormat(language, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
@@ -18,7 +22,7 @@ export function seasonalChange(from: number, to: number, metric: SeasonalMetric,
   const tone = equal ? 'neutral' : (difference < 0) === lower ? 'good' : 'bad'
   const amount = equal ? '' : ['roi', 'margin', 'awd'].includes(metric)
     ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(difference))} ${language === 'vi' ? 'điểm %' : 'pp'}`
-    : from > 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(difference / from * 100))}%`
+    : from > 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(difference / from * 100))} %`
       : `${seasonalNumber(Math.abs(difference), metric, language)} ${seasonalUnit(metric, language)}`
   const direction = language === 'vi' ? equal ? 'không đổi' : difference > 0 ? 'tăng' : 'giảm' : equal ? 'unchanged' : difference > 0 ? 'increases' : 'decreases'
   return { tone, text: `${direction}${amount ? ` ${amount}` : ''}` }

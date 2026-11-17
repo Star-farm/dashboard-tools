@@ -7,7 +7,7 @@ import { seasonalComposition } from './seasonalComposition'
 const cropColors: Record<CropPeriod, string> = { early: '#267e91', middle: '#ba861f', late: '#8859a5' }
 export interface SeasonalSlice { period: CropPeriod; label: string; value: number | null; status?: string; notGrown?: boolean }
 
-export default function SeasonalPieChart({ language, name, color, slices, unit, format, selected, onSelect }: {
+export default function SeasonalPieChart({ language, name, color, slices, unit, format, selected, onSelect, showLegend = true }: {
   language: Language
   name: string
   color: string
@@ -16,6 +16,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   format: (value: number) => string
   selected: string
   onSelect: (period: CropPeriod) => void
+  showLegend?: boolean
 }) {
   const vi = language === 'vi'
   const [hovered, setHovered] = useState<CropPeriod | null>(null)
@@ -24,7 +25,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   const { shares } = seasonalComposition(cultivated.map((slice) => slice.value))
   const percent = (slice: SeasonalSlice) => {
     const index = cultivated.indexOf(slice)
-    return shares && index >= 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(shares[index])}%` : null
+    return shares && index >= 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(shares[index])} %` : null
   }
   const description = (slice: SeasonalSlice) => `${slice.label}: ${slice.value === null ? slice.status : `${format(slice.value)} ${unit}`}${percent(slice) ? ` · ${percent(slice)}` : ''}`
   const negative = slices.some((slice) => slice.value !== null && slice.value < 0)
@@ -52,10 +53,11 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      {active && <div className="seasonal-pie-tooltip" role="status"><strong>{active.label}</strong><span>{active.value === null ? active.status : `${format(active.value)} ${unit}`}{percent(active) ? ` · ${percent(active)}` : ''}</span></div>}
     </div>
+    {active && <div className="seasonal-pie-tooltip" role="status"><strong>{active.label}</strong><span>{active.value === null ? active.status : `${format(active.value)} ${unit}`}{percent(active) ? ` · ${percent(active)}` : ''}</span></div>}
 
-    <div
+    {showLegend && <p className="chart-legend-caption seasonal-pie-legend-caption">{vi ? 'Chú giải' : 'Legend'}</p>}
+    {showLegend && <div
       className="seasonal-pie-legend"
       role="group"
       aria-label={vi ? 'Chú thích mùa vụ' : 'Season legend'}
@@ -75,7 +77,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
           <span>{slice.label}</span>
         </div>
       ))}
-    </div>
+    </div>}
 
     {negative && <p className="seasonal-pie-note">{vi ? 'Có giá trị âm, không thể hiện cơ cấu: ' : 'Negative values cannot be shown as shares: '}{slices.map(description).join('; ')}</p>}
     {!negative && !drawable && <p className="seasonal-pie-note">{vi ? 'Không tính cơ cấu khi thiếu dữ liệu hoặc tổng bằng 0.' : 'Composition is unavailable with missing data or a zero total.'}</p>}

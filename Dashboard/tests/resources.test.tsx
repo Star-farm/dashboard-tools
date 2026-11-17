@@ -43,7 +43,7 @@ describe('resource overview and comparison', () => {
     expect(summary.compareDocumentPosition(screen.getAllByRole('article')[0]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const before = screen.getAllByRole('article')[0].querySelector('.comparison-values')!.textContent
     fireEvent.click(screen.getByRole('button', { name: 'Khắc nghiệt' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Thiếu tài nguyên' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Khan hiếm tài nguyên' }))
     const chart = screen.getAllByRole('article')[0]
     expect(chart.querySelector('.comparison-values')!.textContent).not.toBe(before)
     const expected = resourceStats(data.series.filter((series) => series.family === 'oneMha' && series.condition === 'severeShortage'), 'water').mean!

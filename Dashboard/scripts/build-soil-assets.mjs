@@ -21,7 +21,7 @@ for (const layer of layers) {
   if (layer.id === 'landuse') {
     const geometry = JSON.parse(await fs.readFile(new URL('geometry.json', directory), 'utf8'))
     const colors = new Map(layer.categories.map((category) => [category.id, category.color]))
-    const paths = layer.features.map((feature) => `<path d="${feature.path}" fill="${colors.get(feature.categoryId)}" fill-rule="evenodd"/>`).join('')
+    const paths = geometry.plots.map((plot) => `<path d="${plot.path}" fill="#A9ADB4" fill-rule="evenodd"/>`).join('') + layer.features.map((feature) => `<path d="${feature.path}" fill="${colors.get(feature.categoryId)}" fill-rule="evenodd"/>`).join('')
     const width = 3072
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${Math.ceil(width * geometry.height / geometry.width)}" viewBox="0 0 ${geometry.width} ${geometry.height}">${paths}</svg>`
     // Include dimensions, paths and colors in the content-derived asset name.

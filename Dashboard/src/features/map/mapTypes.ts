@@ -27,6 +27,18 @@ export interface MapGeometry {
   plots: PlotShape[]
   raster: { columns: number; rows: number; values: number[]; x: number; y: number; cellWidth: number; cellHeight: number; resolutionMeters: number[] }
 }
+export interface AdminBoundaryFeature {
+  type: 'Feature'
+  properties: { code: string; name: string; nameEn: string; fullName: string; provinceCode: string; provinceName: string; kind: 'ward' | 'province'; center: [number, number] }
+  geometry: { type: 'Polygon' | 'MultiPolygon'; coordinates: number[][][][] | number[][][] }
+}
+export interface AdminBoundaryData {
+  type: 'FeatureCollection'
+  projection: 'EPSG:32648'
+  bounds: [number, number, number, number]
+  focusBounds?: [number, number, number, number]
+  features: AdminBoundaryFeature[]
+}
 export interface PlotRecord {
   year: number
   season: number

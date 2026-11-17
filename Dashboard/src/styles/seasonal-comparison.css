@@ -40,7 +40,7 @@
 .seasonal-pie-canvas { position: relative; width: 100%; aspect-ratio: 1; max-width: 340px; margin-inline: auto; }
 .seasonal-pie-canvas:focus-visible { outline: 2px solid #759b7f; outline-offset: 2px; border-radius: 6px; }
 .seasonal-pie-center { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #40533b; font-size: var(--text-small); pointer-events: none; white-space: nowrap; }
-.seasonal-pie-tooltip { position: absolute; z-index: 2; top: 8px; right: 8px; display: grid; gap: 3px; max-width: calc(100% - 16px); padding: 9px 12px; border: 1px solid #9bac90; border-radius: 6px; background: #fffefa; box-shadow: 0 4px 14px #163d3026; color: #30472d; font-size: var(--text-small); line-height: 1.5; font-variant-numeric: tabular-nums; pointer-events: none; }
+.seasonal-pie-tooltip { position: static; display: grid; gap: 3px; width: fit-content; max-width: 100%; margin: 8px auto 0; padding: 9px 12px; border: 1px solid #9bac90; border-radius: 6px; background: #fffefa; box-shadow: 0 4px 14px #163d3026; color: #30472d; font-size: var(--text-small); line-height: 1.5; font-variant-numeric: tabular-nums; pointer-events: none; }
 .seasonal-pie-note { margin: 0 0 10px; color: #40533b; font-size: var(--text-small); line-height: 1.6; }
 .seasonal-overview { margin-top: 24px; }
 .seasonal-overview .economic-filters { border-top: 0; }
@@ -68,7 +68,7 @@
   .seasonal-plot { height: 250px; }
   .seasonal-pie-plot { height: auto; padding-inline: 14px; }
   .seasonal-insight { padding: 17px 16px 20px; }
-  
+
 }
 
 .seasonal-pie-section {
@@ -99,6 +99,9 @@
   border-radius: 3px;
   flex-shrink: 0;
 }
+.seasonal-pie-shared-legend { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 22px; margin: 14px 0 0; padding: 12px 14px; border-top: 1px solid #dce3d9; color: #40533b; font-size: var(--text-small); }
+.seasonal-pie-shared-legend-item { display: inline-flex; align-items: center; gap: 7px; }
+.seasonal-pie-shared-legend-item i { width: 13px; height: 13px; border-radius: 3px; flex: 0 0 auto; }
 
 @media (max-width: 600px) {
   .seasonal-pie-legend {

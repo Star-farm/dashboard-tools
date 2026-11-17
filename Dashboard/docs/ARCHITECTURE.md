@@ -1,0 +1,58 @@
+# Architecture
+
+## Runtime
+
+The Dashboard is a static single-page React application. Vite bundles TypeScript and styles and copies public files into dist/. The browser does not call a simulation backend or external map service. Data preparation is separate; see [DATA_PIPELINE.md](DATA_PIPELINE.md).
+
+~~~mermaid
+flowchart LR
+  Hash[URL hash and query] --> Nav[src/app navigation]
+  Nav --> App[App shell]
+  App --> Feature[Feature page]
+  Feature --> Data[src/data JSON and public map assets]
+  Feature --> Shared[src/components and app hooks]
+  Data --> UI[Charts tables filters and maps]
+  Shared --> UI
+~~~
+
+## Shell and navigation
+
+- `src/main.tsx` imports global styles and mounts React inside StrictMode and an error boundary.
+- `src/app/App.tsx` composes header, breadcrumbs, lazy feature pages, language controls, chart selection context, footer, and back-to-top control.
+- `src/app/usePageNavigation.ts` maps URL hashes to a typed page, listens for `hashchange`, and supports browser history. No routing library is installed.
+- `src/app/exploreNavigation.ts` and resource/environment route modules define topic paths.
+- `src/app/mapNavigation.ts` validates map-to-dashboard query context; `useDashboardFilters.ts` initializes filters from it.
+- `src/i18n/` owns language state and translations.
+
+Most data pages use React lazy imports. Home, glossary, and not-found are directly imported. Route and map query context participate in the page key so changed map context remounts page content.
+
+## Module responsibilities
+
+| Path | Responsibility |
+| --- | --- |
+| `src/app/` | Shell, navigation, breadcrumbs, site chrome, dashboard/map context state. |
+| `src/components/` | Shared chart controls, filters, analysis and description UI. |
+| `src/features/economics/` | Economic summaries, farming-system pages, comparisons, seasonal views and analysis. |
+| `src/features/environment/` | Environment pages, routes, data transforms and copy. |
+| `src/features/future/` | Future series and chart analysis. |
+| `src/features/glossary/`, `src/features/home/` | Glossary and home views. |
+| `src/features/map/` | Farming and soil maps, helpers, viewport behavior, loading and validation. |
+| `src/features/resources/` | Resource pages, routes, transforms and copy. |
+| `src/features/scenarios/` | Scenario details, types and aggregation. |
+| `src/data/` | Source CSVs, generated JSON and metadata. |
+| `src/styles/` | Global, navigation, chart and feature styles. |
+| `src/utils/` | CSV parsing and responsive year tick generation. |
+
+There is no `src/shared/` directory or generic service layer. Reuse current components, app hooks, and utilities where their responsibilities fit. Keep domain logic in its feature when it is not shared.
+
+## State and boundaries
+
+Aggregation scripts read source CSVs and produce checked-in JSON. Features import JSON or fetch files from `public/map-data/`. Feature components prepare values for presentation components such as charts, tables, filters, and maps.
+
+The URL hash owns route state. `src/i18n/useLanguage.ts` owns language state. Filters are held by the consuming page or the app-level dashboard filter hook when map context is involved. `ChartSelectionProvider` shares chart-series selection through its page subtree. Map pages own year, harvest, metric, layer, selected plot, and viewport state.
+
+`src/features/map/useMapFile.ts` shares in-flight requests, cancels abandoned requests, retries failures, and caches up to eight successful files. Active components retain loaded results after cache eviction. Soil JSON is checked against map geometry before rendering.
+
+The app shell composes features; shared presentation components must not depend on feature pages. Keep shared UI in `src/components/`, application navigation/state in `src/app/`, and feature logic in its feature. Avoid circular imports and duplicated domain mappings.
+
+Preserve units, missing values, zeroes, negatives, populations, baselines, scenario definitions, map CRS/order, geometry fingerprints, and area shares. Keep GIS generation separate from development, tests, quality checks, and builds. Update these guides when module boundaries or data contracts change.

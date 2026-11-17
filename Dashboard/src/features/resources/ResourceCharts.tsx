@@ -45,7 +45,7 @@ function ResourceFarming({ family, language }: { family: Bau3Family; language: L
       <dl className="scenario-kpis farming-kpis resource-kpis">{resourceMetrics.map((metric) => {
         const stats = resourceStats(selected, metric, data.startYear, data.endYear), change = stats.change
         const tone = change === null || Math.abs(change) < .000001 ? 'neutral' : change < 0 ? 'good' : 'bad'
-        return <div className="scenario-kpi" key={metric}><dt>{t[metric]}</dt><dd className="scenario-kpi-value"><strong>{stats.mean === null ? '—' : resourceNumber(stats.mean, language)}</strong><span>{resourceUnit(metric, language)}</span></dd><dd className="scenario-kpi-change">{change === null ? t.noData : <><span className={`scenario-change ${tone}`}><span aria-hidden="true">{Math.abs(change) < .000001 ? '−' : change < 0 ? '↓' : '↑'}</span> {new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))}%</span><span>{t.change}</span></>}</dd></div>
+        return <div className="scenario-kpi" key={metric}><dt>{t[metric]}</dt><dd className="scenario-kpi-value"><strong>{stats.mean === null ? '—' : resourceNumber(stats.mean, language)}</strong><span>{resourceUnit(metric, language)}</span></dd><dd className="scenario-kpi-change">{change === null ? t.noData : <><span className={`scenario-change ${tone}`}><span aria-hidden="true">{Math.abs(change) < .000001 ? '−' : change < 0 ? '↓' : '↑'}</span> {new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))} %</span><span>{t.change}</span></>}</dd></div>
       })}</dl><p className="farming-method">{t.method}</p>
     </section>
     <Insight label={t.summary} text={resourceSummary(data, selected, language, family)} summary />

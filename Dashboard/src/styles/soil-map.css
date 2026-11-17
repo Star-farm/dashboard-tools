@@ -6,6 +6,8 @@
 .soil-chart p { margin: 8px 0; font-size: var(--text-small); line-height: 1.6; color: var(--muted); }
 .soil-chart-figure { height: 200px; flex: 0 0 200px; }
 .soil-chart ul { list-style: none; margin: 0; padding: 0; }
+.soil-chart .soil-chart-list-scroll { max-height: 160px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.soil-chart .soil-chart-list-scroll li span { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .soil-chart-more summary { cursor: pointer; padding: 10px 0; color: var(--forest); font-size: var(--text-small); }
 .soil-chart li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--text-small); border-bottom: 1px solid var(--line); }
 .soil-chart li span { display: flex; align-items: center; gap: 8px; }

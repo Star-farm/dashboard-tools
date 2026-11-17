@@ -72,7 +72,7 @@ describe('combined scenario chart', () => {
     await screen.findByRole('table', { name: 'Net income · Year 2050 · USD/ha' })
     rerender(<ScenarioComparisonChart {...props} language="vi" baselineLabel="BAU 3 vụ" />)
     expect(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Bình thường' })).toHaveAttribute('aria-pressed', 'true')
-    expect(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Thiếu tài nguyên' })).toHaveAttribute('aria-pressed', 'true')
+    expect(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Khan hiếm tài nguyên' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('table', { name: 'Net income · Năm 2050 · USD/ha' })).toBeInTheDocument()
     fireEvent.click(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Tất cả' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Tất cả' }))

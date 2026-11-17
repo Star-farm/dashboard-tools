@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { Language } from '../../i18n'
-import type { MapGeometry } from './mapTypes'
+import type { AdminBoundaryData, MapGeometry } from './mapTypes'
 import PlotMap from './PlotMap'
 import SoilAreaChart from './SoilAreaChart'
 import SoilMapShell, { SoilMapLoading } from './SoilMapShell'
@@ -19,6 +19,7 @@ export default function SoilMapSection({ geometry, language, geometryError, geom
 }) {
   const [layerId, setLayerId] = useState('soil_texture')
   const [selectedPlot, setSelectedPlot] = useState<number | null>(null)
+  const adminBoundaries = useMapFile<AdminBoundaryData>('admin-boundaries.geojson')
   const selectedLayer = soilManifest.layers.find((layer) => layer.id === layerId) ?? soilManifest.layers[0]
   const file = useMapFile<SoilData>(selectedLayer.file)
   const retained = file.data ?? file.previousData
@@ -30,7 +31,7 @@ export default function SoilMapSection({ geometry, language, geometryError, geom
   const displayed = layer ?? (valid ? retained?.layers[0] : undefined)
   const failed = geometryError || file.error || (!!file.data && !!geometry && (!valid || !layer))
   return <SoilMapShell language={language} layerId={layerId} onLayerChange={setLayerId} chart={<SoilAreaChart layer={layer} layerId={layerId} selectedLayer={selectedLayer} selectedPlot={selectedPlot} language={language} failed={failed} />}>
-    {geometry && displayed ? <div inert={!layer || !!failed} aria-hidden={!layer || !!failed}><PlotMap geometry={geometry} language={language} thematic={displayed} rasterFile={layer ? selectedLayer.rasterFile : undefined} onSelectionChange={setSelectedPlot} values={emptyValues} metric="yield" breaks={emptyBreaks} yieldValues={emptyValues} incomeValues={emptyValues} periodLabel="" scenarioLabel="" /></div> : <SoilMapLoading language={language} />}
+    {geometry && displayed ? <div inert={!layer || !!failed} aria-hidden={!layer || !!failed}><PlotMap geometry={geometry} adminBoundaries={adminBoundaries.data} language={language} thematic={displayed} rasterFile={layer ? selectedLayer.rasterFile : undefined} onSelectionChange={setSelectedPlot} values={emptyValues} metric="yield" breaks={emptyBreaks} yieldValues={emptyValues} incomeValues={emptyValues} /></div> : <SoilMapLoading language={language} />}
     {failed ? <div className="map-loading-overlay"><div className="map-error" role="alert"><p>{t.error}</p><button type="button" className="primary-button" onClick={() => geometryError ? geometryRetry?.() : file.retry()}>{t.retry}</button></div></div>
       : !layer && displayed && <div className="map-loading-overlay" role="status">{t.loading}</div>}
   </SoilMapShell>

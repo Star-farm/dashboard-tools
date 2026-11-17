@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
 import { CHART_TICK, CHART_TOOLTIP } from '../../components/chartStyles'
+import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { economicFacets, economicsText } from '../economics/economicsText'
 import { emptyEconomicFilters, filterEconomicRows } from '../economics/economicsData'
 import type { EconomicFilters, EconomicRow } from '../economics/economicsData'
@@ -21,7 +22,7 @@ import {
   selectPlotValues,
 } from './mapData'
 import { mapText } from './mapText'
-import type { MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario, PlotMetric } from './mapTypes'
+import type { AdminBoundaryData, MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario, PlotMetric } from './mapTypes'
 import PlotMap from './PlotMap'
 import { useMapFile, useMapFiles } from './useMapFile'
 import '../../styles/map.css'
@@ -59,6 +60,7 @@ export default function MapPage({ language }: { language: Language }) {
   const t = mapText[language]
   const manifest = useMapFile<MapManifest>('manifest.json')
   const geometry = useMapFile<MapGeometry>('geometry.json')
+  const adminBoundaries = useMapFile<AdminBoundaryData>('admin-boundaries.geojson')
   const conversion = useMapFile<MapCurrency>('currency.json')
   const currencyCode: MapCurrencyCode = language === 'vi' ? 'VND' : 'USD'
   const filterText = economicsText[language]
@@ -113,6 +115,7 @@ export default function MapPage({ language }: { language: Language }) {
   }, [displayData, metric, currencyCode, conversion.data])
 
   const trend = useMemo(() => displayData ? plotTrend(displayData, season, trendMetric, null) : [], [displayData, season, trendMetric])
+  const chartTrend = useMemo(() => trend.map((point) => ({ ...point, value: point.value === null ? null : point.value / (language === 'vi' && trendMetric === 'income' ? 1_000_000 : 1) })), [trend, language, trendMetric])
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const money = new Intl.NumberFormat(language, { maximumFractionDigits: language === 'vi' ? 0 : 2 })
   const trendNumber = trendMetric === 'income' ? money : number
@@ -120,6 +123,8 @@ export default function MapPage({ language }: { language: Language }) {
   const values = metric === 'income' ? incomeValues : yieldValues
   const unit = metric === 'income' ? t.incomeUnit : t.yieldUnit
   const trendUnit = trendMetric === 'income' ? t.incomeUnit : t.yieldUnit
+  const trendChartUnit = language === 'vi' && trendMetric === 'income' ? 'triệu VNĐ/ha' : trendUnit
+  const trendChartNumber = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const selectedYield = mean(yieldValues)
   const selectedIncome = mean(incomeValues)
   const format = (value: number | null | undefined) => value == null ? '—' : number.format(value)
@@ -208,6 +213,7 @@ export default function MapPage({ language }: { language: Language }) {
           <div className="map-canvas-container">
             {geometry.data ? <PlotMap
   geometry={geometry.data}
+  adminBoundaries={adminBoundaries.data}
   values={values}
   metric={metric}
   breaks={breaks}
@@ -215,12 +221,6 @@ export default function MapPage({ language }: { language: Language }) {
   language={language}
   yieldValues={yieldValues}
   incomeValues={incomeValues}
-  periodLabel={period}
-  scenarioLabel={
-    scenarios.length === 1
-      ? scenarios[0].code
-      : `${scenarios.length} ${filterText.scenario}`
-  }
 /> : <div className="map-canvas-skeleton" />}
             {loading && !hasError && <div className="map-loading-overlay" role="status">{t.loading}</div>}
           </div>
@@ -235,12 +235,13 @@ export default function MapPage({ language }: { language: Language }) {
     </section>
     <section className="map-trend-section" aria-labelledby="map-trend-title">
       <div className="map-section-heading"><div><h2 id="map-trend-title">{t.trend}</h2></div><div className="map-layer-switch" role="group" aria-label={t.trend}>{(['yield', 'income'] as const).map((value) => <button type="button" key={value} aria-pressed={trendMetric === value} onClick={() => setTrendMetric(value)}>{t[value]}</button>)}</div></div>
-      <p className="map-chart-note">{t.trendNote} · {trendUnit}</p>
+      <p className="map-chart-note">{t.trendNote}</p>
 {loading ? <div className="map-trend-skeleton" /> : <div className="map-trend-chart" role="img" aria-label={`${t.trend} · ${t[trendMetric]} · ${period}`}>
+        <ChartUnitLabel unit={trendChartUnit} />
         <ResponsiveContainer width="100%" height={290}>
         <LineChart
-          data={trend}
-          margin={{ top: 16, right: 24, left: 20, bottom: 20 }}
+          data={chartTrend}
+          margin={{ top: 34, right: 24, left: 20, bottom: 20 }}
         >
           <CartesianGrid stroke="#dce3d9" vertical={false} />
 
@@ -278,7 +279,7 @@ export default function MapPage({ language }: { language: Language }) {
             formatter={(value) => [
               value == null
                 ? '—'
-                : `${trendNumber.format(Number(value))} ${trendUnit}`,
+                : `${trendChartNumber.format(Number(value))} ${trendChartUnit}`,
               t[trendMetric],
             ]}
             contentStyle={CHART_TOOLTIP}

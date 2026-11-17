@@ -72,7 +72,10 @@ export default function SeasonalComparison({ language, data, config }: { languag
 function SeasonalMetricCard({ language, metric, points, mode, families, startYear, endYear }: { language: Language; metric: SeasonalMetric; points: Point[]; mode: Mode; families: SeasonalFamily[]; startYear: number; endYear: number }) {
   const bars = mode === 'year' && (metric === 'roi' || metric === 'margin')
   const pieMode = mode === 'year' && !bars
-  const t = seasonalText[language], id = useId(), title = `${pieMode ? language === 'vi' ? 'Cơ cấu ' : 'Composition ' : ''}${seasonalLabel(metric, language)}`
+  const t = seasonalText[language], id = useId(), metricTitle = seasonalLabel(metric, language)
+  const title = pieMode
+    ? `${language === 'vi' ? 'Cơ cấu ' : 'Composition '}${metricTitle.charAt(0).toLocaleLowerCase(language)}${metricTitle.slice(1)}`
+    : metricTitle
   const [selected, setSelected] = useState(points[0].key), [model, setModel] = useChartSelection<SeasonalFamily | 'all'>('seasonalModel', 'all'), [width, setWidth] = useState(620)
   const currency = language === 'vi' ? 'VND' : 'USD', unit = seasonalUnit(metric, language), chartUnit = seasonalChartUnit(metric, language)
   const visible = families.filter((family) => model === 'all' || family === model)

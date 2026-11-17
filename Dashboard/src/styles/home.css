@@ -97,3 +97,39 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-actions a { transition: none; }
 }
+
+
+.glossary-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.glossary-callout > div {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+}
+
+.glossary-callout > div > p:not(.eyebrow) {
+  max-width: none;
+  white-space: nowrap;
+}
+
+.glossary-callout > a {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .glossary-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .glossary-callout > div > p:not(.eyebrow) {
+    white-space: normal;
+  }
+}

@@ -87,7 +87,7 @@ export default function EnvironmentLineChart({
           role="group"
           aria-label={`${t[metric]} · ${t[family]} · ${unit}`}
         >
-          <ChartUnitLabel unit={unit} />
+          <ChartUnitLabel unit={unit} language={language} />
           <ResponsiveContainer
             width="100%"
             height="100%"
@@ -149,9 +149,8 @@ export default function EnvironmentLineChart({
                   <ChartInfo
                     {...props}
                     yearLabel={t.year}
-                    format={(value) =>
-                      `${environmentNumber(value, language)} ${unit}`
-                    }
+                    format={(value) => environmentNumber(value, language)}
+                    unit={unit}
                   />
                 )}
                 cursor={{

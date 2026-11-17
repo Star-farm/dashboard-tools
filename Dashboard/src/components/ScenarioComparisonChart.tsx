@@ -53,7 +53,6 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
     }
   })
   const hasData = points.some((point) => visible.some((key) => visibleModels.some((group) => point[`${group}_${key}`] != null)))
-  const singleModel = visibleModels.filter((model) => visible.some((condition) => points.some((point) => point[`${model}_${condition}`] != null))).length === 1
   const selectedYear = Math.min(endYear, Math.max(startYear, year))
   const display = (value: number | null | undefined) => value == null ? '—' : formatValue(value)
   const selectYear = ({ activeLabel }: { activeLabel?: string | number }) => {
@@ -63,11 +62,11 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
   const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   return <article className="bau3-chart scenario-comparison-chart" aria-labelledby={`${id}-title`}>
     <header><h3 id={`${id}-title`}><span className="scenario-model-bau">{baselineLabel}</span> <span> / </span> <span className="scenario-model-one-mha">1Mha</span></h3></header>
-    <div className="comparison-model-key" data-chart={chartType} data-single={!bars && singleModel} role="group" aria-label={vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}>
+    <div className="comparison-model-key" data-chart={chartType} role="group" aria-label={vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}>
       <p className="chart-legend-label">{vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}</p>
       <button type="button" title={vi ? 'Tất cả mô hình' : 'All models'} aria-pressed={model === 'all'} onClick={() => setModel('all')}>{vi ? 'Tất cả mô hình' : 'All models'}</button>
       <button type="button" title="1Mha" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}><i className="model-line model-line-oneMha" aria-hidden="true" />1Mha · {bars ? vi ? 'cột đậm' : 'solid bars' : vi ? 'nét đậm' : 'bold line'}</button>
-      <button type="button" title={baselineLabel} aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><i className="model-line model-line-bau" aria-hidden="true" />{baselineLabel} · {bars ? vi ? 'cột nhạt' : 'faint bars' : singleModel ? vi ? 'nét liền' : 'solid line' : vi ? 'nét đứt' : 'dashed line'}</button>
+      <button type="button" title={baselineLabel} aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><i className="model-line model-line-bau" aria-hidden="true" />{baselineLabel} · {bars ? vi ? 'cột nhạt' : 'faint bars' : vi ? 'nét đứt' : 'dashed line'}</button>
     </div>
     <ConditionFilters language={language} filters={filters} />
     {hasData ? <>
@@ -77,7 +76,7 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
         event.stopPropagation()
         setYear(event.key === 'Home' ? startYear : event.key === 'End' ? endYear : Math.min(endYear, Math.max(startYear, selectedYear + (event.key === 'ArrowRight' ? 1 : -1))))
       }}>
-        <ChartUnitLabel unit={unit} />
+        <ChartUnitLabel unit={unit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 340 }} onResize={setWidth}>
           <ComposedChart barGap={1} barCategoryGap="10%" data={points} accessibilityLayer margin={{ top: 30, right: 18, left: 0, bottom: 8 }} onClick={selectYear}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
@@ -99,6 +98,6 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
       {visible.length * visibleModels.length === 1 && <p className="sr-only" aria-live="polite">{t.year} {selectedYear} · {t[visible[0]]} · {visibleModels[0] === 'bau' ? baselineLabel : '1Mha'}: {display((visibleModels[0] === 'bau' ? baselineYears : oneMhaYears).get(selectedYear)?.[visible[0]])} {unit}</p>}
     </> : <p className="bau3-no-data">{t.noData}</p>}
     <ConditionLegend language={language} conditions={filters.visible} />
-    <p className="bau3-chart-note">{!bars && singleModel ? vi ? 'Biểu đồ chỉ hiển thị một mô hình: tất cả các đường dùng nét liền.' : 'When only one model is shown, all its lines are solid.' : bars ? vi ? 'Màu cột thể hiện điều kiện kịch bản. BAU: cột nhạt, viền đứt. 1Mha: cột đậm.' : 'Bar colors identify scenario conditions. BAU: faint bars with dashed borders. 1Mha: solid bars.' : vi ? 'Màu và hình dấu điểm thể hiện điều kiện kịch bản. BAU: nét đứt. 1Mha: nét liền. Các đường có cùng số liệu có thể trùng nhau.' : 'Colors and marker shapes identify scenario conditions. BAU: dashed. 1Mha: solid. Lines with identical values may overlap.'}</p>
+    <p className="bau3-chart-note">{bars ? vi ? 'Màu cột thể hiện điều kiện kịch bản. BAU: cột nhạt, viền đứt. 1Mha: cột đậm.' : 'Bar colors identify scenario conditions. BAU: faint bars with dashed borders. 1Mha: solid bars.' : vi ? 'Màu và hình dấu điểm thể hiện điều kiện kịch bản. BAU: nét đứt. 1Mha: nét liền. Các đường có cùng số liệu có thể trùng nhau.' : 'Colors and marker shapes identify scenario conditions. BAU: dashed. 1Mha: solid. Lines with identical values may overlap.'}</p>
   </article>
 }

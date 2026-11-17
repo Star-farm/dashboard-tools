@@ -77,11 +77,7 @@ Layer names and classification fields are configured in `scripts/build-soil-over
 
 Land Use JSON retains per-plot category areas and unknown area but omits detailed vector feature paths. The generator renders those paths and plot outlines to a 3072-pixel lossless WebP. The browser displays that raster over shared plot geometry; statistics are not calculated from the image. Raster detail can be lower than a high-resolution drawing while area shares remain unchanged.
 
-`scripts/build-admin-boundaries.py` prepares `public/map-data/admin-boundaries.geojson` from province and ward GeoJSON, reprojected to display CRS. Keep `admin-boundaries-LICENSE.txt`. Verify names, extents, properties, and CRS when replacing this asset.
-
-It accepts the GeoJSON source root and output filename as positional arguments, for example `python scripts/build-admin-boundaries.py D:/path/to/admin-source public/map-data/admin-boundaries.geojson`. The selected province folders and levels are declared in the script; it does not process every administrative unit in the source tree.
-
-The boundary preparation script takes an input GeoJSON source root and an output path as positional arguments. Its current source folder names and selected provinces are declared in the script; do not assume it processes every province or administrative level.
+`scripts/build-admin-boundaries.py` prepares `public/map-data/admin-boundaries.geojson` from province and ward GeoJSON, reprojected to display CRS. It accepts the GeoJSON source root and output filename as positional arguments, for example `python scripts/build-admin-boundaries.py D:/path/to/admin-source public/map-data/admin-boundaries.geojson`. Its selected province folders and levels are declared in the script, so it does not process every administrative unit. Keep `admin-boundaries-LICENSE.txt`; verify names, extents, properties, and CRS when replacing this asset.
 
 When map generation changes, check geometry and hashes, source overlay, layer files, soil manifest, raster filename, scenario manifest, and aggregate references. Deploy manifests and referenced hashed assets together; retain old hashes while cached manifests may refer to them.
 

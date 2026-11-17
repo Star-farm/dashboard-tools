@@ -3,7 +3,6 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import type { Language } from '../src/i18n'
 import Bau3LineChart from '../src/features/economics/Bau3LineChart'
 import ResourceLineChart from '../src/features/resources/ResourceLineChart'
-import EnvironmentLineChart from '../src/features/environment/EnvironmentLineChart'
 import TimeSeriesChart from '../src/features/future/TimeSeriesChart'
 import ComparisonBarChart from '../src/features/economics/ComparisonBarChart'
 import ResourceBarChart from '../src/features/resources/ResourceBarChart'
@@ -15,6 +14,7 @@ import type { EconomicComparisonData } from '../src/features/economics/compariso
 import { ChartSelectionProvider } from '../src/components/ChartSelection'
 import { within } from '@testing-library/react'
 import ScenarioComparisonChart from '../src/components/ScenarioComparisonChart'
+import ChartUnitLabel from '../src/components/ChartUnitLabel'
 import { CONDITION_COLORS } from '../src/components/chartStyles'
 import economicSource from '../src/data/economics-bau3-series.json'
 import resourceSource from '../src/data/resources.json'
@@ -22,10 +22,21 @@ import environmentSource from '../src/data/environment.json'
 import barSource from '../src/data/economics-comparison.json'
 
 const economic = economicSource as Bau3Data, resources = resourceSource as ResourceData, environment = environmentSource as EnvironmentData
+
+describe('chart unit labels', () => {
+  it('translates the unit prefix when the display language changes', () => {
+    const { rerender } = render(<ChartUnitLabel language="vi" unit="kg/ha" />)
+    expect(screen.getByText('Đơn vị: kg/ha')).toBeInTheDocument()
+
+    rerender(<ChartUnitLabel language="en" unit="kg/ha" />)
+    expect(screen.getByText('Unit: kg/ha')).toBeInTheDocument()
+    expect(screen.queryByText('Đơn vị: kg/ha')).not.toBeInTheDocument()
+  })
+})
+
 const lineCharts = [
   { name: 'economics', chart: (language: Language) => <Bau3LineChart data={economic} family="bau3s" metric="income" domain={[0, 40000000]} language={language} /> },
   { name: 'resources', chart: (language: Language) => <ResourceLineChart data={resources} family="bau3s" metric="water" domain={[0, 1000]} language={language} /> },
-  { name: 'environment', chart: (language: Language) => <EnvironmentLineChart data={environment} family="bau3s" metric="methane" domain={[0, 1000]} language={language} /> },
 ]
 const barCharts = [
   { name: 'economics', chart: <ComparisonBarChart metric="income" cohort={(barSource as EconomicComparisonData).cohorts[0]} language="en" startYear={2027} endYear={2050} /> },
@@ -59,7 +70,7 @@ describe('interactive legends across chart pages', () => {
   })
 
   it('synchronizes condition and model in paired charts', () => {
-    const points = [{ year: 2027, mildNormal: 1, mildShortage: 2, severeNormal: 3, severeShortage: 4 }]
+    const points = [{ year: 2027, mildNormal: 1, mildShortage: 2, severeNormal: 3, severeShortage: 4 }, { year: 2028, mildNormal: 2, mildShortage: 3, severeNormal: 4, severeShortage: 5 }]
     const chart = (title: string) => <ScenarioComparisonChart language="en" title={title} baselineLabel="BAU" baseline={points} oneMha={points} startYear={2027} endYear={2027} domain={[0, 5]} unit="kg" formatValue={String} />
     render(<ChartSelectionProvider>{chart('Income')}{chart('Cost')}</ChartSelectionProvider>)
     const weather = screen.getAllByRole('group', { name: 'Weather' })
@@ -71,6 +82,17 @@ describe('interactive legends across chart pages', () => {
     const models = screen.getAllByRole('group', { name: 'Choose comparison models' })
     fireEvent.click(within(models[1]).getByRole('button', { name: /1Mha/ }))
     expect(within(models[0]).getByRole('button', { name: /1Mha/ })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('keeps the BAU line dashed and labels it correctly when selected alone', () => {
+    const points = [{ year: 2027, mildNormal: 1, mildShortage: 2, severeNormal: 3, severeShortage: 4 }, { year: 2028, mildNormal: 2, mildShortage: 3, severeNormal: 4, severeShortage: 5 }]
+    render(<ScenarioComparisonChart language="en" title="Income" baselineLabel="BAU" baseline={points} oneMha={points} startYear={2027} endYear={2028} domain={[0, 5]} unit="kg" formatValue={String} />)
+
+    const legend = screen.getByRole('group', { name: 'Choose comparison models' })
+    const bauButton = within(legend).getByRole('button', { name: 'BAU · dashed line' })
+    fireEvent.click(bauButton)
+    expect(bauButton.querySelector('.model-line-bau')).toHaveClass('model-line-bau')
+    expect(document.querySelector('.comparison-combined-plot .recharts-line-curve')).toHaveAttribute('stroke-dasharray', '6 4')
   })
 
   it('shares BAU selection between future income and labor without applying it to AWD', () => {

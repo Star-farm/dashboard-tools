@@ -22,12 +22,12 @@ export default function ResourceLineChart({ data, family, metric, domain, langua
   return <article className={`bau3-chart bau3-chart-${family}`} aria-labelledby={`resource-${metric}-${family}-title`}>
     <header><h3 id={`resource-${metric}-${family}-title`}>{title ?? t[family]}</h3></header>
     <ConditionFilters language={language} filters={filters} />
-    {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${unit}`}><ChartUnitLabel unit={unit} /><ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 310 }} onResize={setWidth}>
+    {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${unit}`}><ChartUnitLabel unit={unit} language={language} /><ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 310 }} onResize={setWidth}>
       <LineChart data={points} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 8 }}>
         <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
         <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={yearTicks(data.startYear, data.endYear, width, 88)} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
         <YAxis width={68} domain={domain} allowDataOverflow tickFormatter={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Number(value))} tickLine={false} tickMargin={8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
-        <Tooltip shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => `${resourceNumber(Number(value), language)} ${unit}`} />} cursor={{ fill: '#254f3d0a' }} />
+        <Tooltip shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => resourceNumber(Number(value), language)} unit={unit} />} cursor={{ fill: '#254f3d0a' }} />
         {visibleConditions.map((condition) => <Line key={condition} type="linear" dataKey={condition} name={labels[condition]} {...scenarioLineStyle(family, condition, true, false)} connectNulls={false} isAnimationActive={false} />)}
       </LineChart>
     </ResponsiveContainer></div> : <p className="bau3-no-data">{t.noData}</p>}

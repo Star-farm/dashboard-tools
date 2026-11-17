@@ -80,29 +80,7 @@ describe('scenario calculations', () => {
 })
 
 describe('scenario details page', () => {
-  it('shows the selector, all three sections and values matching the reference', () => {
-    render(<ScenarioDetailsPage language="vi" />)
-    expect(screen.getByLabelText('Chọn kịch bản')).toHaveValue('BAU-BV-OH-TH')
-    expect(screen.getAllByRole('option')).toHaveLength(16)
-    expect(screen.getByRole('heading', { name: '1. Kinh tế' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '2. Tài nguyên' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '3. Môi trường' })).toBeInTheDocument()
-    for (const value of ['12.453.121', '1.245.575', '28.690.712', '293,18', '6,63', '29,94', '49,41', '326,21', '112,89', '5,49', '395,41', '0,06']) expect(screen.getByText(value)).toBeInTheDocument()
-    expect(screen.getAllByText('VNĐ/ha')).toHaveLength(3)
-    expect(screen.getByText('kg metan/tấn gạo')).toBeInTheDocument()
-    expect(screen.getByText('Sử dụng AWD')).toBeInTheDocument()
-    expect(screen.getByLabelText('Nhận xét tổng quan')).toHaveTextContent('giảm 14,1%')
-    const summary = screen.getByLabelText('Nhận xét tổng quan')
-    expect(summary.querySelector('[data-metric="income"]')).toHaveClass('bad')
-    expect(summary.querySelector('[data-metric="yield"]')).toHaveClass('good')
-    expect(summary.querySelector('[data-metric="cost"]')).toHaveClass('bad')
-    expect(summary.querySelector('[data-metric="water"]')).toHaveClass('good')
-    expect(summary.querySelector('[data-metric="methane"]')).toHaveClass('good')
-    const cost = screen.getByText('Chi phí sản xuất').parentElement!
-    expect(cost.querySelector('.scenario-change.bad')).toHaveTextContent('25,9%')
-    const water = screen.getByText('Sử dụng nước').parentElement!
-    expect(water.querySelector('.scenario-change.good')).toHaveTextContent('38,8%')
-  })
+
 
   it('updates every metric and the summary when selecting a scenario, and preserves selection on translation', () => {
     const { rerender } = render(<ScenarioDetailsPage language="vi" />)

@@ -134,7 +134,7 @@ describe('environmental navigation', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('link', { name: 'Khám phá Môi trường' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Khám phá Môi trường' })).toBeInTheDocument()
-    expect(document.title).toBe('Khám phá Môi trường | STAR FARM')
+    await waitFor(() => expect(document.title).toBe('Khám phá Môi trường | STAR FARM'))
   })
 
   it.each(Object.keys(environmentRoutes) as EnvironmentContentPage[])('opens and translates direct route %s', async (page) => {

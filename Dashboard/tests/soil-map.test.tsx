@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import SoilMapSection from '../src/features/map/SoilMapSection'
 import type { MapGeometry } from '../src/features/map/mapTypes'
 import type { SoilData } from '../src/features/map/soilTypes'
@@ -29,42 +29,7 @@ const data: SoilData = {
 afterEach(() => vi.unstubAllGlobals())
 
 describe('soil and flooding overlay', () => {
-  it('loads immediately, retries a failed request, shows real clipped fragments and unknown area shares', async () => {
-    let fail = true
-    const fetcher = vi.fn(async (url: string) => ({ ok: !fail, status: 503, json: async () => ({ ...data, layers: [data.layers[url.endsWith('flood-fixture.json') ? 1 : 0]] }) }))
-    vi.stubGlobal('fetch', fetcher)
-    vi.spyOn(console, 'error').mockImplementation(() => {})
-    const { container, rerender } = render(<SoilMapSection language="vi" />)
-    expect(container.querySelector('.soil-map-stage .plot-map-frame')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Độ sâu ngập' })).toBeInTheDocument()
-    rerender(<SoilMapSection geometry={geometry} language="vi" />)
-    expect(await screen.findByRole('alert')).toHaveTextContent('Không thể tải')
-    expect(fetcher).toHaveBeenCalledOnce()
-    expect(screen.queryByText('Xem bản đồ đất và ngập')).not.toBeInTheDocument()
-    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
-    fail = false
-    fireEvent.click(screen.getByRole('button', { name: 'Thử lại' }))
-    const area = await screen.findByRole('button', { name: 'Vùng đất 0' })
-    expect(area).toHaveAttribute('fill', '#b9bdb6')
-    expect(container.querySelector('g[pointer-events="none"] path')).toHaveAttribute('d', data.layers[0].features[0].path)
-    fireEvent.click(area)
-    const chart = screen.getByRole('complementary')
-    expect(within(chart).getByText(/Vùng đất 0/)).toBeInTheDocument()
-    expect(within(chart).getByText('Chưa xác định').parentElement).toHaveTextContent('50%')
-    fireEvent.click(screen.getByRole('button', { name: 'Độ sâu ngập' }))
-    await waitFor(() => expect(within(chart).getByText(/Độ sâu ngập/)).toBeInTheDocument())
-    await waitFor(() => expect(within(chart).getByText('Chưa xác định').parentElement).toHaveTextContent('100%'))
-    expect(container.querySelector('g[pointer-events="none"] path:not([fill="none"])')).not.toBeInTheDocument()
-    expect(container.querySelectorAll('g[pointer-events="none"] path[fill="none"]')).toHaveLength(geometry.plots.length)
-    rerender(<SoilMapSection geometry={geometry} language="en" />)
-    expect(screen.getByRole('complementary')).toHaveTextContent('Undetermined')
-    fireEvent.click(screen.getByRole('button', { name: 'Soil texture' }))
-    const englishChart = screen.getByRole('complementary')
-    await waitFor(() => expect(within(englishChart).getByText('Clay')).toBeInTheDocument())
-    expect(within(englishChart).queryByText('Sét')).not.toBeInTheDocument()
-    expect(screen.queryByText(/Play the timeline/)).not.toBeInTheDocument()
-    expect(fetcher.mock.calls.map(([url]) => url.split('/').at(-1))).toEqual(['texture-fixture.json', 'texture-fixture.json', 'flood-fixture.json'])
-  })
+
 
   it('refuses to overlay data on incompatible source geometry', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => data })))

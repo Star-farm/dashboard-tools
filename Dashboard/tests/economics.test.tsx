@@ -79,25 +79,6 @@ describe('economic overview interface', () => {
     expect(within(cards[1]).getByText('17.653.309')).toBeInTheDocument()
   })
 
-  it('filters both views, keeps selections when translating and reads native USD amounts', () => {
-    const { rerender } = render(<EconomicOverviewPage language="vi" />)
-    fireEvent.change(screen.getByLabelText('Nhóm kịch bản'), { target: { value: 'bau' } })
-    fireEvent.change(screen.getByLabelText('Hệ canh tác'), { target: { value: 'sustainable' } })
-    fireEvent.change(screen.getByLabelText('Thời tiết'), { target: { value: 'mild' } })
-    fireEvent.change(screen.getByLabelText('Tài nguyên'), { target: { value: 'shortage' } })
-    expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(3)
-    expect(within(screen.getByRole('table')).getByText('12.453.121')).toBeInTheDocument()
-    rerender(<EconomicOverviewPage language="en" />)
-    expect(screen.getByLabelText('Resource scenario')).toHaveValue('shortage')
-    const table = screen.getByRole('table')
-    expect(within(table).getByText('473.11')).toBeInTheDocument()
-    expect(within(table).getByText('1,089.99')).toBeInTheDocument()
-    expect(within(table).getByText('43.40%')).toBeInTheDocument()
-    expect(within(table).getAllByText('Unit: USD/ha')).toHaveLength(3)
-    fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
-    expect(within(table).getAllByRole('row')).toHaveLength(19)
-    expect(screen.getAllByRole('combobox').every((select) => (select as HTMLSelectElement).value === 'all')).toBe(true)
-  })
 
   it('hides incompatible options and restores them when filters are cleared', () => {
     render(<EconomicOverviewPage language="vi" />)

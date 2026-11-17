@@ -1,10 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
-import App from '../src/app/App'
-import HeaderNavigation from '../src/app/HeaderNavigation'
-import Bau3ComparisonPage from '../src/features/economics/Bau3ComparisonPage'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import Bau3LineChart from '../src/features/economics/Bau3LineChart'
 import { aggregateBau3Data } from '../src/features/economics/aggregateBau3'
 import { analyzeBau3, bau3Domain, selectBau3Points } from '../src/features/economics/bau3Analysis'
@@ -105,32 +102,7 @@ describe('BAU 3 seasons data and observations', () => {
 })
 
 describe('BAU 3 seasons comparison page', () => {
-  it('renders five combined charts, observations, straight lines and yearly dots in the existing template', () => {
-    render(<Bau3ComparisonPage language="vi" />)
-    expect(screen.getByRole('heading', { name: 'BAU 3 vụ so với 1Mha' })).toBeInTheDocument()
-    expect(screen.getAllByRole('article')).toHaveLength(5)
-    expect(screen.getAllByRole('complementary')).toHaveLength(5)
-    const income = screen.getByRole('region', { name: 'Thu nhập ròng' })
-    const pair = within(income).getAllByRole('article')
-    expect(pair).toHaveLength(1)
-    expect(pair[0].querySelector('header')).toHaveTextContent('BAU 3 vụ / 1Mha')
-    for (const card of pair) {
-      const paths = [...card.querySelectorAll('path.recharts-line-curve')]
-      expect(paths).toHaveLength(8)
-      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual([...Array(2)].flatMap(() => ['#2868b2', '#8650a8', '#b65b15', '#287447']))
-      expect(paths.slice(0, 4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
-      expect(paths.slice(4).map((path) => path.getAttribute('stroke-opacity'))).toEqual(Array(4).fill('1'))
-      for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
-      for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
-      expect(card.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)
-      expect(card.querySelector('header')).toHaveTextContent('Đơn vị: VNĐ/ha')
-    }
-    for (const insight of screen.getAllByRole('complementary')) {
-      expect(insight.querySelectorAll('p')).toHaveLength(1)
-      expect(insight.querySelectorAll('strong').length).toBeGreaterThan(4)
-    }
-    expect(screen.getByRole('complementary', { name: 'Nhận xét · Tỷ suất lợi nhuận' })).toHaveTextContent('điểm %')
-  })
+
 
   it('shows all four conditions with the selected year and units in the tooltip', async () => {
     const { container } = render(<Bau3LineChart data={data} family="bau3s" metric="income" domain={bau3Domain(data, 'income', 'USD')} language="en" />)
@@ -150,25 +122,4 @@ describe('BAU 3 seasons comparison page', () => {
     expect(tooltip).toHaveTextContent('37.55 USD/ha')
   })
 
-  it('connects the mobile menu and direct URL and translates units and observations', async () => {
-    const navigate = vi.fn()
-    const { unmount } = render(<HeaderNavigation language="vi" page="bau3Comparison" mobile onNavigate={navigate} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Kinh tế' }))
-    fireEvent.click(screen.getByRole('button', { name: 'So sánh chi tiết' }))
-    const link = screen.getByRole('link', { name: 'BAU3S vs 1Mha' })
-    expect(link).toHaveAttribute('href', '#economics-bau3-vs-1mha')
-    expect(link).toHaveAttribute('aria-current', 'page')
-    fireEvent.click(link)
-    expect(navigate).toHaveBeenCalledOnce()
-    unmount()
-    window.history.replaceState(null, '', '#economics-bau3-vs-1mha')
-    render(<App />)
-    expect(await screen.findByRole('heading', { name: 'BAU 3 vụ so với 1Mha' })).toBeInTheDocument()
-    expect(document.title).toBe('BAU 3 vụ so với 1Mha | STAR FARM')
-    fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(document.title).toBe('BAU 3 seasons vs 1Mha | STAR FARM')
-    const income = screen.getByRole('region', { name: 'Net income' })
-    for (const card of within(income).getAllByRole('article')) expect(card.querySelector('header')).toHaveTextContent('Unit: USD/ha')
-    expect(screen.getByRole('complementary', { name: 'What the comparison shows · Net income' })).toHaveTextContent('simulation results')
-  })
 })

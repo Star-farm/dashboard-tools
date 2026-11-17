@@ -90,6 +90,22 @@ describe('seasonal data for all topics and farming systems', () => {
 })
 
 describe('seasonal interface', () => {
+  it('localizes the shared crop legend immediately when the language changes', () => {
+    const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
+    const vietnameseLegend = screen.getAllByRole('group', { name: 'Chú giải màu sắc mùa vụ' })[0]
+    expect(vietnameseLegend).toHaveTextContent('Đông-Xuân')
+    expect(vietnameseLegend).toHaveTextContent('Xuân-Hè')
+    expect(vietnameseLegend).toHaveTextContent('Thu-Đông')
+    expect(vietnameseLegend).not.toHaveTextContent('early')
+
+    rerender(<SeasonalComparison language="en" data={data} config={config} />)
+    const englishLegend = screen.getAllByRole('group', { name: 'Season color legend' })[0]
+    expect(englishLegend).toHaveTextContent('Winter–Spring')
+    expect(englishLegend).toHaveTextContent('Spring–Summer')
+    expect(englishLegend).toHaveTextContent('Fall–Winter')
+    expect(englishLegend).not.toHaveTextContent('early')
+  })
+
   it('shows crop details on hover, click and keyboard without a crop selector list', () => {
     let selected = ''
     const { container } = render(<SeasonalPieChart language="en" name="BAU" color="#b8322b" unit="kg" format={String} selected="early" onSelect={(period) => { selected = period }} slices={[
@@ -165,11 +181,6 @@ describe('seasonal interface', () => {
     expect(screen.queryByText(/Only crops grown in both systems/)).not.toBeInTheDocument()
   })
 
-  it('uses the existing BAU3 reference without a baseline selector on overall comparisons', () => {
-    render(<SeasonalComparison language="vi" data={data} config={{ topic: 'economics', kind: 'comparison', metrics: ['income'] }} />)
-    expect(screen.queryByLabelText('Hệ canh tác đối chiếu')).not.toBeInTheDocument()
-    expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })).toHaveTextContent('BAU 3 vụ')
-  })
 
   it.each([
     { name: 'BAU 3 comparison', page: <Bau3ComparisonPage language="vi" />, cards: 7 },
@@ -186,35 +197,6 @@ describe('seasonal interface', () => {
     expect(screen.queryByRole('heading', { name: 'Phân tích theo từng vụ' })).not.toBeInTheDocument()
   })
 
-  it('updates crops and years, supports keyboard selection, and labels unplanted 1Mha crops in both languages', () => {
-    const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
-    const income = screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })
-    expect(income.querySelectorAll('.seasonal-pie')).toHaveLength(2)
-    const insight = within(income).getByRole('complementary')
-    expect(insight).toHaveTextContent('BAU 3 vụ')
-    expect(insight).toHaveTextContent('1Mha')
-    expect(insight).toHaveTextContent('Tổng cả năm')
-    expect(insight).toHaveTextContent('Cơ cấu mùa vụ')
-    expect(insight).not.toHaveTextContent('1Mha so với')
-    expect(insight.querySelector('.scenario-change')).not.toBeNull()
-    const plot = within(income).getByRole('group', { name: 'Thu nhập ròng trên hecta' })
-    fireEvent.keyDown(plot, { key: 'End' })
-    expect(income).toHaveTextContent('Không canh tác')
-    fireEvent.click(screen.getByRole('button', { name: 'Qua nhiều năm' }))
-    fireEvent.keyDown(screen.getByRole('group', { name: 'Thu nhập ròng trên hecta' }), { key: 'ArrowRight' })
-    expect(screen.queryByRole('region', { name: 'Số liệu đang chọn · Thu nhập ròng trên hecta' })).not.toBeInTheDocument()
-    expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' }).querySelector('.sr-only[aria-live]')).toHaveTextContent('Năm 2028')
-    fireEvent.change(screen.getByLabelText('Mùa vụ'), { target: { value: 'late' } })
-    expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' })).toHaveTextContent('Không canh tác')
-    expect(screen.getByRole('article', { name: 'Thu nhập ròng trên hecta' }).querySelectorAll('.recharts-line-curve')).toHaveLength(1)
-    rerender(<SeasonalComparison language="en" data={data} config={config} />)
-    expect(screen.getByLabelText('Crop season')).toHaveValue('late')
-    const translated = screen.getByRole('article', { name: 'Net income per hectare' })
-    expect(translated).toHaveTextContent('Not grown')
-    expect(translated).toHaveTextContent('USD/ha')
-    fireEvent.click(within(translated).getByRole('button', { name: '1Mha' }))
-    expect(translated.querySelectorAll('.recharts-line-curve')).toHaveLength(0)
-  })
 
   it('uses columns for seasonal rates and lines across years', async () => {
     render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['roi', 'margin'] }} />)

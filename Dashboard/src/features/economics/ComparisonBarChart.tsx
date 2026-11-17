@@ -1,8 +1,9 @@
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { CHART_TICK, scenarioColor } from '../../components/chartStyles'
 import { useChartSelection } from '../../components/chartSelectionContext'
-import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartLegend from '../../components/ChartLegend'
+import ChartInfo from '../../components/ChartInfo'
 import type { Language } from '../../i18n'
 import type { ComparisonCohort, ComparisonMetric } from './comparisonData'
 import { economicMetricUnits, economicsText } from './economicsText'
@@ -34,13 +35,14 @@ export default function ComparisonBarChart({ metric, cohort, language, startYear
       <header><h2 id={`comparison-${metric}-title`}>{title}</h2><p><span>{text.period} {startYear} - {endYear}</span></p></header>
       <ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={points.map((point) => ({ key: point.group, label: point.label, color: point.color }))} selected={selection} onSelect={setSelection} />
       {visibleChartPoints.some((point) => point.value !== null) ? <div className="comparison-plot" role="group" aria-label={`${title} · ${startYear}–${endYear} · ${chartUnit}`}>
-        <ChartUnitLabel unit={chartUnit} />
+        <ChartUnitLabel unit={chartUnit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 600, height: 280 }}>
           <BarChart data={visibleChartPoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
             <CartesianGrid vertical={false} stroke="#b5c2aa" />
             <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
             <YAxis width={62} domain={[(min: number) => min < 0 ? min * 1.15 : 0, (max: number) => max > 0 ? max * 1.2 : 1]} tickFormatter={(value) => compact.format(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
             <ReferenceLine y={0} stroke="#819275" />
+            <Tooltip isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} content={(props) => <ChartInfo {...props} format={(value) => number.format(value)} unit={chartUnit} />} />
 
             <Bar dataKey="value" name={title} maxBarSize={84} radius={[4, 4, 0, 0]} isAnimationActive={false}>
               {visibleChartPoints.map((point) => <Cell key={point.group} fill={point.color} />)}

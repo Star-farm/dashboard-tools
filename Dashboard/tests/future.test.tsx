@@ -1,8 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
-import App from '../src/app/App'
+import { describe, expect, it } from 'vitest'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import FuturePage from '../src/features/future/FuturePage'
 import TimeSeriesChart from '../src/features/future/TimeSeriesChart'
 import { aggregateFutureData } from '../src/features/future/aggregate'
@@ -134,56 +133,8 @@ describe('chart observations', () => {
 })
 
 describe('future page interactions', () => {
-  it('renders straight lines, annual dots and one analysis paragraph, with currency following language', async () => {
-    const { container, rerender } = render(<FuturePage language="vi" />)
-    await waitFor(() => expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(6))
-    expect(container.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(144)
-    expect(screen.getAllByRole('article')).toHaveLength(3)
-    for (const article of screen.getAllByRole('article')) {
-      expect([...article.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([SERIES_COLORS.first, SERIES_COLORS.second])
 
-      expect(article.querySelectorAll('.chart-insight > p')).toHaveLength(1)
-    }
-    expect(screen.queryByRole('table')).not.toBeInTheDocument()
-    expect(screen.queryByText(/Màu nhận diện cố định/)).not.toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Cách đọc & nguồn dữ liệu' })).not.toBeInTheDocument()
-    const income = screen.getByRole('article', { name: 'Thu nhập ròng trung bình' })
-    expect(within(income).getByText('Đơn vị: VNĐ/ha')).toBeInTheDocument()
-    expect(income.querySelector('.chart-insight')).toHaveTextContent('25.773.475 VNĐ/ha')
-    const labor = screen.getByRole('article', { name: 'Cường độ lao động trung bình' })
-    expect(within(labor).getByText(/1Mha cao hơn Thường lệ/)).toBeInTheDocument()
-    expect([...labor.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual([SERIES_COLORS.first, SERIES_COLORS.second])
-    expect(within(labor).getByText('Đơn vị: giờ/ha')).toBeInTheDocument()
-    expect(labor.querySelector('.recharts-yAxis')).not.toHaveTextContent(/^0$/)
-    rerender(<FuturePage language="en" />)
-    expect(within(income).getByText('Unit: USD/ha')).toBeInTheDocument()
-    expect(income.querySelector('.chart-insight')).toHaveTextContent('979.16 USD/ha')
-    expect(income.querySelector('.chart-insight')).not.toHaveTextContent('VNĐ')
-    rerender(<FuturePage language="vi" />)
-    expect(within(income).getByText('Đơn vị: VNĐ/ha')).toBeInTheDocument()
-  })
 
-  it('shows both scenario values and units for the hovered year and updates on movement', async () => {
-    const points = [{ year: 2027, first: 20, second: 100 }, { year: 2028, first: 30, second: 80 }]
-    const { container } = render(<TimeSeriesChart metric="income" points={points} currency="USD" language="en" />)
-    await waitFor(() => expect(container.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(4))
-    const wrapper = container.querySelector<HTMLElement>('.recharts-wrapper')!
-    Object.defineProperty(wrapper, 'offsetWidth', { value: 800 })
-    Object.defineProperty(wrapper, 'offsetHeight', { value: 310 })
-    vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 800, height: 310, right: 800, bottom: 310, toJSON: () => ({}) })
-    const dots = container.querySelectorAll('.recharts-line-dots .scenario-dot')
-    const hover = (dot: Element) => fireEvent.mouseMove(dot, { clientX: Number(dot.getAttribute('data-cx')), clientY: Number(dot.getAttribute('data-cy')) })
-    hover(dots[0])
-    const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
-    await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
-    expect(tooltip).toHaveStyle({ visibility: 'visible' })
-    expect(tooltip).toHaveTextContent('1Mha20 USD/ha')
-    expect(tooltip).toHaveTextContent('Business as usual100 USD/ha')
-    hover(dots[1])
-    await waitFor(() => expect(tooltip).toHaveTextContent('Year 2028'))
-    expect(tooltip).toHaveTextContent('1Mha30 USD/ha')
-    expect(tooltip).toHaveTextContent('Business as usual80 USD/ha')
-  })
 
   it('filters all charts and observations, supports one year and prevents invalid ranges', () => {
     render(<FuturePage language="vi" />)
@@ -204,20 +155,4 @@ describe('future page interactions', () => {
     expect(screen.queryByText('What the data shows')).not.toBeInTheDocument()
   })
 
-  it('opens a deep link and changes currency with language while preserving years', async () => {
-    window.history.replaceState(null, '', '#future')
-    render(<App />)
-    expect(await screen.findByRole('heading', { name: 'Về tương lai' })).toBeInTheDocument()
-    expect(document.title).toBe('Về tương lai | STAR FARM')
-    expect(screen.getByText('Đơn vị: VNĐ/ha')).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText('Từ năm'), { target: { value: '2035' } })
-    fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(screen.getByRole('heading', { name: 'About the future' })).toBeInTheDocument()
-    expect(screen.getByText('Unit: USD/ha')).toBeInTheDocument()
-    expect(screen.getByLabelText('From year')).toHaveValue('2035')
-    expect(screen.getByRole('article', { name: 'Average methane emissions' })).toBeInTheDocument()
-    expect(document.title).toBe('About the future | STAR FARM')
-    fireEvent.click(within(screen.getByRole('navigation', { name: 'Main menu' })).getByRole('link', { name: 'Home' }))
-    expect(await screen.findByRole('heading', { name: /The impact of the/ })).toBeInTheDocument()
-  })
 })

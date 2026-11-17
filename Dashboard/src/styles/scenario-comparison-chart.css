@@ -17,7 +17,6 @@
 .model-line { display: inline-block; width: 25px; border-top: 3px solid #30472d; }
 .model-line-bau { border-top-color: #40533b; border-top-style: dashed; }
 .model-line-oneMha { border-top-color: #40533b; }
-.comparison-model-key[data-single="true"] .model-line-bau { border-top-style: solid; }
 .comparison-model-key[data-chart="bar"] .model-line { width: 12px; height: 14px; border: 1px solid #40533b; background: #40533b; }
 .comparison-model-key[data-chart="bar"] .model-line-bau { opacity: .4; border-style: dashed; }
 .comparison-year-values i { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; display: inline-block; }

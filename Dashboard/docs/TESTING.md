@@ -26,13 +26,15 @@ npm run e2e
 npm run e2e -- --grep "#map "
 ~~~
 
-The suite tests nine routes: home, future, map exploration, farming map, soil map, economics overview, resources overview, environment overview, and scenario details. Each route is checked at 320, 375, 390, 430, 768, 1024, and 1440 pixels for horizontal overflow, page errors, and failed requests. Screenshots go to ignored `test-results/responsive/`.
+The suite tests every routed home, glossary, future, map, economics, resources, environment, and scenario page in both English and Vietnamese. Each page is checked at 320, 375, 390, 430, 768, 1024, and 1440 pixels for horizontal overflow, immediate language switching, page errors, and failed requests. English and Vietnamese screenshots at 375 pixels go to ignored `test-results/responsive/`.
 
-The map test selects a plot by keyboard and checks the popup, including a two-line long ward name. The soil test switches to Land Use and checks the raster without fetching the complete soil overlay. These viewport checks are not physical-device tests and do not measure mobile memory, thermal behavior, or touch reliability. See [map-verification.md](map-verification.md) for the Land Use phone procedure.
+The map test selects a plot by keyboard and checks the popup, including a two-line long ward name. The soil test switches to Land Use and checks the raster without fetching the complete soil overlay. Translation key and dataset-label coverage is checked by `tests/i18n-coverage.test.ts`; see [INTERNATIONALIZATION.md](INTERNATIONALIZATION.md) for the locale workflow. These viewport checks are not physical-device tests and do not measure mobile memory, thermal behavior, or touch reliability. See [map-verification.md](map-verification.md) for the Land Use phone procedure.
 
 ## Manual and data checks
 
 For changed pages, check both languages, routes and history, filters/reset, loading/error/empty states, keyboard focus, chart axes/units/legends/tooltips, reduced motion, and responsive layout. For maps, also check plot selection, pan/zoom, layer changes, retry, legends, and map-to-dashboard links. Review browser console and Network requests.
+
+For tooltip changes, exercise a line, bar, seasonal pie, and map trend at 320, 375, 390, 430, 768, and 1440 pixels. Check the mobile unit and `BAU` label styles, full desktop labels and units, chart-boundary placement, value/color identity, language switching, and console/network errors. Capture screenshots with each tooltip visible; viewport screenshots without an active tooltip do not verify tooltip layout.
 
 Preserve USD/VND paths, missing values, zero and negative values, scenario combinations, and baselines. For GIS changes, check hashes, IDs/order, geometry, manifest references, category totals, and unknown areas. Verify network requests when changing Land Use assets.
 

@@ -28,7 +28,13 @@ Keep aggregation and scientific calculation in data or feature analysis modules 
 
 Keep bilingual labels, units, axes, missing values, zero and negative values, and explanatory summaries aligned. Distinguish missing observations, zero values, and crop periods not grown. Comparison populations and baseline periods are part of a chart's data contract. Check annual and seasonal views independently when denominators differ.
 
+Use `ChartInfo` for Recharts tooltips that show formatted series values. Pass the numeric formatter and unit separately so mobile CSS can hide units while desktop keeps them. It retains the full scenario label on desktop and uses `BAU` for the compact mobile label. The seasonal pie tooltip follows the same unit and scenario-label rules. Keep Recharts' chart-relative placement so tooltips stay within the plot; use an inline tooltip for charts where a floating overlay would obscure the data.
+
 Optimize measured repeated work; avoid speculative memoization. Preserve focus indicators, reduced motion, and narrow layouts.
+
+## Internationalization
+
+Every changed user-facing string needs Vietnamese and English translations. Use the core dictionary in `src/i18n/index.ts` for shell text and feature-owned `*Text.ts` dictionaries for feature copy. Localize dataset-derived display labels without changing source values or identifiers, and verify immediate language switching. Follow [INTERNATIONALIZATION.md](INTERNATIONALIZATION.md) for dictionary patterns, label mappings, formatting conventions, exceptions, and regression checks.
 
 ## Maps
 

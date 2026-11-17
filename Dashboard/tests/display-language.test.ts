@@ -17,7 +17,7 @@ describe('consistent display language', () => {
     expect(environmentUnit('intensity', 'en')).toBe('kg methane/ton rice')
   })
   it.each(['vi', 'en'] as const)('spells out methane and nitrogen in %s', (language) => {
-    const methane = language === 'vi' ? 'metan' : 'Methane', nitrogen = language === 'vi' ? 'nito' : 'nitrogen'
+    const methane = language === 'vi' ? 'metan' : 'methane', nitrogen = language === 'vi' ? 'nito' : 'nitrogen'
     expect(metricUnit('methane', 'USD', language)).toBe(`kg ${methane}/ha`)
     expect(environmentUnit('methane', language)).toBe(`kg ${methane}/ha`)
     expect(scenarioText[language].methaneUnit).toBe(`kg ${methane}/ha`)

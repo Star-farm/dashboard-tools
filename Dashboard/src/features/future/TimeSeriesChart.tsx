@@ -42,14 +42,14 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
           <div className="chart-and-insight">
             <div className="chart-area">
               <div className="timeseries-plot" role="group" aria-label={`${title} · ${points[0]?.year}–${points.at(-1)?.year} · ${unit}`}>
-                <ChartUnitLabel unit={chartUnit} />
+                <ChartUnitLabel unit={chartUnit} language={language} />
                 <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 800, height: 310 }} onResize={setChartWidth}>
                   <LineChart data={chartPoints} accessibilityLayer margin={{ top: 30, right: 18, left: 0, bottom: 8 }}>
                     <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
                     <XAxis dataKey="year" type="number" domain={points.length === 1 ? [points[0].year - .5, points[0].year + .5] : ['dataMin', 'dataMax']} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={CHART_TICK} />
                     <YAxis width={62} domain={metric === 'labor' ? laborAxisDomain(points) : [(min: number) => Math.min(0, min), 'auto']} tickFormatter={(value) => compactNumber.format(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={8} tick={CHART_TICK} />
                     {metric !== 'labor' && <ReferenceLine y={0} stroke="#819275" />}
-                    <Tooltip shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => `${new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} ${chartUnit}`} />} cursor={{ fill: '#254f3d0a' }} />
+                    <Tooltip shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} unit={chartUnit} />} cursor={{ fill: '#254f3d0a' }} />
                     {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} {...scenarioLineStyle('oneMha', undefined, false, selection !== 'all')} connectNulls={false} isAnimationActive={false} />}
                     {selection !== 'first' && <Line type="linear" dataKey="second" name={analysis.secondLabel} {...scenarioLineStyle('bau', undefined, false, selection !== 'all')} connectNulls={false} isAnimationActive={false} />}
                   </LineChart>

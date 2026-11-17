@@ -10,7 +10,11 @@ The Dashboard is a static, bilingual (Vietnamese and English) React application 
 - Inspect soil texture, flood depth, acid sulfate depth, and land-use layers with per-plot area shares.
 - Browse in Vietnamese or English, search the glossary, and follow map context to dashboard views.
 
-See [Data and GIS pipeline](docs/DATA_PIPELINE.md) for data scope and interpretation limits.
+The dashboard presents prepared outputs from STAR-FARM rice-farming simulations. BAU denotes Business As Usual; 1M_HA denotes the modeled one-million-hectare program scenario. Comparison pages also distinguish modeled climate and resource conditions, such as severe or mild weather and water shortage or normal supply. These scenario labels refer to model configurations; observed differences should not be attributed to a single practice unless the comparison controls for the other conditions. See [data and GIS](docs/DATA_PIPELINE.md) for periods, populations, and interpretation limits.
+
+Economics, Environment, and Resources present related outcome families from the scenario data. Scenario Comparison puts selected outcomes side by side. Spatial Maps connect scenario filters and modeled years/harvests to plot-level yield and income; soil and Land Use maps provide static spatial classifications, not future forecasts.
+
+See [Internationalization](docs/INTERNATIONALIZATION.md) for locale dictionaries, dynamic display labels, and bilingual regression checks.
 
 ## Stack and structure
 
@@ -48,6 +52,8 @@ npm run dev
 
 Vite normally prints port 5173. For a fixed address run npm run dev -- --host 127.0.0.1 --port 5173 --strictPort. Builds use checked-in data and do not run generators.
 
+For a step-by-step first run, prerequisite details, a learning path, and troubleshooting, see [Getting started](docs/GETTING_STARTED.md).
+
 ## Commands
 
 Run from Dashboard/.
@@ -76,10 +82,15 @@ Do not regenerate data for routine development or checks. See [DATA_PIPELINE.md]
 
 ## Guides
 
+- [Getting started](docs/GETTING_STARTED.md)
 - [Architecture](docs/ARCHITECTURE.md)
+- [Code walkthrough](docs/CODE_WALKTHROUGH.md)
+- [Feature guides](docs/FEATURES.md)
 - [Data and GIS pipeline](docs/DATA_PIPELINE.md)
 - [Development](docs/DEVELOPMENT.md)
 - [Testing and UI verification](docs/TESTING.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Internationalization](docs/INTERNATIONALIZATION.md)
 - [Deployment and maintenance](docs/DEPLOYMENT.md)
 - [Land Use device verification](docs/map-verification.md)
 

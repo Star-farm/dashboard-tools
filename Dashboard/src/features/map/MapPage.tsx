@@ -25,6 +25,7 @@ import { mapText } from './mapText'
 import type { AdminBoundaryData, MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario, PlotMetric } from './mapTypes'
 import PlotMap from './PlotMap'
 import { useMapFile, useMapFiles } from './useMapFile'
+import '../../styles/chart-info.css'
 import '../../styles/map.css'
 
 function DashboardContext({ scenarios, language, context }: { scenarios: MapScenario[]; language: Language; context: MapNavigationContext }) {
@@ -237,7 +238,7 @@ export default function MapPage({ language }: { language: Language }) {
       <div className="map-section-heading"><div><h2 id="map-trend-title">{t.trend}</h2></div><div className="map-layer-switch" role="group" aria-label={t.trend}>{(['yield', 'income'] as const).map((value) => <button type="button" key={value} aria-pressed={trendMetric === value} onClick={() => setTrendMetric(value)}>{t[value]}</button>)}</div></div>
       <p className="map-chart-note">{t.trendNote}</p>
 {loading ? <div className="map-trend-skeleton" /> : <div className="map-trend-chart" role="img" aria-label={`${t.trend} · ${t[trendMetric]} · ${period}`}>
-        <ChartUnitLabel unit={trendChartUnit} />
+        <ChartUnitLabel unit={trendChartUnit} language={language} />
         <ResponsiveContainer width="100%" height={290}>
         <LineChart
           data={chartTrend}
@@ -275,13 +276,9 @@ export default function MapPage({ language }: { language: Language }) {
           />
 
           <Tooltip
+            isAnimationActive={false}
             labelFormatter={(value) => `${t.year} ${value}`}
-            formatter={(value) => [
-              value == null
-                ? '—'
-                : `${trendChartNumber.format(Number(value))} ${trendChartUnit}`,
-              t[trendMetric],
-            ]}
+            formatter={(value) => [value == null ? '—' : <>{trendChartNumber.format(Number(value))} <span className="chart-info-unit">{trendChartUnit}</span></>, t[trendMetric]]}
             contentStyle={CHART_TOOLTIP}
           />
 

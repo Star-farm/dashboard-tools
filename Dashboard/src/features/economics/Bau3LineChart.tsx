@@ -34,7 +34,7 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
       <header><h3 id={`bau3-${metric}-${family}-title`} title={family === 'oneMha' ? t.oneMhaDescription : undefined}>{title ?? t[family]}</h3></header>
       <ConditionFilters language={language} filters={filters} />
       {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${data.startYear}–${data.endYear} · ${unit}`}>
-        <ChartUnitLabel unit={unit} />
+        <ChartUnitLabel unit={unit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 310 }} onResize={setChartWidth}>
           <LineChart data={points} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 8 }}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
@@ -48,9 +48,8 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
     <ChartInfo
       {...props}
       yearLabel={t.year}
-      format={(value) =>
-        `${new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(Number(value))} ${unit}`
-      }
+      format={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(Number(value))}
+      unit={unit}
     />
   )}
   cursor={{ stroke: '#819275', strokeDasharray: '3 3' }}

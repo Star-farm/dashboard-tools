@@ -27,6 +27,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
     const index = cultivated.indexOf(slice)
     return shares && index >= 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(shares[index])} %` : null
   }
+  const dataLabel = (slice: SeasonalSlice) => percent(slice)?.replace(/\s?%$/, '') ?? ''
   const description = (slice: SeasonalSlice) => `${slice.label}: ${slice.value === null ? slice.status : `${format(slice.value)} ${unit}`}${percent(slice) ? ` · ${percent(slice)}` : ''}`
   const negative = slices.some((slice) => slice.value !== null && slice.value < 0)
   const positive = slices.filter((slice) => slice.value !== null && slice.value > 0)
@@ -47,14 +48,14 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
           <Pie data={drawable ? positive : [{ label: '', value: 1, period: 'early' }]} dataKey="value" nameKey="label" cx="50%" cy="50%" innerRadius="48%" outerRadius="85%" startAngle={90} endAngle={-270} paddingAngle={drawable && positive.length > 1 ? 3 : 0} stroke="#fffefa" strokeWidth={2} isAnimationActive={false} labelLine={false} label={drawable ? (props) => {
             const angle = -Number(props.midAngle) * Math.PI / 180
             const radius = (Number(props.innerRadius) + Number(props.outerRadius)) / 2
-            return <text x={Number(props.cx) + radius * Math.cos(angle)} y={Number(props.cy) + radius * Math.sin(angle)} textAnchor="middle" dominantBaseline="central" fill="#fff" stroke="#173e32" strokeWidth={2.5} paintOrder="stroke" fontWeight={700} fontSize={14} pointerEvents="none">{percent(positive[props.index])}</text>
+            return <text x={Number(props.cx) + radius * Math.cos(angle)} y={Number(props.cy) + radius * Math.sin(angle)} textAnchor="middle" dominantBaseline="central" fill="#fff" stroke="#173e32" strokeWidth={2.5} paintOrder="stroke" fontWeight={700} fontSize={14} pointerEvents="none">{dataLabel(positive[props.index])}</text>
           } : false} onMouseEnter={drawable ? (_slice, index) => setHovered(positive[index].period) : undefined} onMouseLeave={() => setHovered(null)} onClick={drawable ? (_slice, index) => select(positive[index].period) : undefined}>
             {(drawable ? positive : [null]).map((slice) => <Cell key={slice?.period ?? 'empty'} fill={slice ? cropColors[slice.period] : '#dce3d9'} opacity={slice && selected !== slice.period ? .8 : 1} cursor={slice ? 'pointer' : 'default'} strokeWidth={slice?.period === selected ? 4 : 2} />)}
           </Pie>
         </PieChart>
       </ResponsiveContainer>
     </div>
-    {active && <div className="seasonal-pie-tooltip" role="status"><strong>{active.label}</strong><span>{active.value === null ? active.status : `${format(active.value)} ${unit}`}{percent(active) ? ` · ${percent(active)}` : ''}</span></div>}
+    {active && <div className="seasonal-pie-tooltip" role="status"><strong><span className="seasonal-pie-tooltip-desktop-name">{active.label}</span><span className="seasonal-pie-tooltip-mobile-name">{name.replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')} · {active.label}</span></strong><span>{active.value === null ? active.status : <>{format(active.value)} <span className="chart-info-unit">{unit}</span></>}{percent(active) ? ` · ${percent(active)}` : ''}</span></div>}
 
     {showLegend && <p className="chart-legend-caption seasonal-pie-legend-caption">{vi ? 'Chú giải' : 'Legend'}</p>}
     {showLegend && <div

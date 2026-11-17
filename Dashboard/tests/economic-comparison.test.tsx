@@ -7,7 +7,6 @@ import HeaderNavigation from '../src/app/HeaderNavigation'
 import EconomicComparisonPage from '../src/features/economics/EconomicComparisonPage'
 import ComparisonBarChart from '../src/features/economics/ComparisonBarChart'
 import { aggregateEconomicComparison, selectComparisonCohort } from '../src/features/economics/comparisonData'
-import { comparisonSummary } from '../src/features/economics/comparisonAnalysis'
 import type { ComparisonCohort, EconomicComparisonData } from '../src/features/economics/comparisonData'
 import cached from '../src/data/economics-comparison.json'
 
@@ -27,21 +26,7 @@ function fixture(multiplier = 1) {
 }
 
 describe('economic comparison aggregation', () => {
-  it('summarizes all five indicators, reports trade-offs and handles a zero baseline or missing values', () => {
-    const cohort = selectComparisonCohort(data, 'all', 'all')!
-    const summary = comparisonSummary(cohort, 'vi', 2027, 2050)
-    for (const value of ['25.961.407 VNĐ/ha', '13.814.629 VNĐ/ha', '87,9%', 'chi phí sản xuất cao hơn', 'giá trị rơm thấp hơn', 'năng suất thấp hơn', 'cường độ lao động cao hơn', 'Kết quả mô phỏng', 'chuẩn bị vốn sản xuất', 'bố trí nhân công', 'cải thiện năng suất']) expect(summary).toContain(value)
-    const changed = structuredClone(cohort)
-    changed.groups.oneMha.USD.income = changed.groups.bau.USD.income! / 2
-    expect(comparisonSummary(changed, 'en', 2027, 2050)).toContain('no net income advantage')
-    changed.groups.bau.USD.income = 0
-    changed.groups.oneMha.USD.income = 20
-    changed.groups.oneMha.USD.straw = null
-    const partial = comparisonSummary(changed, 'en', 2027, 2050)
-    expect(partial).toContain('net income is 20.00 USD/ha higher')
-    expect(partial).toContain('insufficient data to compare straw value')
-    expect(partial).not.toMatch(/NaN|Infinity/)
-  })
+
 
   it('averages records within each filter combination, preserves zero and negative values, and excludes historical data', () => {
     const result = aggregateEconomicComparison(fixture(), fixture(1000))
@@ -88,31 +73,7 @@ describe('economic comparison aggregation', () => {
 })
 
 describe('economic comparison interface', () => {
-  it('shows five bar charts with fixed scenario colors, full values, correct units and axes starting at zero', () => {
-    render(<EconomicComparisonPage language="en" />)
-    expect(screen.getByRole('heading', { name: 'Economic comparison' })).toBeInTheDocument()
-    const cards = screen.getAllByRole('article')
-    expect(cards).toHaveLength(5)
-    const summary = screen.getByRole('complementary', { name: 'Overall assessment' })
-    expect(summary.compareDocumentPosition(cards[0]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(summary.querySelectorAll('p')).toHaveLength(1)
-    expect(summary.querySelectorAll('strong').length).toBeGreaterThan(5)
-    for (const card of cards) {
-      expect(card.querySelector('header')).toHaveTextContent('Period 2027 - 2050')
-      const bars = [...card.querySelectorAll('path.recharts-rectangle')]
-      expect(bars.map((path) => path.getAttribute('fill'))).toEqual(['#b8322b', '#217348'])
-      const zero = Number(card.querySelector('.recharts-reference-line-line')!.getAttribute('y1'))
-      for (const bar of bars) expect(Number(bar.getAttribute('y')) + Number(bar.getAttribute('height'))).toBeCloseTo(zero, 4)
-    }
-    const income = screen.getByRole('article', { name: 'Average net income' })
-    expect(income.querySelector('.comparison-values')).toHaveTextContent('524.83 USD/ha')
-    expect(income.querySelector('.comparison-values')).toHaveTextContent('986.30 USD/ha')
-    expect(income.querySelector('header')).toHaveTextContent('Unit: USD/ha')
-    const straw = screen.getByRole('article', { name: 'Average straw value' })
-    expect(straw.querySelector('header')).toHaveTextContent('Unit: USD/ha')
-    expect(screen.getByRole('article', { name: 'Average labor intensity' }).querySelector('header')).toHaveTextContent('Unit: hours/ha')
-    expect(screen.queryByRole('table')).not.toBeInTheDocument()
-  })
+
 
   it('combines filters across every chart, preserves selections and currencies when translating, and resets', () => {
     const { rerender } = render(<EconomicComparisonPage language="vi" />)

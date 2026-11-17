@@ -14,7 +14,6 @@ interface Props<Key extends string> {
 
 export default function ChartLegend<Key extends string>({ language, label, items, selected, onSelect, allLabel }: Props<Key>) {
   return <div className="interactive-chart-legend" role="group" aria-label={label} data-filtered={selected !== 'all'} data-layout={items.length > 2 ? 'conditions' : 'groups'}>
-    <p className="chart-legend-caption">{language === 'vi' ? 'Chú giải' : 'Legend'}</p>
     <p className="chart-legend-label">{label}</p>
     <button type="button" className="chart-legend-option chart-legend-all" title={`${label}: ${allLabel ?? (language === 'vi' ? 'Tất cả' : 'All')}`} aria-pressed={selected === 'all'} onClick={() => onSelect('all')}>{allLabel ?? (language === 'vi' ? 'Tất cả' : 'All')}</button>
     {items.map((item) => <button key={item.key} type="button" className="chart-legend-option" title={`${label}: ${item.label}`} aria-pressed={selected === item.key} onClick={() => onSelect(item.key)}>

@@ -55,4 +55,12 @@ The URL hash owns route state. `src/i18n/useLanguage.ts` owns language state. Fi
 
 The app shell composes features; shared presentation components must not depend on feature pages. Keep shared UI in `src/components/`, application navigation/state in `src/app/`, and feature logic in its feature. Avoid circular imports and duplicated domain mappings.
 
+## Rendering, charts, maps, and language
+
+Recharts charts live in feature modules and receive already selected or aggregated values. Shared components in `src/components/` provide chart selection, legends, chart information, and unit labels. Chart CSS in `src/styles/` controls responsive presentation; mobile tooltip labels and units are display-only formatting and do not alter source values. Annual and seasonal selection is composed by `src/components/AnalysisView.tsx`.
+
+Map pages combine SVG plot geometry and values in `src/features/map/PlotMap.tsx`; `useMapFile.ts` provides shared JSON request state and cache for map files. `SoilMapSection.tsx` loads the selected soil statistics layer, validates it with `validateSoilData.ts`, and passes its raster filename to the plot map. `MapPage.tsx` owns scenario, year, harvest, metric, and playback selection.
+
+Core translations and locale selection live in `src/i18n/`; feature dictionaries are in their owning feature directories. `useLanguage` updates the page and document metadata when language changes. Responsive behavior is implemented by shared and feature styles in `src/styles/`, with browser viewport checks in `e2e/`; viewport emulation does not establish physical-device performance or touch reliability.
+
 Preserve units, missing values, zeroes, negatives, populations, baselines, scenario definitions, map CRS/order, geometry fingerprints, and area shares. Keep GIS generation separate from development, tests, quality checks, and builds. Update these guides when module boundaries or data contracts change.

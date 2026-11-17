@@ -47,6 +47,12 @@ function incomePlotColor(
   return colors[colors.length - 1]
 }
 
+function plotIdFromTarget(target: EventTarget): number | null {
+  if (!(target instanceof Element)) return null
+  const id = target.closest('[data-plot]')?.getAttribute('data-plot')
+  return id === null || id === undefined ? null : Number(id)
+}
+
 export default function PlotMap({
   geometry,
   adminBoundaries,
@@ -316,27 +322,9 @@ export default function PlotMap({
           key={plot.id}
           data-plot={plot.id}
           d={plot.path}
-          onClick={(event) => {
-            if (
-              !suppressClick.current ||
-              event.detail === 0
-            ) {
-              setSelected(plot.id)
-            }
-          }}
           tabIndex={plot.id === 0 ? 0 : -1}
           role="button"
           aria-label={`${plotLabel} ${plot.id}`}
-          onKeyDown={(event) => {
-            if (
-              event.key === 'Enter' ||
-              event.key === ' '
-            ) {
-              event.preventDefault()
-              event.stopPropagation()
-              setSelected(plot.id)
-            }
-          }}
 
 fill={
   thematic
@@ -624,7 +612,21 @@ fill={
         aria-describedby={helpId}
         tabIndex={0}
 
+        onClick={(event) => {
+          const plotId = plotIdFromTarget(event.target)
+          if (plotId !== null && (!suppressClick.current || event.detail === 0)) {
+            setSelected(plotId)
+          }
+        }}
         onKeyDown={(event) => {
+          const plotId = plotIdFromTarget(event.target)
+          if (plotId !== null && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault()
+            event.stopPropagation()
+            setSelected(plotId)
+            return
+          }
+
           if (
             event.key === '+' ||
             event.key === '='
@@ -680,11 +682,7 @@ fill={
             }
           }
 
-          const plot = (
-            event.target as Element
-          )
-            .closest('[data-plot]')
-            ?.getAttribute('data-plot')
+          const plot = plotIdFromTarget(event.target)
 
           suppressClick.current = false
 
@@ -694,10 +692,7 @@ fill={
             lastX: event.clientX,
             lastY: event.clientY,
             moved: false,
-            plot:
-              plot == null
-                ? null
-                : Number(plot),
+            plot,
           }
 
           event.currentTarget.setPointerCapture(
@@ -725,17 +720,7 @@ fill={
           const active = drag.current
 
           if (!active) {
-            const plot = (
-              event.target as Element
-            )
-              .closest('[data-plot]')
-              ?.getAttribute('data-plot')
-
-            setHover(
-              plot == null
-                ? null
-                : Number(plot)
-            )
+            setHover(plotIdFromTarget(event.target))
 
             return
           }

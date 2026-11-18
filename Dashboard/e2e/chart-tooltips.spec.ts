@@ -72,10 +72,10 @@ for (const chart of charts) {
 
         const unitSelector = chart.name === 'seasonal pie' ? '.seasonal-pie-tooltip-unit' : '.chart-info-unit'
         const hiddenUnit = await page.locator(unitSelector).first().evaluate((element) => getComputedStyle(element).display === 'none')
-        expect(hiddenUnit).toBe(width <= 767)
+        expect(hiddenUnit).toBe(chart.name !== 'seasonal pie' && width <= 767)
         if (chart.name === 'bar') {
           await expect(page.locator('.chart-info dd').first()).toContainText(/\d/)
-          const swatch = await page.locator('.chart-info dt i').first().evaluate((element) => getComputedStyle(element).backgroundColor)
+          const swatch = await page.locator('.chart-info-swatch').first().evaluate((element) => getComputedStyle(element).backgroundColor)
           expect(swatch).not.toBe('rgba(0, 0, 0, 0)')
           if (width <= 767) await expect(page.locator('.chart-tooltip-mobile-label').first()).toHaveText('BAU')
           else await expect(page.locator('.chart-tooltip-desktop-label').first()).toContainText(/Business as usual|Thường lệ/)

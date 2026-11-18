@@ -453,7 +453,7 @@ fill={
       bottom: plotBounds.bottom - frameBounds.top,
     } : { left: anchorPoint.x - frameBounds.left, right: anchorPoint.x - frameBounds.left, top: anchorPoint.y - frameBounds.top, bottom: anchorPoint.y - frameBounds.top }
     setPopupAnchor({ x: anchorPoint.x - frameBounds.left, y: anchorPoint.y - frameBounds.top, bounds })
-  }, [plot?.id, popupMapAnchor, view.x, view.y, view.zoom, svgSize.width, svgSize.height])
+  }, [plot, popupMapAnchor, view.x, view.y, view.zoom, svgSize.width, svgSize.height])
   const plotWardName = useMemo(() => {
     if (!plot || !validAdminBoundaries) return undefined
     const point = [

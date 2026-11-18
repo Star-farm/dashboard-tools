@@ -34,7 +34,7 @@ The map test selects a plot by keyboard and checks the popup, including a two-li
 
 For changed pages, check both languages, routes and history, filters/reset, loading/error/empty states, keyboard focus, chart axes/units/legends/tooltips, reduced motion, and responsive layout. For maps, also check plot selection, pan/zoom, layer changes, retry, legends, and map-to-dashboard links. Review browser console and Network requests.
 
-For tooltip changes, exercise a line, bar, seasonal pie, and map trend at 320, 375, 390, 430, 768, and 1440 pixels. Check the mobile unit and `BAU` label styles, full desktop labels and units, chart-boundary placement, value/color identity, language switching, and console/network errors. Capture screenshots with each tooltip visible; viewport screenshots without an active tooltip do not verify tooltip layout.
+For tooltip changes, exercise line, bar, seasonal pie, and map-trend charts at 320, 375, 390, 430, 768, and 1440 pixels. Check that `ChartInfo` hides units on mobile. Check that the seasonal pie tooltip keeps its unit visible at every width. Verify mobile `BAU` labels, full desktop labels, tooltip placement, value and color identity, language switching, and console and network errors. Capture a screenshot with each tooltip visible. A viewport screenshot without an active tooltip does not verify tooltip layout.
 
 Preserve USD/VND paths, missing values, zero and negative values, scenario combinations, and baselines. For GIS changes, check hashes, IDs/order, geometry, manifest references, category totals, and unknown areas. Verify network requests when changing Land Use assets.
 

@@ -48,7 +48,7 @@ Generator validation is module-specific. Compare outputs and check paired source
 
 ## Farming map
 
-The checked-in `public/map-data/manifest.json` describes 16 scenario files, 992 plot records, and years 2027–2050. The Python preparation script reads the original model checkout:
+The checked-in `public/map-data/manifest.json` lists 16 scenario files. Each file covers 992 plots for years 2027–2050. The Python preparation script reads the original model checkout:
 
 ~~~powershell
 python scripts/build-map-data.py --model-root "D:/path/to/STAR FARM"

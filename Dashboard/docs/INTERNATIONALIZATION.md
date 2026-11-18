@@ -21,7 +21,7 @@ Examples include `categoryLabels` for glossary categories, `scenarioMetricLabels
 ## Language-specific conventions and exceptions
 
 - Keep official names such as STAR-FARM and Dong Thap as proper nouns. Preserve scenario IDs, URL hashes, metric IDs, map IDs, and category codes as identifiers.
-- Preserve established terms and abbreviations where they are part of the model vocabulary, including BAU, AWD, and 1Mha. Compact mobile chart tooltips intentionally use `BAU`; mobile chart layouts also hide units where space is limited.
+- Preserve established model terms and abbreviations, including BAU, AWD, and 1Mha. Compact mobile chart tooltips use `BAU`. `ChartInfo` tooltips hide units on mobile. The inline seasonal pie tooltip keeps its unit visible at every viewport width.
 - Keep scientific notation and conventional symbols intact, including chemical formulas, percentages, currency codes, coordinate references, and units. Translate surrounding explanatory words when they are user-facing.
 - CSV column names and machine-readable codes are not interface copy unless surfaced to users. When shown in a chart, table, selector, legend, or popup, provide a localized display label.
 - Glossary term names and definitions are bilingual source content. Do not substitute one locale's definition for the other.

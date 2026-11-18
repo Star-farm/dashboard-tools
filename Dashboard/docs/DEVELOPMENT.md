@@ -28,7 +28,7 @@ Keep aggregation and scientific calculation in data or feature analysis modules 
 
 Keep bilingual labels, units, axes, missing values, zero and negative values, and explanatory summaries aligned. Distinguish missing observations, zero values, and crop periods not grown. Comparison populations and baseline periods are part of a chart's data contract. Check annual and seasonal views independently when denominators differ.
 
-Use `ChartInfo` for Recharts tooltips that show formatted series values. Pass the numeric formatter and unit separately so mobile CSS can hide units while desktop keeps them. It retains the full scenario label on desktop and uses `BAU` for the compact mobile label. The seasonal pie tooltip follows the same unit and scenario-label rules. Keep Recharts' chart-relative placement so tooltips stay within the plot; use an inline tooltip for charts where a floating overlay would obscure the data.
+Use `ChartInfo` for Recharts tooltips with formatted series values. Pass the number formatter and unit separately. `ChartInfo` hides units on mobile and keeps them on desktop. It shows the full scenario label on desktop and the compact `BAU` label on mobile. The inline seasonal pie tooltip keeps its unit visible at every viewport width. It uses the compact `BAU` label on mobile. Keep Recharts tooltips within the chart area. Use an inline tooltip when a floating overlay would cover the data.
 
 Optimize measured repeated work; avoid speculative memoization. Preserve focus indicators, reduced motion, and narrow layouts.
 

@@ -27,6 +27,52 @@ async function expectMobileMapControls(page: Page, width: number) {
   await page.setViewportSize({ width: 1440, height: 900 })
 }
 
+async function expectSoilLayerButtonsFit(page: Page) {
+  const layout = await page.locator('.soil-layer-control .map-layer-switch').evaluate((element) => {
+    const group = element.getBoundingClientRect()
+    const parent = element.parentElement!.getBoundingClientRect()
+    const buttons = [...element.querySelectorAll('button')].map((button) => {
+      const { left, right } = button.getBoundingClientRect()
+      return { left, right }
+    })
+    return {
+      groupLeft: group.left,
+      groupRight: group.right,
+      parentLeft: parent.left,
+      parentRight: parent.right,
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      buttons,
+    }
+  })
+
+  expect(layout.groupLeft).toBeGreaterThanOrEqual(layout.parentLeft)
+  expect(layout.groupRight).toBeLessThanOrEqual(layout.parentRight + 1)
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1)
+  expect(layout.buttons.length).toBe(5)
+  for (const button of layout.buttons) {
+    expect(button.left).toBeGreaterThanOrEqual(layout.groupLeft)
+    expect(button.right).toBeLessThanOrEqual(layout.groupRight + 1)
+  }
+}
+
+async function expectSoilChartAndLegendAligned(page: Page) {
+  const layout = await page.evaluate(() => {
+    const column = document.querySelector('.soil-map-column')
+    const chart = document.querySelector('.soil-chart')
+    const legend = document.querySelector('.soil-map-legend')
+    if (!column || !chart || !legend) throw new Error('Missing soil map chart or legend')
+    return {
+      columnBottom: column.getBoundingClientRect().bottom,
+      chartBottom: chart.getBoundingClientRect().bottom,
+      legendBottomPadding: parseFloat(getComputedStyle(legend).paddingBottom),
+    }
+  })
+
+  expect(Math.abs(layout.columnBottom - layout.chartBottom)).toBeLessThanOrEqual(1)
+  expect(layout.legendBottomPadding).toBeGreaterThanOrEqual(12)
+}
+
 const viewports = [320, 375, 390, 430, 768, 1024, 1440]
 const routes = [
   '#home', '#glossary', '#future', '#map-explore', '#map', '#soil-map',
@@ -71,6 +117,8 @@ for (const route of routes) {
 
     for (const width of viewports) {
       await page.setViewportSize({ width, height: width < 600 ? 844 : 900 })
+      if (route === '#soil-map' && width < 768) await expectSoilLayerButtonsFit(page)
+      if (route === '#soil-map' && width >= 768) await expectSoilChartAndLegendAligned(page)
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), {
         message: `${route} should not overflow horizontally at ${width}px`,
       }).toBe(true)
@@ -105,6 +153,8 @@ for (const route of routes) {
     }
     for (const width of viewports) {
       await page.setViewportSize({ width, height: width < 600 ? 844 : 900 })
+      if (route === '#soil-map' && width < 768) await expectSoilLayerButtonsFit(page)
+      if (route === '#soil-map' && width >= 768) await expectSoilChartAndLegendAligned(page)
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), {
         message: `${route} should not overflow horizontally in Vietnamese at ${width}px`,
       }).toBe(true)
@@ -124,6 +174,13 @@ for (const route of routes) {
       await page.getByRole('button', { name: 'Land use' }).click()
       await expect(page.locator('.plot-map-svg image')).toHaveCount(1)
       await expect(page.getByRole('complementary')).toContainText('Land use')
+      const categoryList = page.locator('.soil-chart .soil-chart-list-scroll')
+      const visibleRows = await categoryList.locator('li').evaluateAll((items) => {
+        const listBottom = items[0]?.parentElement?.getBoundingClientRect().bottom ?? 0
+        return items.slice(0, 5).map((item) => item.getBoundingClientRect().bottom <= listBottom + 1)
+      })
+      expect(visibleRows).toHaveLength(5)
+      expect(visibleRows.every(Boolean)).toBe(true)
       expect(dataRequests.some((url) => url.endsWith('/soil-overlay.json'))).toBe(false)
     }
     if (route === '#map') {

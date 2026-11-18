@@ -5,11 +5,13 @@ import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
 import { yearTicks } from '../../utils/yearTicks'
+import { lineAxisScale } from '../../utils/lineAxisScale'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import ChartLegend from '../../components/ChartLegend'
 import { useChartSelection } from '../../components/chartSelectionContext'
 import type { ChartPoint, Currency, Metric } from './futureTypes'
-import { analyzeChart, laborAxisDomain, metricUnit, SERIES_COLORS } from './chartAnalysis'
+import { analyzeChart, metricUnit, SERIES_COLORS } from './chartAnalysis'
 import { futureText } from './futureText'
 
 interface Props {
@@ -24,18 +26,18 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
   const [selection, setSelection] = useChartSelection<'first' | 'second' | 'all'>(metric === 'methane' ? 'futureAwd' : 'futureModel', 'all')
   const t = futureText[language]
   const chartPoints = metric === 'income' && currency === 'VND' ? points.map((point) => ({ ...point, first: point.first === null ? null : point.first / 1_000_000, second: point.second === null ? null : point.second / 1_000_000 })) : points
+  const yScale = lineAxisScale(chartPoints.flatMap((point) => [selection !== 'second' ? point.first : null, selection !== 'first' ? point.second : null]))
   const analysis = analyzeChart(points, metric, currency, language)
   const title = t[`${metric}Title`]
   const unit = metricUnit(metric, currency, language)
   const chartUnit = metric === 'income' && currency === 'VND' ? 'triệu VNĐ/ha' : unit
-  const compactNumber = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
+  const axisNumber = distinctAxisFormatter(yScale.ticks, language, true)
   const ticks = yearTicks(points[0]?.year, points.at(-1)?.year ?? points[0]?.year, chartWidth, 80)
 
   return (
     <article className="future-chart-card" id={`future-${metric}`} aria-labelledby={`${metric}-title`}>
       <header className="chart-card-header">
         <div className="chart-heading"><h2 id={`${metric}-title`}>{title}</h2><p>{t[`${metric}Subtitle`]}</p></div>
-        <span className="chart-direction">{t[`${metric}Direction`]}</span>
       </header>
       {analysis ? (
         <>
@@ -47,7 +49,7 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
                   <LineChart data={chartPoints} accessibilityLayer margin={{ top: 30, right: 18, left: 0, bottom: 8 }}>
                     <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
                     <XAxis dataKey="year" type="number" domain={points.length === 1 ? [points[0].year - .5, points[0].year + .5] : ['dataMin', 'dataMax']} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickMargin={12} tick={CHART_TICK} />
-                    <YAxis width={62} domain={metric === 'labor' ? laborAxisDomain(points) : [(min: number) => Math.min(0, min), 'auto']} tickFormatter={(value) => compactNumber.format(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={8} tick={CHART_TICK} />
+                    <YAxis width={chartWidth < 420 ? 46 : 62} domain={yScale.domain} ticks={yScale.ticks} tickFormatter={(value) => axisNumber(Number(value))} axisLine={{ stroke: '#819275', strokeWidth: 1 }} tickLine={false} tickMargin={chartWidth < 420 ? 4 : 8} tick={CHART_TICK} />
                     {metric !== 'labor' && <ReferenceLine y={0} stroke="#819275" />}
                     <Tooltip shared isAnimationActive={false} content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} unit={chartUnit} />} cursor={{ fill: '#254f3d0a' }} />
                     {selection !== 'second' && <Line type="linear" dataKey="first" name={analysis.firstLabel} {...scenarioLineStyle('oneMha', undefined, false, selection !== 'all')} connectNulls={false} isAnimationActive={false} />}
@@ -56,7 +58,7 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
                 </ResponsiveContainer>
               </div>
               <p className="chart-x-label">{t.year}</p>
-              <ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={[{ key: 'first', label: analysis.firstLabel, color: SERIES_COLORS.first }, { key: 'second', label: analysis.secondLabel, color: SERIES_COLORS.second, dashed: selection === 'all' }]} selected={selection} onSelect={setSelection} />
+              <ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={[{ key: 'first', label: analysis.firstLabel, color: SERIES_COLORS.first }, { key: 'second', label: analysis.secondLabel, color: SERIES_COLORS.second }]} selected={selection} onSelect={setSelection} />
             </div>
             <aside className="chart-insight" aria-label={`${t.insight} — ${title}`}>
               <h3 className="insight-eyebrow">{t.insight}</h3>

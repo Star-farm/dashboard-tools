@@ -1,5 +1,5 @@
 
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Language } from '../../i18n'
 import { colorFor, mapColors  } from './mapData'
@@ -53,6 +53,8 @@ function plotIdFromTarget(target: EventTarget): number | null {
   return id === null || id === undefined ? null : Number(id)
 }
 
+type PlotPopupAnchor = { x: number; y: number; bounds: { left: number; top: number; right: number; bottom: number } }
+
 export default function PlotMap({
   geometry,
   adminBoundaries,
@@ -105,6 +107,8 @@ export default function PlotMap({
   const pinching = useRef(false)
 
   const [storedView, setView] = useState<{ zoom: number; x: number; y: number } | null>(null)
+  const [popupAnchor, setPopupAnchor] = useState<PlotPopupAnchor>()
+  const [popupMapAnchor, setPopupMapAnchor] = useState<{ plotId: number; x: number; y: number } | null>(null)
 
   const validAdminBoundaries = adminBoundaries
     && Array.isArray(adminBoundaries.bounds)
@@ -192,7 +196,17 @@ export default function PlotMap({
     ).matrixTransform(inverse)
   }
 
+  function rememberPopupCursor(plotId: number, event: { clientX: number; clientY: number; pointerType?: string }) {
+    if (event.pointerType === 'mouse' && window.matchMedia('(min-width: 768px)').matches) {
+      const point = pointToMap(event)
+      setPopupMapAnchor(point ? { plotId, x: point.x, y: point.y } : null)
+    } else {
+      setPopupMapAnchor(null)
+    }
+  }
+
   function closePopup() {
+    setPopupMapAnchor(null)
     setSelected(null)
     svgRef.current?.focus({ preventScroll: true })
   }
@@ -417,6 +431,29 @@ fill={
       : geometry.plots.find(
           (shape) => shape.id === selected
         )
+  useLayoutEffect(() => {
+    const svg = svgRef.current
+    const frame = frameRef.current
+    const matrix = svg?.getScreenCTM?.()
+    if (!plot || !frame || !svg || !matrix) {
+      setPopupAnchor(undefined)
+      return
+    }
+    const frameBounds = frame.getBoundingClientRect()
+    const cursorPoint = popupMapAnchor?.plotId === plot.id
+      ? popupMapAnchor
+      : { x: plot.center[0], y: plot.center[1] }
+    const anchorPoint = new DOMPoint(cursorPoint.x, cursorPoint.y).matrixTransform(matrix)
+    const plotElement = svg.querySelector<SVGPathElement>(`[data-plot="${plot.id}"]`)
+    const plotBounds = plotElement?.getBoundingClientRect()
+    const bounds = plotBounds ? {
+      left: plotBounds.left - frameBounds.left,
+      top: plotBounds.top - frameBounds.top,
+      right: plotBounds.right - frameBounds.left,
+      bottom: plotBounds.bottom - frameBounds.top,
+    } : { left: anchorPoint.x - frameBounds.left, right: anchorPoint.x - frameBounds.left, top: anchorPoint.y - frameBounds.top, bottom: anchorPoint.y - frameBounds.top }
+    setPopupAnchor({ x: anchorPoint.x - frameBounds.left, y: anchorPoint.y - frameBounds.top, bounds })
+  }, [plot?.id, popupMapAnchor, view.x, view.y, view.zoom, svgSize.width, svgSize.height])
   const plotWardName = useMemo(() => {
     if (!plot || !validAdminBoundaries) return undefined
     const point = [
@@ -521,7 +558,9 @@ fill={
         const line2 = isHoChiMinh ? (language === 'vi' ? 'Hồ Chí Minh' : 'City') : ''
         const [x, y] = placement.point
         const fitFontSize = fontSizeFor(placement, line1, line2)
-        const fontSize = view.zoom === 1 ? defaultProvinceFontSize : Math.min(Math.max(8, width * 0.018), fitFontSize)
+        const fontSize = view.zoom === 1
+          ? defaultProvinceFontSize
+          : Math.max(defaultProvinceFontSize, Math.min(Math.max(8, width * 0.018), fitFontSize))
         if (fontSize < 4.5) return null
         return <text key={`province-label-${feature.properties.provinceCode}`} x={x} y={isHoChiMinh ? y - fontSize * 0.55 : y} textAnchor="middle" fontSize={fontSize} fontWeight="700" fill="#344b37" stroke="#fffefa" strokeWidth={2} paintOrder="stroke">
           {isHoChiMinh
@@ -615,6 +654,7 @@ fill={
         onClick={(event) => {
           const plotId = plotIdFromTarget(event.target)
           if (plotId !== null && (!suppressClick.current || event.detail === 0)) {
+            rememberPopupCursor(plotId, { clientX: event.clientX, clientY: event.clientY, pointerType: event.detail === 0 ? 'keyboard' : 'mouse' })
             setSelected(plotId)
           }
         }}
@@ -623,6 +663,7 @@ fill={
           if (plotId !== null && (event.key === 'Enter' || event.key === ' ')) {
             event.preventDefault()
             event.stopPropagation()
+            setPopupMapAnchor(null)
             setSelected(plotId)
             return
           }
@@ -776,6 +817,7 @@ fill={
             drag.current &&
             !drag.current.moved
           ) {
+            if (drag.current.plot !== null) rememberPopupCursor(drag.current.plot, event)
             setSelected(drag.current.plot)
           }
 
@@ -857,6 +899,8 @@ fill={
         thematic={!!thematic}
         placement={`${plot.center[1] <= view.y ? 'bottom' : 'top'}-${plot.center[0] <= view.x ? 'right' : 'left'}`}
         language={language}
+        metric={metric}
+        anchor={popupAnchor}
         yieldValue={yieldValues[plot.id]}
         incomeValue={incomeValues[plot.id]}
         closeRef={closeRef}

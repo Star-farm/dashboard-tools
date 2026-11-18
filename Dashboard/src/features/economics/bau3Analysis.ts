@@ -55,7 +55,7 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
     if (!pairs.length) return []
     const bauMean = pairs.reduce((sum, pair) => sum + pair.bau, 0) / pairs.length
     const oneMean = pairs.reduce((sum, pair) => sum + pair.one, 0) / pairs.length
-    return [{ condition, bauMean, oneMean, difference: oneMean - bauMean, relative: bauMean === 0 ? null : (oneMean - bauMean) / Math.abs(bauMean) * 100, last: pairs.at(-1)! }]
+    return [{ condition, bauMean, oneMean, difference: oneMean - bauMean, relative: bauMean === 0 ? null : (oneMean - bauMean) / Math.abs(bauMean) * 100, first: pairs[0]!, last: pairs.at(-1)! }]
   })
   if (!stats.length) return null
   const higher = stats.filter(({ difference }) => difference > .000001).length
@@ -82,6 +82,21 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const last = language === 'vi'
     ? `Ở nhóm điều kiện “${t[focus.condition]}”, năm ${focus.last.year}, ${baseline} đạt ${formatBau3Value(focus.last.bau, metric, language)} ${unit}, còn 1Mha đạt ${formatBau3Value(focus.last.one, metric, language)} ${unit}.`
     : `For “${t[focus.condition]}” in ${focus.last.year}, ${baseline} reaches ${formatBau3Value(focus.last.bau, metric, language)} ${unit}, versus ${formatBau3Value(focus.last.one, metric, language)} ${unit} for 1Mha.`
+  const startBau = stats.reduce((sum, stat) => sum + stat.first.bau, 0) / count
+  const endBau = stats.reduce((sum, stat) => sum + stat.last.bau, 0) / count
+  const startOne = stats.reduce((sum, stat) => sum + stat.first.one, 0) / count
+  const endOne = stats.reduce((sum, stat) => sum + stat.last.one, 0) / count
+  const trend = (label: string, start: number, end: number) => {
+    const change = metric === 'margin' ? end - start : start === 0 ? null : (end - start) / Math.abs(start) * 100
+    const amount = change === null ? '' : `${number.format(Math.abs(change))} ${metric === 'margin' ? language === 'vi' ? 'điểm %' : 'pp' : '%'}`
+    const movement = end > start ? language === 'vi' ? 'tăng' : 'increased' : end < start ? language === 'vi' ? 'giảm' : 'decreased' : language === 'vi' ? 'gần như không đổi' : 'was nearly unchanged'
+    return language === 'vi'
+      ? `${label} ${movement}${amount ? ` ${amount}` : ''} (từ ${formatBau3Value(start, metric, language)} đến ${formatBau3Value(end, metric, language)} ${unit})`
+      : `${label} ${movement}${amount ? ` ${amount}` : ''} (from ${formatBau3Value(start, metric, language)} to ${formatBau3Value(end, metric, language)} ${unit})`
+  }
+  const trendSummary = language === 'vi'
+    ? `Từ ${period.split('–')[0]} đến ${period.split('–')[1]}, ${trend('1Mha', startOne, endOne)}; ${trend(baseline, startBau, endBau)}.`
+    : `From ${period.replace('–', ' to ')}, ${trend('1Mha', startOne, endOne)}; ${trend(baseline, startBau, endBau)}.`
   let conclusion: string
   if (metric === 'income' || metric === 'margin') {
     conclusion = language === 'vi'
@@ -101,5 +116,5 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
       ? higher === count ? `1Mha cần nhiều giờ lao động hơn ${baseline} ở tất cả nhóm điều kiện; cần dự trù nhân công, đào tạo và cơ giới hóa phù hợp khi triển khai.` : lower === count ? `1Mha cần ít giờ lao động hơn ${baseline} ở tất cả nhóm điều kiện; nên tận dụng lợi thế này cùng đào tạo và cơ giới hóa phù hợp.` : 'Kế hoạch triển khai 1Mha cần bố trí nhân công và cơ giới hóa theo từng điều kiện, vì mức tiết kiệm lao động khác nhau giữa các nhóm điều kiện.'
       : higher === count ? `1Mha requires more labor hours than ${baseline} in every combination; implementation needs suitable staffing, training and mechanization.` : lower === count ? `1Mha requires fewer labor hours than ${baseline} in every combination; this advantage should be supported by appropriate training and mechanization.` : 'Plans for implementing 1Mha should adapt staffing and mechanization to each condition, as labor savings vary across combinations.'
   }
-  return { higher, lower, equal, count, comparison, last, conclusion, paragraph: `${comparison} ${last} ${conclusion}` }
+  return { higher, lower, equal, count, comparison, last, conclusion, paragraph: `${comparison} ${trendSummary} ${last}` }
 }

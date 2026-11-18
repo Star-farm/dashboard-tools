@@ -35,15 +35,15 @@ describe('three-season business-as-usual KPIs', () => {
     }
   })
 
-  it('uses pp for margins and treats reduced labor cautiously', () => {
+  it('uses pp for margins and recognizes lower labor requirements as favorable', () => {
     const margin = bauFarmingStats(data, 'margin', 'USD')
     expect(margin.change).toBeLessThan(0)
     expect(farmingTone(margin)).toBe('bad')
     expect(farmingTone(bauFarmingStats(data, 'cost', 'USD'))).toBe('bad')
-    expect(farmingTone(bauFarmingStats(data, 'labor', 'USD'))).toBe('neutral')
+    expect(farmingTone(bauFarmingStats(data, 'labor', 'USD'))).toBe('good')
     expect(analyzeBauFarming(data, 'margin', 'vi')!.paragraph).toContain('điểm %')
     expect(analyzeBauFarming(data, 'income', 'vi')!.paragraph).toContain('giảm ở 4/4 nhóm điều kiện')
-    expect(analyzeBauFarming(data, 'labor', 'vi')!.paragraph).toContain('không tự động đồng nghĩa với hiệu quả cao hơn')
+    expect(analyzeBauFarming(data, 'labor', 'vi')!.paragraph).toContain('chỉ số giảm ở 4/4 nhóm điều kiện')
     expect(bauFarmingSummary(data, 'vi')).toContain('Các nhóm điều kiện thiếu tài nguyên')
   })
 
@@ -53,7 +53,7 @@ describe('three-season business-as-usual KPIs', () => {
       for (const point of series.USD) point.income = point.year === 2027 ? 0 : -10
     }
     expect(bauFarmingStats(changed, 'income', 'USD')).toMatchObject({ start: 0, end: -10, change: null })
-    expect(analyzeBauFarming(changed, 'income', 'en')!.paragraph).toContain('Declining income')
+    expect(analyzeBauFarming(changed, 'income', 'en')!.paragraph).toContain('decreases in 4/4 combinations')
     expect(analyzeBauFarming(changed, 'income', 'en')!.paragraph).not.toMatch(/NaN|Infinity/)
     const empty = { ...data, series: [] }
     expect(bauFarmingStats(empty, 'yield', 'USD')).toMatchObject({ mean: null, start: null, end: null, change: null })

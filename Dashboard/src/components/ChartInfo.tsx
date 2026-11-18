@@ -1,6 +1,7 @@
 
 import '../styles/chart-info.css'
-import { scenarioColor } from './chartStyles'
+import { CONDITION_COLORS, scenarioColor } from './chartStyles'
+import type { Bau3Condition } from '../features/economics/bau3Types'
 
 type TooltipEntry = {
   name?: string | number
@@ -59,10 +60,18 @@ export default function ChartInfo({
             group === 'bau' || group === 'oneMha'
               ? group
               : undefined
+          const labelScenario = /1\s*mha|one million hectares/i.test(String(name ?? ''))
+            ? 'oneMha'
+            : /business as usual|canh tác như thường lệ|^thường lệ(?:\s|·|$)|\bbau\b/i.test(String(name ?? ''))
+              ? 'bau'
+              : undefined
+          const scenarioKey = scenario ?? labelScenario
+          const conditionColor = CONDITION_COLORS[String(entry.dataKey ?? '') as Bau3Condition]
 
           const color =
+            (scenarioKey ? scenarioColor(scenarioKey) : undefined) ??
+            conditionColor ??
             row?.color ??
-            (scenario ? scenarioColor(scenario) : undefined) ??
             row?.fill ??
             entry.fill ??
             entry.color ??
@@ -71,11 +80,12 @@ export default function ChartInfo({
           return (
             <div key={`${String(entry.dataKey)}-${index}`}>
               <dt>
-                <i
+                <span
+                  className="chart-info-swatch"
                   style={{ backgroundColor: color }}
                   aria-hidden="true"
                 />
-                <><span className="chart-tooltip-desktop-label">{name}</span><span className="chart-tooltip-mobile-label">{compactName}</span></>
+                <span><span className="chart-tooltip-desktop-label">{name}</span><span className="chart-tooltip-mobile-label">{compactName}</span></span>
               </dt>
 
               <dd>

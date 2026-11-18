@@ -101,6 +101,29 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
         : 'Overall, the with-AWD group has higher average methane emissions than the without-AWD group, so these data do not show an emissions advantage for the with-AWD group over this period.'
     }
   }
-  const paragraph = [comparison, trend, latest, conclusion].join(' ')
+  const validFirst = points.filter((point) => point.first !== null && Number.isFinite(point.first))
+  const validSecond = points.filter((point) => point.second !== null && Number.isFinite(point.second))
+  const endpoints = (series: typeof validFirst) => [series[0], series.at(-1)] as const
+  const [firstStart, firstEnd] = endpoints(validFirst)
+  const [secondStart, secondEnd] = endpoints(validSecond)
+  const seriesTrend = (label: string, start: ChartPoint | undefined, end: ChartPoint | undefined, key: 'first' | 'second') => {
+    if (!start || !end || start.year === end.year) return ''
+    const startValue = start[key]!, endValue = end[key]!
+    const change = startValue === 0 ? null : (endValue - startValue) / Math.abs(startValue) * 100
+    const changeText = change === null ? `${format(endValue - startValue)}` : `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))} %`
+    const direction = endValue > startValue ? (language === 'vi' ? 'tăng' : 'increased') : endValue < startValue ? (language === 'vi' ? 'giảm' : 'decreased') : (language === 'vi' ? 'gần như không đổi' : 'remained nearly unchanged')
+    const connector = endValue >= startValue ? (language === 'vi' ? 'lên' : 'to') : (language === 'vi' ? 'xuống' : 'to')
+    return language === 'vi'
+      ? `${label} ${direction} ${changeText}, từ ${format(startValue)} (${start.year}) ${connector} ${format(endValue)} (${end.year})`
+      : `${label} ${direction} ${changeText}, from ${format(startValue)} (${start.year}) to ${format(endValue)} (${end.year})`
+  }
+  const firstTrend = seriesTrend(firstLabel, firstStart, firstEnd, 'first')
+  const secondTrend = seriesTrend(secondLabel, secondStart, secondEnd, 'second')
+  const differenceAmount = relativeDifference === null
+    ? format(Math.abs(difference))
+    : `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(relativeDifference))} %`
+  const paragraph = language === 'vi'
+    ? `Trong giai đoạn ${validFirst[0]?.year ?? ''}–${validFirst.at(-1)?.year ?? ''}, ${firstLabel} đạt bình quân ${format(firstMean)}, ${direction} ${differenceAmount} so với ${secondLabel} (${format(secondMean)}). ${[firstTrend, secondTrend].filter(Boolean).join('; ')}.`
+    : `From ${validFirst[0]?.year ?? ''} to ${validFirst.at(-1)?.year ?? ''}, ${firstLabel} averaged ${format(firstMean)}, ${direction} ${differenceAmount} compared with ${secondLabel} (${format(secondMean)}). ${[firstTrend, secondTrend].filter(Boolean).join('; ')}.`
   return { firstLabel, secondLabel, firstMean, secondMean, difference, statistic, comparison, latest, trend, conclusion, paragraph }
 }

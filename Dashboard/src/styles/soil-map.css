@@ -18,7 +18,7 @@
 .soil-map-intro p { margin: 12px 0; }
 .soil-layer-control { display: grid; gap: 12px; padding: 16px 28px; border-top: 1px solid var(--line); background: #f7f8f1; }
 .soil-layer-control > p { margin: 0; color: var(--green); font-size: var(--text-body); font-weight: 700; }
-.soil-layer-control .map-layer-switch { width: fit-content; }
+.soil-layer-control .map-layer-switch { justify-self: start; width: max-content; max-width: 100%; }
 .soil-map-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 20px 24px 0; font-size: var(--text-small); color: var(--forest); }
 .soil-map-legend span { display: flex; align-items: center; gap: 8px; }
 .soil-map-legend i { display: inline-block; width: 16px; height: 16px; flex-shrink: 0; border: 1px solid #254f3d55; border-radius: 2px; }
@@ -29,8 +29,19 @@
 .soil-map-section .plot-map-popup { max-height: calc(100% - 32px); overflow-y: auto; }
 .soil-map-section .plot-map-popup dt { min-width: 0; overflow-wrap: anywhere; }
 .soil-map-section .plot-map-popup dd { white-space: normal; flex-shrink: 0; max-width: 50%; font-size: var(--text-body); }
+.soil-map-section .plot-map-popup dl > div { justify-content: flex-start; gap: 6px; }
+.soil-map-section .plot-map-popup dd { text-align: left; }
 .soil-map-section .plot-map-popup dd small { display: block; font-size: var(--text-small); }
+@media (min-width: 768px) {
+  .soil-map-section .plot-map-popup dl > div { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: baseline; justify-content: initial; gap: 6px 12px; }
+  .soil-map-section .plot-map-popup dt { white-space: nowrap; overflow-wrap: normal; }
+  .soil-map-section .plot-map-popup dd { max-width: none; white-space: nowrap; }
+  .soil-map-section .plot-map-popup .plot-map-popup-ward-name { display: -webkit-box; flex: initial; max-width: none; overflow: hidden; white-space: normal; }
+  .soil-map-section .plot-map-popup dd small { display: inline; }
+}
 @media (max-width: 767px) {
+  .soil-map-section .plot-map-popup dd { font-size: 12px; }
+  .soil-map-section .plot-map-popup dd small { display: inline; font-size: 10px; }
   .soil-map-layout.has-chart { grid-template-columns: 1fr; }
   .soil-map-stage, .soil-chart { width: 100%; min-width: 0; }
   .soil-chart { height: auto; min-height: 0; padding: 20px; border-left: 0; border-top: 1px solid var(--line); }

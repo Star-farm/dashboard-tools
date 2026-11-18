@@ -10,7 +10,7 @@ const vi = {
   baseline: 'Hệ canh tác đối chiếu',
   insight: 'Nhận xét',
   noPair: 'Chưa có đủ dữ liệu chung để tính chênh lệch giữa hai mô hình.', selected: 'Số liệu đang chọn', summary: 'Phạm vi phân tích',
-  comparison: '1Mha so với', periodMean: 'Chênh lệch trung bình trên những năm có dữ liệu chung',
+  comparison: '1Mha so với', noTrendData: 'Chưa đủ dữ liệu để tính thay đổi.',
   trend: 'Thay đổi từ năm đầu đến năm cuối có dữ liệu', highest: 'Cao nhất', lowest: 'thấp nhất', table: 'Bảng thông tin theo mùa vụ',
 }
 const en: Record<keyof typeof vi, string> = {
@@ -25,7 +25,7 @@ const en: Record<keyof typeof vi, string> = {
   baseline: 'Baseline farming system',
   insight: 'What the comparison shows',
   noPair: 'There is not enough shared data to calculate a difference between the models.', selected: 'Selected values', summary: 'Analysis scope',
-  comparison: '1Mha versus', periodMean: 'Mean difference across years with data for both models',
+  comparison: '1Mha versus', noTrendData: 'Not enough data to calculate a change.',
   trend: 'Change from the first to the last year with data', highest: 'Highest', lowest: 'lowest', table: 'Seasonal information dashboard',
 }
 export const seasonalText = { vi, en }

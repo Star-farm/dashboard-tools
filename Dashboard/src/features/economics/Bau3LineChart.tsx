@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
 import { yearTicks } from '../../utils/yearTicks'
+import { lineAxisScale } from '../../utils/lineAxisScale'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import type { Bau3Data, Bau3Family, Bau3Metric } from './bau3Types'
 import { bau3ChartUnit, selectBau3Points } from './bau3Analysis'
 import { bau3Text } from './bau3Text'
@@ -25,8 +27,9 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
   const t = bau3Text[language]
   const currency = language === 'vi' ? 'VND' : 'USD'
   const points = selectBau3Points(data, family, metric, currency)
+  const yScale = lineAxisScale(points.flatMap((point) => filters.visible.map((condition) => point[condition])))
   const unit = bau3ChartUnit(metric, language)
-  const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
+  const axisNumber = distinctAxisFormatter(yScale.ticks, language, true)
   const ticks = yearTicks(data.startYear, data.endYear, chartWidth, 88)
   const hasData = points.some((point) => visibleConditions.some((condition) => point[condition] !== null))
   return (
@@ -39,7 +42,7 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
           <LineChart data={points} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 8 }}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
             <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
-            <YAxis width={68} domain={domain} allowDataOverflow tickFormatter={(value) => `${compact.format(Number(value))}${metric === 'margin' ? ' %' : ''}`} tickLine={false} tickMargin={8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
+            <YAxis width={chartWidth < 420 ? 46 : 68} domain={yScale.domain} ticks={yScale.ticks} allowDataOverflow tickFormatter={(value) => `${axisNumber(Number(value))}${metric === 'margin' ? ' %' : ''}`} tickLine={false} tickMargin={chartWidth < 420 ? 4 : 8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
             <Tooltip
   shared

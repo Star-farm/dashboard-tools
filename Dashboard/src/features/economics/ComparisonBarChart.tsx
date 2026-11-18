@@ -8,6 +8,8 @@ import type { Language } from '../../i18n'
 import type { ComparisonCohort, ComparisonMetric } from './comparisonData'
 import { economicMetricUnits, economicsText } from './economicsText'
 import { comparisonText } from './comparisonText'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
+import { zeroBasedAxisScale } from '../../utils/zeroBasedAxisScale'
 
 export default function ComparisonBarChart({ metric, cohort, language, startYear, endYear }: {
   metric: ComparisonMetric
@@ -24,11 +26,12 @@ export default function ComparisonBarChart({ metric, cohort, language, startYear
   const unit = money ? t.moneyUnit : metric === 'yield' ? t.yieldUnit : t.laborUnit
   const chartUnit = money && currency === 'VND' ? 'triệu VNĐ/ha' : unit
   const number = new Intl.NumberFormat(language, { minimumFractionDigits: money && language === 'vi' ? 0 : 2, maximumFractionDigits: money && language === 'vi' ? 0 : 2 })
-  const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   const points = (['bau', 'oneMha'] as const).map((group) => ({ group, label: t[group], value: cohort.groups[group][currency][metric], color: scenarioColor(group) }))
   const title = text[metric]
   const visiblePoints = points.filter((point) => selection === 'all' || point.group === selection)
   const visibleChartPoints = visiblePoints.map((point) => ({ ...point, value: point.value === null ? null : point.value / (currency === 'VND' && money ? 1_000_000 : 1) }))
+  const axisScale = zeroBasedAxisScale(visibleChartPoints.map((point) => point.value))
+  const axisNumber = distinctAxisFormatter(axisScale.ticks, language, true)
 
   return (
     <article className="comparison-chart-card" aria-labelledby={`comparison-${metric}-title`}>
@@ -40,7 +43,7 @@ export default function ComparisonBarChart({ metric, cohort, language, startYear
           <BarChart data={visibleChartPoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
             <CartesianGrid vertical={false} stroke="#b5c2aa" />
             <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
-            <YAxis width={62} domain={[(min: number) => min < 0 ? min * 1.15 : 0, (max: number) => max > 0 ? max * 1.2 : 1]} tickFormatter={(value) => compact.format(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
+            <YAxis width={62} domain={axisScale.domain} ticks={axisScale.ticks} tickFormatter={(value) => axisNumber(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
             <ReferenceLine y={0} stroke="#819275" />
             <Tooltip isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} content={(props) => <ChartInfo {...props} format={(value) => number.format(value)} unit={chartUnit} />} />
 

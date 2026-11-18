@@ -8,12 +8,16 @@ import type { Language } from '../../i18n'
 import type { ResourceData, ResourceMetric, ResourceSeries } from './resourceTypes'
 import { resourceNumber, resourceStats, resourceUnit } from './resourceAnalysis'
 import { resourceText } from './resourceText'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
+import { zeroBasedAxisScale } from '../../utils/zeroBasedAxisScale'
 
 export default function ResourceBarChart({ data, series, metric, language }: { data: ResourceData; series: ResourceSeries[]; metric: ResourceMetric; language: Language }) {
   const t = resourceText[language], unit = resourceUnit(metric, language)
   const [selection, setSelection] = useChartSelection<'bau' | 'oneMha' | 'all'>('model', 'all')
   const points = (['bau', 'oneMha'] as const).map((group) => ({ group, label: t[group], value: resourceStats(series.filter((item) => (item.family === 'oneMha') === (group === 'oneMha')), metric, data.startYear, data.endYear).mean, color: scenarioColor(group) }))
   const visiblePoints = points.filter((point) => selection === 'all' || point.group === selection)
+  const axisScale = zeroBasedAxisScale(visiblePoints.map((point) => point.value))
+  const axisNumber = distinctAxisFormatter(axisScale.ticks, language)
   return <article className="comparison-chart-card" aria-labelledby={`resource-bar-${metric}-title`}>
     <header><h2 id={`resource-bar-${metric}-title`}>{t[metric]}</h2><p><span>{t.period} {data.startYear} - {data.endYear}</span></p></header>
     <ChartLegend language={language} label={language === 'vi' ? 'Chọn nhóm kịch bản' : 'Choose scenario group'} items={points.map((point) => ({ key: point.group, label: point.label, color: point.color }))} selected={selection} onSelect={setSelection} />
@@ -21,7 +25,7 @@ export default function ResourceBarChart({ data, series, metric, language }: { d
       <BarChart data={visiblePoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
         <CartesianGrid vertical={false} stroke="#b5c2aa" />
         <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
-        <YAxis width={62} domain={[(min: number) => Math.min(0, min * 1.15), (max: number) => max > 0 ? max * 1.2 : 1]} tickFormatter={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
+        <YAxis width={62} domain={axisScale.domain} ticks={axisScale.ticks} tickFormatter={(value) => axisNumber(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
         <Tooltip isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} content={(props) => <ChartInfo {...props} format={(value) => resourceNumber(value, language)} unit={unit} />} />
         <Bar dataKey="value" name={t[metric]} maxBarSize={84} radius={[4, 4, 0, 0]} isAnimationActive={false}>
           {visiblePoints.map((point) => <Cell key={point.group} fill={point.color} />)}

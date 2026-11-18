@@ -5,7 +5,10 @@ import { seasonalText } from '../economics/seasonalText'
 import { useEffect, useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
-import { CHART_TICK, CHART_TOOLTIP } from '../../components/chartStyles'
+import { CHART_TICK } from '../../components/chartStyles'
+import ChartInfo from '../../components/ChartInfo'
+import { lineAxisScale } from '../../utils/lineAxisScale'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { economicFacets, economicsText } from '../economics/economicsText'
 import { emptyEconomicFilters, filterEconomicRows } from '../economics/economicsData'
@@ -17,12 +20,11 @@ import {
   displayMapCurrency,
   mapColors,
   incomeMapColors,
-  mean,
   plotTrend,
   selectPlotValues,
 } from './mapData'
 import { mapText } from './mapText'
-import type { AdminBoundaryData, MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario, PlotMetric } from './mapTypes'
+import type { AdminBoundaryData, MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario } from './mapTypes'
 import PlotMap from './PlotMap'
 import { useMapFile, useMapFiles } from './useMapFile'
 import '../../styles/chart-info.css'
@@ -49,7 +51,6 @@ function DashboardContext({ scenarios, language, context }: { scenarios: MapScen
   ]
   return <section className="map-dashboard-context" aria-labelledby="map-context-title">
     <div className="map-section-heading"><h2 id="map-context-title">{t.reference}</h2><span>{t.referencePeriod}</span></div>
-    <p className="map-context-note">{t.referenceNote}</p>
     <div className="map-context-values">{cards.map((card) => <article key={card.label}>
       <h3>{card.label}</h3><p>{card.value == null ? '—' : (card.money ? money : number).format(card.value)} <span>{card.unit}</span></p>
       <a href={mapDestination(card.href, context)}>{card.link}<span aria-hidden="true"> →</span></a>
@@ -70,8 +71,9 @@ export default function MapPage({ language }: { language: Language }) {
   const [year, setYear] = useState(() => initialContext?.year ?? 2027)
   const [season, setSeason] = useState(() => initialContext?.harvest ?? 0)
   const [metric, setMetric] = useState<MapMetric>('yield')
-  const [trendMetric, setTrendMetric] = useState<PlotMetric>('yield')
   const [playing, setPlaying] = useState(false)
+  const [trendChartWidth, setTrendChartWidth] = useState(620)
+  const trendMetric = metric
   const mapRows = useMemo(() => (economics as EconomicRow[]).filter((row) => !row.historical && manifest.data?.scenarios.some((scenario) => scenario.code === row.code)), [manifest.data])
   const visibleRows = filterEconomicRows(mapRows, filters)
   const codes = new Set(visibleRows.map((row) => row.code))
@@ -117,6 +119,8 @@ export default function MapPage({ language }: { language: Language }) {
 
   const trend = useMemo(() => displayData ? plotTrend(displayData, season, trendMetric, null) : [], [displayData, season, trendMetric])
   const chartTrend = useMemo(() => trend.map((point) => ({ ...point, value: point.value === null ? null : point.value / (language === 'vi' && trendMetric === 'income' ? 1_000_000 : 1) })), [trend, language, trendMetric])
+  const trendScale = lineAxisScale(chartTrend.map((point) => point.value))
+  const trendAxisNumber = distinctAxisFormatter(trendScale.ticks, language, trendMetric === 'income')
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const money = new Intl.NumberFormat(language, { maximumFractionDigits: language === 'vi' ? 0 : 2 })
   const trendNumber = trendMetric === 'income' ? money : number
@@ -126,10 +130,6 @@ export default function MapPage({ language }: { language: Language }) {
   const trendUnit = trendMetric === 'income' ? t.incomeUnit : t.yieldUnit
   const trendChartUnit = language === 'vi' && trendMetric === 'income' ? 'triệu VNĐ/ha' : trendUnit
   const trendChartNumber = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
-  const selectedYield = mean(yieldValues)
-  const selectedIncome = mean(incomeValues)
-  const format = (value: number | null | undefined) => value == null ? '—' : number.format(value)
-  const formatMoney = (value: number | null | undefined) => value == null ? '—' : money.format(value)
   const period = `${year} · ${season === 0 ? t.allHarvests : seasonalText[language][cropPeriods[season - 1]]}`
   const hasError = manifest.error || geometry.error || results.error || conversion.error
   const loading = !manifest.data || !geometry.data || !displayData
@@ -141,7 +141,7 @@ export default function MapPage({ language }: { language: Language }) {
     const timer = window.setInterval(() => setYear((current) => current < 2050 ? current + 1 : 2050), 1000)
     return () => window.clearInterval(timer)
   }, [isPlaying, loading, hasError, metric])
-  function changeMetric(next: MapMetric) { setMetric(next); setTrendMetric(next) }
+  function changeMetric(next: MapMetric) { setMetric(next) }
   function changeFilter(index: number, value: string) {
     const next = { ...filters, [facets[index].key]: value }
     for (const facet of facets.slice(index + 1)) next[facet.key] = 'all'
@@ -204,11 +204,6 @@ export default function MapPage({ language }: { language: Language }) {
         <div className="map-season-control"><label htmlFor="map-harvest">{t.harvest}</label><select id="map-harvest" value={season} onChange={(event) => { setSeason(Number(event.target.value)); setPlaying(false) }}><option value={0}>{t.allHarvests}</option>{Array.from({ length: availableSeasons }, (_, index) => <option key={index} value={index + 1}>{seasonalText[language][cropPeriods[index]]}</option>)}</select></div>
       </div>
       {hasError && <div className="map-error" role="alert"><p>{t.error}</p><button type="button" className="primary-button" onClick={() => { manifest.retry(); geometry.retry(); results.retry(); conversion.retry() }}>{t.retry}</button></div>}
-      <div className="map-summary" aria-label={t.selectedPeriod}>
-        <div><span>{t.averageYield}</span><strong>{format(selectedYield)} <small>{t.yieldUnit}</small></strong></div>
-        <div><span>{t.averageIncome}</span><strong>{formatMoney(selectedIncome)} <small>{t.incomeUnit}</small></strong></div>
-        <div className="map-summary-period"><span>{t.selectedPeriod}</span><strong>{period}</strong></div>
-      </div>
       <div className="map-explorer-grid" aria-busy={loading && !hasError}>
         <div className="map-visual-column">
           <div className="map-canvas-container">
@@ -235,14 +230,14 @@ export default function MapPage({ language }: { language: Language }) {
       </div>
     </section>
     <section className="map-trend-section" aria-labelledby="map-trend-title">
-      <div className="map-section-heading"><div><h2 id="map-trend-title">{t.trend}</h2></div><div className="map-layer-switch" role="group" aria-label={t.trend}>{(['yield', 'income'] as const).map((value) => <button type="button" key={value} aria-pressed={trendMetric === value} onClick={() => setTrendMetric(value)}>{t[value]}</button>)}</div></div>
+      <div className="map-section-heading"><div><h2 id="map-trend-title">{t.trend}</h2></div></div>
       <p className="map-chart-note">{t.trendNote}</p>
 {loading ? <div className="map-trend-skeleton" /> : <div className="map-trend-chart" role="img" aria-label={`${t.trend} · ${t[trendMetric]} · ${period}`}>
         <ChartUnitLabel unit={trendChartUnit} language={language} />
-        <ResponsiveContainer width="100%" height={290}>
+        <ResponsiveContainer width="100%" height={290} onResize={setTrendChartWidth}>
         <LineChart
           data={chartTrend}
-          margin={{ top: 34, right: 24, left: 20, bottom: 20 }}
+          margin={{ top: 34, right: trendChartWidth < 420 ? 8 : 24, left: trendChartWidth < 420 ? 0 : 20, bottom: 20 }}
         >
           <CartesianGrid stroke="#dce3d9" vertical={false} />
 
@@ -255,31 +250,23 @@ export default function MapPage({ language }: { language: Language }) {
             tickLine={false}
             axisLine={false}
             tickMargin={12}
-            padding={{ left: 12, right: 12 }}
+            padding={trendChartWidth < 420 ? { left: 0, right: 0 } : { left: 12, right: 12 }}
           />
 
           <YAxis
-            width={85}
-            domain={['auto', 'auto']}
-            tickFormatter={(value: number) =>
-              trendMetric === 'income'
-                ? new Intl.NumberFormat(language, {
-                    notation: 'compact',
-                    maximumFractionDigits: 1,
-                  }).format(value)
-                : number.format(value)
-            }
+            width={trendChartWidth < 420 ? 50 : 85}
+            domain={trendScale.domain}
+            ticks={trendScale.ticks}
+            tickFormatter={(value: number) => trendAxisNumber(value)}
             tick={CHART_TICK}
             tickLine={false}
             axisLine={false}
-            tickMargin={12}
+            tickMargin={trendChartWidth < 420 ? 4 : 12}
           />
 
           <Tooltip
             isAnimationActive={false}
-            labelFormatter={(value) => `${t.year} ${value}`}
-            formatter={(value) => [value == null ? '—' : <>{trendChartNumber.format(Number(value))} <span className="chart-info-unit">{trendChartUnit}</span></>, t[trendMetric]]}
-            contentStyle={CHART_TOOLTIP}
+            content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => trendChartNumber.format(value)} unit={trendChartUnit} />}
           />
 
           <ReferenceLine
@@ -290,10 +277,11 @@ export default function MapPage({ language }: { language: Language }) {
 
           <Line
             dataKey="value"
+            name={t[trendMetric]}
             type="linear"
             stroke="#254f3d"
             strokeWidth={2.5}
-            dot={false}
+            dot={{ r: 3.5, fill: '#254f3d', stroke: '#fffefa', strokeWidth: 1 }}
             activeDot={{ r: 5 }}
             connectNulls={false}
             isAnimationActive={false}

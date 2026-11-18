@@ -7,22 +7,22 @@
 .year-controls label { display: flex; flex-direction: column; gap: 9px; color: #40533b; font-size: var(--text-small); }
 .year-controls select { min-width: 118px; min-height: 46px; border: 1px solid #c5d1bc; background: #fffefa; border-radius: 6px; padding: 10px 30px 10px 13px; color: #3b5434; font: inherit; font-size: var(--text-body); cursor: pointer; font-variant-numeric: tabular-nums; }
 .year-controls select:focus-visible { outline: 3px solid #759b7f; outline-offset: 3px; }
-.year-control-divider { color: #a1ae94; padding-bottom: 13px; font-size: var(--text-body); }
+.year-control-divider { display: grid; place-items: center; color: #a1ae94; padding-bottom: 13px; }
+.year-control-divider svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .future-charts { display: flex; flex-direction: column; gap: 28px; margin-top: 24px; }
 .future-chart-card { background: #fffefa; border: 1px solid #d8e1cd; border-radius: 10px; overflow: clip; }
 .chart-card-header { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 25px 28px 22px; border-bottom: 1px solid #e8ecdf; }
 .chart-heading h2 { font-size: var(--section-title-size); color: #30472d; font-weight: 600; letter-spacing: normal; line-height: 1.4; margin: 0; }
 .chart-heading p { color: #40533b; font-size: var(--text-small); line-height: 1.6; margin: 7px 0 0; }
-.chart-direction { font-size: var(--text-small); color: #647850; background: #edf1e5; padding: 6px 9px; border-radius: 4px; line-height: 1.5; text-align: right; max-width: 190px; }
 .chart-area { min-width: 0; padding: 24px 23px 18px 17px; }
 .chart-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-left: 12px; margin-bottom: 22px; }
 .chart-unit { font-size: var(--text-small); color: #40533b; }
 .timeseries-plot { width: 100%; min-width: 0; height: 320px; }
 .timeseries-plot .recharts-responsive-container { outline: none; }
 .chart-x-label { color: #40533b; font-size: var(--text-small); text-align: center; margin: 9px 0 0; }
-.chart-insight { border-top: 1px solid #e5eadc; background: #f6f7ef; padding: 23px 28px 26px; }
-.insight-eyebrow { font-size: var(--text-small); font-weight: 600; text-transform: uppercase; letter-spacing: normal; color: #40533b; margin: 0 0 10px; }
-.chart-insight > p { color: #526349; font-size: var(--text-body); line-height: 1.9; margin: 0; }
+.chart-insight { margin-top: 48px; border-left: 3px solid #9caa70; background: #edf1e4; padding: 22px 25px; }
+.insight-eyebrow { font-size: 18px; font-weight: 700; text-transform: none; letter-spacing: normal; color: #526447; margin: 0 0 9px; }
+.chart-insight > p { color: #485d3e; font-size: 18px; line-height: 1.8; margin: 0; }
 .chart-no-data { padding: 40px 28px; color: #40533b; font-size: var(--text-body); }
 
 @media (min-width: 1600px) {
@@ -34,7 +34,6 @@
   .chart-area { padding-inline: 13px; }
   .future-period { font-size: calc(18px + 1px); gap: 9px; }
   .chart-card-header { padding-inline: 22px; }
-  .chart-direction { max-width: 150px; }
 }
 
 @media (max-width: 600px) {
@@ -48,11 +47,14 @@
   .future-charts { gap: 20px; margin-top: 20px; }
   .chart-card-header { display: block; padding: 20px 17px 17px; }
   .chart-heading p { font-size: var(--text-small); margin-top: 6px; }
-  .chart-direction { display: inline-block; max-width: none; text-align: left; margin-top: 12px; font-size: var(--text-small); padding: 4px 7px; }
-  .chart-area { padding: 20px 5px 14px; }
+  .chart-area { display: flex; flex-direction: column; padding: 20px 5px 14px; }
+  .chart-area > .interactive-chart-legend { order: 0; margin: 0 12px 12px; }
+  .chart-area > .timeseries-plot { order: 1; }
+  .chart-area > .chart-x-label { order: 2; }
   .chart-meta { padding-inline: 12px; margin-bottom: 15px; align-items: flex-start; gap: 13px; }
   .chart-unit { font-size: var(--text-small); }
   .timeseries-plot { height: 270px; }
-  .chart-insight { padding: 21px 19px; }
-  .chart-insight > p { font-size: var(--text-small); }
+  .chart-insight { margin-top: 32px; padding: 18px 17px; }
+  .chart-insight > p { font-size: 16px; line-height: 1.7; }
+  .insight-eyebrow { font-size: 16px; }
 }

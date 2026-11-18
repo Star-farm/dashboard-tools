@@ -5,6 +5,9 @@ import { useId, useState } from 'react'
 import { Bar, CartesianGrid, LabelList, Line, ComposedChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import type { Language } from '../i18n'
 import { yearTicks } from '../utils/yearTicks'
+import { lineAxisScale } from '../utils/lineAxisScale'
+import { distinctAxisFormatter } from '../utils/distinctAxisFormatter'
+import { zeroBasedAxisScale } from '../utils/zeroBasedAxisScale'
 import { bau3Conditions } from '../features/economics/bau3Types'
 import type { Bau3Condition } from '../features/economics/bau3Types'
 import { bau3Text } from '../features/economics/bau3Text'
@@ -26,7 +29,7 @@ interface Props {
   domain: [number, number]
   unit: string
   formatValue: (value: number) => string
-  formatAxis?: (value: number) => string
+  formatAxis?: (value: number, ticks: number[]) => string
 }
 
 export default function ScenarioComparisonChart({ language, title, baselineLabel, baseline, oneMha, startYear, endYear, domain, unit, formatValue, formatAxis, chartType = 'line' }: Props) {
@@ -53,13 +56,16 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
     }
   })
   const hasData = points.some((point) => visible.some((key) => visibleModels.some((group) => point[`${group}_${key}`] != null)))
+  const lineScale = lineAxisScale(points.flatMap((point) => visibleModels.flatMap((group) => visible.map((key) => point[`${group}_${key}`]))))
+  const barScale = zeroBasedAxisScale(points.flatMap((point) => visibleModels.flatMap((group) => visible.map((key) => point[`${group}_${key}`]))))
+  const axisNumber = distinctAxisFormatter(lineScale.ticks, language, true)
+  const barAxisNumber = distinctAxisFormatter(barScale.ticks, language, true)
   const selectedYear = Math.min(endYear, Math.max(startYear, year))
   const display = (value: number | null | undefined) => value == null ? '—' : formatValue(value)
   const selectYear = ({ activeLabel }: { activeLabel?: string | number }) => {
     const value = Number(activeLabel)
     if (activeLabel != null && Number.isInteger(value) && value >= startYear && value <= endYear) setYear(value)
   }
-  const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   return <article className="bau3-chart scenario-comparison-chart" aria-labelledby={`${id}-title`}>
     <header><h3 id={`${id}-title`}><span className="scenario-model-bau">{baselineLabel}</span> <span> / </span> <span className="scenario-model-one-mha">1Mha</span></h3></header>
     <div className="comparison-model-key" data-chart={chartType} role="group" aria-label={vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}>
@@ -81,10 +87,10 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
           <ComposedChart barGap={1} barCategoryGap="10%" data={points} accessibilityLayer margin={{ top: 30, right: 18, left: 0, bottom: 8 }} onClick={selectYear}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
             <XAxis dataKey="year" type={bars ? 'category' : 'number'} domain={bars ? undefined : [startYear, endYear]} ticks={yearTicks(startYear, endYear, width, 88)} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
-            <YAxis width={width < 420 ? 56 : 68} domain={domain} allowDataOverflow tickFormatter={(value) => formatAxis ? formatAxis(Number(value)) : compact.format(Number(value))} tickLine={false} tickMargin={6} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
+            <YAxis width={width < 420 ? 46 : 68} domain={bars ? barScale.domain : lineScale.domain} ticks={bars ? barScale.ticks : lineScale.ticks} allowDataOverflow tickFormatter={(value) => bars ? barAxisNumber(Number(value)) : formatAxis ? formatAxis(Number(value), lineScale.ticks) : axisNumber(Number(value))} tickLine={false} tickMargin={width < 420 ? 4 : 6} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
             <ReferenceLine x={selectedYear} stroke="#687a5c" strokeWidth={1} />
-            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={CONDITION_COLORS[key]} fillOpacity={group === 'bau' ? .35 : 1} stroke={CONDITION_COLORS[key]} strokeDasharray={group === 'bau' ? '3 2' : undefined} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key, true, false)} connectNulls={false} isAnimationActive={false} />))}
+            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={CONDITION_COLORS[key]} fillOpacity={group === 'bau' ? .35 : 1} stroke={CONDITION_COLORS[key]} strokeDasharray={group === 'bau' ? '3 2' : undefined} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key, true, visibleModels.length === 1, true)} connectNulls={false} isAnimationActive={false} />))}
           </ComposedChart>
         </ResponsiveContainer>
       </div>

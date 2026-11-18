@@ -1,4 +1,31 @@
-import { expect, test } from 'playwright/test'
+import { expect, test, type Page } from 'playwright/test'
+
+async function expectMobileMapControls(page: Page, width: number) {
+  await page.setViewportSize({ width, height: 844 })
+  const geometry = await page.evaluate(() => {
+    const rect = (selector: string) => {
+      const element = document.querySelector(selector)
+      if (!element) throw new Error(`Missing map control: ${selector}`)
+      const { x, y, width, height, right } = element.getBoundingClientRect()
+      return { x, y, width, height, right, centerY: y + height / 2 }
+    }
+    return {
+      controls: rect('.map-time-controls'),
+      play: rect('.map-time-controls .map-play'),
+      season: rect('.map-time-controls .map-season-control'),
+      label: rect('.map-time-controls .map-season-control label'),
+      select: rect('.map-time-controls .map-season-control select'),
+    }
+  })
+
+  expect(Math.abs(geometry.label.centerY - geometry.select.centerY), `label and dropdown should share a row at ${width}px`).toBeLessThanOrEqual(4)
+  expect(Math.abs(geometry.play.centerY - geometry.season.centerY), `play button should align with the harvest control at ${width}px`).toBeLessThanOrEqual(4)
+  expect(geometry.select.x).toBeGreaterThan(geometry.label.right)
+  expect(geometry.select.width).toBeLessThan(geometry.season.width)
+  expect(geometry.select.right).toBeLessThanOrEqual(geometry.season.right + 1)
+  expect(geometry.controls.right).toBeLessThanOrEqual(width + 1)
+  await page.setViewportSize({ width: 1440, height: 900 })
+}
 
 const viewports = [320, 375, 390, 430, 768, 1024, 1440]
 const routes = [
@@ -52,6 +79,10 @@ for (const route of routes) {
       }
     }
 
+    if (route === '#map') {
+      await expectMobileMapControls(page, 320)
+      await expectMobileMapControls(page, 375)
+    }
     const englishHeading = await heading.textContent()
     const englishTitle = await page.title()
     await page.getByRole('button', { name: 'Tiếng Việt' }).click()
@@ -60,6 +91,8 @@ for (const route of routes) {
     await expect(heading).not.toHaveText(englishHeading ?? '')
     await expect(page).not.toHaveTitle(englishTitle)
     if (route === '#map') {
+      await expectMobileMapControls(page, 320)
+      await expectMobileMapControls(page, 375)
       const firstPlot = page.getByRole('button', { name: 'Vùng 0' })
       await firstPlot.focus()
       await firstPlot.press('Enter')

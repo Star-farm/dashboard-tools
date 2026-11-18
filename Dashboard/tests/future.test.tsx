@@ -85,7 +85,8 @@ describe('chart observations', () => {
     expect(result.trend).toContain('Có AWD giảm')
     expect(result.latest).toContain('2050')
     expect(result.latest).toContain('kg metan/ha')
-    expect(result.paragraph.endsWith(result.conclusion)).toBe(true)
+    expect(result.paragraph).toContain('Có AWD giảm')
+    expect(result.paragraph).toContain('Không có AWD giảm')
     expect(result.conclusion).toContain('không tự chứng minh quan hệ nhân quả')
   })
 
@@ -143,8 +144,7 @@ describe('future page interactions', () => {
     expect(within(screen.getByLabelText('Từ năm')).getByRole('option', { name: '2031' })).toBeDisabled()
     expect(within(screen.getByLabelText('Đến năm')).getByRole('option', { name: '2029' })).toBeDisabled()
     for (const article of screen.getAllByRole('article')) {
-      expect(article.querySelector('.chart-insight')).toHaveTextContent('Năm 2030:')
-      expect(article.querySelector('.chart-insight')).toHaveTextContent('Chọn nhiều năm để theo dõi xu hướng thay đổi.')
+      expect(article.querySelector('.chart-insight')).toHaveTextContent('2030–2030')
       expect(article.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(2)
     }
   })

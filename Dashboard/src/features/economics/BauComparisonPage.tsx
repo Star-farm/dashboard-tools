@@ -9,6 +9,7 @@ import { bau3Metrics } from './bau3Types'
 import type { Bau3Data } from './bau3Types'
 import { analyzeBau3, bau3ChartUnit, bau3Domain, selectBau3Points } from './bau3Analysis'
 import { bau3Text } from './bau3Text'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import '../../styles/bau3-comparison.css'
 
 export default function BauComparisonPage({ language, data }: { language: Language; data: Bau3Data }) {
@@ -18,7 +19,6 @@ export default function BauComparisonPage({ language, data }: { language: Langua
   const title = { bau3s: t.title, bau2s: t.bau2Title, bauss: t.baussTitle }[variant]
   const currency = language === 'vi' ? 'VND' : 'USD'
   const baselineLabel = { bau3s: t.bau3Short, bau2s: t.bau2Short, bauss: t.baussShort }[variant]
-  const compact = new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 })
   useEffect(() => {
     document.getElementById(anchor)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [anchor])
@@ -31,7 +31,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
         const analysis = analyzeBau3(data, metric, language)
         return <section className="bau3-section" key={metric} aria-labelledby={`bau-${variant}-${metric}-title`}>
           <h2 id={`bau-${variant}-${metric}-title`}>{t[metric]}</h2>
-          <ScenarioComparisonChart chartType="line" key={variant} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={selectBau3Points(data, variant, metric, currency)} oneMha={selectBau3Points(data, 'oneMha', metric, currency)} startYear={data.startYear} endYear={data.endYear} domain={domain} unit={bau3ChartUnit(metric, language)} formatValue={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} formatAxis={(value) => `${compact.format(value)}${metric === 'margin' ? ' %' : ''}`} />
+          <ScenarioComparisonChart chartType="line" key={variant} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={selectBau3Points(data, variant, metric, currency)} oneMha={selectBau3Points(data, 'oneMha', metric, currency)} startYear={data.startYear} endYear={data.endYear} domain={domain} unit={bau3ChartUnit(metric, language)} formatValue={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} formatAxis={(value, ticks) => `${distinctAxisFormatter(ticks, language, true)(value)}${metric === 'margin' ? ' %' : ''}`} />
           <aside className="bau3-insight" aria-label={`${t.insight} · ${t[metric]}`}><h3>{t.insight}</h3><p><EmphasizedNumbers text={analysis?.paragraph ?? t.noData} /></p></aside>
         </section>
       })}</div>

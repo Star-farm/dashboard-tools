@@ -4,7 +4,7 @@
 .farming-section-heading p { margin: 0; color: #40533b; font-size: var(--text-small); line-height: 1.6; }
 .farming-kpis.scenario-kpis { grid-template-columns: repeat(auto-fit, minmax(0, min(100%, 300px))); }
 .farming-method { margin: 12px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; }
-.farming-summary { margin-top: 26px; }
+.farming-summary { margin-top: 32px; }
 .farming-summary h2 { margin-bottom: 12px; }
 .farming-trends { margin-top: 32px; }
 .farming-trends > h2 { margin-bottom: 20px; }
@@ -22,7 +22,7 @@
 @media (max-width: 767px) {
   .farming-chart-grid { grid-template-columns: minmax(0, 1fr); gap: 26px; }
   .farming-indicators { margin-top: 24px; }
-  .farming-summary { margin-top: 22px; }
+  .farming-summary { margin-top: 24px; }
   .farming-trends { margin-top: 28px; }
   .farming-method { font-size: var(--text-small); }
 }

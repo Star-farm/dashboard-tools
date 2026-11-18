@@ -37,33 +37,9 @@ export function bauFarmingStats(data: Bau3Data, metric: Bau3Metric, currency: Ba
 export type BauFarmingStats = ReturnType<typeof bauFarmingStats>
 
 export function farmingTone(stats: BauFarmingStats): 'good' | 'bad' | 'neutral' {
-  if (stats.change === null || Math.abs(stats.change) < .000001 || stats.metric === 'labor') return 'neutral'
-  return (stats.change > 0) === (stats.metric !== 'cost') ? 'good' : 'bad'
-}
-
-function farmingConclusion(stats: BauFarmingStats, language: Language, family: Bau3Family) {
-  const declining = stats.start !== null && stats.end !== null && stats.end < stats.start
-  const vi = language === 'vi'
-  const model = vi
-    ? { bau3s: 'mô hình 3 vụ', bau2s: 'mô hình 2 vụ', bauss: 'mô hình thường lệ bền vững', oneMha: 'mô hình 1Mha' }[family]
-    : { bau3s: 'three-season profitability', bau2s: 'two-season profitability', bauss: 'sustainable business-as-usual profitability', oneMha: '1Mha profitability' }[family]
-  switch (stats.metric) {
-    case 'income': return vi
-      ? declining ? `Thu nhập suy giảm cho thấy cần ưu tiên ổn định tài nguyên đầu vào, kiểm soát chi phí và đánh giá lại khả năng sinh lời của ${model} trong các điều kiện bất lợi.` : 'Cần duy trì khả năng tiếp cận tài nguyên và kiểm soát chi phí để bảo vệ mức thu nhập, đồng thời theo dõi các nhóm điều kiện có kết quả thấp.'
-      : declining ? `Declining income calls for more reliable resource access, cost control and a reassessment of ${model} under adverse conditions.` : 'Reliable resource access and cost control can help protect income, while lower-performing combinations require closer monitoring.'
-    case 'cost': return vi
-      ? 'Cần dự trù vốn theo từng điều kiện và ưu tiên sử dụng vật tư hiệu quả, nhất là ở các nhóm điều kiện có chi phí tăng; đối chiếu với thu nhập để tránh thu hẹp lợi nhuận.'
-      : 'Financing should reflect each condition, with efficient input use where costs rise; costs must be assessed alongside income to protect profitability.'
-    case 'yield': return vi
-      ? declining ? 'Năng suất giảm ở cuối kỳ đặt ra nhu cầu điều chỉnh giống, lịch mùa vụ và kỹ thuật canh tác theo thời tiết, đồng thời bảo đảm tài nguyên đầu vào.' : 'Cần duy trì kỹ thuật canh tác phù hợp với thời tiết và kiểm tra độ ổn định năng suất trước khi mở rộng sản xuất.'
-      : declining ? 'Lower end-period yields support adapting varieties, seasonal calendars and farming practices to weather conditions while maintaining resource access.' : 'Weather-appropriate practices and yield stability should be assessed before expanding production.'
-    case 'margin': return vi
-      ? declining ? 'Biên lợi nhuận giảm khiến nông dân dễ bị ảnh hưởng bởi biến động giá cả và chi phí sản xuất. Cần tối ưu chi phí đầu vào để duy trì lợi nhuận và giảm rủi ro thua lỗ.' : 'Cần duy trì kỷ luật chi phí và theo dõi các nhóm điều kiện có biên lợi nhuận thấp để bảo vệ khả năng sinh lời.'
-      : declining ? 'Declining profit margins make farmers more vulnerable to price fluctuations and rising production costs. Optimizing input costs is essential to maintaining profitability and reducing the risk of financial losses.' : 'Cost discipline and monitoring low-margin combinations remain important to sustain profitability.'
-    case 'labor': return vi
-      ? 'Giảm giờ lao động không tự động đồng nghĩa với hiệu quả cao hơn: cần đối chiếu với năng suất và thu nhập, rồi bố trí nhân công và cơ giới hóa theo từng điều kiện.'
-      : 'Fewer labor hours do not automatically mean greater efficiency: assess them alongside yield and income, then adapt staffing and mechanization to each condition.'
-  }
+  if (stats.change === null || Math.abs(stats.change) < .000001) return 'neutral'
+  const prefersHigher = stats.metric !== 'cost' && stats.metric !== 'labor'
+  return (stats.change > 0) === prefersHigher ? 'good' : 'bad'
 }
 
 export function analyzeBauFarming(data: Bau3Data, metric: Bau3Metric, language: Language, family: Bau3Family = 'bau3s') {
@@ -75,8 +51,8 @@ export function analyzeBauFarming(data: Bau3Data, metric: Bau3Metric, language: 
   const value = (amount: number) => `${formatBau3Value(amount, metric, language)} ${unit}`
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
   const average = vi
-    ? `Trong giai đoạn ${data.startYear}–${data.endYear}, ${t[metric].toLocaleLowerCase(language)} bình quân đạt ${value(stats.mean)}.`
-    : `Over ${data.startYear}–${data.endYear}, average ${t[metric].toLocaleLowerCase(language)} is ${value(stats.mean)}.`
+    ? `${t[metric]} bình quân giai đoạn ${data.startYear}–${data.endYear}: ${value(stats.mean)}.`
+    : `Average ${t[metric].toLocaleLowerCase(language)} for ${data.startYear}–${data.endYear}: ${value(stats.mean)}.`
   const lower = stats.conditions.filter((condition) => condition.difference < -.000001).length
   const higher = stats.conditions.filter((condition) => condition.difference > .000001).length
   const equal = stats.conditions.length - lower - higher
@@ -87,14 +63,14 @@ export function analyzeBauFarming(data: Bau3Data, metric: Bau3Metric, language: 
   const changeUnit = metric === 'margin' ? vi ? 'điểm %' : 'pp' : '%'
   const range = changes.length ? `${number.format(Math.min(...changes))} ${changeUnit} ${vi ? 'đến' : 'to'} ${number.format(Math.max(...changes))} ${changeUnit}` : null
   const trend = stats.conditions.length ? vi
-    ? `Từ ${data.startYear} đến ${data.endYear}, chỉ số ${directions.filter(Boolean).join(', ')}${range ? `, với mức biến động từ ${range}` : ''}.`
-    : `From ${data.startYear} to ${data.endYear}, the indicator ${directions.filter(Boolean).join(', ')}${range ? `, with changes ranging from ${range}` : ''}.` : ''
+    ? `So với ${data.startYear}, đến ${data.endYear}, chỉ số ${directions.filter(Boolean).join(', ')}${range ? ` (mức thay đổi: ${range})` : ''}.`
+    : `By ${data.endYear}, compared with ${data.startYear}, the indicator ${directions.filter(Boolean).join(', ')}${range ? ` (change: ${range})` : ''}.` : ''
   const sorted = [...stats.conditions].sort((a, b) => a.end - b.end)
   const low = sorted[0], high = sorted.at(-1)
   const endpoints = low && high ? vi
-    ? `Năm ${data.endYear}, “${t[low.condition]}” đạt ${value(low.end)}, còn “${t[high.condition]}” đạt ${value(high.end)}.`
-    : `In ${data.endYear}, “${t[low.condition]}” reaches ${value(low.end)}, compared with ${value(high.end)} for “${t[high.condition]}”.` : ''
-  return { ...stats, paragraph: [average, trend, endpoints, farmingConclusion(stats, language, family)].filter(Boolean).join(' ') }
+    ? `Năm ${data.endYear}, thấp nhất là “${t[low.condition]}” (${value(low.end)}); cao nhất là “${t[high.condition]}” (${value(high.end)}).`
+    : `In ${data.endYear}, the lowest value is “${t[low.condition]}” (${value(low.end)}); the highest is “${t[high.condition]}” (${value(high.end)}).` : ''
+  return { ...stats, paragraph: [average, trend, endpoints].filter(Boolean).join(' ') }
 }
 
 export function bauFarmingSummary(data: Bau3Data, language: Language, family: Bau3Family = 'bau3s') {

@@ -18,6 +18,8 @@ import {
 } from 'recharts'
 import type { Language } from '../../i18n'
 import { yearTicks } from '../../utils/yearTicks'
+import { lineAxisScale } from '../../utils/lineAxisScale'
+import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import type {
   Bau3Family,
   Bau3Condition,
@@ -38,7 +40,6 @@ export default function EnvironmentLineChart({
   data,
   family,
   metric,
-  domain,
   language,
   title,
   visibleConditions = bau3Conditions,
@@ -61,6 +62,8 @@ export default function EnvironmentLineChart({
     family,
     metric
   )
+  const yScale = lineAxisScale(points.flatMap((point) => visibleConditions.map((condition) => point[condition])))
+  const axisNumber = distinctAxisFormatter(yScale.ticks, language)
 
   const unit = environmentUnit(metric, language)
 
@@ -128,16 +131,13 @@ export default function EnvironmentLineChart({
               />
 
               <YAxis
-                width={68}
-                domain={domain}
+                width={width < 420 ? 46 : 68}
+                domain={yScale.domain}
+                ticks={yScale.ticks}
                 allowDataOverflow
-                tickFormatter={(value) =>
-                  new Intl.NumberFormat(language, {
-                    maximumFractionDigits: 1,
-                  }).format(Number(value))
-                }
+                tickFormatter={(value) => axisNumber(Number(value))}
                 tickLine={false}
-                tickMargin={8}
+                tickMargin={width < 420 ? 4 : 8}
                 axisLine={{ stroke: '#819275' }}
                 tick={CHART_TICK}
               />

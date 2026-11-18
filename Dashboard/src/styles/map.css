@@ -68,7 +68,7 @@
 .map-section-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
 .map-section-heading .eyebrow { font-weight: 400; margin-bottom: 7px; }
 .map-section-heading > span { color: var(--muted); font-size: var(--text-small); }
-.map-chart-note, .map-context-note { font-size: var(--text-small); color: var(--muted); line-height: 1.8; }
+.map-chart-note { font-size: var(--text-small); color: var(--muted); line-height: 1.8; }
 .map-chart-note { margin: 12px 0 20px; }
 .map-trend-chart { min-width: 0; width: 100%; }
 .map-trend-table { margin-top: 12px; color: var(--muted); font-size: var(--text-small); }
@@ -95,9 +95,14 @@
 @media (max-width: 767px) {
   .map-filters { gap: 16px; grid-template-columns: 1fr; padding-top: 20px; }
   .map-workspace-heading { flex-direction: column; padding: 20px; gap: 16px; }
-  .map-workspace-heading .map-layer-switch { width: 100%; }
-  .map-workspace-heading .map-layer-switch button { flex: 1; padding: 9px 6px; font-size: calc(12px + 1px); }
-  .map-time-controls { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
+  .map-workspace-heading .map-layer-switch { align-self: flex-start; flex: 0 0 auto; width: fit-content; max-width: 100%; }
+  .map-workspace-heading .map-layer-switch button { width: max-content; flex: 0 1 auto; padding: 9px 6px; font-size: calc(12px + 1px); }
+  .map-time-controls { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "play season" "year year"; align-items: start; padding: 20px; gap: 16px 12px; }
+  .map-time-controls .map-play { grid-area: play; align-self: center; }
+  .map-time-controls .map-year-control { grid-area: year; min-width: 0; }
+  .map-time-controls .map-season-control { grid-area: season; min-width: 0; display: flex; align-items: center; gap: 8px; }
+  .map-time-controls .map-season-control label { flex: 0 0 auto; margin: 0; white-space: nowrap; }
+  .map-time-controls .map-season-control select { flex: 1 1 auto; width: auto; min-width: 0; }
   .map-explorer-grid { grid-template-columns: 1fr; }
   .plot-map-frame { height: 370px; }
   .map-legend { padding-inline: 16px; }
@@ -126,13 +131,6 @@
   font-weight: 700;
   line-height: 1.5;
 }
-.map-summary { display: grid; grid-template-columns: 1fr 1fr 1.2fr; align-items: center; gap: 24px; padding: 20px 28px 10px; }
-.map-summary > div { display: flex; flex-direction: column; gap: 7px; }
-.map-summary > div > span { color: var(--muted); font-size: var(--text-small); }
-.map-summary strong { font-size: calc(25px + 1px); font-weight: 600; font-variant-numeric: tabular-nums; }
-.map-summary strong small { font-size: calc(12px + 1px); font-weight: 400; color: var(--muted); }
-.map-summary-period strong { font-size: var(--text-small); line-height: 1.7; }
-.map-summary-note { margin: 0; padding: 0 28px 20px; font-size: calc(12px + 1px); line-height: 1.8; color: var(--muted); }
 .map-play {
   display: inline-flex;
   align-items: center;
@@ -209,18 +207,13 @@
   opacity: 0.5;
   cursor: default;
 }
-@media (max-width: 900px) { .map-summary { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 767px) {
-  .map-time-controls { grid-template-columns: 1fr; }
-  .map-summary { gap: 18px; padding-inline: 20px; }
-  .map-summary-note { padding-inline: 20px; }
-  .map-summary strong { font-size: calc(22px + 1px); }
-  .map-summary-period strong { font-size: calc(12px + 1px); }
-}
 .map-year-labels { display: flex; justify-content: space-between; gap: 4px; color: var(--muted); font-size: calc(11px + 1px); font-variant-numeric: tabular-nums; }
 .plot-map-popup { position: absolute; z-index: 1; top: 70px; right: 16px; width: 280px; max-width: calc(100% - 32px); max-height: calc(100% - 86px); overflow-y: auto; overscroll-behavior: contain; padding: 0 18px 10px; border: 1px solid #bac8b9; border-radius: 8px; background: #fffefa; color: var(--forest); box-shadow: 0 5px 20px #163d3026; }
 .plot-map-popup[data-placement$="-left"] { right: auto; left: 16px; }
 .plot-map-popup[data-placement^="bottom-"] { top: auto; bottom: 16px; }
+@media (min-width: 768px) {
+  .plot-map-popup.plot-map-popup--anchored { right: auto; bottom: auto; left: var(--plot-popup-left); top: var(--plot-popup-top); }
+}
 .plot-map-popup header { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; background: #fffefa; }
 .plot-map-popup header p { margin: 0 0 5px; color: var(--muted); font-size: calc(11px + 1px); }
 .plot-map-popup h3 { margin: 0; font-size: calc(19px + 1px); font-weight: 600; line-height: 1.5; }
@@ -236,3 +229,14 @@
 .plot-map-popup .plot-map-popup-ward { align-items: flex-start; }
 .plot-map-popup .plot-map-popup-ward-name { display: -webkit-box; flex: 0 1 68%; max-width: 68%; overflow: hidden; overflow-wrap: anywhere; white-space: normal; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .plot-map-popup dd small { font-size: calc(11px + 1px); font-weight: 400; color: var(--muted); }
+@media (max-width: 767px) {
+  .plot-map-popup { box-sizing: border-box; right: 12px; width: 216px; max-width: calc(100% - 20px); padding: 0 8px 2px; }
+  .plot-map-popup[data-placement$="-left"] { left: 12px; }
+  .plot-map-popup header { gap: 6px; padding-top: 4px; }
+  .plot-map-popup header p { margin-bottom: 1px; font-size: 12px; line-height: 1.25; }
+  .plot-map-popup h3 { font-size: 14px; line-height: 1.2; }
+  .plot-map-popup header button { width: 34px; height: 34px; margin-right: -4px; }
+  .plot-map-popup dl > div { gap: 4px; padding: 3px 0; }
+  .plot-map-popup dt, .plot-map-popup dd { font-size: 12px; line-height: 1.25; }
+  .plot-map-popup dd small { font-size: 10px; }
+}

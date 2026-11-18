@@ -84,7 +84,7 @@ describe('interactive legends across chart pages', () => {
     expect(within(models[0]).getByRole('button', { name: /1Mha/ })).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it('keeps the BAU line dashed and labels it correctly when selected alone', () => {
+  it('keeps the BAU line solid when selected alone', () => {
     const points = [{ year: 2027, mildNormal: 1, mildShortage: 2, severeNormal: 3, severeShortage: 4 }, { year: 2028, mildNormal: 2, mildShortage: 3, severeNormal: 4, severeShortage: 5 }]
     render(<ScenarioComparisonChart language="en" title="Income" baselineLabel="BAU" baseline={points} oneMha={points} startYear={2027} endYear={2028} domain={[0, 5]} unit="kg" formatValue={String} />)
 
@@ -92,7 +92,7 @@ describe('interactive legends across chart pages', () => {
     const bauButton = within(legend).getByRole('button', { name: 'BAU · dashed line' })
     fireEvent.click(bauButton)
     expect(bauButton.querySelector('.model-line-bau')).toHaveClass('model-line-bau')
-    expect(document.querySelector('.comparison-combined-plot .recharts-line-curve')).toHaveAttribute('stroke-dasharray', '6 4')
+    expect(document.querySelector('.comparison-combined-plot .recharts-line-curve')).not.toHaveAttribute('stroke-dasharray')
   })
 
   it('shares BAU selection between future income and labor without applying it to AWD', () => {
@@ -106,8 +106,8 @@ describe('interactive legends across chart pages', () => {
   it.each(lineCharts)('isolates one condition, keeps repeated selections and restores all lines in $name', ({ chart }) => {
     const { container, rerender } = render(chart('vi'))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(4)
-    expect([...container.querySelectorAll('.chart-legend-marker .scenario-dot')].map((dot) => dot.getAttribute('data-marker'))).toEqual(['circle', 'square', 'triangle', 'diamond'])
-    expect([...new Set([...container.querySelectorAll('.recharts-line-dots .scenario-dot')].map((dot) => dot.getAttribute('data-marker')))]).toEqual(['circle', 'square', 'triangle', 'diamond'])
+    expect([...container.querySelectorAll('.chart-legend-marker .scenario-dot')].map((dot) => dot.getAttribute('data-marker'))).toEqual(['circle', 'circle', 'circle', 'circle'])
+    expect([...new Set([...container.querySelectorAll('.recharts-line-dots .scenario-dot')].map((dot) => dot.getAttribute('data-marker')))]).toEqual(['circle'])
     for (const line of container.querySelectorAll('path.recharts-line-curve')) {
       expect(line).toHaveAttribute('stroke-width', '3')
       expect(line).toHaveAttribute('stroke-opacity', '1')

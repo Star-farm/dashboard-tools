@@ -106,22 +106,21 @@ describe('seasonal interface', () => {
     expect(englishLegend).not.toHaveTextContent('early')
   })
 
-  it('shows crop details on hover, click and keyboard without a crop selector list', () => {
+  it('toggles the touch tooltip and supports keyboard selection without a crop selector list', () => {
     let selected = ''
     const { container } = render(<SeasonalPieChart language="en" name="BAU" color="#b8322b" unit="kg" format={String} selected="early" onSelect={(period) => { selected = period }} slices={[
       { period: 'early', label: 'Winter–Spring', value: 10 }, { period: 'middle', label: 'Spring–Summer', value: 30 }, { period: 'late', label: 'Fall–Winter', value: 10 },
     ]} />)
     expect(screen.queryByText('Choose crop season')).not.toBeInTheDocument()
-    const sectors = container.querySelectorAll('.recharts-pie-sector')
-    fireEvent.mouseEnter(sectors[1])
+    fireEvent.click(container.querySelector('[data-pie-period="middle"]')!)
     expect(screen.getByRole('status')).toHaveTextContent('Spring–Summer')
-    expect(screen.getByRole('status')).toHaveTextContent('30 kg')
-    fireEvent.click(container.querySelectorAll('.recharts-pie-sector')[1])
+    expect(screen.getByRole('status')).toHaveTextContent('30.00 kg')
     expect(selected).toBe('middle')
-    fireEvent.mouseLeave(container.querySelectorAll('.recharts-pie-sector')[1])
-    expect(screen.getByRole('status')).toHaveTextContent('Spring–Summer')
+    fireEvent.click(container.querySelector('[data-pie-period="middle"]')!)
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
     fireEvent.keyDown(screen.getByRole('group', { name: /BAU: Winter–Spring/ }), { key: 'ArrowRight' })
-    expect(screen.getByRole('status')).toHaveTextContent('Fall–Winter')
+    expect(screen.getByRole('status')).toHaveTextContent('Spring–Summer')
+    expect(selected).toBe('middle')
   })
 
   it('keeps negative and zero crop values intact instead of drawing misleading positive slices', async () => {

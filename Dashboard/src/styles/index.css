@@ -27,6 +27,10 @@
   --gold-bright: #fff6cc;
 }
 
+.scenario-insight-model { font-weight: 700; }
+.scenario-insight-model.scenario-model-bau { color: var(--scenario-bau); }
+.scenario-insight-model.scenario-model-one-mha { color: var(--scenario-one-mha); }
+
 * { box-sizing: border-box; }
 html { scroll-padding-top: 112px; scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; }
@@ -203,3 +207,8 @@ h1 { font-size: var(--page-title-size); font-weight: 600; line-height: 1.3; lett
 #main-content p .scenario-change, .seasonal-insight .scenario-change { font-size: inherit; font-variant-numeric: proportional-nums; letter-spacing: normal; word-spacing: normal; white-space: nowrap; }
 .bau3-plot, .comparison-plot, .timeseries-plot, .seasonal-plot, .map-trend-chart, .soil-chart-figure { position: relative; }
 .chart-unit-label { position: absolute; z-index: 2; top: 2px; right: 12px; color: #526847; font-size: var(--text-small); font-weight: 600; line-height: 1.4; pointer-events: none; }
+@media (max-width: 767px) {
+  .scenario-dot circle { r: 2.5px; }
+  .map-trend-chart .recharts-dot { r: 2.5px; }
+  .map-trend-chart .recharts-active-dot { r: 4px; }
+}

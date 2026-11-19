@@ -30,6 +30,8 @@ Keep bilingual labels, units, axes, missing values, zero and negative values, an
 
 Use `ChartInfo` for Recharts tooltips with formatted series values. Pass the number formatter and unit separately. `ChartInfo` hides units on mobile and keeps them on desktop. It shows the full scenario label on desktop and the compact `BAU` label on mobile. The inline seasonal pie tooltip keeps its unit visible at every viewport width. It uses the compact `BAU` label on mobile. Keep Recharts tooltips within the chart area. Use an inline tooltip when a floating overlay would cover the data.
 
+On narrow screens, keep chart legends below the plot and X-axis label. Seasonal crop bars rotate their category ticks when the chart is too narrow for the full labels to fit horizontally.
+
 Optimize measured repeated work; avoid speculative memoization. Preserve focus indicators, reduced motion, and narrow layouts.
 
 ## Internationalization
@@ -40,7 +42,7 @@ Every changed user-facing string needs Vietnamese and English translations. Use 
 
 Map state and rendering live in `src/features/map/`. Read [DATA_PIPELINE.md](DATA_PIPELINE.md) before changing assets. Keep manifest references, hashes, CRS, shape order, category shares, and geometry fingerprints in sync.
 
-Soil validation expects plot area = known area + unknown area, and category shares to sum to known area within tolerance. Land Use uses compact per-plot statistics and a raster; do not restore a full vector fallback or fetch the complete overlay during normal display. The regional Natural Earth image covers 94–116°E and 4–23°N; country and sea names are translated SVG labels. Plot-map panning stays within the administrative study extent and can reach its northern edge. Test layer changes, retry, constrained pan/zoom, keyboard selection, labels in both languages, legends, popups, long names, and map-to-dashboard context.
+Soil validation expects plot area = known area + unknown area, and category shares to sum to known area within tolerance. Land Use uses compact per-plot statistics and a raster; do not restore a full vector fallback or fetch the complete overlay during normal display. The regional Natural Earth image covers 94–116°E and 4–23°N; country and sea names are translated SVG labels. Plot-map panning stays within the administrative study extent and can reach its northern edge. Plot map zoom is bounded at 20×. Test layer changes, retry, constrained pan/zoom, keyboard selection, labels in both languages, legends, popups, long names, and map-to-dashboard context.
 
 ## Local workflow
 

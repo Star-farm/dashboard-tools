@@ -15,7 +15,7 @@ import { ChartSelectionProvider } from '../src/components/ChartSelection'
 import { within } from '@testing-library/react'
 import ScenarioComparisonChart from '../src/components/ScenarioComparisonChart'
 import ChartUnitLabel from '../src/components/ChartUnitLabel'
-import { CONDITION_COLORS } from '../src/components/chartStyles'
+import { CONDITION_COLORS, SCENARIO_COLORS } from '../src/components/chartStyles'
 import economicSource from '../src/data/economics-bau3-series.json'
 import resourceSource from '../src/data/resources.json'
 import environmentSource from '../src/data/environment.json'
@@ -87,10 +87,12 @@ describe('interactive legends across chart pages', () => {
     render(<ScenarioComparisonChart language="en" title="Income" baselineLabel="BAU" baseline={points} oneMha={points} startYear={2027} endYear={2028} domain={[0, 5]} unit="kg" formatValue={String} />)
 
     const legend = screen.getByRole('group', { name: 'Choose comparison models' })
-    const bauButton = within(legend).getByRole('button', { name: 'BAU · dashed line' })
+    const bauButton = within(legend).getByRole('button', { name: /BAU:/ })
     fireEvent.click(bauButton)
-    expect(bauButton.querySelector('.model-line-bau')).toHaveClass('model-line-bau')
-    expect(document.querySelector('.comparison-combined-plot .recharts-line-curve')).not.toHaveAttribute('stroke-dasharray')
+    expect(bauButton).toHaveAttribute('aria-pressed', 'true')
+    fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Normal' }))
+    expect(document.querySelectorAll('.comparison-combined-plot .recharts-line-curve')).toHaveLength(2)
+    for (const line of document.querySelectorAll('.comparison-combined-plot .recharts-line-curve')) expect(line).not.toHaveAttribute('stroke-dasharray')
   })
 
   it('keeps both series visible on future charts without scenario group selectors', () => {
@@ -102,8 +104,6 @@ describe('interactive legends across chart pages', () => {
   it.each(lineCharts)('isolates one condition, keeps repeated selections and restores all lines in $name', ({ chart }) => {
     const { container, rerender } = render(chart('vi'))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(4)
-    expect([...container.querySelectorAll('.chart-legend-marker .scenario-dot')].map((dot) => dot.getAttribute('data-marker'))).toEqual(['circle', 'circle', 'circle', 'circle'])
-    expect([...new Set([...container.querySelectorAll('.recharts-line-dots .scenario-dot')].map((dot) => dot.getAttribute('data-marker')))]).toEqual(['circle'])
     for (const line of container.querySelectorAll('path.recharts-line-curve')) {
       expect(line).toHaveAttribute('stroke-width', '3')
       expect(line).toHaveAttribute('stroke-opacity', '1')
@@ -111,7 +111,8 @@ describe('interactive legends across chart pages', () => {
     fireEvent.click(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Khắc nghiệt' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Khan hiếm tài nguyên' }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(1)
-    expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke', CONDITION_COLORS.severeShortage)
+    expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke', SCENARIO_COLORS.bau)
+    expect(container.querySelector('.recharts-line-dots .scenario-dot')).toHaveAttribute('data-marker', 'square')
     expect(container.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(24)
     rerender(chart('en'))
     expect(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Severe' })).toHaveAttribute('aria-pressed', 'true')

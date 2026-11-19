@@ -35,7 +35,7 @@
 .seasonal-plot .recharts-wrapper:focus, .seasonal-plot .recharts-surface:focus { outline: none; }
 .seasonal-plot:focus-visible { outline: 2px solid #9caa70; outline-offset: -2px; }
 .seasonal-missing { color: #7d755e; }
-.seasonal-insight { flex: 1; margin-top: 48px; padding: 22px 25px; border-left: 3px solid #9caa70; background: #edf1e4; color: #485d3e; font-size: 18px; line-height: 1.8; }
+.seasonal-insight { flex: 1; margin-top: 0; padding: 22px 25px; border-left: 3px solid #9caa70; background: #edf1e4; color: #485d3e; font-size: 18px; line-height: 1.8; }
 .seasonal-card-pie .seasonal-insight { box-sizing: border-box; flex: 0 0 340px; margin-top: auto; }
 .seasonal-insight h4 { font-size: 18px; margin: 0 0 9px; color: #526447; }
 .seasonal-crop-insights { display: grid; gap: 12px; }
@@ -54,8 +54,8 @@
 .seasonal-pie-canvas { position: relative; width: 100%; aspect-ratio: 1; max-width: 340px; margin-inline: auto; }
 .seasonal-pie-canvas:focus-visible { outline: 2px solid #759b7f; outline-offset: 2px; border-radius: 6px; }
 .seasonal-pie-center { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #40533b; font-size: var(--text-small); pointer-events: none; white-space: nowrap; }
-.seasonal-pie-tooltip { position: static; margin: 8px auto 0; pointer-events: none; font-variant-numeric: tabular-nums; }
-@media (min-width: 768px) { .seasonal-pie-tooltip--pointer { position: fixed; z-index: 1000; margin: 0; } }
+.seasonal-pie-tooltip { position: static; box-sizing: border-box; width: min(100%, 560px); max-width: 100%; margin: 8px auto 0; pointer-events: none; font-variant-numeric: tabular-nums; }
+@media (min-width: 768px) { .seasonal-pie-tooltip--pointer { position: fixed; z-index: 1000; width: min(560px, calc(100vw - 16px)); max-width: calc(100vw - 16px); margin: 0; } }
 .seasonal-pie-tooltip dt { align-items: center; }
 .seasonal-pie-tooltip dt > span { min-width: 0; font-weight: 700; }
 .seasonal-pie-tooltip-mobile-value, .seasonal-pie-tooltip-mobile-percent { display: none; }
@@ -86,10 +86,16 @@
   .seasonal-card > header { padding: 18px 16px 14px; }
   .seasonal-card h3 { font-size: calc(18px + 1px); }
   .seasonal-card .interactive-chart-legend { padding-inline: 12px; }
-  .seasonal-model-legend { padding: 10px 14px 12px; gap: 6px 16px; }
+  .seasonal-model-legend { box-sizing: border-box; flex-wrap: wrap; align-items: flex-start; gap: 6px 12px; max-width: 100%; overflow-x: visible; padding: 10px 14px 12px; }
+  .seasonal-model-legend-item { flex: 0 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+  .seasonal-pie-shared-legend-item > span:last-child { min-width: 0; }
+  .seasonal-pie-shared-legend { flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  .seasonal-pie-shared-legend > .chart-legend-label { flex: 0 0 100%; }
+  .seasonal-pie-shared-legend-item { flex: 0 1 auto; gap: 6px; white-space: normal; font-size: var(--text-small); }
+  .seasonal-pie-shared-legend-item .seasonal-model-legend-swatch { width: 12px !important; flex-basis: 12px; }
   .seasonal-plot { height: 250px; }
   .seasonal-pie-plot { height: auto; padding-inline: 14px; }
-  .seasonal-insight { margin-top: 32px; padding: 18px 17px; font-size: 16px; line-height: 1.7; }
+  .seasonal-insight { margin-top: 0; padding: 18px 17px; font-size: 16px; line-height: 1.7; }
   .seasonal-insight h4 { font-size: 16px; }
 
 }

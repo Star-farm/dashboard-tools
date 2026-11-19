@@ -118,10 +118,7 @@ export default function SiteHeader(props: HeaderProps) {
   const [homeScrolled, setHomeScrolled] = useState(false)
 
   useEffect(() => {
-    if (props.page !== 'home') {
-      setHomeScrolled(false)
-      return
-    }
+    if (props.page !== 'home') return
     const header = document.querySelector<HTMLElement>('.site-header')
     const hero = document.querySelector<HTMLElement>('.home-hero')
     const update = () => {

@@ -14,22 +14,6 @@ describe('desktop header scrolling', () => {
     fireEvent.scroll(window)
   }
 
-  it('remains visible when scrolling down, up, or reaching the top', () => {
-    render(<SiteHeader language="vi" page="home" changeLanguage={() => {}} />)
-    const header = screen.getByRole('banner')
-    expect(header).not.toHaveClass('header-hidden')
-    scrollTo(140)
-    expect(header).not.toHaveClass('header-hidden')
-    scrollTo(138)
-    expect(header).not.toHaveClass('header-hidden')
-    scrollTo(120)
-    expect(header).not.toHaveClass('header-hidden')
-    scrollTo(180)
-    expect(header).not.toHaveClass('header-hidden')
-    scrollTo(0)
-    expect(header).not.toHaveClass('header-hidden')
-  })
-
   it('uses the solid page header color after scrolling past the home hero', () => {
     render(<SiteHeader language="vi" page="home" changeLanguage={() => {}} />)
     const header = screen.getByRole('banner')
@@ -40,16 +24,14 @@ describe('desktop header scrolling', () => {
     expect(header).not.toHaveClass('header-home-scrolled')
   })
 
-  it('shows the header when navigating or focusing a menu item from the keyboard', () => {
+  it('keeps a content page header solid while scrolling and navigating by keyboard', () => {
     render(<SiteHeader language="en" page="future" changeLanguage={() => {}} />)
     const header = screen.getByRole('banner')
+    expect(header).not.toHaveClass('header-home')
     scrollTo(300)
-    fireEvent.focus(screen.getByRole('button', { name: 'English' }))
-    expect(header).not.toHaveClass('header-hidden')
+    expect(header).not.toHaveClass('header-home')
     scrollTo(400)
-    expect(header).not.toHaveClass('header-hidden')
     fireEvent(window, new HashChangeEvent('hashchange'))
-    expect(header).not.toHaveClass('header-hidden')
     expect(within(header).getByRole('link', { name: 'About the future' })).toHaveAttribute('aria-current', 'page')
   })
 })

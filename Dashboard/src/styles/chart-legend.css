@@ -20,6 +20,7 @@
 .chart-meta .interactive-chart-legend { padding: 0; }
 @media (max-width: 767px) {
   .interactive-chart-legend { gap: 8px; padding: 10px 14px 12px; }
+  .chart-series-legend { padding-inline: 14px; }
   .interactive-chart-legend[data-layout="conditions"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .interactive-chart-legend[data-layout="conditions"] .chart-legend-all { grid-column: 1 / -1; justify-self: start; }
   .interactive-chart-legend .chart-legend-option { min-height: 40px; font-size: var(--text-small); gap: 6px; }

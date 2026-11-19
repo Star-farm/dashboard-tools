@@ -116,10 +116,11 @@ describe('BAU 3 seasons comparison page', () => {
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
     expect(tooltip).toHaveStyle({ visibility: 'visible' })
-    for (const amount of ['593.43', '627.16', '608.57', '630.13']) expect(tooltip).toHaveTextContent(`${amount} USD/ha`)
+    for (const amount of ['593.43', '627.16', '608.57', '630.13']) expect(tooltip).toHaveTextContent(amount)
+    expect(container.querySelector('.chart-unit-label')).toHaveTextContent('Unit: USD/ha')
     hover(dots[23])
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
-    expect(tooltip).toHaveTextContent('37.55 USD/ha')
+    expect(tooltip).toHaveTextContent('37.55')
   })
 
 })

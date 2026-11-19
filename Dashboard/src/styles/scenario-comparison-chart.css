@@ -34,4 +34,28 @@
 @media (max-width: 767px) {
   .comparison-model-key { padding: 14px 14px 8px; gap: 8px 16px; font-size: var(--text-small); }
   .comparison-combined-plot { height: 290px; }
+  .scenario-encoding-legend-groups {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "model" "weather" "resources";
+    gap: 12px;
+  }
+  .scenario-encoding-legend-groups > .chart-series-legend {
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: start;
+    gap: 6px 12px;
+    min-width: 0;
+  }
+  .scenario-encoding-legend-groups > .chart-series-legend ul {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 6px 16px;
+    min-width: 0;
+  }
+  .scenario-encoding-legend-groups .condition-legend-group {
+    min-width: 0;
+  }
+  .scenario-encoding-legend-groups .condition-legend-group ul {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
 }

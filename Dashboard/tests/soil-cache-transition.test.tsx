@@ -9,7 +9,7 @@ vi.mock('../src/features/map/soilManifest', () => ({ soilManifest: { layers: [
 ] } }))
 
 const geometry = {
-  width: 100, height: 100, metersPerUnit: 100, crs: 'EPSG:32648', sourceSha256: 'transition-source',
+  width: 100, height: 100, metersPerUnit: 100, crs: 'EPSG:32648', bounds: [0, 0, 10000, 10000], sourceSha256: 'transition-source',
   plots: [{ id: 0, path: 'M0 0H100V100H0Z', areaHa: 10, center: [50, 50], record: 0 }],
 } as MapGeometry
 const layer = (id: string) => ({

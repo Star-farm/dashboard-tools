@@ -5,7 +5,7 @@ import type { Language } from '../../i18n'
 import { colorFor, mapColors  } from './mapData'
 import { mapText } from './mapText'
 import type { AdminBoundaryData, MapGeometry, MapMetric } from './mapTypes'
-import { zoomViewport } from './mapViewport'
+import { MAX_MAP_ZOOM, zoomViewport } from './mapViewport'
 import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
 import type { SoilLayer } from './soilTypes'
@@ -614,7 +614,7 @@ fill={
         <button
           type="button"
           onClick={() => zoom(1.6)}
-          disabled={view.zoom >= 12}
+          disabled={view.zoom >= MAX_MAP_ZOOM}
           aria-label={t.zoomIn}
           title={t.zoomIn}
         >

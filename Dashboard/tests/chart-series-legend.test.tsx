@@ -4,8 +4,8 @@ import ChartSeriesLegend from '../src/components/ChartSeriesLegend'
 
 describe('shared chart series legend', () => {
   it.each([
-    ['vi', 'Chú giải'],
-    ['en', 'Legend'],
+    ['vi', 'Chú giải:'],
+    ['en', 'Legend:'],
   ] as const)('shows a localized legend with line and bar symbols in %s', (language, label) => {
     const { container } = render(<ChartSeriesLegend language={language} items={[
       { key: 'line', label: 'Series A', color: '#217348' },

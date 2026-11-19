@@ -29,6 +29,16 @@ type Point = { key: string; period: SelectedPeriod; rows: Partial<Record<Seasona
 type Mode = 'year' | 'trend'
 const isNotGrown = (family: SeasonalFamily, point: Point) => point.period !== 'all' && !cultivatedPeriods(family).includes(point.period)
 
+function SeasonalPeriodTick({ x = 0, y = 0, payload, format }: { x?: string | number; y?: string | number; payload?: { value?: string | number }; format: (value: string) => string }) {
+  const parts = format(String(payload?.value ?? '')).split(/\s*[-‐‑‒–—―]+\s*/)
+  const first = parts[0]
+  const second = parts.length < 2 ? '' : parts.slice(1).join(' ')
+  return <text x={x} y={y} textAnchor="middle" fill={CHART_TICK.fill} fontSize={CHART_TICK.fontSize} fontWeight={CHART_TICK.fontWeight}>
+    <tspan x={x} dy="0">{first}{second && <> <tspan fontFamily="Arial, sans-serif">-</tspan></>}</tspan>
+    {second && <tspan x={x} dy="1.15em">{second}</tspan>}
+  </text>
+}
+
 function averageCropSeasons(rows: SeasonalRow[]): SeasonalRow | undefined {
   if (!rows.length) return undefined
   const average = (currency: 'USD' | 'VND'): SeasonalRow['USD'] => {
@@ -120,7 +130,7 @@ function SeasonalMetricCard({ language, metric, points, scaleRows, mode, familie
     {plotted.map((family) => <span className="seasonal-model-legend-item" key={family}><span className="seasonal-model-legend-swatch seasonal-model-legend-swatch--bar" aria-hidden="true" style={{ backgroundColor: scenarioColor(family) }} />{t[family]}</span>)}
   </div> : null
   const grid = <CartesianGrid stroke="#d8dfd0" vertical={false} />
-  const axes = <><XAxis dataKey="key" ticks={mode === 'trend' ? yearTicks(startYear, endYear, width, 80).map(String) : undefined} interval={0} tickFormatter={label} tick={CHART_TICK} tickLine={false} axisLine={{ stroke: '#819275' }} tickMargin={10} label={{ value: mode === 'trend' ? t.year : t.period, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} /><YAxis domain={bars ? barScale.domain : lineScale.domain} ticks={bars ? barScale.ticks : lineScale.ticks} width={width < 420 ? 42 : 68} tickFormatter={(amount) => bars ? barAxisNumber(Number(amount)) : axisNumber(Number(amount))} tick={CHART_TICK} axisLine={false} tickLine={false} /></>
+  const axes = <><XAxis dataKey="key" ticks={mode === 'trend' ? yearTicks(startYear, endYear, width, 80).map(String) : undefined} interval={0} tickFormatter={label} tick={mode === 'year' && bars && width < 420 ? (props) => <SeasonalPeriodTick {...props} format={label} /> : CHART_TICK} tickLine={false} axisLine={{ stroke: '#819275' }} tickMargin={10} height={mode === 'year' && bars ? (width < 420 ? 82 : 50) : undefined} label={{ value: mode === 'trend' ? t.year : t.period, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} /><YAxis domain={bars ? barScale.domain : lineScale.domain} ticks={bars ? barScale.ticks : lineScale.ticks} width={width < 420 ? 42 : 68} tickFormatter={(amount) => bars ? barAxisNumber(Number(amount)) : axisNumber(Number(amount))} tick={CHART_TICK} axisLine={false} tickLine={false} /></>
   const tooltip = <Tooltip trigger="hover" content={(props) => <ChartInfo {...props} label={mode === 'year' ? label(String(props.label ?? '')) : props.label} yearLabel={mode === 'trend' ? t.year : undefined} format={(amount) => new Intl.NumberFormat(language, { maximumSignificantDigits: 3 }).format(amount)} unit={chartUnit} />} isAnimationActive={false} />
   return <article className={`seasonal-card${pieMode ? ' seasonal-card-pie' : ''}`} aria-labelledby={`${id}-title`}>
     <header><h3 id={`${id}-title`}>{title}</h3></header>
@@ -132,7 +142,7 @@ function SeasonalMetricCard({ language, metric, points, scaleRows, mode, familie
       const index = points.findIndex((point) => point.key === current.key)
       setSelected(points[event.key === 'Home' ? 0 : event.key === 'End' ? points.length - 1 : Math.max(0, Math.min(points.length - 1, index + (event.key === 'ArrowRight' ? 1 : -1)))].key)
     }}><ChartUnitLabel unit={pieMode ? '%' : chartUnit} language={language} />{pieMode ? <><div className="seasonal-pies">{visible.map((family) => <SeasonalPieChart key={family} language={language} name={t[family]} color={scenarioColor(family)} slices={points.map((point) => ({ period: point.period === 'all' ? cropPeriods[0] : point.period, label: label(point.key), value: value(point, family), notGrown: isNotGrown(family, point), status: isNotGrown(family, point) ? t.notGrown : t.noData }))} unit={chartUnit} format={chartFormat} mobileFormat={mobileChartFormat} selected={current.key} showLegend={visible.length === 1} allowedPeriods={cultivatedPeriods(family)} />)}</div>{visible.length > 1 && <div className="seasonal-model-legend seasonal-pie-shared-legend" role="group" aria-label={language === 'vi' ? 'Chú giải màu sắc mùa vụ' : 'Season color legend'}><p className="chart-legend-label">{language === 'vi' ? 'Chú giải:' : 'Legend:'}</p>{cropPeriods.filter((crop) => visible.some((family) => cultivatedPeriods(family).includes(crop))).map((crop) => <span className="seasonal-model-legend-item seasonal-pie-shared-legend-item" key={crop}><span className="seasonal-model-legend-swatch" aria-hidden="true" style={{ backgroundColor: cropPeriodColors[crop], width: 12, height: 12, borderRadius: 3 }} />{t[crop]}</span>)}</div>}</> : <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 280 }} onResize={setWidth}>
-      <ComposedChart data={chartData} accessibilityLayer margin={{ top: 32, right: 14, bottom: 24, left: 0 }}>
+      <ComposedChart data={chartData} accessibilityLayer margin={{ top: 32, right: 14, bottom: 32, left: 0 }}>
         {grid}{axes}{tooltip}{!bars && <ReferenceLine x={current.key} stroke="#829074" strokeDasharray="3 3" />}{bars ? plotted.map((family) => <Bar key={family} dataKey={family} name={t[family]} fill={scenarioColor(family)} maxBarSize={44} isAnimationActive={false}><LabelList dataKey={family} position="top" offset={family === 'oneMha' ? 28 : 6} formatter={(amount) => amount == null ? '' : new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700, fontFamily: 'inherit' }} /></Bar>) : plotted.map((family) => <Line key={family} dataKey={family} name={t[family]} type="linear" {...scenarioLineStyle(family)} connectNulls={false} isAnimationActive={false} />)}
       </ComposedChart>
     </ResponsiveContainer>}</div> : <p className="seasonal-empty">{visible.every((family) => isNotGrown(family, current)) ? t.notGrown : t.noData}</p>}

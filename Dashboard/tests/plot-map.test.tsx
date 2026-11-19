@@ -58,7 +58,7 @@ describe('interactive plot map', () => {
     expect(screen.getByText('South China Sea')).toBeInTheDocument()
   })
 
-  it('keeps the map focused on the study area when panning north or south', () => {
+  it('allows panning north to the study boundary and keeps southward panning bounded', () => {
     const localGeometry = { ...geometry, bounds: [0, 0, 1000, 1000] }
     const adminBoundaries = { type: 'FeatureCollection' as const, projection: 'EPSG:32648' as const, bounds: [100, 200, 900, 800] as [number, number, number, number], features: [] }
     const { container } = render(<PlotMap {...props} geometry={localGeometry} adminBoundaries={adminBoundaries} />)
@@ -66,10 +66,14 @@ describe('interactive plot map', () => {
     const initial = svg.getAttribute('viewBox')!
 
     fireEvent.keyDown(svg, { key: 'ArrowUp' })
-    expect(svg).toHaveAttribute('viewBox', initial)
+    expect(svg.getAttribute('viewBox')).not.toBe(initial)
+    for (let index = 0; index < 20; index++) fireEvent.keyDown(svg, { key: 'ArrowUp' })
+    const northernView = svg.getAttribute('viewBox')
+    fireEvent.keyDown(svg, { key: 'ArrowUp' })
+    expect(svg.getAttribute('viewBox')).toBe(northernView)
 
     fireEvent.keyDown(svg, { key: 'ArrowDown' })
-    expect(svg.getAttribute('viewBox')).not.toBe(initial)
+    expect(svg.getAttribute('viewBox')).not.toBe(northernView)
   })
 
   it('opens a plot popup with plot values only and closes with Escape', () => {

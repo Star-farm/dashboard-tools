@@ -15,7 +15,7 @@ describe('combined scenario chart', () => {
     const { container } = render(<ScenarioComparisonChart {...props} chartType="bar" />)
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(8))
     expect(container.querySelectorAll('.recharts-line')).toHaveLength(0)
-    fireEvent.click(container.querySelector('.model-line-oneMha')!.closest('button')!)
+    fireEvent.click(within(screen.getByRole('group', { name: 'Choose comparison models' })).getByRole('button', { name: /1Mha/ }))
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(4))
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Normal' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: 'Normal economy' }))
@@ -42,8 +42,9 @@ describe('combined scenario chart', () => {
     expect(within(tooltip as HTMLElement).getByRole('columnheader', { name: 'BAU' })).toBeInTheDocument()
     expect(within(tooltip as HTMLElement).getByRole('columnheader', { name: '1Mha' })).toBeInTheDocument()
     expect(tooltip).toHaveTextContent('Severe weather · Resource shortage')
-    expect(tooltip).toHaveTextContent('10.00 USD/ha')
-    expect(tooltip).toHaveTextContent('100.00 USD/ha')
+    expect(tooltip).toHaveTextContent('10.00')
+    expect(tooltip).toHaveTextContent('100.00')
+    expect(container.querySelector('.chart-unit-label')).toHaveTextContent('Unit: USD/ha')
   })
 
   it('does not invent values when no condition has data', () => {

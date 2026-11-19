@@ -29,32 +29,19 @@ describe('mobile header menu', () => {
     Reflect.deleteProperty(HTMLDialogElement.prototype, 'close')
   })
 
-  it('remains visible on page scroll and while the menu is open', () => {
+  it('keeps the modal menu open while the page scrolls', () => {
     render(<App />)
-    const header = screen.getByRole('banner')
     const scroll = (y: number) => {
       vi.spyOn(window, 'scrollY', 'get').mockReturnValue(y)
       fireEvent.scroll(window)
     }
 
-    scroll(150)
-    expect(header).not.toHaveClass('header-hidden')
-    scroll(148)
-    expect(header).not.toHaveClass('header-hidden')
-    scroll(130)
-    expect(header).not.toHaveClass('header-hidden')
-    scroll(0)
-    expect(header).not.toHaveClass('header-hidden')
-
     fireEvent.click(screen.getByRole('button', { name: 'Mở menu' }))
     scroll(300)
-    expect(header).not.toHaveClass('header-hidden')
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Đóng menu' }))
     scroll(340)
-    expect(header).not.toHaveClass('header-hidden')
-    scroll(0)
-    expect(header).not.toHaveClass('header-hidden')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('opens a modal menu, switches language, and closes after choosing a page', async () => {

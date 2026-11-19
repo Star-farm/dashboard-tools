@@ -6,12 +6,12 @@ import HeaderNavigation from '../src/app/HeaderNavigation'
 describe('current topic and missing pages', () => {
   it.each([false, true])('identifies exactly one current parent topic (mobile: %s)', (mobile) => {
     const { container, rerender } = render(<HeaderNavigation page="baussComparison" language="vi" mobile={mobile} />)
-    expect(screen.getByRole('button', { name: 'Kinh tế' })).toHaveAttribute('aria-current', 'true')
-    expect(container.querySelectorAll('.topic-trigger[aria-current="true"]')).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'Kinh tế' })).toHaveAttribute('aria-current', 'location')
+    expect(container.querySelectorAll('.topic-trigger[aria-current="location"]')).toHaveLength(1)
     rerender(<HeaderNavigation page="resourceOneMha" language="en" mobile={mobile} />)
-    expect(screen.getByRole('button', { name: 'Resources' })).toHaveAttribute('aria-current', 'true')
+    expect(screen.getByRole('button', { name: 'Resources' })).toHaveAttribute('aria-current', 'location')
     rerender(<HeaderNavigation page="environmentOverview" language="en" mobile={mobile} />)
-    expect(screen.getByRole('button', { name: 'Environment' })).toHaveAttribute('aria-current', 'true')
+    expect(screen.getByRole('button', { name: 'Environment' })).toHaveAttribute('aria-current', 'location')
     rerender(<HeaderNavigation page="home" language="en" mobile={mobile} />)
     expect(container.querySelector('.topic-trigger[aria-current]')).not.toBeInTheDocument()
   })

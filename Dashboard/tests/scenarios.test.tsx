@@ -84,17 +84,17 @@ describe('scenario details page', () => {
 
   it('updates every metric and the summary when selecting a scenario, and preserves selection on translation', () => {
     const { rerender } = render(<ScenarioDetailsPage language="vi" />)
-    const originalSummary = screen.getByLabelText('Nhận xét tổng quan').textContent
+    const originalSummary = screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' }).textContent
     fireEvent.change(screen.getByLabelText('Chọn kịch bản'), { target: { value: 'BAU-2V-OH-BT' } })
     expect(screen.getByText('Không sử dụng AWD')).toBeInTheDocument()
-    expect(screen.getByLabelText('Nhận xét tổng quan').textContent).not.toBe(originalSummary)
+    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' }).textContent).not.toBe(originalSummary)
     expect(screen.queryByText('12.453.121')).not.toBeInTheDocument()
     rerender(<ScenarioDetailsPage language="en" />)
     expect(screen.getByLabelText('Choose a scenario')).toHaveValue('BAU-2V-OH-BT')
     expect(screen.getAllByText('USD/ha')).toHaveLength(3)
     expect(screen.queryByText('VNĐ/ha')).not.toBeInTheDocument()
     expect(screen.getByText('Without AWD')).toBeInTheDocument()
-    expect(screen.getByLabelText('Scenario overview')).toHaveTextContent('2016–2022 baseline')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('2016–2022 baseline')
   })
 
   it('opens the new header link, supports deep links and updates page metadata in both languages', async () => {

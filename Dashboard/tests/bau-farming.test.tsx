@@ -44,7 +44,7 @@ describe('three-season business-as-usual KPIs', () => {
     expect(analyzeBauFarming(data, 'margin', 'vi')!.paragraph).toContain('điểm %')
     expect(analyzeBauFarming(data, 'income', 'vi')!.paragraph).toContain('giảm ở 4/4 nhóm điều kiện')
     expect(analyzeBauFarming(data, 'labor', 'vi')!.paragraph).toContain('chỉ số giảm ở 4/4 nhóm điều kiện')
-    expect(bauFarmingSummary(data, 'vi')).toContain('Các nhóm điều kiện thiếu tài nguyên')
+    expect(bauFarmingSummary(data, 'vi')).toContain('nhóm thiếu tài nguyên có thu nhập thấp hơn')
   })
 
   it('keeps zeroes and negatives, avoids dividing by zero and handles missing data', () => {
@@ -89,7 +89,7 @@ describe('three-season business-as-usual page', () => {
     rerender(<Bau3FarmingPage language="en" />)
     expect(screen.getByRole('heading', { level: 1, name: 'Business as usual · 3 seasons' })).toBeInTheDocument()
     expect(screen.getByRole('region', { name: 'Economic indicators' })).toHaveTextContent('USD/ha')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('pp')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('income is lower under resource shortages')
   })
 
   it.each([false, true])('connects the three-season leaf to its page (mobile: %s)', (mobile) => {

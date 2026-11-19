@@ -58,7 +58,10 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
       ])),
     }
   })
-  const hasData = points.some((point) => visible.some((key) => visibleModels.some((group) => point[`${group}_${key}`] != null)))
+  const hasData = points.some(({ year }) => visible.some((key) => visibleModels.some((group) => {
+    const source = group === 'bau' ? baselineYears : oneMhaYears
+    return source.get(year)?.[key] != null
+  })))
   const allValues = points.flatMap((point) => (['bau', 'oneMha'] as const).flatMap((group) => bau3Conditions.map((key) => point[`${group}_${key}`])))
   const lineScale = lineAxisScale(allValues)
   const barScale = zeroBasedAxisScale(allValues)

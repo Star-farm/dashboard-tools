@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import PlotMap from '../src/features/map/PlotMap'
-import { zoomViewport } from '../src/features/map/mapViewport'
+import { MAX_MAP_ZOOM, zoomViewport } from '../src/features/map/mapViewport'
 import type { MapGeometry } from '../src/features/map/mapTypes'
 
 const geometry: MapGeometry = {
@@ -28,7 +28,7 @@ describe('interactive plot map', () => {
   })
   it('zooms around the cursor, clamps bounds, and prevents page scrolling inside the map', () => {
     expect(zoomViewport({ zoom: 1, x: 500, y: 250 }, 2, { x: 300, y: 100 })).toEqual({ zoom: 2, x: 400, y: 175 })
-    expect(zoomViewport({ zoom: 12, x: 1, y: 2 }, 100).zoom).toBe(12)
+    expect(zoomViewport({ zoom: 12, x: 1, y: 2 }, 100).zoom).toBe(MAX_MAP_ZOOM)
     expect(zoomViewport({ zoom: 1, x: 1, y: 2 }, .01).zoom).toBe(1)
     const { container } = render(<PlotMap {...props} />)
     const svg = container.querySelector('.plot-map-svg')!
@@ -39,8 +39,10 @@ describe('interactive plot map', () => {
     expect(Number(svg.getAttribute('viewBox')!.split(' ')[2])).toBeLessThan(Number(initial!.split(' ')[2]))
     fireEvent.click(screen.getByRole('button', { name: 'Fit map' }))
     expect(svg).toHaveAttribute('viewBox', initial)
-    fireEvent.wheel(svg, { deltaY: 120 })
-    expect(svg).toHaveAttribute('viewBox', initial)
+    const zoomOut = new WheelEvent('wheel', { deltaY: 120, bubbles: true, cancelable: true })
+    fireEvent(svg, zoomOut)
+    expect(zoomOut.defaultPrevented).toBe(true)
+    expect(Number(svg.getAttribute('viewBox')!.split(' ')[2])).toBeGreaterThan(Number(initial!.split(' ')[2]))
   })
 
   it('labels nearby countries and the East Sea in both languages', () => {

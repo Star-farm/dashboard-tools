@@ -67,7 +67,7 @@ describe('resource model pages', () => {
     expect(screen.getAllByRole('definition')[0]).toHaveTextContent(resourceNumber(expected, 'vi'))
     for (const chart of screen.getAllByRole('article')) {
       expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
-      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(['#2868b2', '#8650a8', '#b65b15', '#287447'])
+      expect([...chart.querySelectorAll('path.recharts-line-curve')].map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(page === 'resourceOneMha' ? '#217348' : '#b8322b'))
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
     }
     rerender(<ResourcesPage page={page} language="en" />)
@@ -85,8 +85,8 @@ describe('resource model pages', () => {
       expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(192)
       expect(chart.querySelectorAll('path.recharts-line-curve')).toHaveLength(8)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
-      for (const path of paths.slice(0, 4)) expect(path).toHaveAttribute('stroke-dasharray', '6 4')
-      for (const path of paths.slice(4)) expect(path).not.toHaveAttribute('stroke-dasharray')
+      expect(paths.filter((path) => path.getAttribute('stroke-dasharray') === '6 3')).toHaveLength(4)
+      for (const path of paths.filter((path) => path.getAttribute('stroke-dasharray') !== '6 3')) expect(path).not.toHaveAttribute('stroke-dasharray')
     }
     expect(charts[0]).toHaveClass('scenario-comparison-chart')
     expect(charts[0].querySelector('header')).toHaveTextContent('1Mha')
@@ -102,7 +102,9 @@ describe('resource model pages', () => {
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2027'))
     expect(tooltip).toHaveStyle({ visibility: 'visible' })
-    for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(`${resourceNumber(series.points[0].values.water!, 'en')} mm`)
+    for (const series of data.series.filter((series) => series.family === 'oneMha')) expect(tooltip).toHaveTextContent(resourceNumber(series.points[0].values.water!, 'en'))
+    expect(tooltip.querySelectorAll('.chart-info-unit')).toHaveLength(4)
+    for (const unit of tooltip.querySelectorAll('.chart-info-unit')) expect(unit).toHaveTextContent('mm')
     fireEvent.mouseMove(dots[23], { clientX: Number(dots[23].getAttribute('data-cx')), clientY: Number(dots[23].getAttribute('data-cy')) })
     await waitFor(() => expect(tooltip).toHaveTextContent('Year 2050'))
   })

@@ -6,6 +6,7 @@ import App from '../src/app/App'
 import HeaderNavigation from '../src/app/HeaderNavigation'
 import EconomicComparisonPage from '../src/features/economics/EconomicComparisonPage'
 import ComparisonBarChart from '../src/features/economics/ComparisonBarChart'
+import { comparisonText } from '../src/features/economics/comparisonText'
 import { aggregateEconomicComparison, selectComparisonCohort } from '../src/features/economics/comparisonData'
 import type { ComparisonCohort, EconomicComparisonData } from '../src/features/economics/comparisonData'
 import cached from '../src/data/economics-comparison.json'
@@ -80,7 +81,8 @@ describe('economic comparison interface', () => {
     fireEvent.change(screen.getByRole('combobox', { name: 'Thời tiết' }), { target: { value: 'severe' } })
     fireEvent.change(screen.getByRole('combobox', { name: 'Tài nguyên' }), { target: { value: 'shortage' } })
     expect(screen.getByRole('status')).toHaveTextContent('Thời tiết: Khắc nghiệt. Tài nguyên: Khan hiếm tài nguyên.')
-    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng kết' })).toHaveTextContent('21.458.536 VNĐ/ha')
+    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })).toHaveTextContent('21.458.536')
+    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })).toHaveTextContent('VNĐ/ha')
     expect(screen.getAllByRole('heading', { name: /giai đoạn 2027 - 2050/ })).toHaveLength(5)
     expect(screen.getByRole('article', { name: /Thu nhập ròng trung bình/ }).querySelector('header p')).not.toBeInTheDocument()
     expect(screen.getByRole('article', { name: /Thu nhập ròng trung bình/ }).querySelector('.comparison-values')).toHaveTextContent('21.458.536 VNĐ/ha')
@@ -94,13 +96,15 @@ describe('economic comparison interface', () => {
     rerender(<EconomicComparisonPage language="en" />)
     expect(screen.getByRole('combobox', { name: 'Weather' })).toHaveValue('severe')
     expect(screen.getByRole('combobox', { name: 'Resource scenario' })).toHaveValue('shortage')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('815.23 USD/ha')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('815.23')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('USD/ha')
     expect(screen.getAllByRole('heading', { name: /period 2027 - 2050/ })).toHaveLength(5)
     expect(screen.getByRole('article', { name: /Average net income/ }).querySelector('.comparison-values')).toHaveTextContent('815.23 USD/ha')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
     expect(screen.getByRole('combobox', { name: 'Weather' })).toHaveValue('all')
     expect(screen.getByRole('combobox', { name: 'Resource scenario' })).toHaveValue('all')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('986.30 USD/ha')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('986.30')
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('USD/ha')
     expect(screen.getByRole('article', { name: /Average net income/ }).querySelector('.comparison-values')).toHaveTextContent('986.30 USD/ha')
   })
 
@@ -117,13 +121,14 @@ describe('economic comparison interface', () => {
     const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
     await waitFor(() => expect(tooltip).toHaveStyle({ visibility: 'visible' }))
     expect(tooltip).toHaveTextContent('1Mha')
-    expect(tooltip).toHaveTextContent('283.93 hours/ha')
+    expect(tooltip).toHaveTextContent('283.93')
+    expect(tooltip.querySelector('.chart-info-unit')).toHaveTextContent('hours/ha')
   })
 
   it('keeps missing groups empty instead of rendering fabricated zero values', () => {
     const empty: ComparisonCohort = { climate: 'all', resource: 'all', groups: { bau: { count: 0, USD: { income: null, straw: null, cost: null, yield: null, labor: null }, VND: { income: null, straw: null, cost: null, yield: null, labor: null } }, oneMha: { count: 0, USD: { income: null, straw: null, cost: null, yield: null, labor: null }, VND: { income: null, straw: null, cost: null, yield: null, labor: null } } } }
     render(<ComparisonBarChart metric="income" cohort={empty} language="vi" startYear={2027} endYear={2050} />)
-    expect(screen.getByText('Không có dữ liệu cho lựa chọn này.')).toBeInTheDocument()
+    expect(screen.getAllByText(comparisonText.vi.unavailable)).toHaveLength(2)
     expect(screen.getAllByText('Chưa có dữ liệu')).toHaveLength(2)
   })
 

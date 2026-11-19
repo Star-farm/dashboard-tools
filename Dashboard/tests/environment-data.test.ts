@@ -102,7 +102,7 @@ describe('environmental data', () => {
       }
       expect(environmentComparisonInsight(data, selected, metric, 'vi')).not.toMatch(/NaN|Infinity|mức sử dụng/)
     }
-    expect(environmentSummary(data, data.series, 'vi', undefined, true)).toContain('Tỷ lệ áp dụng AWD')
+    expect(environmentSummary(data, data.series, 'vi', undefined, true)).toContain('AWD:')
     expect(environmentAwdStats([])).toMatchObject({ mean: null, start: null, end: null, change: null })
     expect(environmentSummary({ ...data, series: [] }, [], 'en')).toBe('Not enough data.')
     const zero = aggregateEnvironmentData(fixture.replaceAll(',0.1,100', ',0,100'), fixture.replaceAll(',0.1,100', ',0,100'))

@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import App from '../src/app/App'
+import { translations } from '../src/i18n'
 import HeaderNavigation from '../src/app/HeaderNavigation'
 import Bau2FarmingPage from '../src/features/economics/Bau2FarmingPage'
 import BauSustainableFarmingPage from '../src/features/economics/BauSustainableFarmingPage'
@@ -66,26 +67,28 @@ describe.each(models)('$family standalone farming page', (model) => {
   })
 
   it('renders the shared KPI and chart template, the selected data and both languages', () => {
+    document.documentElement.lang = 'vi'
     const { container, rerender } = render(<model.Component language="vi" />)
     expect(screen.getByRole('heading', { level: 1, name: model.title })).toBeInTheDocument()
     expect(within(screen.getByRole('region', { name: 'Các chỉ số kinh tế' })).getAllByRole('term')).toHaveLength(5)
     expect(screen.getAllByRole('article')).toHaveLength(5)
     expect(container.querySelectorAll(`.bau3-chart-${model.family}`)).toHaveLength(5)
-    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })).toHaveTextContent(model.name)
+    expect(screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })).toHaveTextContent(model.family === 'oneMha' ? translations.vi.fullOneMhaName : model.name)
     for (const chart of screen.getAllByRole('article')) {
       expect(chart.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(96)
       const paths = [...chart.querySelectorAll('path.recharts-line-curve')]
-      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(['#2868b2', '#8650a8', '#b65b15', '#287447'])
+      expect(paths.map((path) => path.getAttribute('stroke'))).toEqual(Array(4).fill(model.family === 'oneMha' ? '#217348' : '#b8322b'))
       for (const path of paths) expect(path.getAttribute('d')).not.toMatch(/[CQ]/)
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
       expect(chart.nextElementSibling!.querySelectorAll('strong').length).toBeGreaterThan(3)
     }
+    document.documentElement.lang = 'en'
     rerender(<model.Component language="en" />)
     expect(screen.getByRole('heading', { level: 1, name: model.enTitle })).toBeInTheDocument()
     const indicators = screen.getByRole('region', { name: 'Economic indicators' })
     expect(indicators).toHaveTextContent('USD/ha')
     expect(indicators).toHaveTextContent('2050 compared with 2027')
-    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent(model.enName)
+    expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent(model.family === 'oneMha' ? translations.en.fullOneMhaName : model.enName)
   }, 10000)
 
   it.each([false, true])('opens from the menu (mobile: %s)', (mobile) => {

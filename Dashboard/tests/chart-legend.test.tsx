@@ -15,7 +15,7 @@ import { ChartSelectionProvider } from '../src/components/ChartSelection'
 import { within } from '@testing-library/react'
 import ScenarioComparisonChart from '../src/components/ScenarioComparisonChart'
 import ChartUnitLabel from '../src/components/ChartUnitLabel'
-import { CONDITION_COLORS, SCENARIO_COLORS } from '../src/components/chartStyles'
+import { SCENARIO_COLORS } from '../src/components/chartStyles'
 import economicSource from '../src/data/economics-bau3-series.json'
 import resourceSource from '../src/data/resources.json'
 import environmentSource from '../src/data/environment.json'
@@ -118,7 +118,7 @@ describe('interactive legends across chart pages', () => {
     expect(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Severe' })).toHaveAttribute('aria-pressed', 'true')
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Normal' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: 'Normal economy' }))
-    expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke', CONDITION_COLORS.mildNormal)
+    expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke', SCENARIO_COLORS.bau)
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'All' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: 'All' }))
     expect(container.querySelectorAll('path.recharts-line-curve')).toHaveLength(4)

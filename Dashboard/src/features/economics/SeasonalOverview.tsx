@@ -27,7 +27,7 @@ export default function SeasonalOverview({ data, metrics, language, mode, year, 
   }))
   const formatted = (row: SeasonalRow | undefined, metric: SeasonalMetric) => {
     const value = row?.[currency][metric]?.mean
-    return value == null ? '—' : seasonalNumber(value, metric, language)
+    return value == null ? '-' : seasonalNumber(value, metric, language)
   }
   return <div className="seasonal-overview">
     <ScenarioFilters rows={sourceRows} filters={filters} onChange={setFilters} language={language} idPrefix="seasonal-filter" seasonLabel={t.system} />

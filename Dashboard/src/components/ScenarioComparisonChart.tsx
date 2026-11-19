@@ -17,6 +17,7 @@ import '../styles/scenario-comparison-chart.css'
 import { useChartSelection } from './chartSelectionContext'
 import ScenarioAbbreviations from './ScenarioAbbreviations'
 import ChartSeriesLegend from './ChartSeriesLegend'
+import { displayChartValue, valueForChart } from '../utils/chartMissingValue'
 
 type ConditionPoint = { year: number } & Record<Bau3Condition, number | null>
 interface Props {
@@ -52,8 +53,8 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
     return {
       year: currentYear,
       ...Object.fromEntries(bau3Conditions.flatMap((key) => [
-        [`bau_${key}`, baselineYears.get(currentYear)?.[key] ?? null],
-        [`oneMha_${key}`, oneMhaYears.get(currentYear)?.[key] ?? null],
+        [`bau_${key}`, valueForChart(baselineYears.get(currentYear)?.[key], bars)],
+        [`oneMha_${key}`, valueForChart(oneMhaYears.get(currentYear)?.[key], bars)],
       ])),
     }
   })
@@ -64,7 +65,7 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
   const axisNumber = distinctAxisFormatter(lineScale.ticks, language, true)
   const barAxisNumber = distinctAxisFormatter(barScale.ticks, language, true)
   const selectedYear = Math.min(endYear, Math.max(startYear, year))
-  const display = (value: number | null | undefined) => value == null ? '—' : formatValue(value)
+  const display = (value: number | null | undefined) => formatValue(displayChartValue(value))
   const selectYear = ({ activeLabel }: { activeLabel?: string | number }) => {
     const value = Number(activeLabel)
     if (activeLabel != null && Number.isInteger(value) && value >= startYear && value <= endYear) setYear(value)
@@ -92,9 +93,9 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
             <XAxis dataKey="year" type={bars ? 'category' : 'number'} domain={bars ? undefined : [startYear, endYear]} ticks={yearTicks(startYear, endYear, width, 88)} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
             <YAxis width={width < 420 ? 46 : 68} domain={bars ? barScale.domain : lineScale.domain} ticks={bars ? barScale.ticks : lineScale.ticks} allowDataOverflow tickFormatter={(value) => bars ? barAxisNumber(Number(value)) : formatAxis ? formatAxis(Number(value), lineScale.ticks) : axisNumber(Number(value))} tickLine={false} tickMargin={width < 420 ? 4 : 6} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
-            <Tooltip shared isAnimationActive={false} content={(tooltipProps) => <ConditionComparisonTooltip {...tooltipProps} language={language} yearLabel={t.year} format={formatValue} unit={unit} />} cursor={{ stroke: '#819275', strokeDasharray: '3 3' }} wrapperStyle={{ pointerEvents: 'none', zIndex: 10 }} />
+            <Tooltip shared isAnimationActive={false} content={(tooltipProps) => <ConditionComparisonTooltip {...tooltipProps} language={language} yearLabel={t.year} format={(value) => formatValue(displayChartValue(value))} unit={unit} />} cursor={{ stroke: '#819275', strokeDasharray: '3 3' }} wrapperStyle={{ pointerEvents: 'none', zIndex: 10 }} />
             <ReferenceLine x={selectedYear} stroke="#687a5c" strokeWidth={1} />
-            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={scenarioColor(group)} stroke={scenarioColor(group)} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key)} connectNulls={false} isAnimationActive={false} />))}
+            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={scenarioColor(group)} stroke={scenarioColor(group)} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(displayChartValue(Number(amount)))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key)} connectNulls={false} isAnimationActive={false} />))}
           </ComposedChart>
         </ResponsiveContainer>
       </div>

@@ -46,12 +46,12 @@ describe('chart tooltip display', () => {
     expect(container.querySelector('.chart-tooltip-mobile-label')).toHaveTextContent('BAU · Severe weather')
   })
 
-  it('omits the unit from tooltip values', () => {
+  it('renders the supplied unit with tooltip values', () => {
     render(<ChartInfo active label={2030} yearLabel="Year" format={(value) => value.toFixed(2)} unit="t/ha" payload={[{ name: 'Yield', value: 4.25, color: '#217348' }]} />)
 
     expect(screen.getByText('Year 2030')).toBeInTheDocument()
     expect(screen.getByText('4.25')).toBeInTheDocument()
-    expect(screen.queryByText('t/ha')).not.toBeInTheDocument()
+    expect(screen.getByText('t/ha')).toHaveClass('chart-info-unit')
   })
 
   it.each(['Business As Usual · severe shortage', 'Canh tác như thường lệ · thiếu nước nghiêm trọng'])(

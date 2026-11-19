@@ -12,6 +12,7 @@ import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import type { ChartPoint, Currency, Metric } from './futureTypes'
 import { analyzeChart, metricUnit } from './chartAnalysis'
 import { futureText } from './futureText'
+import { valueForChart } from '../../utils/chartMissingValue'
 
 interface Props {
   metric: Metric
@@ -23,7 +24,7 @@ interface Props {
 export default function TimeSeriesChart({ metric, points, currency, language }: Props) {
   const [chartWidth, setChartWidth] = useState(800)
   const t = futureText[language]
-  const chartPoints = metric === 'income' && currency === 'VND' ? points.map((point) => ({ ...point, first: point.first === null ? null : point.first / 1_000_000, second: point.second === null ? null : point.second / 1_000_000 })) : points
+  const chartPoints = points.map((point) => ({ ...point, first: valueForChart(point.first) / (metric === 'income' && currency === 'VND' ? 1_000_000 : 1), second: valueForChart(point.second) / (metric === 'income' && currency === 'VND' ? 1_000_000 : 1) }))
   const yScale = lineAxisScale(chartPoints.flatMap((point) => [point.first, point.second]))
   const analysis = analyzeChart(points, metric, currency, language)
   const title = t[`${metric}Title`]
@@ -61,7 +62,7 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
                 { key: 'second', label: analysis.secondLabel, color: SCENARIO_COLORS.bau, kind: 'bar' },
               ]} />
             </div>
-            <aside className="chart-insight" aria-label={`${t.insight} — ${title}`}>
+            <aside className="chart-insight" aria-label={`${t.insight} - ${title}`}>
               <h3 className="insight-eyebrow">{t.insight}</h3>
               <p><EmphasizedNumbers text={analysis.paragraph} /></p>
             </aside>

@@ -25,7 +25,7 @@ export default function EconomicOverviewPage({ language }: { language: Language 
   const unit = (metric: typeof economicMetrics[number]) => economicMetricUnits[metric] === '%' ? '%' : t[economicMetricUnits[metric] as 'moneyUnit' | 'yieldUnit' | 'laborUnit']
   const value = (row: EconomicRow, metric: typeof economicMetrics[number]) => {
     const amount = row[currency][metric]
-    return amount === null ? '—' : (economicMetricUnits[metric] === 'moneyUnit' ? money : decimal).format(amount)
+    return amount === null ? '-' : (economicMetricUnits[metric] === 'moneyUnit' ? money : decimal).format(amount)
   }
   const period = (row: EconomicRow) => `${row.historical ? `${t.historical} · ` : ''}${row.startYear}–${row.endYear}`
 

@@ -34,7 +34,7 @@ export function KpiSection({ t, language, cards, changes, loading }: KpiSectionP
                     const percentage = entry?.pct_change;
                     const isGood = percentage != null && (card.lowerIsBetter ? percentage < 0 : percentage > 0);
                     const colorClass = percentage == null ? '' : isGood ? 'text-success' : 'text-danger';
-                    const arrow = percentage == null ? '' : percentage > 0 ? '▲' : percentage < 0 ? '▼' : '—';
+                    const arrow = percentage == null ? '' : percentage > 0 ? '▲' : percentage < 0 ? '▼' : '-';
                     const isVnd = language === 'vi' && card.key === 'Net Income';
                     const targetValue = entry?.target_value;
                     const displayValue = targetValue != null && isVnd

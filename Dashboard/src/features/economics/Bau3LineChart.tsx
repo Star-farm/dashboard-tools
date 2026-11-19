@@ -14,6 +14,7 @@ import { bau3ChartUnit, selectBau3Points } from './bau3Analysis'
 import { bau3Text } from './bau3Text'
 import ConditionFilters, { ConditionLegend } from '../../components/ConditionFilters'
 import { useConditionFilters } from '../../components/useConditionFilters'
+import { valueForChart } from '../../utils/chartMissingValue'
 
 export default function Bau3LineChart({ data, family, metric, domain, language, title }: {
   data: Bau3Data
@@ -29,11 +30,12 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
   const t = bau3Text[language]
   const currency = language === 'vi' ? 'VND' : 'USD'
   const points = selectBau3Points(data, family, metric, currency)
-  const yScale = lineAxisScale(points.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
+  const chartPoints = points.map((point) => ({ ...point, ...Object.fromEntries(bau3Conditions.map((condition) => [condition, valueForChart(point[condition])])) }))
+  const yScale = lineAxisScale(chartPoints.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
   const unit = bau3ChartUnit(metric, language)
   const axisNumber = distinctAxisFormatter(yScale.ticks, language, true)
   const ticks = yearTicks(data.startYear, data.endYear, chartWidth, 88)
-  const hasData = points.some((point) => visibleConditions.some((condition) => point[condition] !== null))
+  const hasData = chartPoints.length > 0
   return (
     <article className={`bau3-chart bau3-chart-${family}`} aria-labelledby={`bau3-${metric}-${family}-title`}>
       <header><h3 id={`bau3-${metric}-${family}-title`} title={family === 'oneMha' ? t.oneMhaDescription : undefined}>{title ?? t[family]}</h3></header>
@@ -41,7 +43,7 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
       {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${data.startYear}–${data.endYear} · ${unit}`}>
         <ChartUnitLabel unit={unit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 310 }} onResize={setChartWidth}>
-          <LineChart data={points} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 24 }}>
+          <LineChart data={chartPoints} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 24 }}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
             <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
             <YAxis width={chartWidth < 420 ? 46 : 68} domain={yScale.domain} ticks={yScale.ticks} allowDataOverflow tickFormatter={(value) => `${axisNumber(Number(value))}${metric === 'margin' ? ' %' : ''}`} tickLine={false} tickMargin={chartWidth < 420 ? 4 : 8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />

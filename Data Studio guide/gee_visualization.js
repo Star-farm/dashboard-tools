@@ -456,7 +456,7 @@ var selectYear = function(index, snap) {
 
 
 
-  // Reference pre-built layers — no Map.layers() manipulation needed
+  // Reference pre-built layers - no Map.layers() manipulation needed
 
   var layers = state.allLayers[state.mode];
 
@@ -758,7 +758,7 @@ Map.onClick(function(coords) {
 
 // Pre-add ALL layers for ALL modes once at startup (opacity = 0).
 
-// switchMode and selectYear control visibility via setOpacity only —
+// switchMode and selectYear control visibility via setOpacity only -
 
 // Map.layers().reset() is never called after this point.
 

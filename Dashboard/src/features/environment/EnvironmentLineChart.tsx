@@ -1,4 +1,5 @@
 import { bau3Conditions } from '../economics/bau3Types'
+import { valueForChart } from '../../utils/chartMissingValue'
 import ChartInfo from '../../components/ChartInfo'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { ConditionLegend } from '../../components/ConditionFilters'
@@ -64,16 +65,13 @@ export default function EnvironmentLineChart({
     family,
     metric
   )
-  const yScale = lineAxisScale(points.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
+  const chartPoints = points.map((point) => ({ ...point, ...Object.fromEntries(bau3Conditions.map((condition) => [condition, valueForChart(point[condition])])) }))
+  const yScale = lineAxisScale(chartPoints.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
   const axisNumber = distinctAxisFormatter(yScale.ticks, language)
 
   const unit = environmentUnit(metric, language)
 
-  const hasData = points.some((point) =>
-    visibleConditions.some(
-      (condition) => point[condition] != null
-    )
-  )
+  const hasData = chartPoints.length > 0
 
   return (
     <article
@@ -100,7 +98,7 @@ export default function EnvironmentLineChart({
             onResize={setWidth}
           >
             <LineChart
-              data={points}
+              data={chartPoints}
               accessibilityLayer
               margin={{
                 top: 32,

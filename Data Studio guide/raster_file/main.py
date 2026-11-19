@@ -176,7 +176,7 @@ def process_raster_data(event_data: dict) -> str:
         retry_count = increment_retry(file_name)
 
         if retry_count >= MAX_RETRIES:
-            reason = f"File '{file_name}' failed {retry_count} times — auto-locked"
+            reason = f"File '{file_name}' failed {retry_count} times - auto-locked"
             lock_pipeline(reason)
             return "LOCKED"
 

@@ -26,7 +26,7 @@ async function apiFetchJson<T>(path: string, options: RequestInit = {}): Promise
     });
 
     if (response.status === 401 || response.status === 502) {
-        console.error(`[dashboardApi] ${response.status} on ${path} — check the proxy configuration.`);
+        console.error(`[dashboardApi] ${response.status} on ${path} - check the proxy configuration.`);
     }
     if (!response.ok) {
         throw new Error(`${path} request failed with status ${response.status}`);

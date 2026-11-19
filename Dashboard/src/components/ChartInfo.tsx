@@ -26,6 +26,7 @@ export default function ChartInfo({
   payload,
   yearLabel,
   format,
+  unit,
   language,
 }: {
   active?: boolean
@@ -99,8 +100,9 @@ export default function ChartInfo({
               <dd>
                 {entry.value == null ||
                 !Number.isFinite(Number(entry.value))
-                  ? '—'
+                  ? '-'
                   : format(Number(entry.value))}
+                {unit && <small className="chart-info-unit">{unit}</small>}
               </dd>
             </div>
           )

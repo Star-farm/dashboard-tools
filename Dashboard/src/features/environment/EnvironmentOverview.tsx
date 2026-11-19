@@ -25,13 +25,13 @@ export default function EnvironmentOverview({ data, language }: { data: Pick<Env
         <thead><tr className="economic-column-groups"><th scope="colgroup" colSpan={5}>{t.scenarioColumns}</th><th scope="colgroup" colSpan={2}>{text.indicators}</th></tr><tr>{economicFacets.map(({ key }) => <th scope="col" className={key === 'awd' ? 'economic-divider' : undefined} key={key}>{t[key]}</th>)}{environmentMetrics.map((metric) => <th scope="col" className="economic-numeric" key={metric}><span>{text[metric]}</span><small>{text.unit}: {environmentUnit(metric, language)}</small></th>)}</tr></thead>
         <tbody>{visible.map((row, index) => <tr key={`${row.code}:${row.historical}`} className={[row.historical ? 'economic-historical' : '', index && (visible[index - 1].group !== row.group || visible[index - 1].season !== row.season) ? 'economic-section-start' : ''].filter(Boolean).join(' ') || undefined}>
           <th scope="row"><span className={`economic-group ${row.group}`}>{t[row.group]}</span><small className="economic-row-period">{period(row)}</small></th><td>{t[row.season]}</td><td>{t[row.climate]}</td><td>{t[row.resource]}</td><td className="economic-divider"><span className={`economic-awd ${row.awd}`}>{t[row.awd]}</span></td>
-          {environmentMetrics.map((metric) => <td className="economic-numeric" key={metric}>{row.values[metric] === null ? '—' : environmentNumber(row.values[metric], language)}</td>)}
+          {environmentMetrics.map((metric) => <td className="economic-numeric" key={metric}>{row.values[metric] === null ? '-' : environmentNumber(row.values[metric], language)}</td>)}
         </tr>)}</tbody>
       </table></div>
       <section className="economic-cards" aria-label={text.mobile}>{visible.map((row) => <article className={`economic-card${row.historical ? ' economic-historical' : ''}`} key={`${row.code}:${row.historical}`}>
         <header><h2><span className={`economic-group ${row.group}`}>{t[row.group]}</span><span>{t[row.season]}</span></h2><p className="economic-card-period">{period(row)}</p></header>
         <dl className="economic-card-facets">{economicFacets.slice(2).map(({ key }) => <div key={key}><dt>{t[key]}</dt><dd className={key === 'awd' ? `economic-awd ${row.awd}` : undefined}>{t[row[key]]}</dd></div>)}</dl>
-        <dl className="economic-card-values">{environmentMetrics.map((metric) => <div key={metric}><dt>{text[metric]}</dt><dd><strong>{row.values[metric] === null ? '—' : environmentNumber(row.values[metric], language)}</strong><span>{environmentUnit(metric, language)}</span></dd></div>)}</dl>
+        <dl className="economic-card-values">{environmentMetrics.map((metric) => <div key={metric}><dt>{text[metric]}</dt><dd><strong>{row.values[metric] === null ? '-' : environmentNumber(row.values[metric], language)}</strong><span>{environmentUnit(metric, language)}</span></dd></div>)}</dl>
       </article>)}</section>
     </>}
   </>

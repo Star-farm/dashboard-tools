@@ -3,7 +3,7 @@ AI-Agent Backplane & API Server
 Security hardened: rate limiting, security headers, CORS restriction,
 Pydantic field validation, request-size guard, structured error responses,
 API-key authentication on all API and MCP routes.
-All configuration is read from environment variables — no secrets in code.
+All configuration is read from environment variables - no secrets in code.
 """
 
 import os
@@ -35,7 +35,7 @@ _raw_origins = os.getenv(
 # Stripping whitespace and trailing slashes from each configured origin
 ALLOWED_ORIGINS: list[str] = [o.strip().rstrip("/") for o in _raw_origins.split(",") if o.strip()]
 
-# Hard fail on startup if someone tries to combine wildcard origins with credentials —
+# Hard fail on startup if someone tries to combine wildcard origins with credentials -
 # that combination silently defeats the whole CORS whitelist.
 if "*" in ALLOWED_ORIGINS:
     raise RuntimeError(
@@ -123,7 +123,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 # ── Custom Middlewares ────────────────────────────────────────────────────────
-# IMPORTANT — Starlette middleware ordering:
+# IMPORTANT - Starlette middleware ordering:
 # Each call to app.add_middleware() (including the @app.middleware("http")
 # decorator below) inserts at the FRONT of the middleware list, so the LAST
 # middleware registered ends up as the OUTERMOST layer (sees the request
@@ -242,7 +242,7 @@ async def require_data_loaded(request: Request, call_next):
 
 # Configure CORS based on ALLOWED_ORIGINS.
 # Registered LAST so it becomes the OUTERMOST middleware (see note above the
-# custom middlewares section) — every response, including early 401/409/413
+# custom middlewares section) - every response, including early 401/409/413
 # rejections from the middlewares above, now passes through this layer and
 # gets proper Access-Control-Allow-Origin headers before reaching the browser.
 app.add_middleware(
@@ -259,7 +259,7 @@ app.add_middleware(
 @app.exception_handler(Exception)
 async def generic_exception_handler(request: Request, exc: Exception):
     # Log detailed internal errors while keeping response messages generic for clients.
-    # NOTE: route your Cloud Run logs to a sink with restricted access — repr(exc) can
+    # NOTE: route your Cloud Run logs to a sink with restricted access - repr(exc) can
     # include fragments of request data that triggered the failure.
     print(f"[ERROR] Unhandled exception on {request.url.path}: {exc!r}")
     return JSONResponse(

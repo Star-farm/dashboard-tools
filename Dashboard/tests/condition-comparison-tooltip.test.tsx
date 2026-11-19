@@ -18,7 +18,7 @@ describe('condition comparison tooltip', () => {
     expect(rows[1]).toHaveTextContent('Severe weather · Resource shortage')
     expect(rows[1]).toHaveTextContent('6.65')
     expect(rows[1]).toHaveTextContent('6.41')
-    expect(rows[2]).toHaveTextContent('—')
+    expect(rows[2]).toHaveTextContent('-')
     expect(rows[2]).toHaveTextContent('6.57')
     expect(screen.queryByText('ton/ha')).not.toBeInTheDocument()
   })

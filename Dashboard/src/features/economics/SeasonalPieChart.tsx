@@ -59,23 +59,24 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
     window.addEventListener('seasonal-pie-tooltip-open', closeOtherTooltip)
     return () => window.removeEventListener('seasonal-pie-tooltip-open', closeOtherTooltip)
   }, [instanceId])
-  const cultivated = slices.filter((slice) => !slice.notGrown && (!allowedPeriods || allowedPeriods.includes(slice.period)))
+  const normalizedSlices = slices.map((slice) => ({ ...slice, value: slice.value ?? 0 }))
+  const cultivated = normalizedSlices.filter((slice) => !slice.notGrown && (!allowedPeriods || allowedPeriods.includes(slice.period)))
   const { shares } = seasonalComposition(cultivated.map((slice) => slice.value))
-  const percent = (slice: SeasonalSlice) => {
+  const percent = (slice: typeof cultivated[number]) => {
     const index = cultivated.indexOf(slice)
     return shares && index >= 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(shares[index])} %` : null
   }
-  const tooltipPercent = (slice: SeasonalSlice) => {
+  const tooltipPercent = (slice: typeof cultivated[number]) => {
     const index = cultivated.indexOf(slice)
     return shares && index >= 0 ? `${new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(shares[index])} %` : null
   }
   const mobileNumber = mobileFormat ?? ((value: number) => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value))
-  const dataLabel = (slice: SeasonalSlice) => percent(slice)?.replace(/\s?%$/, '') ?? ''
-  const description = (slice: SeasonalSlice) => slice.value === 0 ? '' : `${slice.label}: ${slice.value === null ? slice.status : `${format(slice.value)} ${unit}`}${percent(slice) ? ` · ${percent(slice)}` : ''}`
-  const negative = slices.some((slice) => slice.value !== null && slice.value < 0)
-  const positive = slices.filter((slice) => slice.value !== null && slice.value > 0)
+  const dataLabel = (slice: typeof cultivated[number]) => percent(slice)?.replace(/\s?%$/, '') ?? ''
+  const description = (slice: typeof cultivated[number]) => `${slice.label}: ${format(slice.value)} ${unit}${percent(slice) ? ` · ${percent(slice)}` : ''}`
+  const negative = normalizedSlices.some((slice) => slice.value !== null && slice.value < 0)
+  const positive = normalizedSlices.filter((slice) => slice.value !== null && slice.value > 0)
   const drawable = shares !== null && !negative && positive.length > 0
-  const active = slices.find((slice) => slice.period === (hovered ?? (hoverPointer ? null : pinned)) && slice.value !== 0)
+  const active = normalizedSlices.find((slice) => slice.period === (hovered ?? (hoverPointer ? null : pinned)) && slice.value !== 0)
   function select(period: CropPeriod) {
     onSelect?.(period)
     if (!hoverPointer) {
@@ -105,7 +106,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   }, [hoverPointer, hovered, pointer, active?.period])
   return <figure className="seasonal-pie">
     <figcaption style={{ color }}>{name}</figcaption>
-    <div ref={canvasRef} className="seasonal-pie-canvas" role="group" tabIndex={0} aria-label={`${name}: ${slices.filter((slice) => slice.value !== 0).map(description).join('; ')}`} onMouseMove={(event) => {
+    <div ref={canvasRef} className="seasonal-pie-canvas" role="group" tabIndex={0} aria-label={`${name}: ${normalizedSlices.filter((slice) => slice.value !== 0).map(description).join('; ')}`} onMouseMove={(event) => {
       if (!hoverPointer) return
       setPointer({ x: event.clientX, y: event.clientY })
       const period = (event.target as Element).closest('[data-pie-period]')?.getAttribute('data-pie-period')
@@ -155,14 +156,14 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
       ))}
     </div>}
 
-    {negative && <p className="seasonal-pie-note">{vi ? 'Có giá trị âm, không thể hiện cơ cấu: ' : 'Negative values cannot be shown as shares: '}{slices.map(description).join('; ')}</p>}
-    {!negative && !drawable && <p className="seasonal-pie-note">{vi ? 'Không tính cơ cấu khi thiếu dữ liệu hoặc tổng bằng 0.' : 'Composition is unavailable with missing data or a zero total.'}</p>}
-    {drawable && slices.some(
+    {negative && <p className="seasonal-pie-note">{vi ? 'Có giá trị âm, không thể hiện cơ cấu: ' : 'Negative values cannot be shown as shares: '}{normalizedSlices.map(description).join('; ')}</p>}
+    {!negative && !drawable && <p className="seasonal-pie-note">{vi ? 'Không tính cơ cấu khi thiếu dữ liệu hoặc tổng bằng 0.' : 'Composition is unavailable with missing data or a zero total.'} {cultivated.map(description).join('; ')}</p>}
+    {drawable && normalizedSlices.some(
       (slice) => !slice.notGrown &&
         (slice.value === null || slice.value === 0)
     ) && (
       <p className="seasonal-pie-note">
-        {slices
+        {normalizedSlices
           .filter(
             (slice) => !slice.notGrown &&
               (slice.value === null || slice.value === 0)

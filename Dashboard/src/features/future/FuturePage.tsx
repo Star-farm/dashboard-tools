@@ -23,7 +23,7 @@ export default function FuturePage({ language }: { language: Language }) {
     <div className="future-page page-shell" id="future">
       <section className="intro future-intro" aria-labelledby="future-title">
         <div><h1 id="future-title">{t.title}</h1><PageDescription language={language} kind="future" /></div>
-        <span className="future-period">{startYear}<span aria-hidden="true">—</span>{endYear}</span>
+        <span className="future-period">{startYear}<span aria-hidden="true">-</span>{endYear}</span>
       </section>
 
       <section className="future-controls" aria-label={t.controls}>

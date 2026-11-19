@@ -149,7 +149,8 @@ for (const route of routes) {
     if (route === '#soil-map') {
       await page.getByRole('button', { name: 'Sử dụng đất' }).click()
       await expect(page.getByRole('complementary')).toContainText('Sử dụng đất')
-      await expect(page.locator('.plot-map-svg image')).toHaveCount(1)
+      await expect(page.locator('.soil-map-legend')).toBeVisible()
+      await expect(page.locator('.plot-map-svg image:not(.map-basemap-image)')).toHaveCount(1)
     }
     for (const width of viewports) {
       await page.setViewportSize({ width, height: width < 600 ? 844 : 900 })
@@ -172,7 +173,7 @@ for (const route of routes) {
       expect(dataRequests.some((url) => url.endsWith('/soil-overlay.json'))).toBe(false)
       await expect(page.getByRole('button', { name: 'Land use' })).toBeVisible()
       await page.getByRole('button', { name: 'Land use' }).click()
-      await expect(page.locator('.plot-map-svg image')).toHaveCount(1)
+      await expect(page.locator('.plot-map-svg image:not(.map-basemap-image)')).toHaveCount(1)
       await expect(page.getByRole('complementary')).toContainText('Land use')
       const categoryList = page.locator('.soil-chart .soil-chart-list-scroll')
       const visibleRows = await categoryList.locator('li').evaluateAll((items) => {

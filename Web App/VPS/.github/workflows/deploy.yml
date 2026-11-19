@@ -48,10 +48,10 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
 
     steps:
-      # No checkout/build step here — the build happens directly on the VPS
+      # No checkout/build step here - the build happens directly on the VPS
       # after pulling the latest code, so the image always reflects whatever
       # is on disk on the VPS at build time (including backend/data/Simulation_Data.csv
-      # if it's committed to the repo — see CI_CD_SETUP.md for the data-in-image caveat).
+      # if it's committed to the repo - see CI_CD_SETUP.md for the data-in-image caveat).
       - name: SSH into VPS and redeploy
         uses: appleboy/ssh-action@v1.0.3
         with:

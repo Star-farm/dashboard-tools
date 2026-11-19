@@ -28,7 +28,7 @@ export default function ConditionComparisonTooltip({ active, label, payload, yea
   )
   const value = (group: 'bau' | 'oneMha', condition: Bau3Condition) => {
     const amount = entries.get(`${group}_${condition}`)?.value
-    return amount == null || !Number.isFinite(Number(amount)) ? '—' : format(Number(amount))
+    return amount == null || !Number.isFinite(Number(amount)) ? '-' : format(Number(amount))
   }
 
   if (!conditions.length) return null

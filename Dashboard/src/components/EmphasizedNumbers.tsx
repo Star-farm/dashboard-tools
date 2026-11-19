@@ -1,4 +1,4 @@
-const numericParts = /(?<![\p{L}\p{N}])([+−-]?\d+(?:[.,]\d+)*(?:[–—]\d+(?:[.,]\d+)*)?(?:\s?%)?)(?![\p{L}\p{N}])/gu
+const numericParts = /(?<![\p{L}\p{N}])([+−-]?\d+(?:[.,]\d+)*(?:[–-]\d+(?:[.,]\d+)*)?(?:\s?%)?)(?![\p{L}\p{N}])/gu
 
 const modelNames = /1Mha|\bBAU(?:\s+(?:2|3)\s+(?:vụ|seasons)|\s+bền vững|\s+sustainable)?\b|Canh tác (?:như )?thường lệ(?: \d+ vụ)?|Business as usual(?: farming)?|Thường lệ/giu
 

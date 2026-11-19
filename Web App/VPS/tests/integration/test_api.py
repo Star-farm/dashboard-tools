@@ -317,7 +317,7 @@ def test_validate_metrics_empty_list_passes_validation(client):
         headers={"X-API-Key": "test-key-123"},
         json=compare_data
     )
-    # This asserts CURRENT behavior — validator lets it through.
+    # This asserts CURRENT behavior - validator lets it through.
     # If /api/compare is supposed to reject an empty metrics list,
     # that's a business-logic check missing downstream, not here.
     assert response.status_code != 422
@@ -325,7 +325,7 @@ def test_validate_metrics_empty_list_passes_validation(client):
 
 def test_kpi_change_validate_metrics_invalid_raises_422(client):
     # KpiChangeRequest.validate_metrics invalid branch (line 398-399)
-    # Distinct from CompareRequest.validate_metrics tested earlier —
+    # Distinct from CompareRequest.validate_metrics tested earlier -
     # same logic, different class/lines, so needs its own coverage.
     response = client.post(
         "/api/kpi-change",

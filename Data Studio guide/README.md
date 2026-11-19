@@ -31,10 +31,10 @@ The following features are **optional** and can be skipped completely when the d
 
 ### Software & Platforms
 
-- **Google Cloud Account** — Active account with billing enabled (BigQuery, Cloud Functions, Cloud Scheduler).
-- **Google Drive** — A dedicated folder for source spatial files.
-- **QGIS (v3.12 or later)** — Open-source GIS software for desktop data preparation.
-- **GAMA Platform** — *(Optional)* For advanced spatial simulation modeling.
+- **Google Cloud Account** - Active account with billing enabled (BigQuery, Cloud Functions, Cloud Scheduler).
+- **Google Drive** - A dedicated folder for source spatial files.
+- **QGIS (v3.12 or later)** - Open-source GIS software for desktop data preparation.
+- **GAMA Platform** - *(Optional)* For advanced spatial simulation modeling.
 
 ### Google Cloud APIs
 
@@ -64,8 +64,8 @@ If organizational policy requires an Asia region, verify every row above against
 
 ### Data Assets
 
-- **Base Spatial Boundary Dataset** — A CSV file with at least an `id` column and an `Area` column in Polygon format (WKT or GeoJSON). Keep the lowercase `id` name because the supplied SQL references it directly.
-- **Source Raster Files** — GeoTIFF maps representing regional metrics across time (e.g., `sowing_date.zip` or `cropping_intensity.zip` from [VietSco](https://www.vietsco.org/)).
+- **Base Spatial Boundary Dataset** - A CSV file with at least an `id` column and an `Area` column in Polygon format (WKT or GeoJSON). Keep the lowercase `id` name because the supplied SQL references it directly.
+- **Source Raster Files** - GeoTIFF maps representing regional metrics across time (e.g., `sowing_date.zip` or `cropping_intensity.zip` from [VietSco](https://www.vietsco.org/)).
 
 ---
 
@@ -75,12 +75,12 @@ If organizational policy requires an Asia region, verify every row above against
 
 ### Step 1: Desktop GIS Pre-processing (QGIS)
 
-1. **Extract and Load** — Unzip your source data files and drag the `.tif` layers into QGIS.
-2. **Reproject to WGS84 (EPSG:4326)** — Source `.tif` files are often in local coordinate systems (e.g., *WGS 84 / UTM*) that are incompatible with Google APIs.
+1. **Extract and Load** - Unzip your source data files and drag the `.tif` layers into QGIS.
+2. **Reproject to WGS84 (EPSG:4326)** - Source `.tif` files are often in local coordinate systems (e.g., *WGS 84 / UTM*) that are incompatible with Google APIs.
    - Navigate to **Raster > Projections > Warp (Reproject)**.
    - Set target CRS to **EPSG:4326 - WGS 84**.
-3. **Merge Files** *(Optional)* — If spatial regions are split into tiles, go to **Raster > Miscellaneous > Merge**. Keep individual files under **1.5 GB** for optimal cloud performance.
-4. **Convert to Cloud Optimized GeoTIFF (COG)** — Export using the **COG** profile. This allows cloud systems to stream specific pixel regions without downloading the entire file.
+3. **Merge Files** *(Optional)* - If spatial regions are split into tiles, go to **Raster > Miscellaneous > Merge**. Keep individual files under **1.5 GB** for optimal cloud performance.
+4. **Convert to Cloud Optimized GeoTIFF (COG)** - Export using the **COG** profile. This allows cloud systems to stream specific pixel regions without downloading the entire file.
 
 ---
 
@@ -186,10 +186,10 @@ Before uploading GAMA data to Google Sheets or BigQuery, use the desktop merge t
 
 Application files:
 
-- [`App/main.py`](App/main.py) — application entry point;
-- [`App/gui.py`](App/gui.py) — desktop interface;
-- [`App/processor.py`](App/processor.py) — merge and enrichment logic;
-- [`App/requirement.txt`](App/requirement.txt) — Python dependency list.
+- [`App/main.py`](App/main.py) - application entry point;
+- [`App/gui.py`](App/gui.py) - desktop interface;
+- [`App/processor.py`](App/processor.py) - merge and enrichment logic;
+- [`App/requirement.txt`](App/requirement.txt) - Python dependency list.
 
 The app automatically:
 
@@ -261,7 +261,7 @@ GAMA exports per-agent tabular data as CSV files with simulation metrics across 
 
 1. Open [Google Sheets](https://sheets.google.com) and create a new spreadsheet (e.g. `GAMA_Simulation_Output`).
 2. Go to **File > Import**, upload your `.csv` file, choose **Replace spreadsheet**, separator: **Comma**.
-3. If you have multiple simulation runs, append all rows into one sheet — use the `seed` column to identify each run and `datetime` to track timesteps.
+3. If you have multiple simulation runs, append all rows into one sheet - use the `seed` column to identify each run and `datetime` to track timesteps.
 
 ### Connect Google Sheets to Looker Studio
 
@@ -272,27 +272,27 @@ GAMA exports per-agent tabular data as CSV files with simulation metrics across 
 
 ## Required Step 3. Build KPI and Chart Panels in Looker Studio
 
-**Scorecards (KPIs)** — add a Scorecard chart for each key metric:
+**Scorecards (KPIs)** - add a Scorecard chart for each key metric:
 
 - **Average** `Emission Intensity` across all agents and timesteps.
 - **Average** `Water Usage`, `Fertilizer Usage`, `Pesticide Usage`.
 - **Average** `Biodiversity`, `Resilient Varieties`, `Water Reliability`, `AWD Adoption`.
-- **Max** `Flood Stress`, `Drought Stress`, `Salinity Stress` (binary flags — useful for seeing if any agent experienced stress).
+- **Max** `Flood Stress`, `Drought Stress`, `Salinity Stress` (binary flags - useful for seeing if any agent experienced stress).
 
 > Only configure metrics that exist in your exported schema. The sample table above contains `Fertilizer Usage`, `Water Usage`, `Flood Stress`, `Drought Stress`, `Biodiversity`, and `Emission Intensity`. Add the other fields to the GAMA export first, or omit their scorecards and filters.
 
-**Time Series Charts** — track metrics over the simulation period:
+**Time Series Charts** - track metrics over the simulation period:
 
 - X-axis → `datetime`
 - Metric → `Emission Intensity`, `Water Usage`, or `Biodiversity`
 - Breakdown dimension → `seed` (plots one line per simulation run for comparison)
 
-**Bar / Column Charts** — compare averages across agent groups or scenario seeds:
+**Bar / Column Charts** - compare averages across agent groups or scenario seeds:
 
 - Dimension → `seed` or `id`
 - Metrics → `Fertilizer Usage`, `Pesticide Usage`, `Water Usage`
 
-**Controls (Filters)** — add interactive controls to let viewers slice the data:
+**Controls (Filters)** - add interactive controls to let viewers slice the data:
 
 - **Date Range control** → `datetime`
 - **Drop-down list** → `seed` (switch between simulation runs / scenarios)
@@ -337,7 +337,7 @@ Once the cloud pipeline is running, the `datastudio_output` table populates with
    - **Geospatial field** → `Area` column (detected as BigQuery `GEOGRAPHY`).
    - **Tooltip** → `id` column.
    - **Color Metric** → `AverageValue` (shades polygons by raster-extracted value).
-3. Add a **Drop-down list control** with dimension `Index` — lets viewers switch between *Sowing Date* and *Cropping Intensity* layers.
+3. Add a **Drop-down list control** with dimension `Index` - lets viewers switch between *Sowing Date* and *Cropping Intensity* layers.
 4. Add a **Slider control** using `Year` to scrub through historical trends.
 
 > Looker Studio Google Maps has a polygon-vertex limit. If polygons are missing, increase **Max number of polygon vertices** in the chart style settings, apply filters, or simplify the geometry in BigQuery with `ST_SIMPLIFY`.
@@ -351,7 +351,7 @@ Add a second page and connect it to the GAMA Google Sheet (or BigQuery table if 
 1. Click **Add data** → **Google Sheets** (or **BigQuery** for Path B).
 2. Select your `GAMA_Simulation_Output` spreadsheet → **Add**.
 
-Then build Scorecards, Time Series charts, Bar charts, and Controls exactly as described in Section 3 — Step 3.
+Then build Scorecards, Time Series charts, Bar charts, and Controls exactly as described in Section 3 - Step 3.
 
 ---
 
@@ -363,11 +363,11 @@ While Looker Studio handles vector shapes well, rendering dense pixel-level rast
 
 ### Workflow Overview
 
-1. **Host COGs** — Store your processed GeoTIFF files on Google Earth Engine Cloud Assets.
-2. **Import into GEE** — Import the rasters as Earth Engine assets or reference storage objects using an access method supported by Earth Engine.
-3. **Set Permissions** — Grant only the access required by the deployed Earth Engine App. Do not make the source bucket public unless public data access is intentional.
-4. **Build the GEE App** — Deploy the visualization script as an official Earth Engine App.
-5. **Embed** — Paste the GEE App URL into a **URL Embed** widget inside Looker Studio.
+1. **Host COGs** - Store your processed GeoTIFF files on Google Earth Engine Cloud Assets.
+2. **Import into GEE** - Import the rasters as Earth Engine assets or reference storage objects using an access method supported by Earth Engine.
+3. **Set Permissions** - Grant only the access required by the deployed Earth Engine App. Do not make the source bucket public unless public data access is intentional.
+4. **Build the GEE App** - Deploy the visualization script as an official Earth Engine App.
+5. **Embed** - Paste the GEE App URL into a **URL Embed** widget inside Looker Studio.
 
 ### Step 1: Earth Engine Implementation Script
 
@@ -379,10 +379,10 @@ Open the [Google Earth Engine Code Editor](https://code.earthengine.google.com/)
 
 **Key features of the script:**
 
-- **Smooth crossfade** — When auto-playing, each year transition fades over 1.5 seconds using 20 opacity steps fired via `ui.util.setTimeout`.
-- **Instant snap** — Clicking a year button switches immediately without any fade delay.
-- **Play from current year** — Pressing Play starts from whichever year is currently displayed and runs to 2024, then stops. It only resets to 2018 if already at the last year.
-- **Polygon inspector** — Clicking any polygon displays the pixel value at the click point and the mean raster value across the whole polygon, batched in a single server round-trip.
+- **Smooth crossfade** - When auto-playing, each year transition fades over 1.5 seconds using 20 opacity steps fired via `ui.util.setTimeout`.
+- **Instant snap** - Clicking a year button switches immediately without any fade delay.
+- **Play from current year** - Pressing Play starts from whichever year is currently displayed and runs to 2024, then stops. It only resets to 2018 if already at the last year.
+- **Polygon inspector** - Clicking any polygon displays the pixel value at the click point and the mean raster value across the whole polygon, batched in a single server round-trip.
 
 ### Step 2: Deploy and Embed into Looker Studio
 

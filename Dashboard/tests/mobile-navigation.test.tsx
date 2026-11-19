@@ -56,7 +56,7 @@ describe('mobile header menu', () => {
     const dialog = screen.getByRole('dialog', { name: 'Menu chính' })
     expect(dialog).toContainElement(document.activeElement as HTMLElement)
     expect(within(dialog).getByRole('button', { name: 'Đóng menu' })).not.toHaveFocus()
-    expect(within(dialog).getByRole('link', { name: 'STAR FARM — Trang chủ' })).not.toHaveFocus()
+    expect(within(dialog).getByRole('link', { name: 'STAR FARM - Trang chủ' })).not.toHaveFocus()
     expect(document.body.style.overflow).toBe('hidden')
     expect(trigger).toHaveAttribute('aria-expanded', 'true')
     fireEvent.click(within(dialog).getByRole('button', { name: 'English' }))

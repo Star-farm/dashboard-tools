@@ -25,7 +25,7 @@ export default function PlotMapPopup({ plot, wardName, thematic = false, placeme
   const t = mapText[language]
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const money = new Intl.NumberFormat(language, { maximumFractionDigits: language === 'vi' ? 0 : 2 })
-  const format = (value: number | null | undefined) => value == null ? '—' : number.format(value)
+  const format = (value: number | null | undefined) => value == null ? '-' : number.format(value)
 
   useLayoutEffect(() => {
     const popup = popupRef.current
@@ -84,7 +84,7 @@ export default function PlotMapPopup({ plot, wardName, thematic = false, placeme
       <div><dt>{t.area}</dt><dd>{format(plot.areaHa)} <small>ha</small></dd></div>
       {!thematic && (metric === 'yield'
         ? <div><dt>{t.yield}</dt><dd>{format(yieldValue)} <small>{t.yieldUnit}</small></dd></div>
-        : <div><dt>{t.income}</dt><dd>{incomeValue == null ? '—' : money.format(incomeValue)} <small>{t.incomeUnit}</small></dd></div>)}
+        : <div><dt>{t.income}</dt><dd>{incomeValue == null ? '-' : money.format(incomeValue)} <small>{t.incomeUnit}</small></dd></div>)}
     </dl>
   </section>
 }

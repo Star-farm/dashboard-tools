@@ -364,7 +364,7 @@ describe('Dashboard Component UI', () => {
         const viBtn = screen.getByText('VI');
         fireEvent.click(viBtn);
 
-        expect(screen.queryByText(/— 0.0%/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/- 0.0%/i)).not.toBeInTheDocument();
         expect(screen.queryByText(/▲ 5.0%/i)).not.toBeInTheDocument();
         expect(screen.queryByText('Average Yield')).not.toBeInTheDocument();
         expect(screen.queryByText('Labour Intensity')).not.toBeInTheDocument();

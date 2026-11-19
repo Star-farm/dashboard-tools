@@ -8,6 +8,7 @@ import type { Language } from '../../i18n'
 import { CHART_TICK } from '../../components/chartStyles'
 import ChartInfo from '../../components/ChartInfo'
 import { lineAxisScale } from '../../utils/lineAxisScale'
+import { valueForChart } from '../../utils/chartMissingValue'
 import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import ChartSeriesLegend from '../../components/ChartSeriesLegend'
@@ -53,7 +54,7 @@ function DashboardContext({ scenarios, language, context }: { scenarios: MapScen
   return <section className="map-dashboard-context" aria-labelledby="map-context-title">
     <div className="map-section-heading"><h2 id="map-context-title">{t.reference}</h2><span>{t.referencePeriod}</span></div>
     <div className="map-context-values">{cards.map((card) => <article key={card.label}>
-      <h3>{card.label}</h3><p>{card.value == null ? '—' : (card.money ? money : number).format(card.value)} <span>{card.unit}</span></p>
+      <h3>{card.label}</h3><p>{card.value == null ? '-' : (card.money ? money : number).format(card.value)} <span>{card.unit}</span></p>
       <a href={mapDestination(card.href, context)}>{card.link}<span aria-hidden="true"> →</span></a>
     </article>)}</div>
   </section>
@@ -119,7 +120,7 @@ export default function MapPage({ language }: { language: Language }) {
   }, [displayData, metric, currencyCode, conversion.data])
 
   const trend = useMemo(() => displayData ? plotTrend(displayData, season, trendMetric, null) : [], [displayData, season, trendMetric])
-  const chartTrend = useMemo(() => trend.map((point) => ({ ...point, value: point.value === null ? null : point.value / (language === 'vi' && trendMetric === 'income' ? 1_000_000 : 1) })), [trend, language, trendMetric])
+  const chartTrend = useMemo(() => trend.map((point) => ({ ...point, value: valueForChart(point.value) / (language === 'vi' && trendMetric === 'income' ? 1_000_000 : 1) })), [trend, language, trendMetric])
   const trendScale = lineAxisScale(chartTrend.map((point) => point.value))
   const trendAxisNumber = distinctAxisFormatter(trendScale.ticks, language, trendMetric === 'income')
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
@@ -224,7 +225,7 @@ export default function MapPage({ language }: { language: Language }) {
             {loading && !hasError && <div className="map-loading-overlay" role="status">{t.loading}</div>}
           </div>
           <div className="map-legend" aria-label={`${t[metric]} (${unit})`}><div className="map-legend-title"><strong>{t[metric]}</strong><span>{unit}</span></div>
-            <div className="map-legend-steps">{colors.map((color, index) => <div key={color}><span style={{ background: color }} /><small title={breaks.length ? `${(metric === 'income' ? money : number).format(breaks[index])} – ${(metric === 'income' ? money : number).format(breaks[index + 1])}` : undefined}>{breaks.length ? `${legendNumber.format(breaks[index])} – ${legendNumber.format(breaks[index + 1])}` : '—'}</small></div>)}</div>
+            <div className="map-legend-steps">{colors.map((color, index) => <div key={color}><span style={{ background: color }} /><small title={breaks.length ? `${(metric === 'income' ? money : number).format(breaks[index])} – ${(metric === 'income' ? money : number).format(breaks[index + 1])}` : undefined}>{breaks.length ? `${legendNumber.format(breaks[index])} – ${legendNumber.format(breaks[index + 1])}` : '-'}</small></div>)}</div>
             <p>{t.legendNote}</p>
           </div>
           <p className="map-interaction-help" id="map-interaction-help">{t.instructions}</p>
@@ -294,7 +295,7 @@ export default function MapPage({ language }: { language: Language }) {
       </ResponsiveContainer>
       </div>}
       {!loading && <ChartSeriesLegend language={language} items={[{ key: trendMetric, label: t[trendMetric], color: '#254f3d' }]} />}
-      <details className="map-trend-table"><summary>{t.showTable} · 2027–2050</summary><div className="map-data-table-scroll"><table><thead><tr><th>{t.year}</th><th>{t[trendMetric]} ({trendUnit})</th></tr></thead><tbody>{trend.map((point) => <tr key={point.year}><td>{point.year}</td><td>{point.value == null ? '—' : trendNumber.format(point.value)}</td></tr>)}</tbody></table></div></details>
+      <details className="map-trend-table"><summary>{t.showTable} · 2027–2050</summary><div className="map-data-table-scroll"><table><thead><tr><th>{t.year}</th><th>{t[trendMetric]} ({trendUnit})</th></tr></thead><tbody>{trend.map((point) => <tr key={point.year}><td>{point.year}</td><td>{point.value == null ? '-' : trendNumber.format(point.value)}</td></tr>)}</tbody></table></div></details>
     </section>
     {scenarios.length > 0 && <DashboardContext scenarios={scenarios} language={language} context={{ filters, year, harvest: season, codes: scenarios.map((scenario) => scenario.code) }} />}
 

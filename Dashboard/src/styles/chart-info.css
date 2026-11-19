@@ -8,6 +8,7 @@
 .chart-info-swatch { display: none; }
 .chart-info-swatch--square { border-radius: 0; }
 .chart-info dd { margin: 2px 0 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.chart-info-unit { margin-left: 4px; color: var(--muted); font-size: .85em; font-weight: 400; }
 .chart-info-condition-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: inherit; }
 .chart-info-condition-table th, .chart-info-condition-table td { padding: 2px 3px; border-top: 1px solid #dce3d5; vertical-align: middle; }
 .chart-info-condition-table thead th { color: #40533b; font-size: .9em; text-align: right; }

@@ -36,25 +36,25 @@ describe('environmental overview and comparison', () => {
     expect(screen.getAllByRole('article')).toHaveLength(8)
   })
 
-  it('shows two bar comparisons with summary and individual findings, and updates values with both filters', async () => {
+  it('shows two bar comparisons with a summary and updates values with both filters', async () => {
     const { rerender } = render(<EnvironmentPage page="environmentComparison" language="vi" />)
     await screen.findAllByRole('article')
     expect(screen.getAllByRole('article')).toHaveLength(2)
-    expect(screen.getAllByRole('complementary')).toHaveLength(3)
+    expect(screen.getAllByRole('complementary')).toHaveLength(1)
     const summary = screen.getByRole('complementary', { name: 'Nhận xét tổng hợp' })
     expect(summary).toHaveTextContent('AWD')
     expect(summary.compareDocumentPosition(screen.getAllByRole('article')[0]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const before = screen.getAllByRole('article')[1].querySelector('.comparison-values')!.textContent
-    fireEvent.click(screen.getByRole('button', { name: 'Khắc nghiệt' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Khan hiếm tài nguyên' }))
+    fireEvent.change(screen.getByRole('combobox', { name: 'Thời tiết' }), { target: { value: 'severe' } })
+    fireEvent.change(screen.getByRole('combobox', { name: 'Tài nguyên' }), { target: { value: 'shortage' } })
     const chart = screen.getAllByRole('article')[1]
     expect(chart.querySelector('.comparison-values')!.textContent).not.toBe(before)
     const expected = environmentStats(data.series.filter((series) => series.family === 'oneMha' && series.condition === 'severeShortage'), 'methane').mean!
     expect(chart.querySelector('.comparison-values')).toHaveTextContent(environmentNumber(expected, 'vi'))
     rerender(<EnvironmentPage page="environmentComparison" language="en" />)
-    expect(screen.getByRole('button', { name: 'Severe weather' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('combobox', { name: 'Weather' })).toHaveValue('severe')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
-    expect(screen.getByRole('button', { name: 'All weather conditions' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('combobox', { name: 'Weather' })).toHaveValue('all')
   })
 })
 

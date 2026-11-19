@@ -124,6 +124,8 @@
   padding: 24px 0 30px;
   gap: 16px;
 }
+.map-filter-reset { min-height: 46px; padding: 8px 0; margin-left: auto; border: 0; color: var(--green); background: transparent; font-size: var(--text-body); white-space: nowrap; }
+.map-filter-reset:hover { text-decoration: underline; text-underline-offset: 4px; }
 .map-page h2.map-filter-title {
   margin: 0;
   color: var(--green);

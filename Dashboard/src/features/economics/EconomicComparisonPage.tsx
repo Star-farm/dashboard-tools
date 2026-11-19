@@ -21,6 +21,7 @@ export default function EconomicComparisonPage({ language }: { language: Languag
   const [climate, setClimate] = useState<ComparisonClimate>('all')
   const [resource, setResource] = useState<ComparisonResource>('all')
   const cohort = selectComparisonCohort(comparison, climate, resource)
+  const axisCohort = selectComparisonCohort(comparison, 'all', 'all')!
 
   useEffect(() => {
     document.getElementById('economics-comparison')?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
@@ -32,13 +33,17 @@ export default function EconomicComparisonPage({ language }: { language: Languag
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison' }}>
       <section className="comparison-filters" aria-label={text.filters}>
         <h2 className="filter-group-title">{language === 'vi' ? 'Bộ lọc điều kiện' : 'Condition filters'}</h2>
-        <fieldset><legend>{t.climate}</legend><div className="comparison-segmented">{(['all', 'severe', 'mild'] as const).map((option) => <button key={option} type="button" title={`${t.climate}: ${option === 'all' ? t.all : t[option]}`} aria-pressed={climate === option} aria-label={option === 'all' ? text.allWeather : undefined} onClick={() => setClimate(option)}>{option === 'all' ? t.all : t[option]}</button>)}</div></fieldset>
-        <fieldset><legend>{t.resource}</legend><div className="comparison-segmented">{(['all', 'shortage', 'normal'] as const).map((option) => <button key={option} type="button" title={`${t.resource}: ${option === 'all' ? t.all : option === 'normal' ? text.normalResource : t.shortage}`} aria-pressed={resource === option} aria-label={option === 'all' ? text.allResources : undefined} onClick={() => setResource(option)}>{option === 'all' ? t.all : option === 'normal' ? text.normalResource : t.shortage}</button>)}</div></fieldset>
+        <fieldset><legend>{t.climate}</legend><select className="comparison-select" aria-label={t.climate} value={climate} onChange={(event) => setClimate(event.target.value as ComparisonClimate)}>
+          <option value="all">{t.all}</option><option value="severe">{t.severe}</option><option value="mild">{t.mild}</option>
+        </select></fieldset>
+        <fieldset><legend>{t.resource}</legend><select className="comparison-select" aria-label={t.resource} value={resource} onChange={(event) => setResource(event.target.value as ComparisonResource)}>
+          <option value="all">{t.all}</option><option value="shortage">{t.shortage}</option><option value="normal">{text.normalResource}</option>
+        </select></fieldset>
         {(climate !== 'all' || resource !== 'all') && <button title={text.reset} className="comparison-reset" type="button" onClick={() => { setClimate('all'); setResource('all') }}>{text.reset}<span aria-hidden="true"> ↺</span></button>}
       </section>
       <p className="sr-only" role="status">{t.climate}: {climate === 'all' ? t.all : t[climate]}. {t.resource}: {resource === 'all' ? t.all : resource === 'normal' ? text.normalResource : t.shortage}.</p>
       {cohort && <aside className="comparison-summary" aria-labelledby="comparison-summary-title"><h2 id="comparison-summary-title">{text.summary}</h2><p><EmphasizedNumbers text={comparisonSummary(cohort, language, comparison.startYear, comparison.endYear)} /></p></aside>}
-      {cohort ? <div className="comparison-grid">{comparisonMetrics.map((metric) => <ComparisonBarChart key={metric} metric={metric} cohort={cohort} language={language} startYear={comparison.startYear} endYear={comparison.endYear} />)}</div> : <p className="comparison-no-data">{text.noData}</p>}
+      {cohort ? <div className="comparison-grid">{comparisonMetrics.map((metric) => <ComparisonBarChart key={metric} metric={metric} cohort={cohort} axisCohort={axisCohort} language={language} startYear={comparison.startYear} endYear={comparison.endYear} />)}</div> : <p className="comparison-no-data">{text.noData}</p>}
       </AnalysisView>
     </div>
   )

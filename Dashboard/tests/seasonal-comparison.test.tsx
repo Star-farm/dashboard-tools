@@ -92,6 +92,10 @@ describe('seasonal data for all topics and farming systems', () => {
 describe('seasonal interface', () => {
   it('localizes the shared crop legend immediately when the language changes', () => {
     const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
+    const modelLegendVi = screen.getAllByRole('group', { name: 'Chú giải' })[0]
+    expect(modelLegendVi).toHaveTextContent('BAU 3 vụ')
+    expect(modelLegendVi).toHaveTextContent('1Mha')
+    expect(screen.queryByRole('button', { name: 'Cả hai mô hình' })).not.toBeInTheDocument()
     const vietnameseLegend = screen.getAllByRole('group', { name: 'Chú giải màu sắc mùa vụ' })[0]
     expect(vietnameseLegend).toHaveTextContent('Đông-Xuân')
     expect(vietnameseLegend).toHaveTextContent('Xuân-Hè')
@@ -99,6 +103,10 @@ describe('seasonal interface', () => {
     expect(vietnameseLegend).not.toHaveTextContent('early')
 
     rerender(<SeasonalComparison language="en" data={data} config={config} />)
+    const modelLegendEn = screen.getAllByRole('group', { name: 'Legend' })[0]
+    expect(modelLegendEn).toHaveTextContent('BAU 3 seasons')
+    expect(modelLegendEn).toHaveTextContent('1Mha')
+    expect(screen.queryByRole('button', { name: 'Both models' })).not.toBeInTheDocument()
     const englishLegend = screen.getAllByRole('group', { name: 'Season color legend' })[0]
     expect(englishLegend).toHaveTextContent('Winter–Spring')
     expect(englishLegend).toHaveTextContent('Spring–Summer')

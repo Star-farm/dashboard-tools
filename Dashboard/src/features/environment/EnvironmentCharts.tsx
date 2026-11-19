@@ -26,14 +26,17 @@ function EnvironmentBars({ language }: { language: Language }) {
   return <>
     <section className="comparison-filters" aria-label={t.filters}>
         <h2 className="filter-group-title">{language === 'vi' ? 'Bộ lọc điều kiện' : 'Condition filters'}</h2>
-      <fieldset><legend>{labels.climate}</legend><div className="comparison-segmented">{['all', 'severe', 'mild'].map((value) => <button type="button" key={value} title={`${labels.climate}: ${value === 'all' ? labels.all : labels[value as 'severe' | 'mild']}`} aria-pressed={climate === value} aria-label={value === 'all' ? t.allWeather : undefined} onClick={() => setClimate(value)}>{value === 'all' ? labels.all : labels[value as 'severe' | 'mild']}</button>)}</div></fieldset>
-      <fieldset><legend>{labels.resource}</legend><div className="comparison-segmented">{['all', 'shortage', 'normal'].map((value) => <button type="button" key={value} title={`${labels.resource}: ${value === 'all' ? labels.all : value === 'normal' ? t.normal : labels.shortage}`} aria-pressed={resource === value} aria-label={value === 'all' ? t.allResources : undefined} onClick={() => setResource(value)}>{value === 'all' ? labels.all : value === 'normal' ? t.normal : labels.shortage}</button>)}</div></fieldset>
+      <fieldset><legend>{labels.climate}</legend><select className="comparison-select" aria-label={labels.climate} value={climate} onChange={(event) => setClimate(event.target.value)}>
+        <option value="all">{labels.all}</option><option value="severe">{labels.severe}</option><option value="mild">{labels.mild}</option>
+      </select></fieldset>
+      <fieldset><legend>{labels.resource}</legend><select className="comparison-select" aria-label={labels.resource} value={resource} onChange={(event) => setResource(event.target.value)}>
+        <option value="all">{labels.all}</option><option value="shortage">{labels.shortage}</option><option value="normal">{t.normal}</option>
+      </select></fieldset>
       {(climate !== 'all' || resource !== 'all') && <button type="button" title={labels.reset} className="comparison-reset" onClick={() => { setClimate('all'); setResource('all') }}>{labels.reset}<span aria-hidden="true"> ↺</span></button>}
     </section>
     <div aria-live="polite"><Insight label={t.summary} text={environmentSummary(data, series, language, undefined, true)} summary /></div>
     <div className="farming-chart-grid environment-bar-grid">{environmentMetrics.map((metric) => <section className="farming-chart-section" key={metric} aria-labelledby={`environment-bar-${metric}-title`}>
       <EnvironmentBarChart data={data} series={series} metric={metric} language={language} />
-      <Insight label={`${t.insight} · ${t[metric]}`} text={environmentComparisonInsight(data, series, metric, language)} />
     </section>)}</div>
   </>
 }

@@ -3,7 +3,7 @@ import { scenarioMetricLabels, scenarioText } from '../scenarios/scenarioText'
 import { scenarioMetrics } from '../scenarios/scenarioTypes'
 import type { SeasonalMetric } from './seasonalData'
 
-export const seasonalLabel = (metric: SeasonalMetric, language: Language) => metric === 'awd' ? scenarioText[language].awd : scenarioMetricLabels[language][metric]
+export const seasonalLabel = (metric: SeasonalMetric, language: Language) => metric === 'awd' ? scenarioText[language].awd : metric === 'fertilizer' && language === 'vi' ? 'Sử dụng phân bón' : scenarioMetricLabels[language][metric]
 export function seasonalUnit(metric: SeasonalMetric, language: Language) {
   const kind = metric === 'awd' ? 'percentage' : scenarioMetrics.find((item) => item.id === metric)!.kind
   return kind === 'money' ? language === 'vi' ? 'VNĐ/ha' : 'USD/ha' : kind === 'percentage' ? '%' : scenarioText[language][`${kind}Unit`]

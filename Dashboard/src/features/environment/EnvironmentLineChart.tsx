@@ -62,7 +62,7 @@ export default function EnvironmentLineChart({
     family,
     metric
   )
-  const yScale = lineAxisScale(points.flatMap((point) => visibleConditions.map((condition) => point[condition])))
+  const yScale = lineAxisScale(points.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
   const axisNumber = distinctAxisFormatter(yScale.ticks, language)
 
   const unit = environmentUnit(metric, language)

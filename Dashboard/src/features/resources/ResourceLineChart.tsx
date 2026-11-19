@@ -14,13 +14,14 @@ import { resourceLinePoints, resourceNumber, resourceUnit } from './resourceAnal
 import { resourceText } from './resourceText'
 import ConditionFilters, { ConditionLegend } from '../../components/ConditionFilters'
 import { useConditionFilters } from '../../components/useConditionFilters'
+import { bau3Conditions } from '../economics/bau3Types'
 
 export default function ResourceLineChart({ data, family, metric, language, title }: { data: ResourceData; family: Bau3Family; metric: ResourceMetric; domain: [number, number]; language: Language; title?: string }) {
   const [width, setWidth] = useState(620)
   const filters = useConditionFilters()
   const visibleConditions = filters.visible
   const t = resourceText[language], labels = bau3Text[language], points = resourceLinePoints(data, family, metric), unit = resourceUnit(metric, language)
-  const yScale = lineAxisScale(points.flatMap((point) => visibleConditions.map((condition) => point[condition])))
+  const yScale = lineAxisScale(points.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
   const axisNumber = distinctAxisFormatter(yScale.ticks, language)
   const hasData = points.some((point) => visibleConditions.some((condition) => point[condition] != null))
   return <article className={`bau3-chart bau3-chart-${family}`} aria-labelledby={`resource-${metric}-${family}-title`}>

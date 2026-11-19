@@ -49,7 +49,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
         </div>
       </div>
       <AnalysisView language={language} config={{ topic: 'all', kind: 'family', family: ({ threeSeasons: 'bau3s', twoSeasons: 'bau2s', sustainable: 'bauss', oneMha: 'oneMha' } as const)[selected.family], scenarioCode: selected.code }}>
-      <aside className="scenario-summary" aria-label={t.summary} aria-live="polite"><p>{scenarioSummaryParts(current.values, baseline.values, language).map((part, index) => part.tone ? <strong key={index} className={`scenario-change ${part.tone}`} data-metric={part.metric}>{part.text}</strong> : <EmphasizedNumbers key={index} text={part.text} />)}</p></aside>
+      <aside className="scenario-summary" aria-labelledby="scenario-summary-title" aria-live="polite"><h2 id="scenario-summary-title">{language === 'vi' ? 'Nhận xét tổng hợp' : 'Overall assessment'}</h2><p>{scenarioSummaryParts(current.values, baseline.values, language).map((part, index) => part.tone ? <strong key={index} className={`scenario-change ${part.tone}`} data-metric={part.metric}>{part.text}</strong> : <EmphasizedNumbers key={index} text={part.text} />)}</p></aside>
       {sections.map((section, index) => (
         <section className="scenario-section" id={`scenario-${section.id}`} aria-labelledby={`scenario-${section.id}-title`} key={section.id}>
           <h2 id={`scenario-${section.id}-title`}><span>{index + 1}.</span> {t[section.id]}</h2>

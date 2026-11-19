@@ -70,11 +70,11 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   }
   const mobileNumber = mobileFormat ?? ((value: number) => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value))
   const dataLabel = (slice: SeasonalSlice) => percent(slice)?.replace(/\s?%$/, '') ?? ''
-  const description = (slice: SeasonalSlice) => `${slice.label}: ${slice.value === null ? slice.status : `${format(slice.value)} ${unit}`}${percent(slice) ? ` · ${percent(slice)}` : ''}`
+  const description = (slice: SeasonalSlice) => slice.value === 0 ? '' : `${slice.label}: ${slice.value === null ? slice.status : `${format(slice.value)} ${unit}`}${percent(slice) ? ` · ${percent(slice)}` : ''}`
   const negative = slices.some((slice) => slice.value !== null && slice.value < 0)
   const positive = slices.filter((slice) => slice.value !== null && slice.value > 0)
   const drawable = shares !== null && !negative && positive.length > 0
-  const active = slices.find((slice) => slice.period === (hovered ?? (hoverPointer ? null : pinned)))
+  const active = slices.find((slice) => slice.period === (hovered ?? (hoverPointer ? null : pinned)) && slice.value !== 0)
   function select(period: CropPeriod) {
     onSelect?.(period)
     if (!hoverPointer) {
@@ -104,7 +104,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   }, [hoverPointer, hovered, pointer, active?.period])
   return <figure className="seasonal-pie">
     <figcaption style={{ color }}>{name}</figcaption>
-    <div ref={canvasRef} className="seasonal-pie-canvas" role="group" tabIndex={0} aria-label={`${name}: ${slices.map(description).join('; ')}`} onMouseMove={(event) => {
+    <div ref={canvasRef} className="seasonal-pie-canvas" role="group" tabIndex={0} aria-label={`${name}: ${slices.filter((slice) => slice.value !== 0).map(description).join('; ')}`} onMouseMove={(event) => {
       if (!hoverPointer) return
       setPointer({ x: event.clientX, y: event.clientY })
       const period = (event.target as Element).closest('[data-pie-period]')?.getAttribute('data-pie-period')
@@ -131,26 +131,26 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
     </div>
     {active && <div ref={tooltipRef} className={`chart-info seasonal-pie-tooltip${hoverPointer && hovered && pointer ? ' seasonal-pie-tooltip--pointer' : ''}`} style={hoverPointer && hovered && pointer ? { left: tooltipPosition?.left ?? pointer.x + 14, top: tooltipPosition?.top ?? pointer.y + 14 } : undefined} role="status"><p className="chart-info-title"><span className="seasonal-pie-tooltip-desktop-name">{active.label}</span><span className="seasonal-pie-tooltip-mobile-name">{name.replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')} · {active.label}</span></p><dl><div><dt><span className="chart-info-swatch" style={{ backgroundColor: cropColors[active.period] }} aria-hidden="true" /><span>{active.value === null ? active.status : <><span className="seasonal-pie-tooltip-desktop-value">{format(active.value)}</span><span className="seasonal-pie-tooltip-mobile-value">{mobileNumber(active.value)}</span> <span className="seasonal-pie-tooltip-unit">{unit}</span></>}{tooltipPercent(active) && <><span className="seasonal-pie-tooltip-desktop-percent"> · {tooltipPercent(active)}</span><span className="seasonal-pie-tooltip-mobile-percent"> · {tooltipPercent(active)}</span></>}</span></dt></div></dl></div>}
 
-    {showLegend && <p className="chart-legend-caption seasonal-pie-legend-caption">{vi ? 'Chú giải' : 'Legend'}</p>}
     {showLegend && <div
-      className="seasonal-pie-legend"
+      className="seasonal-model-legend seasonal-pie-shared-legend"
       role="group"
-      aria-label={vi ? 'Chú thích mùa vụ' : 'Season legend'}
+      aria-label={vi ? 'Chú giải mùa vụ' : 'Season legend'}
     >
+      <p className="chart-legend-label">{vi ? 'Chú giải' : 'Legend'}</p>
       {slices.map((slice) => (
-        <div
-          key={slice.period}
-          className="seasonal-pie-legend-item"
-        >
+        <span key={slice.period} className="seasonal-model-legend-item seasonal-pie-shared-legend-item">
           <span
-            className="seasonal-pie-legend-color"
+            className="seasonal-model-legend-swatch"
             style={{
               backgroundColor: cropColors[slice.period],
+              width: 12,
+              height: 12,
+              borderRadius: 3,
             }}
             aria-hidden="true"
           />
           <span>{slice.label}</span>
-        </div>
+        </span>
       ))}
     </div>}
 

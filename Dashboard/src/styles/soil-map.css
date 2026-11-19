@@ -6,7 +6,7 @@
 .soil-chart p { margin: 8px 0; font-size: var(--text-small); line-height: 1.6; color: var(--muted); }
 .soil-chart-figure { height: 200px; flex: 0 0 200px; }
 .soil-chart ul { list-style: none; margin: 0; padding: 0; }
-.soil-chart .soil-chart-list-scroll { max-height: 250px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.soil-chart .soil-chart-list-scroll { display: block; flex: 0 0 auto; min-height: 120px; max-height: 250px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 .soil-chart .soil-chart-list-scroll li { display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: start; }
 .soil-chart .soil-chart-list-scroll li > span { min-width: 0; align-items: flex-start; }
 .soil-chart .soil-chart-list-scroll li .soil-chart-category-name { display: block; min-width: 0; overflow: visible; overflow-wrap: anywhere; white-space: normal; }

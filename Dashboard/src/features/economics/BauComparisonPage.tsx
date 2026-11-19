@@ -19,6 +19,10 @@ export default function BauComparisonPage({ language, data }: { language: Langua
   const title = { bau3s: t.title, bau2s: t.bau2Title, bauss: t.baussTitle }[variant]
   const currency = language === 'vi' ? 'VND' : 'USD'
   const baselineLabel = { bau3s: t.bau3Short, bau2s: t.bau2Short, bauss: t.baussShort }[variant]
+  const comparisonDetails = bau3Metrics.map((metric) => analyzeBau3(data, metric, language)?.comparison.replace(/^(?:Trong|Over) [^,]+, /, '').replace(/\.$/, '')).filter(Boolean)
+  const summary = language === 'vi'
+    ? `Giai đoạn ${data.startYear}–${data.endYear}: ${comparisonDetails.join('; ')}.`
+    : `From ${data.startYear} to ${data.endYear}: ${comparisonDetails.join('; ')}.`
   useEffect(() => {
     document.getElementById(anchor)?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [anchor])
@@ -26,6 +30,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
     <div className="bau3-page page-shell" id={anchor}>
       <section className="intro bau3-intro" aria-labelledby="bau-comparison-title"><h1 id="bau-comparison-title">{title}</h1><PageDescription language={language} kind="pair" topic="economics" /><span>{data.startYear}–{data.endYear}</span></section>
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison', family: variant }}>
+      <aside className="bau3-insight bau3-comparison-summary" aria-labelledby="bau-comparison-summary-title"><h3 id="bau-comparison-summary-title">{language === 'vi' ? 'Nhận xét tổng hợp' : 'Overall assessment'}</h3><p><EmphasizedNumbers text={summary || t.noData} /></p></aside>
       <div className="bau3-sections">{bau3Metrics.map((metric) => {
         const domain = bau3Domain(data, metric, currency)
         const analysis = analyzeBau3(data, metric, language)

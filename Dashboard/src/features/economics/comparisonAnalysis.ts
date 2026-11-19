@@ -23,17 +23,17 @@ export function comparisonSummary(cohort: ComparisonCohort, language: Language, 
   if (Object.values(one).every((value) => value === null) || Object.values(bau).every((value) => value === null)) return comparisonText[language].noData
   const period = `${startYear} - ${endYear}`
   const introduction = language === 'vi'
-    ? `Trong giai đoạn ${period}, với lựa chọn thời tiết và tài nguyên hiện tại, `
-    : `For ${period}, under the selected weather and resource conditions, `
+    ? `Giai đoạn ${period}, với điều kiện thời tiết và tài nguyên đã chọn, so sánh 1Mha với thường lệ: `
+    : `Period ${period}, under the selected weather and resource conditions, comparing 1Mha with business as usual: `
   const income = one.income === null || bau.income === null
-    ? language === 'vi' ? 'chưa đủ dữ liệu đối chiếu thu nhập ròng của hai nhóm.' : 'there is insufficient data to compare net income between the groups.'
+    ? language === 'vi' ? 'thu nhập ròng: chưa đủ dữ liệu đối chiếu.' : 'net income: insufficient comparison data.'
     : language === 'vi'
-      ? `thu nhập ròng bình quân của 1Mha là ${number(one.income, true)} ${t.moneyUnit}, so với ${number(bau.income, true)} ${t.moneyUnit} của thường lệ (${describe('income')}).`
-      : `average net income under 1Mha is ${number(one.income, true)} ${t.moneyUnit}, compared with ${number(bau.income, true)} ${t.moneyUnit} under business as usual (${describe('income')}).`
+      ? `thu nhập ròng bình quân: ${number(one.income, true)} so với ${number(bau.income, true)} ${t.moneyUnit} (${describe('income')})`
+      : `average net income: ${number(one.income, true)} compared with ${number(bau.income, true)} ${t.moneyUnit} (${describe('income')})`
   const details = (['cost', 'straw', 'yield', 'labor'] as const).map(describe)
   const comparisons = language === 'vi'
-    ? `Các chỉ số còn lại của 1Mha so với thường lệ: ${details.slice(0, -1).join(', ')} và ${details.at(-1)}.`
-    : `Compared with business as usual, ${details.slice(0, -1).join(', ')}, and ${details.at(-1)} under 1Mha.`
+    ? `Các chỉ số khác: ${details.join('; ')}.`
+    : `Other indicators: ${details.join('; ')}.`
   const needs: string[] = []
   if ((difference('cost') ?? 0) > .000001) needs.push(language === 'vi' ? 'chuẩn bị vốn sản xuất' : 'plan production financing')
   if ((difference('labor') ?? 0) > .000001) needs.push(language === 'vi' ? 'bố trí nhân công' : 'provide sufficient labor')

@@ -8,6 +8,7 @@ import { yearTicks } from '../../utils/yearTicks'
 import { lineAxisScale } from '../../utils/lineAxisScale'
 import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import type { Bau3Data, Bau3Family, Bau3Metric } from './bau3Types'
+import { bau3Conditions } from './bau3Types'
 import { bau3ChartUnit, selectBau3Points } from './bau3Analysis'
 import { bau3Text } from './bau3Text'
 import ConditionFilters, { ConditionLegend } from '../../components/ConditionFilters'
@@ -27,7 +28,7 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
   const t = bau3Text[language]
   const currency = language === 'vi' ? 'VND' : 'USD'
   const points = selectBau3Points(data, family, metric, currency)
-  const yScale = lineAxisScale(points.flatMap((point) => filters.visible.map((condition) => point[condition])))
+  const yScale = lineAxisScale(points.flatMap((point) => bau3Conditions.map((condition) => point[condition])))
   const unit = bau3ChartUnit(metric, language)
   const axisNumber = distinctAxisFormatter(yScale.ticks, language, true)
   const ticks = yearTicks(data.startYear, data.endYear, chartWidth, 88)

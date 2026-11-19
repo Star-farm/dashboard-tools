@@ -1,27 +1,22 @@
 .economic-comparison-page { padding-bottom: 64px; }
 .comparison-filters { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 20px 48px; padding: 24px 0; border-block: 1px solid var(--line); }
-.comparison-filters fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+.comparison-filters fieldset { min-width: min(100%, 240px); border: 0; padding: 0; margin: 0; }
 .comparison-filters legend { color: var(--green); font-size: var(--text-body); font-weight: 700; margin-bottom: 11px; padding: 0; }
-.comparison-segmented { display: inline-flex; flex-wrap: wrap; gap: 8px; padding: 0; border: 0; background: transparent; }
-.comparison-segmented button { min-height: 40px; padding: 7px 14px; border: 1px solid #bdc9b4; border-radius: 4px; color: #4c6144; background: transparent; font-size: var(--text-body); line-height: 1.4; transition: border-color .18s ease, background-color .18s ease; }
-.comparison-segmented button:hover, .comparison-segmented button:focus-visible { border-color: var(--green); background: #f1f4e9; color: var(--forest); }
-.comparison-segmented button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
-.comparison-segmented button[aria-pressed="true"] { border-color: var(--green); color: var(--forest); background: #edf1e4; }
+.comparison-select { width: 100%; min-height: 48px; padding: 8px 42px 8px 14px; border: 1px solid #bdc9b4; border-radius: 4px; color: #254f3d; background-color: #fffefa; font: inherit; font-size: var(--text-body); line-height: 1.4; cursor: pointer; }
+.comparison-select:hover, .comparison-select:focus-visible { border-color: var(--green); background-color: #f1f4e9; }
+.comparison-select:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .comparison-reset { min-height: 46px; padding: 8px 0; margin-left: auto; border: 0; color: var(--green); background: transparent; font-size: var(--text-body); text-underline-offset: 4px; }
 .comparison-reset:hover { text-decoration: underline; }
 .comparison-summary { margin-top: 32px; padding: 22px 25px; border-left: 3px solid #9caa70; background: #edf1e4; }
-.comparison-summary h2 { margin: 0 0 10px; color: #526447; font-size: var(--text-body); font-weight: 700; line-height: 1.5; }
+.comparison-summary h2 { margin: 0 0 12px; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; }
 .comparison-summary p { margin: 0; color: #485d3e; font-size: 18px; line-height: 1.8; }
 .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
-.comparison-chart-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid #cddbc4; border-radius: 9px; background: #fffefa; }
+.comparison-chart-card { display: flex; flex-direction: column; min-width: 0; container-type: inline-size; border: 1px solid #cddbc4; border-radius: 9px; background: #fffefa; }
 .comparison-chart-card > .comparison-plot { order: 2; }
 .comparison-chart-card > .interactive-chart-legend { order: 3; }
 .comparison-chart-card > .comparison-values { order: 4; }
 .comparison-chart-card > header { padding: 22px 24px 18px; border-bottom: 1px solid #e4eadc; }
-.comparison-chart-card h2 { margin: 0; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; letter-spacing: normal; }
-.comparison-chart-card > header p { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px; margin: 10px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.5; }
-.comparison-chart-card > header p > span { margin-left: auto; padding-left: 10px; }
-.comparison-chart-card > header strong { color: #455d3b; font-weight: 600; }
+.comparison-chart-card h2 { margin: 0; color: #30472d; font-size: clamp(9px, 3.1cqi, var(--section-title-size)); font-weight: 600; line-height: 1.4; letter-spacing: normal; white-space: nowrap; }
 .comparison-plot { width: 100%; height: 290px; padding: 12px 12px 0 0; }
 .comparison-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 17px 24px 20px; margin: 0; border-top: 1px solid #e4eadc; background: #f4f6ee; border-radius: 0 0 9px 9px; }
 .comparison-values > div { min-width: 0; }
@@ -33,19 +28,17 @@
 .comparison-values dd > strong { color: var(--forest); font-size: calc(20px + 1px); font-weight: 600; }
 .comparison-values dd > span { color: var(--muted); font-size: var(--text-small); }
 .comparison-no-data { padding: 40px 24px; color: var(--muted); font-size: var(--text-body); }
-@media (max-width: 1000px) { .comparison-filters { gap: 18px 24px; } .comparison-segmented button { padding-inline: 12px; } }
+@media (max-width: 1000px) { .comparison-filters { gap: 18px 24px; } }
 @media (max-width: 767px) {
   .economic-comparison-page { padding-bottom: 40px; }
   .comparison-filters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-block: 20px; }
   .comparison-filters legend { font-size: var(--text-small); margin-bottom: 9px; }
-  .comparison-segmented { display: flex; width: 100%; }
-  .comparison-segmented button { flex: 1 1 0; min-width: 0; min-height: 44px; padding: 8px 5px; font-size: var(--text-small); }
+  .comparison-select { min-height: 48px; font-size: var(--text-small); }
   .comparison-reset { justify-self: start; min-height: 32px; margin: -4px 0 0; padding: 0; font-size: var(--text-small); }
   .comparison-summary { padding: 18px 17px; margin-top: 24px; }
   .comparison-summary p { font-size: 16px; line-height: 1.7; }
   .comparison-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; margin-top: 20px; }
   .comparison-chart-card > header { padding: 19px 17px 16px; }
-  .comparison-chart-card > header p { font-size: var(--text-small); }
   .comparison-chart-card > .interactive-chart-legend { order: 1; }
   .comparison-plot { height: 260px; padding-right: 0; }
   .comparison-values { padding: 15px 17px 18px; gap: 10px; }
@@ -53,4 +46,3 @@
   .comparison-values dt { font-size: var(--text-small); }
   .comparison-values dd > strong { font-size: calc(clamp(17px, 4.6vw, 20px) + 1px); }
 }
-@media (prefers-reduced-motion: reduce) { .comparison-segmented button { transition: none; } }

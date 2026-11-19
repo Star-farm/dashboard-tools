@@ -13,6 +13,8 @@
 .bau3-plot { width: 100%; min-width: 0; height: 315px; padding-right: 8px; }
 .bau3-chart-note { min-height: 34px; margin: 0; padding: 4px 20px 12px; color: #40533b; font-size: var(--text-small); line-height: 1.6; }
 .bau3-insight { padding: 22px 25px; margin-top: 48px; border-left: 3px solid #9caa70; background: #edf1e4; }
+.bau3-comparison-summary { margin: 32px 0 0; }
+.bau3-insight.bau3-comparison-summary h3 { margin: 0 0 12px; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; }
 .bau3-insight h3 { font-size: var(--text-body); font-weight: 700; line-height: 1.5; color: #526447; margin: 0 0 9px; }
 .bau3-insight p { margin: 0; color: #485d3e; font-size: 18px; line-height: 1.8; }
 .bau3-no-data { padding: 70px 22px; font-size: var(--text-body); color: var(--muted); }

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import App from '../src/app/App'
 import HeaderNavigation from '../src/app/HeaderNavigation'
 import EconomicComparisonPage from '../src/features/economics/EconomicComparisonPage'
@@ -77,12 +77,13 @@ describe('economic comparison interface', () => {
 
   it('combines filters across every chart, preserves selections and currencies when translating, and resets', () => {
     const { rerender } = render(<EconomicComparisonPage language="vi" />)
-    fireEvent.click(within(screen.getByRole('group', { name: 'Thời tiết' })).getByRole('button', { name: 'Khắc nghiệt' }))
-    fireEvent.click(within(screen.getByRole('group', { name: 'Tài nguyên' })).getByRole('button', { name: 'Khan hiếm tài nguyên' }))
+    fireEvent.change(screen.getByRole('combobox', { name: 'Thời tiết' }), { target: { value: 'severe' } })
+    fireEvent.change(screen.getByRole('combobox', { name: 'Tài nguyên' }), { target: { value: 'shortage' } })
     expect(screen.getByRole('status')).toHaveTextContent('Thời tiết: Khắc nghiệt. Tài nguyên: Khan hiếm tài nguyên.')
     expect(screen.getByRole('complementary', { name: 'Nhận xét tổng kết' })).toHaveTextContent('21.458.536 VNĐ/ha')
-    expect(screen.getAllByText('Giai đoạn 2027 - 2050')).toHaveLength(5)
-    expect(screen.getByRole('article', { name: 'Thu nhập ròng trung bình' }).querySelector('.comparison-values')).toHaveTextContent('21.458.536 VNĐ/ha')
+    expect(screen.getAllByRole('heading', { name: /giai đoạn 2027 - 2050/ })).toHaveLength(5)
+    expect(screen.getByRole('article', { name: /Thu nhập ròng trung bình/ }).querySelector('header p')).not.toBeInTheDocument()
+    expect(screen.getByRole('article', { name: /Thu nhập ròng trung bình/ }).querySelector('.comparison-values')).toHaveTextContent('21.458.536 VNĐ/ha')
     const filtered = selectComparisonCohort(data, 'severe', 'shortage')!
     for (const [index, metric] of (['income', 'straw', 'cost', 'yield', 'labor'] as const).entries()) {
       const card = screen.getAllByRole('article')[index]
@@ -91,15 +92,16 @@ describe('economic comparison interface', () => {
       expect(card.querySelector('.comparison-values')).toHaveTextContent(number.format(filtered.groups.oneMha.VND[metric]!))
     }
     rerender(<EconomicComparisonPage language="en" />)
-    expect(screen.getByRole('button', { name: 'Severe weather' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: 'Resource shortage' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('combobox', { name: 'Weather' })).toHaveValue('severe')
+    expect(screen.getByRole('combobox', { name: 'Resource scenario' })).toHaveValue('shortage')
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('815.23 USD/ha')
-    expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('815.23 USD/ha')
+    expect(screen.getAllByRole('heading', { name: /period 2027 - 2050/ })).toHaveLength(5)
+    expect(screen.getByRole('article', { name: /Average net income/ }).querySelector('.comparison-values')).toHaveTextContent('815.23 USD/ha')
     fireEvent.click(screen.getByRole('button', { name: /Clear filters/ }))
-    expect(screen.getByRole('button', { name: 'All weather' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: 'All resources' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('combobox', { name: 'Weather' })).toHaveValue('all')
+    expect(screen.getByRole('combobox', { name: 'Resource scenario' })).toHaveValue('all')
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('986.30 USD/ha')
-    expect(screen.getByRole('article', { name: 'Average net income' }).querySelector('.comparison-values')).toHaveTextContent('986.30 USD/ha')
+    expect(screen.getByRole('article', { name: /Average net income/ }).querySelector('.comparison-values')).toHaveTextContent('986.30 USD/ha')
   })
 
   it('shows the scenario value and unit on hover', async () => {

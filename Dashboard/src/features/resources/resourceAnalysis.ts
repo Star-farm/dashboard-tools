@@ -84,6 +84,25 @@ export function resourceSummary(data: ResourceData, selected: ResourceSeries[], 
     if (stats.mean === null) return `${t[metric]}: ${t.noData}`
     return `${t[metric].toLocaleLowerCase(language)} ${resourceNumber(stats.mean, language)} ${resourceUnit(metric, language)}${compare ? '' : ` (${changeText(stats.change, language)})`}`
   })
-  if (compare) return resourceMetrics.map((metric) => resourceComparisonInsight(data, selected, metric, language, family).split('. ').slice(0, 1).join('. ')).join('. ') + `. ${t.conclusion}`
+  if (compare) {
+    const name = family ? t[family] : t.bau
+    const comparisons = resourceMetrics.flatMap((metric) => {
+      const baseline = selected.filter((item) => family ? item.family === family : item.family !== 'oneMha')
+      const oneMha = selected.filter((item) => item.family === 'oneMha')
+      const a = resourceStats(baseline, metric, data.startYear, data.endYear).mean
+      const b = resourceStats(oneMha, metric, data.startYear, data.endYear).mean
+      if (a === null || b === null) return []
+      const relative = a === 0 ? null : (b - a) / Math.abs(a) * 100
+      const direction = relative === null
+        ? vi ? `chênh lệch ${resourceNumber(b - a, language)} ${resourceUnit(metric, language)}` : `a difference of ${resourceNumber(b - a, language)} ${resourceUnit(metric, language)}`
+        : Math.abs(relative) < .000001
+          ? vi ? 'tương đương' : 'similar'
+          : vi ? `${b < a ? '1Mha thấp hơn' : '1Mha cao hơn'} ${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(relative))} %` : `1Mha ${b < a ? 'lower' : 'higher'} by ${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(relative))} %`
+      return [`${t[metric].toLocaleLowerCase(language)}: ${resourceNumber(a, language)} / ${resourceNumber(b, language)} ${resourceUnit(metric, language)} (${direction})`]
+    })
+    const period = vi ? `Giai đoạn ${data.startYear}–${data.endYear}, so sánh ${name} với 1Mha` : `From ${data.startYear} to ${data.endYear}, comparing ${name} with 1Mha`
+    const summary = `${period}: ${comparisons.join('; ')}.`
+    return `${summary} ${t.conclusion}`
+  }
   return vi ? `Trong giai đoạn ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} có mức bình quân: ${parts.join('; ')}. Các mức biến động so sánh năm ${data.endYear} với ${data.startYear}. ${t.conclusion}` : `Over ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} has the following period averages: ${parts.join('; ')}. Changes compare ${data.endYear} with ${data.startYear}. ${t.conclusion}`
 }

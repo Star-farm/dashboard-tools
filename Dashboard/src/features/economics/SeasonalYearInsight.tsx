@@ -27,8 +27,8 @@ export default function SeasonalYearInsight({ language, metric, models, format, 
     </section>
     {summaries.map((model) => <section className="seasonal-crop-detail" key={model.family}>
       {['roi', 'margin'].includes(metric)
-        ? <h5>{t.period} · {t[model.family]}</h5>
-        : <p><strong>{t[model.family]}:</strong></p>}
+        ? <h5>{vi ? 'Trong đó:' : 'Breakdown:'}</h5>
+        : <p><strong>{vi ? 'Trong đó:' : 'Breakdown:'}</strong></p>}
       <ul>{model.crops.map((crop) => <li key={crop.label}><strong>{crop.label}:</strong> {crop.value === null ? t.noData : `${format(crop.value)} ${unit}`}</li>)}</ul>
     </section>)}
   </div>

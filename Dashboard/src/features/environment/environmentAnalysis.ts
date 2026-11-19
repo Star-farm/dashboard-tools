@@ -96,10 +96,27 @@ export function environmentSummary(data: EnvironmentData, selected: EnvironmentS
   const awd = environmentAwdStats(selected.filter((series) => !family || series.family === family), data.startYear, data.endYear)
   const rate = (value: number | null) => value === null ? t.noData : `${environmentNumber(value, language)} %`
   if (compare) {
-    const baseRate = environmentAwdStats(selected.filter((series) => family ? series.family === family : series.family !== 'oneMha'), data.startYear, data.endYear).mean
-    const oneRate = environmentAwdStats(selected.filter((series) => series.family === 'oneMha'), data.startYear, data.endYear).mean
-    const awdText = vi ? `Tỷ lệ áp dụng AWD ở ${family ? t[family] : t.bau} là ${rate(baseRate)}, ở 1Mha là ${rate(oneRate)}.` : `AWD adoption is ${rate(baseRate)} under ${family ? t[family] : t.bau} and ${rate(oneRate)} under 1Mha.`
-    return environmentMetrics.map((metric) => environmentComparisonInsight(data, selected, metric, language, family).split('. ').slice(0, 1).join('. ')).join('. ') + `. ${awdText} ${t.conclusion}`
+    const baseline = selected.filter((series) => family ? series.family === family : series.family !== 'oneMha')
+    const one = selected.filter((series) => series.family === 'oneMha')
+    const name = family ? t[family] : t.bau
+    const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
+    const comparisons = environmentMetrics.flatMap((metric) => {
+      const a = environmentStats(baseline, metric, data.startYear, data.endYear).mean
+      const b = environmentStats(one, metric, data.startYear, data.endYear).mean
+      if (a === null || b === null) return []
+      const relative = a === 0 ? null : (b - a) / Math.abs(a) * 100
+      const relation = relative === null
+        ? vi ? `chênh lệch ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}` : `a difference of ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}`
+        : Math.abs(relative) < .000001
+          ? vi ? 'tương đương' : 'similar'
+          : vi ? `1Mha ${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))} %` : `1Mha is ${number.format(Math.abs(relative))} % ${b < a ? 'lower' : 'higher'}`
+      return [`${t[metric].toLocaleLowerCase(language)}: ${environmentNumber(a, language)} / ${environmentNumber(b, language)} ${environmentUnit(metric, language)} (${relation})`]
+    })
+    const baseRate = environmentAwdStats(baseline, data.startYear, data.endYear).mean
+    const oneRate = environmentAwdStats(one, data.startYear, data.endYear).mean
+    const awdText = vi ? `AWD: ${rate(baseRate)} ở ${name}, ${rate(oneRate)} ở 1Mha` : `AWD adoption: ${rate(baseRate)} under ${name}, ${rate(oneRate)} under 1Mha`
+    const period = vi ? `Giai đoạn ${data.startYear}–${data.endYear}, so sánh ${name} với 1Mha` : `From ${data.startYear} to ${data.endYear}, comparing ${name} with 1Mha`
+    return `${period}: ${[...comparisons, awdText].join('; ')}. ${t.conclusion}`
   }
   return vi ? `Trong giai đoạn ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} có mức bình quân: ${parts.join('; ')}; tỷ lệ áp dụng AWD ${rate(awd.mean)}. Các mức biến động so sánh năm ${data.endYear} với ${data.startYear}. ${t.conclusion}` : `Over ${data.startYear}–${data.endYear}, ${family ? t[family] : t.bau} has the following period averages: ${parts.join('; ')}; AWD adoption is ${rate(awd.mean)}. Changes compare ${data.endYear} with ${data.startYear}. ${t.conclusion}`
 }

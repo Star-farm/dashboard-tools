@@ -135,6 +135,7 @@ export default function MapPage({ language }: { language: Language }) {
   const loading = !manifest.data || !geometry.data || !displayData
   const colors = metric === 'income' ? incomeMapColors : mapColors
   const facets = economicFacets.slice(0, 4)
+  const filtersChanged = facets.some(({ key }) => filters[key] !== emptyEconomicFilters[key])
   const isPlaying = playing && year < 2050
   useEffect(() => {
     if (!isPlaying || loading || hasError) return
@@ -163,6 +164,7 @@ export default function MapPage({ language }: { language: Language }) {
           <option value="all">{filterText.all}</option>{facet.options.filter((option) => available.has(option)).map((option) => <option key={option} value={option}>{filterText[option]}</option>)}
         </select></div>
       })}
+      {filtersChanged && <button type="button" className="map-filter-reset" title={filterText.reset} onClick={() => { setFilters(emptyEconomicFilters); setPlaying(false) }}>{filterText.reset}<span aria-hidden="true"> ↺</span></button>}
     </form>
     </div>
     <section className="map-workspace" aria-labelledby="map-layer-title">

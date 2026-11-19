@@ -6,6 +6,7 @@
 .scenario-selector select { display: block; width: max-content; max-width: 100%; min-width: 0; min-height: 46px; padding: 12px 38px 12px 15px; border: 1px solid #c5d1bc; border-radius: 6px; background: #fffefa; color: #3b5434; font: inherit; font-size: var(--text-body); text-overflow: ellipsis; cursor: pointer; }
 .scenario-selector select:focus-visible { outline: 3px solid #759b7f; outline-offset: 3px; }
 .scenario-summary { margin-top: 32px; padding: 22px 25px; border-left: 3px solid #9ea966; background: #edf1e4; }
+.scenario-summary h2 { margin: 0 0 12px; color: #30472d; font-size: var(--section-title-size); font-weight: 600; line-height: 1.4; }
 .scenario-summary p { color: #485d3e; font-size: 18px; line-height: 1.8; margin: 0; }
 .scenario-section { padding-top: 28px; }
 .scenario-section h2 { font-size: var(--section-title-size); font-weight: 600; letter-spacing: normal; line-height: 1.4; margin: 0 0 21px; color: #30472d; }
@@ -53,6 +54,7 @@
   .scenario-selector { padding-block: 20px; }
   .scenario-selector select { font-size: var(--text-body); padding-left: 12px; }
   .scenario-summary { padding: 18px 17px; margin-top: 24px; }
+  .scenario-summary h2 { margin-bottom: 10px; }
   .scenario-summary p { font-size: 16px; line-height: 1.7; }
   .scenario-section { padding-top: 28px; }
   .scenario-section h2 { margin-bottom: 16px; }

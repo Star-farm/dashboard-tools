@@ -33,7 +33,7 @@
 .map-explorer-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
 .map-visual-column { min-width: 0; }
 .map-canvas-container { position: relative; }
-.plot-map-frame { position: relative; height: clamp(380px, 38vw, 540px); background-color: #eef1e6; background-image: linear-gradient(#b6c4b326 1px, transparent 1px), linear-gradient(90deg, #b6c4b326 1px, transparent 1px); background-size: 44px 44px; }
+.plot-map-frame { position: relative; height: clamp(380px, 38vw, 540px); background-color: #c3deea; }
 .plot-map-svg { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; color: var(--forest); }
 .plot-map-svg:active { cursor: grabbing; }
 .plot-map-svg:focus-visible { outline: 3px solid #759b7f; outline-offset: -4px; }
@@ -48,7 +48,11 @@
 .plot-map-controls button:disabled { cursor: default; color: #889382; }
 .plot-map-north { position: absolute; right: 22px; top: 20px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: calc(12px + 1px); color: var(--green); pointer-events: none; }
 .plot-map-north > span:first-child { font-size: calc(30px + 1px); line-height: 1; }
-.plot-map-caption { position: absolute; right: 12px; bottom: 10px; max-width: calc(100% - 120px); padding: 4px 7px; border-radius: 3px; background: #fffefae6; color: var(--muted); font-size: calc(11px + 1px); pointer-events: none; }
+.plot-map-caption { position: absolute; right: 12px; bottom: 34px; max-width: calc(100% - 120px); padding: 4px 7px; border-radius: 3px; background: #fffefae6; color: var(--muted); font-size: calc(11px + 1px); pointer-events: none; }
+.map-basemap-image { image-rendering: auto; }
+.map-basemap-credit { position: absolute; z-index: 1; right: 12px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px; padding: 3px 6px; border-radius: 3px; background: #fffefaed; font: 10px/1.2 Arial, sans-serif; }
+.map-basemap-credit a { color: #344b37; text-decoration: none; }
+.map-basemap-credit a:hover { text-decoration: underline; }
 .map-legend { padding: 18px 24px 0; }
 .map-legend-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: var(--text-small); }
 .map-legend-title strong { font-weight: 600; }

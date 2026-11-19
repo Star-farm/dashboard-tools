@@ -5,9 +5,9 @@ This guide traces real execution from the browser URL to feature rendering. The 
 ## Entry to page
 
 1. `src/main.tsx` imports global styles and renders `App` inside React `StrictMode` and `ErrorBoundary` at `#root`.
-2. `src/app/App.tsx` calls `usePageNavigation()` and `useLanguage(page, branch)`, creates the page element map, and wraps the active lazy page in `Suspense` and `ChartSelectionProvider`.
-3. `src/app/usePageNavigation.ts` converts `window.location.hash` to a `Page`, listens for `hashchange`, and resolves explore branches with `exploreRouteForHash`. Resource and environment page names come from their feature route modules.
-4. `App` selects the page element and passes `language` plus route-specific inputs. The page transition key includes page, branch, and the hash query string, so map context changes remount the page subtree.
+2. `src/app/App.tsx` calls `usePageNavigation()` and `useLanguage(page)`, creates the page element map, and wraps the active lazy page in `Suspense` and `ChartSelectionProvider`.
+3. `src/app/usePageNavigation.ts` converts `window.location.hash` to a `Page` and listens for `hashchange`. Resource and environment page names come from their feature route modules. Legacy Explore hashes resolve to the related content page.
+4. `App` selects the page element and passes `language` plus route-specific inputs. The page transition key includes the page and hash query string, so map context changes remount the page subtree.
 
 ~~~mermaid
 flowchart LR
@@ -96,4 +96,4 @@ flowchart TD
 
 ## Language changes
 
-`App` gets `language`, `changeLanguage`, and core `t` labels from `useLanguage(page, branch)`, then passes the language to `SiteHeader` and the active page. `SiteHeader` wires the VI and EN buttons to `changeLanguage`. In `src/i18n/useLanguage.ts`, that function updates React state immediately and attempts to store the choice under `LANGUAGE_STORAGE_KEY`; storage failure does not prevent switching. The hook also updates the document's `lang`, title, and description. Core labels live in `src/i18n/index.ts`; domain copy lives in feature `*Text.ts` dictionaries. Dynamic scenario and category names use display-time helpers while identifiers remain stable. Follow [internationalization](INTERNATIONALIZATION.md) for coverage and safe additions.
+`App` gets `language`, `changeLanguage`, and core `t` labels from `useLanguage(page)`, then passes the language to `SiteHeader` and the active page. `SiteHeader` wires the VI and EN buttons to `changeLanguage`. In `src/i18n/useLanguage.ts`, that function updates React state immediately and attempts to store the choice under `LANGUAGE_STORAGE_KEY`; storage failure does not prevent switching. The hook also updates the document's `lang`, title, and description. Core labels live in `src/i18n/index.ts`; domain copy lives in feature `*Text.ts` dictionaries. Dynamic scenario and category names use display-time helpers while identifiers remain stable. Follow [internationalization](INTERNATIONALIZATION.md) for coverage and safe additions.

@@ -13,15 +13,16 @@ export const resourceRoutes = {
   resourceOneMha: { anchor: 'resources-1mha', kind: 'farming', family: 'oneMha' },
 } as const
 export type ResourceContentPage = keyof typeof resourceRoutes
-export type ResourcePage = ResourceContentPage | 'resourceExplore'
-export function isResourcePage(page: string): page is ResourcePage { return page === 'resourceExplore' || page in resourceRoutes }
+export type ResourcePage = ResourceContentPage
+export function isResourcePage(page: string): page is ResourcePage { return page in resourceRoutes }
 export function resourcePageForHash(hash: string): ResourcePage | undefined {
-  if (hash === '#resources-explore') return 'resourceExplore'
+  if (hash === '#resources-explore' || hash === '#resources-explore-overview') return 'resourceOverview'
+  if (hash === '#resources-explore-comparison') return 'resourceComparison'
+  if (hash === '#resources-explore-bau') return 'resourceBau3'
   return (Object.keys(resourceRoutes) as ResourceContentPage[]).find((key) => `#${resourceRoutes[key].anchor}` === hash)
 }
 export function resourcePageTitle(page: ResourcePage, language: Language) {
   const t = resourceText[language]
-  if (page === 'resourceExplore') return t.exploreTitle
   const route = resourceRoutes[page]
   if (route.kind === 'overview') return t.title
   if (route.kind === 'bars') return t.comparisonTitle

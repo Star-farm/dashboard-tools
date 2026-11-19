@@ -42,7 +42,7 @@ The repository root also contains a separate [Web App](../Web%20App/README.md) a
 
 ## Setup
 
-Use Node.js 24 and npm. No environment file, API key, backend, or external map service is needed for normal development.
+Use Node.js 24 and npm. No environment file, API key, or backend is needed. A single regional JPEG background is bundled in `public/map-data/static-basemap.jpg`; displaying the map does not request map tiles or a map API.
 
 ~~~powershell
 cd Dashboard
@@ -106,6 +106,7 @@ Deploy the complete dist/ directory. Vercel response headers are configured in v
 ## Limits
 
 - Browser viewport emulation does not establish physical-device behavior.
+- The bundled map background is one 4000 × 4000 JPEG and needs no map service. Like any raster, it can pixelate if enlarged beyond its image resolution.
 - Land Use uses a raster for display and separate JSON statistics; raster detail differs from the former high-resolution drawing.
 - Plot indices are positional model-to-geometry associations, not cadastral IDs.
 - No CI/CD workflow is defined; quality checks run locally.

@@ -177,7 +177,6 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   }
 
   function renderPanel(topic: typeof topics[number]) {
-    const prefix = topic.id === 'sustainability' ? 'environment' : topic.id
     const oneMha = {
       economics: { href: '#economics-1mha', page: 'oneMhaFarming' },
       resources: { href: '#resources-1mha', page: 'resourceOneMha' },
@@ -189,8 +188,8 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
           {branches.map((branch) => (
             <li className="topic-branch" key={branch.id} onMouseEnter={mobile ? undefined : () => setOpenBranch(branch.id)}>
               <div className="topic-branch-row">
-                <a className="topic-menu-button topic-branch-link" href={`#${prefix}-explore-${branch.id}`} data-branch={branch.id} aria-current={window.location.hash === `#${prefix}-explore-${branch.id}` ? 'page' : undefined} onClick={navigate}>{t[branch.label]}</a>
-                <button className="topic-menu-button topic-branch-toggle" type="button" id={`topic-${topic.id}-${branch.id}-trigger`} data-branch={branch.id} aria-label={t[branch.label]} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${t[branch.label]}`} aria-expanded={openBranch === branch.id} aria-controls={`topic-${topic.id}-${branch.id}-panel`} onClick={() => setOpenBranch(mobile && openBranch === branch.id ? null : branch.id)}>
+                <button className="topic-menu-button topic-branch-link topic-branch-toggle" type="button" id={`topic-${topic.id}-${branch.id}-trigger`} data-branch={branch.id} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${t[branch.label]}`} aria-expanded={openBranch === branch.id} aria-controls={`topic-${topic.id}-${branch.id}-panel`} onClick={() => setOpenBranch(mobile && openBranch === branch.id ? null : branch.id)}>
+                  {t[branch.label]}
                   <span className={`topic-chevron ${mobile ? 'down' : 'right'}`} aria-hidden="true">{mobile ? null : '>'}</span>
                 </button>
               </div>
@@ -217,7 +216,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
     { href: '#map', page: 'map', label: language === 'vi' ? 'Bản đồ vùng canh tác' : 'Farming area map' },
     { href: '#soil-map', page: 'soilMap', label: language === 'vi' ? 'Bản đồ đất và ngập' : 'Soil and flooding map' },
   ]
-  const mapCurrent = ['map', 'mapExplore', 'soilMap'].includes(page)
+  const mapCurrent = ['map', 'soilMap'].includes(page)
   function renderMapPanel() {
     return <div className="topic-dropdown topic-dropdown-map" id="topic-map-panel"><ul className="topic-panel" aria-label={mapLabel}>
       {mapPages.map((destination) => <li key={destination.href}><a className="topic-menu-button topic-leaf" href={destination.href} aria-current={page === destination.page ? 'page' : undefined} onClick={navigate}>{destination.label}</a></li>)}
@@ -225,7 +224,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
   }
 
   const activeTopic = topics.find((topic) => topic.id === openTopic)
-  const currentTopic: Topic | undefined = page.startsWith('environment') ? 'sustainability' : page.startsWith('resource') ? 'resources' : ['economics', 'economicExplore', 'economicComparison', 'bau3Comparison', 'bau2Comparison', 'baussComparison', 'bau3Farming', 'bau2Farming', 'baussFarming', 'oneMhaFarming'].includes(page) ? 'economics' : undefined
+  const currentTopic: Topic | undefined = page.startsWith('environment') ? 'sustainability' : page.startsWith('resource') ? 'resources' : ['economics', 'economicComparison', 'bau3Comparison', 'bau2Comparison', 'baussComparison', 'bau3Farming', 'bau2Farming', 'baussFarming', 'oneMhaFarming'].includes(page) ? 'economics' : undefined
 
   return (
     <nav className={`top-navigation${mobile ? ' mobile-navigation' : ''}`} aria-label={t.mainNavigation} ref={navigationRef} onKeyDown={handleKeys} onMouseLeave={mobile ? undefined : close}>
@@ -238,8 +237,7 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
               event.preventDefault(); event.stopPropagation(); open('map'); focusFirst('topic-map-panel', event.key === 'ArrowUp')
             }
           }}>
-            <a className="topic-trigger topic-link" href="#map-explore" aria-current={mapCurrent ? 'location' : undefined} onClick={navigate}>{mapLabel}</a>
-            <button className="topic-trigger topic-toggle" id="topic-map-trigger" type="button" aria-label={mapLabel} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${mapLabel}`} aria-current={mapCurrent ? 'true' : undefined} aria-expanded={openTopic === 'map'} aria-controls="topic-map-panel" onClick={() => mobile && openTopic === 'map' ? close() : open('map')}><span className="topic-chevron down" aria-hidden="true" /></button>
+            <button className="topic-trigger topic-link" id="topic-map-trigger" type="button" aria-current={mapCurrent ? 'location' : undefined} aria-expanded={openTopic === 'map'} aria-controls="topic-map-panel" onClick={() => mobile && openTopic === 'map' ? close() : open('map')}>{mapLabel}<span className="topic-chevron down" aria-hidden="true" /></button>
           </div>
           {mobile && openTopic === 'map' && renderMapPanel()}
         </li>
@@ -253,9 +251,8 @@ export default function HeaderNavigation({ language, page, mobile = false, onNav
                 focusFirst(`topic-${topic.id}-panel`, event.key === 'ArrowUp')
               }
             }}>
-              <a className="topic-trigger topic-link" href={`#${topic.id === 'sustainability' ? 'environment' : topic.id}-explore`} aria-current={currentTopic === topic.id ? 'location' : undefined} onClick={navigate}>{t[topic.label]}</a>
-              <button className="topic-trigger topic-toggle" id={`topic-${topic.id}-trigger`} type="button" aria-label={t[topic.label]} title={`${language === 'vi' ? 'Mở menu con' : 'Open submenu'}: ${t[topic.label]}`} aria-current={currentTopic === topic.id ? 'true' : undefined} aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)}>
-                <span className="topic-chevron down" aria-hidden="true" />
+              <button className="topic-trigger topic-link" id={`topic-${topic.id}-trigger`} type="button" aria-current={currentTopic === topic.id ? 'location' : undefined} aria-expanded={openTopic === topic.id} aria-controls={`topic-${topic.id}-panel`} onClick={() => mobile && openTopic === topic.id ? close() : open(topic.id)}>
+                {t[topic.label]}<span className="topic-chevron down" aria-hidden="true" />
               </button>
             </div>
             {mobile && openTopic === topic.id && renderPanel(topic)}

@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react'
 import App from '../src/app/App'
 import HeaderNavigation from '../src/app/HeaderNavigation'
-import EconomicExplorePage from '../src/features/economics/EconomicExplorePage'
 import ResourcesPage from '../src/features/resources/ResourcesPage'
 import ResourceLineChart from '../src/features/resources/ResourceLineChart'
 import { resourcePageForHash, resourcePageTitle, resourceRoutes } from '../src/features/resources/resourceRoutes'
@@ -121,18 +120,6 @@ describe('resource navigation', () => {
     expect(screen.getByRole('link', { name: 'Một triệu hecta lúa' })).toHaveAttribute('href', '#resources-1mha')
   })
 
-  it('shows a complete resource hub and opens it directly from the homepage', async () => {
-    const { unmount } = render(<EconomicExplorePage language="vi" topic="resources" />)
-    expect(screen.getAllByRole('link')).toHaveLength(4)
-    expect(document.querySelector('.economic-explore-card ul')).not.toBeInTheDocument()
-    for (const link of screen.getAllByRole('link')) expect(link.getAttribute('href')).toMatch(/^#resources-/)
-    unmount()
-    window.history.replaceState(null, '', '#home')
-    render(<App />)
-    fireEvent.click(screen.getByRole('link', { name: 'Khám phá Tài nguyên' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Khám phá Tài nguyên' })).toBeInTheDocument()
-    expect(document.title).toBe('Khám phá Tài nguyên | STAR FARM')
-  })
 
   it.each(Object.keys(resourceRoutes) as ResourceContentPage[])('opens and translates direct route %s', async (page) => {
     const hash = `#${resourceRoutes[page].anchor}`

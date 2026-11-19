@@ -9,6 +9,8 @@
   .desktop-header::before { background: linear-gradient(180deg, #163d308a 0%, #163d3052 48%, #163d301a 82%, #163d3000 100%); }
   .desktop-header:not(.header-home) { background: var(--forest); }
   .desktop-header:not(.header-home)::before, .desktop-header:not(.header-home)::after { display: none; }
+  .desktop-header.header-home-scrolled { background: var(--forest); }
+  .desktop-header.header-home-scrolled::before, .desktop-header.header-home-scrolled::after { display: none; }
   .desktop-header:not(.header-home) .topic-dropdown { background: var(--forest); border-color: #ffffff26; box-shadow: 0 12px 24px #102a2226; }
   .desktop-header::after { opacity: 0; background: linear-gradient(180deg, #163d30f2 0%, #163d30c2 36%, #163d307a 66%, #163d3029 86%, #163d3000 100%); -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
   .desktop-header:has(.topic-dropdown) { --backdrop-extension: calc(var(--submenu-height, 180px) * 3); }

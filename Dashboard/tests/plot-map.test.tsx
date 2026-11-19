@@ -16,15 +16,15 @@ describe('interactive plot map', () => {
   it('offers a retry when a raster fails without rendering its vector fallback', () => {
     const thematic = { id: 'landuse', title: { vi: 'Land', en: 'Land' }, categories: [], plots: [], features: [{ plotId: 0, categoryId: 'x', path: 'M0 0H1V1Z' }] }
     const { container, rerender } = render(<PlotMap {...props} thematic={thematic} rasterFile="land.webp" />)
-    fireEvent.error(container.querySelector('image')!)
+    fireEvent.error(container.querySelector('image[href$="land.webp"]')!)
     expect(screen.getByRole('alert')).toBeInTheDocument()
     expect(container.querySelector('path[d="M0 0H1V1Z"]')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
-    expect(container.querySelector('image')).toBeInTheDocument()
-    fireEvent.error(container.querySelector('image')!)
+    expect(container.querySelector('image[href$="land.webp"]')).toBeInTheDocument()
+    fireEvent.error(container.querySelector('image[href$="land.webp"]')!)
     rerender(<PlotMap {...props} thematic={thematic} rasterFile="other.webp" />)
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
-    expect(container.querySelector('image')).toBeInTheDocument()
+    expect(container.querySelector('image[href$="other.webp"]')).toBeInTheDocument()
   })
   it('zooms around the cursor, clamps bounds, and prevents page scrolling inside the map', () => {
     expect(zoomViewport({ zoom: 1, x: 500, y: 250 }, 2, { x: 300, y: 100 })).toEqual({ zoom: 2, x: 400, y: 175 })
@@ -41,6 +41,35 @@ describe('interactive plot map', () => {
     expect(svg).toHaveAttribute('viewBox', initial)
     fireEvent.wheel(svg, { deltaY: 120 })
     expect(svg).toHaveAttribute('viewBox', initial)
+  })
+
+  it('labels nearby countries and the East Sea in both languages', () => {
+    const labeledProps = { ...props, geometry: { ...geometry, bounds: [0, 0, 1_000_000, 1_000_000] } }
+    const { rerender } = render(<PlotMap {...labeledProps} language="vi" />)
+    expect(screen.getByText('Thái Lan')).toBeInTheDocument()
+    expect(screen.getByText('Lào')).toBeInTheDocument()
+    expect(screen.getByText('Campuchia')).toBeInTheDocument()
+    expect(screen.getByText('Biển Đông')).toBeInTheDocument()
+
+    rerender(<PlotMap {...labeledProps} language="en" />)
+    expect(screen.getByText('Thailand')).toBeInTheDocument()
+    expect(screen.getByText('Laos')).toBeInTheDocument()
+    expect(screen.getByText('Cambodia')).toBeInTheDocument()
+    expect(screen.getByText('South China Sea')).toBeInTheDocument()
+  })
+
+  it('keeps the map focused on the study area when panning north or south', () => {
+    const localGeometry = { ...geometry, bounds: [0, 0, 1000, 1000] }
+    const adminBoundaries = { type: 'FeatureCollection' as const, projection: 'EPSG:32648' as const, bounds: [100, 200, 900, 800] as [number, number, number, number], features: [] }
+    const { container } = render(<PlotMap {...props} geometry={localGeometry} adminBoundaries={adminBoundaries} />)
+    const svg = container.querySelector('.plot-map-svg')!
+    const initial = svg.getAttribute('viewBox')!
+
+    fireEvent.keyDown(svg, { key: 'ArrowUp' })
+    expect(svg).toHaveAttribute('viewBox', initial)
+
+    fireEvent.keyDown(svg, { key: 'ArrowDown' })
+    expect(svg.getAttribute('viewBox')).not.toBe(initial)
   })
 
   it('opens a plot popup with plot values only and closes with Escape', () => {

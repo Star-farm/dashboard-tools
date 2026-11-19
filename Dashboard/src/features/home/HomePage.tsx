@@ -69,9 +69,9 @@ export default function HomePage({ language }: { language: Language }) {
         {navigationTopics.map((topic) => (
           <aside className="glossary-callout" key={topic.id} aria-labelledby={`${topic.id}-callout-title`}>
             <div><p className="eyebrow">{t.topicsCtaEyebrow}</p><h2 id={`${topic.id}-callout-title`}>{t[topic.label]}</h2><p>{t[topic.description]}</p></div>
-            {topic.id === 'economics' ? <a href="#economics-explore">{t.economicExploreTitle}<span aria-hidden="true">{'>'}</span></a>
-              : topic.id === 'resources' ? <a href="#resources-explore">{t.resourceExploreTitle}<span aria-hidden="true">{'>'}</span></a>
-              : <a href="#environment-explore">{t.environmentExploreTitle}<span aria-hidden="true">{'>'}</span></a>}
+            {topic.id === 'economics' ? <a href="#economics-overview">{t.economicExploreTitle}<span aria-hidden="true">{'>'}</span></a>
+              : topic.id === 'resources' ? <a href="#resources-overview">{t.resourceExploreTitle}<span aria-hidden="true">{'>'}</span></a>
+              : <a href="#environment-overview">{t.environmentExploreTitle}<span aria-hidden="true">{'>'}</span></a>}
           </aside>
         ))}
         <aside className="glossary-callout" aria-labelledby="scenario-callout-title">

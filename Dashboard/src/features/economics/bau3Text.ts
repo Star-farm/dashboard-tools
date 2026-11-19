@@ -1,4 +1,5 @@
 const vi = {
+  conditionColumn: 'Điều kiện',
   title: 'BAU 3 vụ so với 1Mha', bau3s: 'Thường lệ · 3 mùa vụ', oneMha: '1Mha',
   bau2Title: 'BAU 2 vụ so với 1Mha', baussTitle: 'BAU bền vững so với 1Mha',
   bau2s: 'Thường lệ · 2 mùa vụ', bauss: 'Thường lệ · Bền vững',
@@ -10,6 +11,7 @@ const vi = {
   overlap: 'Một số đường trùng nhau vì có cùng số liệu.',
 }
 const en: Record<keyof typeof vi, string> = {
+  conditionColumn: 'Condition',
   title: 'BAU 3 seasons vs 1Mha', bau3s: 'Business as usual · 3 seasons', oneMha: '1Mha',
   bau2Title: 'BAU 2 seasons vs 1Mha', baussTitle: 'BAU sustainable vs 1Mha',
   bau2s: 'Business as usual · 2 seasons', bauss: 'Business as usual · Sustainable',

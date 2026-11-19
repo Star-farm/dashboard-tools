@@ -12,7 +12,7 @@ export const soilText = {
     coverage: 'Diện tích đã xác định',
     displayArea: 'Diện tích trên bản đồ',
     shares: 'Tỷ lệ diện tích trong vùng',
-    legend: 'Chú giải',
+    legend: 'Chú giải:',
   },
   en: {
     title: 'Soil and flooding information',
@@ -27,6 +27,6 @@ export const soilText = {
     coverage: 'Identified area',
     displayArea: 'Area on map',
     shares: 'Area shares within this area',
-    legend: 'Legend',
+    legend: 'Legend:',
   },
 } as const

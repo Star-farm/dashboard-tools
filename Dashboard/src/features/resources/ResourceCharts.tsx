@@ -17,7 +17,7 @@ import ResourceLineChart from './ResourceLineChart'
 
 const data = cached as ResourceData
 function Insight({ label, text, summary = false }: { label: string; text: string; summary?: boolean }) {
-  return <aside className={`bau3-insight ${summary ? 'farming-summary' : 'farming-chart-insight'}`} aria-label={label}>{summary ? <h2>{label}</h2> : <h3>{label.split(' · ')[0]}</h3>}<p><EmphasizedNumbers text={text} /></p></aside>
+  return <aside className={`bau3-insight ${summary ? 'farming-summary' : 'farming-chart-insight'}`} aria-label={label}>{summary ? <h2>{label}</h2> : <h3>{label.split(' · ')[0]}</h3>}<p><EmphasizedNumbers text={text} maxSentences={summary ? 3 : undefined} /></p></aside>
 }
 function ResourceBars({ language }: { language: Language }) {
   const [climate, setClimate] = useState('all'), [resource, setResource] = useState('all')

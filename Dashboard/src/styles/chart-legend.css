@@ -8,6 +8,15 @@
 .interactive-chart-legend[data-filtered="true"] .chart-legend-option[aria-pressed="false"]:hover,
 .interactive-chart-legend[data-filtered="true"] .chart-legend-option[aria-pressed="false"]:focus-visible { opacity: 1; }
 .chart-legend-swatch { display: inline-block; width: 19px; height: 3px; flex: 0 0 19px; }
+.chart-legend-swatch--bar { width: 12px; height: 12px; flex-basis: 12px; border-radius: 3px; }
+.chart-legend-swatch--dashed { border-top: 3px dashed var(--chart-series-color); background: transparent; }
+.chart-series-legend .chart-legend-swatch--bar { background: var(--chart-series-color); }
+.chart-series-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 10px 20px 14px; color: #40533b; font-size: var(--text-small); }
+.chart-series-legend .chart-legend-caption { flex: 0 0 auto; }
+.chart-series-legend-title { flex: 0 0 100%; margin: 0; color: #30472d; font-size: var(--text-small); font-weight: 700; line-height: 1.5; }
+.chart-series-legend ul { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 0; padding: 0; list-style: none; }
+.chart-series-legend li { display: inline-flex; align-items: center; gap: 8px; min-height: 28px; }
+.chart-series-legend .chart-legend-swatch:not(.chart-legend-swatch--bar):not(.chart-legend-swatch--dashed) { background: var(--chart-series-color); }
 .chart-meta .interactive-chart-legend { padding: 0; }
 @media (max-width: 767px) {
   .interactive-chart-legend { gap: 8px; padding: 10px 14px 12px; }

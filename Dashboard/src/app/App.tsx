@@ -5,7 +5,6 @@ import NotFoundPage from '../features/NotFoundPage'
 import HomePage from '../features/home/HomePage'
 import SiteFooter from './SiteFooter'
 import SiteHeader from './SiteHeader'
-import { PageBreadcrumbs } from './PageBreadcrumbs'
 import BackToTop from './BackToTop'
 import { SoilPageLoading } from '../features/map/SoilMapShell'
 import { useLanguage } from '../i18n/useLanguage'
@@ -22,11 +21,9 @@ import { ChartSelectionProvider } from '../components/ChartSelection'
 
 const FuturePage = lazy(() => import('../features/future/FuturePage'))
 const MapPage = lazy(() => import('../features/map/MapPage'))
-const MapExplorePage = lazy(() => import('../features/map/MapExplorePage'))
 const SoilMapPage = lazy(() => import('../features/map/SoilMapPage'))
 const ScenarioDetailsPage = lazy(() => import('../features/scenarios/ScenarioDetailsPage'))
 const EconomicOverviewPage = lazy(() => import('../features/economics/EconomicOverviewPage'))
-const EconomicExplorePage = lazy(() => import('../features/economics/EconomicExplorePage'))
 const EconomicComparisonPage = lazy(() => import('../features/economics/EconomicComparisonPage'))
 const Bau3ComparisonPage = lazy(() => import('../features/economics/Bau3ComparisonPage'))
 const Bau2ComparisonPage = lazy(() => import('../features/economics/Bau2ComparisonPage'))
@@ -39,25 +36,21 @@ const ResourcesPage = lazy(() => import('../features/resources/ResourcesPage'))
 const EnvironmentPage = lazy(() => import('../features/environment/EnvironmentPage'))
 
 export default function App() {
-  const { page, branch, hash } = usePageNavigation()
-  const { language, changeLanguage, t } = useLanguage(page, branch)
+  const { page, hash } = usePageNavigation()
+  const { language, changeLanguage, t } = useLanguage(page)
   const resourcePages = Object.fromEntries((Object.keys(resourceRoutes) as ResourceContentPage[]).map((key) => [key, <ResourcesPage key={key} page={key} language={language} />])) as Record<ResourceContentPage, ReactElement>
   const environmentPages = Object.fromEntries((Object.keys(environmentRoutes) as EnvironmentContentPage[]).map((key) => [key, <EnvironmentPage key={key} page={key} language={language} />])) as Record<EnvironmentContentPage, ReactElement>
   const pages = {
     ...resourcePages,
     ...environmentPages,
-    environmentExplore: <EconomicExplorePage language={language} topic="sustainability" branch={branch} />,
-    resourceExplore: <EconomicExplorePage language={language} topic="resources" branch={branch} />,
     home: <HomePage language={language} />,
     map: <MapPage language={language} />,
-    mapExplore: <MapExplorePage language={language} />,
     soilMap: <SoilMapPage language={language} />,
     notFound: <NotFoundPage language={language} />,
     glossary: <Glossary language={language} />,
     future: <FuturePage language={language} />,
     scenario: <ScenarioDetailsPage language={language} />,
     economics: <EconomicOverviewPage language={language} />,
-    economicExplore: <EconomicExplorePage language={language} branch={branch} />,
     economicComparison: <EconomicComparisonPage language={language} />,
     bau3Comparison: <Bau3ComparisonPage language={language} />,
     bau2Comparison: <Bau2ComparisonPage language={language} />,
@@ -68,11 +61,9 @@ export default function App() {
     oneMhaFarming: <OneMhaFarmingPage language={language} />,
   }
   const loadingText = isEnvironmentPage(page) ? environmentText[language].loading : isResourcePage(page) ? resourceText[language].loading : {
-    mapExplore: language === 'vi' ? 'Đang tải bản đồ…' : 'Loading maps…',
     soilMap: language === 'vi' ? 'Đang tải bản đồ đất và ngập…' : 'Loading soil and flooding map…',
     home: '', glossary: '', notFound: '', map: language === 'vi' ? 'Đang tải bản đồ…' : 'Loading map…', future: t.futureLoading, scenario: t.scenarioLoading,
     economics: t.economicsLoading, economicComparison: t.economicComparisonLoading,
-    economicExplore: t.economicExploreLoading,
     bau3Comparison: t.bau3ComparisonLoading, bau2Comparison: t.bau2ComparisonLoading,
     baussComparison: t.baussComparisonLoading,
     bau3Farming: t.bau3FarmingLoading,
@@ -86,8 +77,7 @@ export default function App() {
       <a className="skip-link" href="#main-content">{t.skipContent}</a>
       <SiteHeader language={language} page={page} changeLanguage={changeLanguage} />
       <main id="main-content" tabIndex={-1}>
-        <div className="page-transition" key={`${page}-${branch ?? 'root'}-${hash.split('?')[1] ?? ''}`}>
-          <PageBreadcrumbs page={page} language={language} branch={branch} />
+        <div className="page-transition" key={`${page}-${hash.split('?')[1] ?? ''}`}>
           <ChartSelectionProvider><Suspense fallback={page === 'soilMap' ? <SoilPageLoading language={language} /> : <div className="future-loading page-shell" role="status"><p>{loadingText}</p><div />{(page === 'future' || page === 'scenario') && <><div /><div /></>}</div>}>{pages[page]}</Suspense></ChartSelectionProvider>
         </div>
       </main>

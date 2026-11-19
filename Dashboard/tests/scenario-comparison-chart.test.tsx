@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import ScenarioComparisonChart from '../src/components/ScenarioComparisonChart'
 import { bau3Text } from '../src/features/economics/bau3Text'
@@ -15,7 +15,7 @@ describe('combined scenario chart', () => {
     const { container } = render(<ScenarioComparisonChart {...props} chartType="bar" />)
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(8))
     expect(container.querySelectorAll('.recharts-line')).toHaveLength(0)
-    fireEvent.click(screen.getByRole('button', { name: /1Mha · solid bars/ }))
+    fireEvent.click(container.querySelector('.model-line-oneMha')!.closest('button')!)
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(4))
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Normal' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: 'Normal economy' }))
@@ -24,9 +24,27 @@ describe('combined scenario chart', () => {
     expect(screen.getByText(/Year 2027 · Normal weather · Normal resources · 1Mha: 103.00 USD\/ha/)).toBeInTheDocument()
   })
 
+  it('shows chart values in the three-column comparison tooltip on hover', async () => {
+    const { container } = render(<ScenarioComparisonChart {...props} />)
+    const wrapper = container.querySelector<HTMLElement>('.recharts-wrapper')!
+    Object.defineProperty(wrapper, 'offsetWidth', { value: 620 })
+    Object.defineProperty(wrapper, 'offsetHeight', { value: 340 })
+    vi.spyOn(wrapper, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, left: 0, top: 0, width: 620, height: 340, right: 620, bottom: 340, toJSON: () => ({}) })
 
+    expect(container.querySelector('.bau3-chart-note')).not.toBeInTheDocument()
+    const dot = container.querySelector('.recharts-line-dots .scenario-dot')!
+    fireEvent.mouseMove(dot, { clientX: Number(dot.getAttribute('data-cx')), clientY: Number(dot.getAttribute('data-cy')) })
 
-
+    const tooltip = container.querySelector('.recharts-tooltip-wrapper')!
+    await waitFor(() => expect(tooltip).toHaveStyle({ visibility: 'visible' }))
+    expect(tooltip).toHaveTextContent('Year 2027')
+    expect(within(tooltip as HTMLElement).getByRole('columnheader', { name: 'Condition' })).toBeInTheDocument()
+    expect(within(tooltip as HTMLElement).getByRole('columnheader', { name: 'BAU' })).toBeInTheDocument()
+    expect(within(tooltip as HTMLElement).getByRole('columnheader', { name: '1Mha' })).toBeInTheDocument()
+    expect(tooltip).toHaveTextContent('Severe weather · Resource shortage')
+    expect(tooltip).toHaveTextContent('10.00 USD/ha')
+    expect(tooltip).toHaveTextContent('100.00 USD/ha')
+  })
 
   it('does not invent values when no condition has data', () => {
     const { container } = render(<ScenarioComparisonChart {...props} baseline={[]} oneMha={[]} />)

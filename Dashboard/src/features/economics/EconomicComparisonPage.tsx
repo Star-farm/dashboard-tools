@@ -42,7 +42,7 @@ export default function EconomicComparisonPage({ language }: { language: Languag
         {(climate !== 'all' || resource !== 'all') && <button title={text.reset} className="comparison-reset" type="button" onClick={() => { setClimate('all'); setResource('all') }}>{text.reset}<span aria-hidden="true"> ↺</span></button>}
       </section>
       <p className="sr-only" role="status">{t.climate}: {climate === 'all' ? t.all : t[climate]}. {t.resource}: {resource === 'all' ? t.all : resource === 'normal' ? text.normalResource : t.shortage}.</p>
-      {cohort && <aside className="comparison-summary" aria-labelledby="comparison-summary-title"><h2 id="comparison-summary-title">{text.summary}</h2><p><EmphasizedNumbers text={comparisonSummary(cohort, language, comparison.startYear, comparison.endYear)} /></p></aside>}
+      {cohort && <aside className="comparison-summary" aria-labelledby="comparison-summary-title"><h2 id="comparison-summary-title">{text.summary}</h2><p><EmphasizedNumbers text={comparisonSummary(cohort, language, comparison.startYear, comparison.endYear)} maxSentences={3} /></p></aside>}
       {cohort ? <div className="comparison-grid">{comparisonMetrics.map((metric) => <ComparisonBarChart key={metric} metric={metric} cohort={cohort} axisCohort={axisCohort} language={language} startYear={comparison.startYear} endYear={comparison.endYear} />)}</div> : <p className="comparison-no-data">{text.noData}</p>}
       </AnalysisView>
     </div>

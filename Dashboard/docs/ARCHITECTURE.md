@@ -18,9 +18,12 @@ flowchart LR
 ## Shell and navigation
 
 - `src/main.tsx` imports global styles and mounts React inside StrictMode and an error boundary.
-- `src/app/App.tsx` composes header, breadcrumbs, lazy feature pages, language controls, chart selection context, footer, and back-to-top control.
-- `src/app/usePageNavigation.ts` maps URL hashes to a typed page, listens for `hashchange`, and supports browser history. No routing library is installed.
-- `src/app/exploreNavigation.ts` and resource/environment route modules define topic paths.
+- `src/app/App.tsx` composes the header, lazy feature pages, language controls, chart selection context, footer, and back-to-top control.
+- `src/app/usePageNavigation.ts` maps URL hashes to a typed content page, listens for `hashchange`, and supports browser history. No routing library is installed.
+- `src/app/exploreNavigation.ts` defines the topic menu's overview, comparison, and business-as-usual branches. They lead directly to content pages; they are not standalone pages.
+- The Economics, Resources, Environment, and Map labels open their dropdowns; branch labels open nested menus, and users reach pages through the links inside those menus.
+- On the home page, the header keeps its translucent hero treatment until the hero scrolls behind it, then switches to the solid forest background used on content pages.
+- Legacy `*-explore` hashes resolve to their corresponding map or topic content page for existing links.
 - `src/app/mapNavigation.ts` validates map-to-dashboard query context; `useDashboardFilters.ts` initializes filters from it.
 - `src/i18n/` owns language state and translations.
 
@@ -30,7 +33,7 @@ Most data pages use React lazy imports. Home, glossary, and not-found are direct
 
 | Path | Responsibility |
 | --- | --- |
-| `src/app/` | Shell, navigation, breadcrumbs, site chrome, dashboard/map context state. |
+| `src/app/` | Shell, navigation, site chrome, dashboard/map context state. |
 | `src/components/` | Shared chart controls, filters, analysis and description UI. |
 | `src/features/economics/` | Economic summaries, farming-system pages, comparisons, seasonal views and analysis. |
 | `src/features/environment/` | Environment pages, routes, data transforms and copy. |
@@ -59,7 +62,7 @@ The app shell composes features; shared presentation components must not depend 
 
 Recharts charts live in feature modules and receive already selected or aggregated values. Shared components in `src/components/` provide chart selection, legends, chart information, and unit labels. Chart CSS in `src/styles/` controls responsive presentation; mobile tooltip labels and units are display-only formatting and do not alter source values. Annual and seasonal selection is composed by `src/components/AnalysisView.tsx`.
 
-Map pages combine SVG plot geometry and values in `src/features/map/PlotMap.tsx`; `useMapFile.ts` provides shared JSON request state and cache for map files. Plot click and keyboard selection are delegated from the SVG, with `plotIdFromTarget` resolving the nearest `data-plot` element so selection behavior is centralized instead of allocating handlers for every plot path. `SoilMapSection.tsx` loads the selected soil statistics layer, validates it with `validateSoilData.ts`, and passes its raster filename to the plot map. `MapPage.tsx` owns scenario, year, harvest, metric, and playback selection.
+Map pages combine SVG plot geometry and values in `src/features/map/PlotMap.tsx`; `useMapFile.ts` provides shared JSON request state and cache for map files. `MapBasemap.tsx` positions one bundled, projected Natural Earth JPEG in the local UTM 48N SVG coordinate space, beneath administrative boundaries and plot overlays. Runtime map rendering loads `public/map-data/static-basemap.jpg` and makes no tile or map API requests. The source and image-generation procedure are recorded in `public/map-data/static-basemap-LICENSE.txt` and `scripts/build-static-basemap.mjs`. Localized country and sea labels are drawn as SVG text, and panning stays within the administrative study region and can reach its northern edge. Plot click and keyboard selection are delegated from the SVG, with `plotIdFromTarget` resolving the nearest `data-plot` element so selection behavior is centralized instead of allocating handlers for every plot path. `SoilMapSection.tsx` loads the selected soil statistics layer, validates it with `validateSoilData.ts`, and passes its raster filename to the plot map. `MapPage.tsx` owns scenario, year, harvest, metric, and playback selection.
 
 Core translations and locale selection live in `src/i18n/`; feature dictionaries are in their owning feature directories. `useLanguage` updates the page and document metadata when language changes. Responsive behavior is implemented by shared and feature styles in `src/styles/`, with browser viewport checks in `e2e/`; viewport emulation does not establish physical-device performance or touch reliability.
 

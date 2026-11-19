@@ -1,0 +1,3 @@
+The bundled static-basemap.jpg is a projected regional map image rendered from Natural Earth 1:10m Physical Land and Admin 0 Boundary Lines, version 5.1.1.
+
+Natural Earth raster and vector map data are in the public domain. The JPEG displays simplified land, sea, and country boundaries. It contains no road network or place labels; country and sea names are rendered separately by the application. Sources: https://www.naturalearthdata.com/downloads/10m-physical-vectors/ and https://www.naturalearthdata.com/downloads/10m-cultural-vectors/.

@@ -6,7 +6,6 @@ import type { CategoryFilter } from '../src/features/glossary/glossaryData'
 import { bau3Text } from '../src/features/economics/bau3Text'
 import { bauFarmingText } from '../src/features/economics/bauFarmingText'
 import { comparisonText } from '../src/features/economics/comparisonText'
-import { economicExploreText } from '../src/features/economics/economicExploreText'
 import { economicsText } from '../src/features/economics/economicsText'
 import { seasonalText } from '../src/features/economics/seasonalText'
 import { environmentText } from '../src/features/environment/environmentText'
@@ -23,7 +22,6 @@ const dictionaries: Record<string, { vi: Record<string, string>; en: Record<stri
   bau3: bau3Text,
   bauFarming: bauFarmingText,
   comparison: comparisonText,
-  economicExplore: economicExploreText,
   economics: economicsText,
   seasonal: seasonalText,
   environment: environmentText,

@@ -7,20 +7,27 @@ import type { ResourcePage } from '../features/resources/resourceRoutes'
 import { environmentPageForHash } from '../features/environment/environmentRoutes'
 import type { EnvironmentPage } from '../features/environment/environmentRoutes'
 
-export type Page = 'home' | 'map' | 'mapExplore' | 'soilMap' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicExplore' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
+export type Page = 'home' | 'map' | 'soilMap' | 'glossary' | 'future' | 'scenario' | 'notFound' | 'economics' | 'economicComparison' | 'bau3Comparison' | 'bau2Comparison' | 'baussComparison' | 'bau3Farming' | 'bau2Farming' | 'baussFarming' | 'oneMhaFarming' | ResourcePage | EnvironmentPage
 
 function pageForHash(hash: string, previous: Page = 'home'): Page {
   hash = hash.split('?')[0]
   if (hash === '#map') return 'map'
-  if (hash === '#map-explore') return 'mapExplore'
+  if (hash === '#map-explore') return 'map'
   if (hash === '#soil-map') return 'soilMap'
   const exploreSection = exploreRouteForHash(hash)
-  if (exploreSection) return ({ economics: 'economicExplore', resources: 'resourceExplore', environment: 'environmentExplore' } as const)[exploreSection.prefix]
+  if (exploreSection) {
+    const routes = {
+      economics: { overview: 'economics', comparison: 'economicComparison', bau: 'bau3Farming' },
+      resources: { overview: 'resourceOverview', comparison: 'resourceComparison', bau: 'resourceBau3' },
+      environment: { overview: 'environmentOverview', comparison: 'environmentComparison', bau: 'environmentBau3' },
+    } as const
+    return routes[exploreSection.prefix][exploreSection.branch]
+  }
   const environmentPage = environmentPageForHash(hash)
   if (environmentPage) return environmentPage
   const resourcePage = resourcePageForHash(hash)
   if (resourcePage) return resourcePage
-  if (hash === '#economics-explore') return 'economicExplore'
+  if (hash === '#economics-explore') return 'economics'
   if (hash === '#economics-overview') return 'economics'
   if (hash === '#economics-comparison') return 'economicComparison'
   if (hash === '#economics-bau3-vs-1mha') return 'bau3Comparison'
@@ -40,14 +47,14 @@ function pageForHash(hash: string, previous: Page = 'home'): Page {
 }
 
 export function usePageNavigation() {
-  const [{ hash, page, branch }, setLocation] = useState(() => ({ hash: window.location.hash, page: pageForHash(window.location.hash), branch: exploreRouteForHash(window.location.hash)?.branch }))
+  const [{ hash, page }, setLocation] = useState(() => ({ hash: window.location.hash, page: pageForHash(window.location.hash) }))
   const currentPage = useRef(page)
 
   useEffect(() => {
     const update = () => {
       const nextHash = window.location.hash
       const nextPage = pageForHash(nextHash, currentPage.current)
-      const updateLocation = () => setLocation((previous) => ({ hash: nextHash, page: pageForHash(nextHash, previous.page), branch: nextHash === '#main-content' ? previous.branch : exploreRouteForHash(nextHash)?.branch }))
+      const updateLocation = () => setLocation((previous) => ({ hash: nextHash, page: pageForHash(nextHash, previous.page) }))
       const animate = nextPage !== currentPage.current && 'startViewTransition' in document && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
       currentPage.current = nextPage
       if (animate) document.startViewTransition(() => flushSync(updateLocation))
@@ -62,5 +69,5 @@ export function usePageNavigation() {
     target?.scrollIntoView?.({ block: 'start', behavior: getScrollBehavior() })
   }, [hash, page])
 
-  return { page, hash, branch }
+  return { page, hash }
 }

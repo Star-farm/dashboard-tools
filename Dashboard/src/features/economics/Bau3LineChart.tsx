@@ -1,6 +1,7 @@
 import ChartInfo from '../../components/ChartInfo'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
-import { CHART_TICK, scenarioLineStyle } from '../../components/chartStyles'
+import { CHART_TICK, scenarioColor, scenarioLineStyle } from '../../components/chartStyles'
+import ChartSeriesLegend from '../../components/ChartSeriesLegend'
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -40,9 +41,9 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
       {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${data.startYear}–${data.endYear} · ${unit}`}>
         <ChartUnitLabel unit={unit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 310 }} onResize={setChartWidth}>
-          <LineChart data={points} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 8 }}>
+          <LineChart data={points} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 24 }}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
-            <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
+            <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
             <YAxis width={chartWidth < 420 ? 46 : 68} domain={yScale.domain} ticks={yScale.ticks} allowDataOverflow tickFormatter={(value) => `${axisNumber(Number(value))}${metric === 'margin' ? ' %' : ''}`} tickLine={false} tickMargin={chartWidth < 420 ? 4 : 8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
             <Tooltip
@@ -59,10 +60,11 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
   cursor={{ stroke: '#819275', strokeDasharray: '3 3' }}
   wrapperStyle={{ pointerEvents: 'none', zIndex: 10 }}
 />
-            {visibleConditions.map((condition) => <Line key={condition} type="linear" dataKey={condition} name={t[condition]} {...scenarioLineStyle(family, condition, true, false)} connectNulls={false} isAnimationActive={false} />)}
+            {visibleConditions.map((condition) => <Line key={condition} type="linear" dataKey={condition} name={t[condition]} {...scenarioLineStyle(family, condition)} connectNulls={false} isAnimationActive={false} />)}
           </LineChart>
         </ResponsiveContainer>
       </div> : <p className="bau3-no-data">{t.noData}</p>}
+      {hasData && <ChartSeriesLegend language={language} legendTitle={language === 'vi' ? 'Chú giải:' : 'Legend:'} label={language === 'vi' ? 'Mô hình' : 'Model'} items={[{ key: family, label: t[family], color: scenarioColor(family), kind: 'bar' }]} />}
       <ConditionLegend language={language} conditions={visibleConditions} />
     </article>
   )

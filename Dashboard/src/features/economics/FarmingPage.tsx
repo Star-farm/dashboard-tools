@@ -45,7 +45,7 @@ export default function FarmingPage({ language, data, family }: { language: Lang
         })}</dl>
         <p className="farming-method">{t.method}</p>
       </section>
-      <aside className="bau3-insight farming-summary" aria-labelledby="farming-summary-title"><h2 id="farming-summary-title">{t.summary}</h2><p><EmphasizedNumbers text={bauFarmingSummary(farming, language, family)} /></p></aside>
+      <aside className="bau3-insight farming-summary" aria-labelledby="farming-summary-title"><h2 id="farming-summary-title">{t.summary}</h2><p><EmphasizedNumbers text={bauFarmingSummary(farming, language, family)} maxSentences={3} /></p></aside>
       <section className="farming-trends" aria-labelledby="farming-trends-title">
         <h2 id="farming-trends-title">{t.charts}</h2>
         <div className="farming-chart-grid">{metrics.map((metric) => {

@@ -13,9 +13,9 @@ No environment file, key, backend, or remote service is required. Vite normally 
 
 ## Add or change a page
 
-1. Locate its route in `src/app/usePageNavigation.ts` and topic maps in `src/app/exploreNavigation.ts`, `src/features/resources/resourceRoutes.ts`, or `src/features/environment/environmentRoutes.ts`.
+1. Locate its route in `src/app/usePageNavigation.ts` and content route maps in `src/features/resources/resourceRoutes.ts` or `src/features/environment/environmentRoutes.ts`. `src/app/exploreNavigation.ts` only defines topic menu branches, which link directly to content pages.
 2. Keep page, domain calculations, types, and copy in the owning feature directory.
-3. Register lazy pages and loading text in `src/app/App.tsx`; preserve breadcrumbs, language, and hash-context behavior.
+3. Register lazy pages and loading text in `src/app/App.tsx`; preserve language and hash-context behavior. Old `*-explore` hashes should continue resolving to their matching content page when applicable.
 4. Reuse `src/components/` for shared chart controls, filters, legends, descriptions, and selection. Reuse `src/app/` for shell-level navigation/state and `src/utils/` for generic helpers.
 5. Add/update Vietnamese and English copy, accessible labels, keyboard behavior, responsive styles, and behavior tests.
 6. Update documentation when routes, data contracts, architecture, or workflows change.
@@ -40,7 +40,7 @@ Every changed user-facing string needs Vietnamese and English translations. Use 
 
 Map state and rendering live in `src/features/map/`. Read [DATA_PIPELINE.md](DATA_PIPELINE.md) before changing assets. Keep manifest references, hashes, CRS, shape order, category shares, and geometry fingerprints in sync.
 
-Soil validation expects plot area = known area + unknown area, and category shares to sum to known area within tolerance. Land Use uses compact per-plot statistics and a raster; do not restore a full vector fallback or fetch the complete overlay during normal display. Test layer changes, retry, pan/zoom, keyboard selection, legends, popups, long names, and map-to-dashboard context.
+Soil validation expects plot area = known area + unknown area, and category shares to sum to known area within tolerance. Land Use uses compact per-plot statistics and a raster; do not restore a full vector fallback or fetch the complete overlay during normal display. The regional Natural Earth image covers 94–116°E and 4–23°N; country and sea names are translated SVG labels. Plot-map panning stays within the administrative study extent and can reach its northern edge. Test layer changes, retry, constrained pan/zoom, keyboard selection, labels in both languages, legends, popups, long names, and map-to-dashboard context.
 
 ## Local workflow
 

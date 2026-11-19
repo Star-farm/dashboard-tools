@@ -10,6 +10,7 @@ import ChartInfo from '../../components/ChartInfo'
 import { lineAxisScale } from '../../utils/lineAxisScale'
 import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
+import ChartSeriesLegend from '../../components/ChartSeriesLegend'
 import { economicFacets, economicsText } from '../economics/economicsText'
 import { emptyEconomicFilters, filterEconomicRows } from '../economics/economicsData'
 import type { EconomicFilters, EconomicRow } from '../economics/economicsData'
@@ -239,7 +240,7 @@ export default function MapPage({ language }: { language: Language }) {
         <ResponsiveContainer width="100%" height={290} onResize={setTrendChartWidth}>
         <LineChart
           data={chartTrend}
-          margin={{ top: 34, right: trendChartWidth < 420 ? 8 : 24, left: trendChartWidth < 420 ? 0 : 20, bottom: 20 }}
+          margin={{ top: 34, right: trendChartWidth < 420 ? 8 : 24, left: trendChartWidth < 420 ? 0 : 20, bottom: 34 }}
         >
           <CartesianGrid stroke="#dce3d9" vertical={false} />
 
@@ -253,6 +254,7 @@ export default function MapPage({ language }: { language: Language }) {
             axisLine={false}
             tickMargin={12}
             padding={trendChartWidth < 420 ? { left: 0, right: 0 } : { left: 12, right: 12 }}
+            label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }}
           />
 
           <YAxis
@@ -291,6 +293,7 @@ export default function MapPage({ language }: { language: Language }) {
         </LineChart>
       </ResponsiveContainer>
       </div>}
+      {!loading && <ChartSeriesLegend language={language} items={[{ key: trendMetric, label: t[trendMetric], color: '#254f3d' }]} />}
       <details className="map-trend-table"><summary>{t.showTable} · 2027–2050</summary><div className="map-data-table-scroll"><table><thead><tr><th>{t.year}</th><th>{t[trendMetric]} ({trendUnit})</th></tr></thead><tbody>{trend.map((point) => <tr key={point.year}><td>{point.year}</td><td>{point.value == null ? '—' : trendNumber.format(point.value)}</td></tr>)}</tbody></table></div></details>
     </section>
     {scenarios.length > 0 && <DashboardContext scenarios={scenarios} language={language} context={{ filters, year, harvest: season, codes: scenarios.map((scenario) => scenario.code) }} />}

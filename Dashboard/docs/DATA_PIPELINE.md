@@ -79,6 +79,8 @@ Land Use JSON retains per-plot category areas and unknown area but omits detaile
 
 `scripts/build-admin-boundaries.py` prepares `public/map-data/admin-boundaries.geojson` from province and ward GeoJSON, reprojected to display CRS. It accepts the GeoJSON source root and output filename as positional arguments, for example `python scripts/build-admin-boundaries.py D:/path/to/admin-source public/map-data/admin-boundaries.geojson`. Its selected province folders and levels are declared in the script, so it does not process every administrative unit. Keep `admin-boundaries-LICENSE.txt`; verify names, extents, properties, and CRS when replacing this asset.
 
+The offline regional basemap is one projected Natural Earth JPEG at `public/map-data/static-basemap.jpg`, spanning 94–116°E and 4–23°N. Runtime map rendering reads only this local image and does not request basemap tiles or a map API. To regenerate it, download Natural Earth 1:10m Physical Land polygons (`ne_10m_land.shp`) and country boundaries (`ne_10m_admin_0_boundary_lines_land.shp`), then run `node scripts/build-static-basemap.mjs <path-to-ne_10m_land.shp> <path-to-ne_10m_admin_0_boundary_lines_land.shp>`. The 4000 × 4000 JPEG displays simplified land, sea, and country boundaries; the application draws localized country and sea labels as SVG text. It does not contain streets. See `public/map-data/static-basemap-LICENSE.txt` for source and license details.
+
 When map generation changes, check geometry and hashes, source overlay, layer files, soil manifest, raster filename, scenario manifest, and aggregate references. Deploy manifests and referenced hashed assets together; retain old hashes while cached manifests may refer to them.
 
 ## Scientific and geographic integrity

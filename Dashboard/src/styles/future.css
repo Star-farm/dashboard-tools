@@ -48,7 +48,7 @@
   .chart-card-header { display: block; padding: 20px 17px 17px; }
   .chart-heading p { font-size: var(--text-small); margin-top: 6px; }
   .chart-area { display: flex; flex-direction: column; padding: 20px 5px 14px; }
-  .chart-area > .interactive-chart-legend { order: 0; margin: 0 12px 12px; }
+  .chart-area > .interactive-chart-legend { order: 3; margin: 12px 12px 0; }
   .chart-area > .timeseries-plot { order: 1; }
   .chart-area > .chart-x-label { order: 2; }
   .chart-meta { padding-inline: 12px; margin-bottom: 15px; align-items: flex-start; gap: 13px; }

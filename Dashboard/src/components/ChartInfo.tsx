@@ -2,6 +2,8 @@
 import '../styles/chart-info.css'
 import { CONDITION_COLORS, scenarioColor } from './chartStyles'
 import type { Bau3Condition } from '../features/economics/bau3Types'
+import type { Language } from '../i18n'
+import { bau3Text } from '../features/economics/bau3Text'
 
 type TooltipEntry = {
   name?: string | number
@@ -24,7 +26,7 @@ export default function ChartInfo({
   payload,
   yearLabel,
   format,
-  unit,
+  language,
 }: {
   active?: boolean
   label?: unknown
@@ -32,11 +34,12 @@ export default function ChartInfo({
   yearLabel?: string
   format: (value: number) => string
   unit?: string
+  language?: Language
 }) {
   if (!active || !payload?.length) return null
 
   return (
-    <div className="chart-info" role="status">
+    <div className="chart-info chart-info--list" role="status">
       <p className="chart-info-title">
         {yearLabel ? `${yearLabel} ` : ''}
         {String(label ?? '')}
@@ -47,7 +50,13 @@ export default function ChartInfo({
           const row = entry.payload
           const group = row?.group ?? row?.model
           const name = group ? row?.label ?? entry.name : entry.name
-          const compactName = String(name ?? '')
+          const conditionKey = String(entry.dataKey ?? '').split('_').at(-1) as Bau3Condition
+          const conditionColor = CONDITION_COLORS[conditionKey]
+          const resourceMarker = conditionKey.endsWith('Shortage') ? 'square' : 'circle'
+          const conditionLabel = conditionColor && language ? bau3Text[language][conditionKey].split(' · ')[0] : ''
+          const compactName = group && conditionColor && language
+            ? `${group === 'bau' ? 'BAU' : '1Mha'} · ${conditionLabel}`
+            : String(name ?? '')
             .replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')
             .replace(/^Thường lệ(?= ·|$)/i, 'BAU')
             .replace(/Severe weather|Normal weather/gi, (label) => label.startsWith('Severe') ? 'Severe' : 'Normal')
@@ -66,23 +75,22 @@ export default function ChartInfo({
               ? 'bau'
               : undefined
           const scenarioKey = scenario ?? labelScenario
-          const conditionColor = CONDITION_COLORS[String(entry.dataKey ?? '') as Bau3Condition]
-
           const color =
             (scenarioKey ? scenarioColor(scenarioKey) : undefined) ??
-            conditionColor ??
+            entry.color ??
+            entry.fill ??
             row?.color ??
             row?.fill ??
-            entry.fill ??
-            entry.color ??
+            conditionColor ??
             '#40533b'
 
           return (
             <div key={`${String(entry.dataKey)}-${index}`}>
               <dt>
                 <span
-                  className="chart-info-swatch"
+                  className={`chart-info-swatch chart-info-swatch--${resourceMarker}`}
                   style={{ backgroundColor: color }}
+                  data-marker={resourceMarker}
                   aria-hidden="true"
                 />
                 <span><span className="chart-tooltip-desktop-label">{name}</span><span className="chart-tooltip-mobile-label">{compactName}</span></span>
@@ -92,7 +100,7 @@ export default function ChartInfo({
                 {entry.value == null ||
                 !Number.isFinite(Number(entry.value))
                   ? '—'
-                  : <>{format(Number(entry.value))}{unit && <> <span className="chart-info-unit">{unit}</span></>}</>}
+                  : format(Number(entry.value))}
               </dd>
             </div>
           )

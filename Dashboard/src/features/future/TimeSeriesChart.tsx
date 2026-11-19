@@ -1,6 +1,7 @@
 import ChartInfo from '../../components/ChartInfo'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
-import { CHART_TICK, scenarioLineStyle } from '../../components/chartStyles'
+import { CHART_TICK, SCENARIO_COLORS, scenarioLineStyle } from '../../components/chartStyles'
+import ChartSeriesLegend from '../../components/ChartSeriesLegend'
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -55,6 +56,10 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
                 </ResponsiveContainer>
               </div>
               <p className="chart-x-label">{t.year}</p>
+              <ChartSeriesLegend language={language} legendTitle={language === 'vi' ? 'Chú giải:' : 'Legend:'} label={language === 'vi' ? 'Mô hình' : 'Model'} items={[
+                { key: 'first', label: analysis.firstLabel, color: SCENARIO_COLORS.oneMha, kind: 'bar' },
+                { key: 'second', label: analysis.secondLabel, color: SCENARIO_COLORS.bau, kind: 'bar' },
+              ]} />
             </div>
             <aside className="chart-insight" aria-label={`${t.insight} — ${title}`}>
               <h3 className="insight-eyebrow">{t.insight}</h3>

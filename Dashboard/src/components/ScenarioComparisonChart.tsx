@@ -1,8 +1,8 @@
-import ChartMarker from './ChartMarker'
+import ConditionComparisonTooltip from './ConditionComparisonTooltip'
 import ChartUnitLabel from './ChartUnitLabel'
-import { CHART_TICK, CONDITION_COLORS, CONDITION_MARKERS, scenarioLineStyle } from './chartStyles'
+import { CHART_TICK, scenarioColor, scenarioLineStyle } from './chartStyles'
 import { useId, useState } from 'react'
-import { Bar, CartesianGrid, LabelList, Line, ComposedChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { Bar, CartesianGrid, LabelList, Line, ComposedChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../i18n'
 import { yearTicks } from '../utils/yearTicks'
 import { lineAxisScale } from '../utils/lineAxisScale'
@@ -15,6 +15,8 @@ import ConditionFilters, { ConditionLegend } from './ConditionFilters'
 import { useConditionFilters } from './useConditionFilters'
 import '../styles/scenario-comparison-chart.css'
 import { useChartSelection } from './chartSelectionContext'
+import ScenarioAbbreviations from './ScenarioAbbreviations'
+import ChartSeriesLegend from './ChartSeriesLegend'
 
 type ConditionPoint = { year: number } & Record<Bau3Condition, number | null>
 interface Props {
@@ -68,12 +70,12 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
     if (activeLabel != null && Number.isInteger(value) && value >= startYear && value <= endYear) setYear(value)
   }
   return <article className="bau3-chart scenario-comparison-chart" aria-labelledby={`${id}-title`}>
-    <header><h3 id={`${id}-title`}><span className="scenario-model-bau">{baselineLabel}</span> <span> / </span> <span className="scenario-model-one-mha">1Mha</span></h3></header>
+    <header><h3 id={`${id}-title`}><span className="scenario-model-bau"><ScenarioAbbreviations text={baselineLabel} language={language} /></span> <span> / </span> <span className="scenario-model-one-mha"><ScenarioAbbreviations text="1Mha" language={language} /></span></h3></header>
     <div className="comparison-model-key" data-chart={chartType} role="group" aria-label={vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}>
       <p className="chart-legend-label">{vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}</p>
       <button type="button" title={vi ? 'Tất cả mô hình' : 'All models'} aria-pressed={model === 'all'} onClick={() => setModel('all')}>{vi ? 'Tất cả mô hình' : 'All models'}</button>
-      <button type="button" title="1Mha" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}><i className="model-line model-line-oneMha" aria-hidden="true" />1Mha · {bars ? vi ? 'cột đậm' : 'solid bars' : vi ? 'nét đậm' : 'bold line'}</button>
-      <button type="button" title={baselineLabel} aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><i className="model-line model-line-bau" aria-hidden="true" />{baselineLabel} · {bars ? vi ? 'cột nhạt' : 'faint bars' : vi ? 'nét đứt' : 'dashed line'}</button>
+      <button type="button" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}><ScenarioAbbreviations text="1Mha" language={language} /></button>
+      <button type="button" aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><ScenarioAbbreviations text={baselineLabel} language={language} /></button>
     </div>
     <ConditionFilters language={language} filters={filters} />
     {hasData ? <>
@@ -85,26 +87,28 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
       }}>
         <ChartUnitLabel unit={unit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 620, height: 340 }} onResize={setWidth}>
-          <ComposedChart barGap={1} barCategoryGap="10%" data={points} accessibilityLayer margin={{ top: 30, right: 18, left: 0, bottom: 8 }} onClick={selectYear}>
+          <ComposedChart barGap={1} barCategoryGap="10%" data={points} accessibilityLayer margin={{ top: 30, right: 18, left: 0, bottom: 24 }} onClick={selectYear}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
-            <XAxis dataKey="year" type={bars ? 'category' : 'number'} domain={bars ? undefined : [startYear, endYear]} ticks={yearTicks(startYear, endYear, width, 88)} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
+            <XAxis dataKey="year" type={bars ? 'category' : 'number'} domain={bars ? undefined : [startYear, endYear]} ticks={yearTicks(startYear, endYear, width, 88)} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
             <YAxis width={width < 420 ? 46 : 68} domain={bars ? barScale.domain : lineScale.domain} ticks={bars ? barScale.ticks : lineScale.ticks} allowDataOverflow tickFormatter={(value) => bars ? barAxisNumber(Number(value)) : formatAxis ? formatAxis(Number(value), lineScale.ticks) : axisNumber(Number(value))} tickLine={false} tickMargin={width < 420 ? 4 : 6} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
+            <Tooltip shared isAnimationActive={false} content={(tooltipProps) => <ConditionComparisonTooltip {...tooltipProps} language={language} yearLabel={t.year} format={formatValue} unit={unit} />} cursor={{ stroke: '#819275', strokeDasharray: '3 3' }} wrapperStyle={{ pointerEvents: 'none', zIndex: 10 }} />
             <ReferenceLine x={selectedYear} stroke="#687a5c" strokeWidth={1} />
-            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={CONDITION_COLORS[key]} fillOpacity={group === 'bau' ? .35 : 1} stroke={CONDITION_COLORS[key]} strokeDasharray={group === 'bau' ? '3 2' : undefined} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key, true, false, true)} connectNulls={false} isAnimationActive={false} />))}
+            {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={scenarioColor(group)} stroke={scenarioColor(group)} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(Number(amount))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key)} connectNulls={false} isAnimationActive={false} />))}
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      {visible.length * visibleModels.length > 1 && <div className="comparison-year-details">
-        <p className="comparison-selected-year">{t.year} <strong>{selectedYear}</strong></p>
-        <table className="comparison-year-values" aria-label={`${title} · ${t.year} ${selectedYear} · ${unit}`}>
-          <thead><tr><th scope="col">{vi ? 'Điều kiện kịch bản' : 'Scenario conditions'}</th>{model !== 'oneMha' && <th scope="col">{baselineLabel}</th>}{model !== 'bau' && <th scope="col">1Mha</th>}</tr></thead>
-          <tbody>{visible.map((key) => <tr key={key}><th scope="row"><svg className="condition-marker" viewBox="-7 -7 14 14" aria-hidden="true"><ChartMarker shape={CONDITION_MARKERS[key]} color={CONDITION_COLORS[key]} /></svg>{t[key]}</th>{model !== 'oneMha' && <td>{display(baselineYears.get(selectedYear)?.[key])}</td>}{model !== 'bau' && <td><strong>{display(oneMhaYears.get(selectedYear)?.[key])}</strong></td>}</tr>)}</tbody>
-        </table>
-      </div>}
       {visible.length * visibleModels.length === 1 && <p className="sr-only" aria-live="polite">{t.year} {selectedYear} · {t[visible[0]]} · {visibleModels[0] === 'bau' ? baselineLabel : '1Mha'}: {display((visibleModels[0] === 'bau' ? baselineYears : oneMhaYears).get(selectedYear)?.[visible[0]])} {unit}</p>}
     </> : <p className="bau3-no-data">{t.noData}</p>}
-    <ConditionLegend language={language} conditions={filters.visible} />
-    <p className="bau3-chart-note">{bars ? vi ? 'Màu cột thể hiện điều kiện kịch bản. BAU: cột nhạt, viền đứt. 1Mha: cột đậm.' : 'Bar colors identify scenario conditions. BAU: faint bars with dashed borders. 1Mha: solid bars.' : vi ? 'Màu và hình dấu điểm thể hiện điều kiện kịch bản. BAU: nét đứt. 1Mha: nét liền. Các đường có cùng số liệu có thể trùng nhau.' : 'Colors and marker shapes identify scenario conditions. BAU: dashed. 1Mha: solid. Lines with identical values may overlap.'}</p>
+    {hasData && <section className="scenario-encoding-legend" aria-label={vi ? 'Chú giải biểu đồ' : 'Chart legend'}>
+      <p className="chart-legend-caption">{vi ? 'Chú giải:' : 'Legend:'}</p>
+      <div className="scenario-encoding-legend-groups">
+        <ChartSeriesLegend language={language} label={vi ? 'Mô hình' : 'Model'} items={[
+          { key: 'oneMha', label: '1Mha', color: scenarioColor('oneMha'), kind: 'bar' },
+          { key: 'bau', label: baselineLabel, color: scenarioColor('bau'), kind: 'bar' },
+        ]} />
+        <ConditionLegend language={language} conditions={filters.visible} />
+      </div>
+    </section>}
   </article>
 }

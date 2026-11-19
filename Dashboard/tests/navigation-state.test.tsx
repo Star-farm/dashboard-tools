@@ -10,7 +10,7 @@ describe('current topic and missing pages', () => {
     expect(container.querySelectorAll('.topic-trigger[aria-current="true"]')).toHaveLength(1)
     rerender(<HeaderNavigation page="resourceOneMha" language="en" mobile={mobile} />)
     expect(screen.getByRole('button', { name: 'Resources' })).toHaveAttribute('aria-current', 'true')
-    rerender(<HeaderNavigation page="environmentExplore" language="en" mobile={mobile} />)
+    rerender(<HeaderNavigation page="environmentOverview" language="en" mobile={mobile} />)
     expect(screen.getByRole('button', { name: 'Environment' })).toHaveAttribute('aria-current', 'true')
     rerender(<HeaderNavigation page="home" language="en" mobile={mobile} />)
     expect(container.querySelector('.topic-trigger[aria-current]')).not.toBeInTheDocument()

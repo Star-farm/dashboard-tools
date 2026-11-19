@@ -1,7 +1,5 @@
 import type { Language } from '../i18n'
-import { bau3Text } from '../features/economics/bau3Text'
-import { CONDITION_COLORS, CONDITION_MARKERS } from './chartStyles'
-import ChartMarker from './ChartMarker'
+import { CONDITION_COLORS } from './chartStyles'
 import type { useConditionFilters } from './useConditionFilters'
 import '../styles/condition-filters.css'
 import '../styles/chart-legend.css'
@@ -21,6 +19,19 @@ export default function ConditionFilters({ language, filters }: { language: Lang
 }
 
 export function ConditionLegend({ language, conditions }: { language: Language; conditions: readonly (keyof typeof CONDITION_COLORS)[] }) {
-  const vi = language === 'vi', t = bau3Text[language]
-  return <div className="condition-legend-wrap"><p className="chart-legend-caption">{vi ? 'Chú giải' : 'Legend'}</p><ul className="condition-key" aria-label={vi ? 'Chú giải điều kiện' : 'Condition legend'}>{conditions.map((key) => <li key={key}><svg className="chart-legend-marker" viewBox="-7 -7 14 14" aria-hidden="true"><ChartMarker shape={CONDITION_MARKERS[key]} color={CONDITION_COLORS[key]} /></svg>{t[key]}</li>)}</ul></div>
+  const vi = language === 'vi'
+  const severe = conditions.some((key) => key.startsWith('severe'))
+  const normalWeather = conditions.some((key) => key.startsWith('mild'))
+  const shortage = conditions.some((key) => key.endsWith('Shortage'))
+  const normalResources = conditions.some((key) => key.endsWith('Normal'))
+  return <div className="condition-legend-wrap">
+    <div className="condition-legend-group"><p className="chart-legend-caption">{vi ? 'Thời tiết' : 'Weather'}</p><ul className="condition-key" aria-label={vi ? 'Chú giải thời tiết' : 'Weather legend'}>
+      {normalWeather && <li><span className="encoding-line" aria-hidden="true" />{vi ? 'Bình thường' : 'Normal'}</li>}
+      {severe && <li><span className="encoding-line encoding-line--dashed" aria-hidden="true" />{vi ? 'Khắc nghiệt' : 'Severe'}</li>}
+    </ul></div>
+    <div className="condition-legend-group"><p className="chart-legend-caption">{vi ? 'Tài nguyên' : 'Resources'}</p><ul className="condition-key" aria-label={vi ? 'Chú giải tài nguyên' : 'Resource legend'}>
+      {normalResources && <li><span className="encoding-marker encoding-marker--circle" aria-hidden="true" />{vi ? 'Tài nguyên bình thường' : 'Normal resources'}</li>}
+      {shortage && <li><span className="encoding-marker encoding-marker--square" aria-hidden="true" />{vi ? 'Khan hiếm tài nguyên' : 'Resource shortage'}</li>}
+    </ul></div>
+  </div>
 }

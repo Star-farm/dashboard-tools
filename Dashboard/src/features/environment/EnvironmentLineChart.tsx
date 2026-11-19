@@ -2,8 +2,10 @@ import { bau3Conditions } from '../economics/bau3Types'
 import ChartInfo from '../../components/ChartInfo'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { ConditionLegend } from '../../components/ConditionFilters'
+import ChartSeriesLegend from '../../components/ChartSeriesLegend'
 import {
   CHART_TICK,
+  scenarioColor,
   scenarioLineStyle,
 } from '../../components/chartStyles'
 import { useState } from 'react'
@@ -104,7 +106,7 @@ export default function EnvironmentLineChart({
                 top: 32,
                 right: 20,
                 left: 0,
-                bottom: 8,
+                bottom: 24,
               }}
             >
               <CartesianGrid
@@ -128,6 +130,7 @@ export default function EnvironmentLineChart({
                 tickMargin={10}
                 axisLine={{ stroke: '#819275' }}
                 tick={CHART_TICK}
+                label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }}
               />
 
               <YAxis
@@ -171,9 +174,7 @@ export default function EnvironmentLineChart({
                   name={labels[condition]}
                   {...scenarioLineStyle(
                     family,
-                    condition,
-                    true,
-                    false
+                    condition
                   )}
                   connectNulls={false}
                   isAnimationActive={false}
@@ -185,6 +186,7 @@ export default function EnvironmentLineChart({
       ) : (
         <p className="bau3-no-data">{t.noData}</p>
       )}
+      {hasData && <ChartSeriesLegend language={language} legendTitle={language === 'vi' ? 'Chú giải:' : 'Legend:'} label={language === 'vi' ? 'Mô hình' : 'Model'} items={[{ key: family, label: t[family], color: scenarioColor(family), kind: 'bar' }]} />}
       <ConditionLegend language={language} conditions={visibleConditions} />
     </article>
   )

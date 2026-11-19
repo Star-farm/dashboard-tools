@@ -7,7 +7,7 @@ import { seasonalComposition } from './seasonalComposition'
 const cropColors: Record<CropPeriod, string> = { early: '#267e91', middle: '#ba861f', late: '#8859a5' }
 export interface SeasonalSlice { period: CropPeriod; label: string; value: number | null; status?: string; notGrown?: boolean }
 
-export default function SeasonalPieChart({ language, name, color, slices, unit, format, mobileFormat, selected, onSelect, showLegend = true }: {
+export default function SeasonalPieChart({ language, name, color, slices, unit, format, mobileFormat, selected, onSelect, showLegend = true, allowedPeriods }: {
   language: Language
   name: string
   color: string
@@ -18,6 +18,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   selected: string
   onSelect?: (period: CropPeriod) => void
   showLegend?: boolean
+  allowedPeriods?: readonly CropPeriod[]
 }) {
   const vi = language === 'vi'
   const [hovered, setHovered] = useState<CropPeriod | null>(null)
@@ -58,7 +59,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
     window.addEventListener('seasonal-pie-tooltip-open', closeOtherTooltip)
     return () => window.removeEventListener('seasonal-pie-tooltip-open', closeOtherTooltip)
   }, [instanceId])
-  const cultivated = slices.filter((slice) => !slice.notGrown)
+  const cultivated = slices.filter((slice) => !slice.notGrown && (!allowedPeriods || allowedPeriods.includes(slice.period)))
   const { shares } = seasonalComposition(cultivated.map((slice) => slice.value))
   const percent = (slice: SeasonalSlice) => {
     const index = cultivated.indexOf(slice)
@@ -136,8 +137,8 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
       role="group"
       aria-label={vi ? 'Chú giải mùa vụ' : 'Season legend'}
     >
-      <p className="chart-legend-label">{vi ? 'Chú giải' : 'Legend'}</p>
-      {slices.map((slice) => (
+      <p className="chart-legend-label">{vi ? 'Chú giải:' : 'Legend:'}</p>
+      {cultivated.map((slice) => (
         <span key={slice.period} className="seasonal-model-legend-item seasonal-pie-shared-legend-item">
           <span
             className="seasonal-model-legend-swatch"

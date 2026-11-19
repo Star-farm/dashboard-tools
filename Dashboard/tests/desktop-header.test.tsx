@@ -30,6 +30,16 @@ describe('desktop header scrolling', () => {
     expect(header).not.toHaveClass('header-hidden')
   })
 
+  it('uses the solid page header color after scrolling past the home hero', () => {
+    render(<SiteHeader language="vi" page="home" changeLanguage={() => {}} />)
+    const header = screen.getByRole('banner')
+    expect(header).not.toHaveClass('header-home-scrolled')
+    scrollTo(700)
+    expect(header).toHaveClass('header-home-scrolled')
+    scrollTo(0)
+    expect(header).not.toHaveClass('header-home-scrolled')
+  })
+
   it('shows the header when navigating or focusing a menu item from the keyboard', () => {
     render(<SiteHeader language="en" page="future" changeLanguage={() => {}} />)
     const header = screen.getByRole('banner')

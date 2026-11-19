@@ -13,15 +13,16 @@ export const environmentRoutes = {
   environmentOneMha: { anchor: 'environment-1mha', kind: 'farming', family: 'oneMha' },
 } as const
 export type EnvironmentContentPage = keyof typeof environmentRoutes
-export type EnvironmentPage = EnvironmentContentPage | 'environmentExplore'
-export function isEnvironmentPage(page: string): page is EnvironmentPage { return page === 'environmentExplore' || page in environmentRoutes }
+export type EnvironmentPage = EnvironmentContentPage
+export function isEnvironmentPage(page: string): page is EnvironmentPage { return page in environmentRoutes }
 export function environmentPageForHash(hash: string): EnvironmentPage | undefined {
-  if (hash === '#environment-explore') return 'environmentExplore'
+  if (hash === '#environment-explore' || hash === '#environment-explore-overview') return 'environmentOverview'
+  if (hash === '#environment-explore-comparison') return 'environmentComparison'
+  if (hash === '#environment-explore-bau') return 'environmentBau3'
   return (Object.keys(environmentRoutes) as EnvironmentContentPage[]).find((key) => `#${environmentRoutes[key].anchor}` === hash)
 }
 export function environmentPageTitle(page: EnvironmentPage, language: Language) {
   const t = environmentText[language]
-  if (page === 'environmentExplore') return t.exploreTitle
   const route = environmentRoutes[page]
   if (route.kind === 'overview') return t.title
   if (route.kind === 'bars') return t.comparisonTitle

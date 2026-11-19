@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react'
 import App from '../src/app/App'
 import HeaderNavigation from '../src/app/HeaderNavigation'
-import EconomicExplorePage from '../src/features/economics/EconomicExplorePage'
 import EnvironmentPage from '../src/features/environment/EnvironmentPage'
 import EnvironmentLineChart from '../src/features/environment/EnvironmentLineChart'
 import { environmentPageForHash, environmentPageTitle, environmentRoutes } from '../src/features/environment/environmentRoutes'
@@ -124,18 +123,6 @@ describe('environmental navigation', () => {
     expect(screen.getByRole('link', { name: 'Một triệu hecta lúa' })).toHaveAttribute('href', '#environment-1mha')
   })
 
-  it('shows four parent destinations and opens the hub from the homepage', async () => {
-    const { unmount } = render(<EconomicExplorePage language="vi" topic="sustainability" />)
-    expect(screen.getAllByRole('link')).toHaveLength(4)
-    expect(document.querySelector('.economic-explore-card ul')).not.toBeInTheDocument()
-    for (const link of screen.getAllByRole('link')) expect(link.getAttribute('href')).toMatch(/^#environment-/)
-    unmount()
-    window.history.replaceState(null, '', '#home')
-    render(<App />)
-    fireEvent.click(screen.getByRole('link', { name: 'Khám phá Môi trường' }))
-    expect(await screen.findByRole('heading', { level: 1, name: 'Khám phá Môi trường' })).toBeInTheDocument()
-    await waitFor(() => expect(document.title).toBe('Khám phá Môi trường | STAR FARM'))
-  })
 
   it.each(Object.keys(environmentRoutes) as EnvironmentContentPage[])('opens and translates direct route %s', async (page) => {
     const hash = `#${environmentRoutes[page].anchor}`

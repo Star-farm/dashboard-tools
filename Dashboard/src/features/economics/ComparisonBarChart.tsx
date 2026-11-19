@@ -38,9 +38,9 @@ export default function ComparisonBarChart({ metric, cohort, axisCohort = cohort
       {chartPoints.some((point) => point.value !== null) ? <div className="comparison-plot" role="group" aria-label={`${title} · ${startYear}–${endYear} · ${chartUnit}`}>
         <ChartUnitLabel unit={chartUnit} language={language} />
         <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 600, height: 280 }}>
-          <BarChart data={chartPoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
+          <BarChart data={chartPoints} accessibilityLayer margin={{ top: 28, right: 20, bottom: 24, left: 0 }} barCategoryGap="30%">
             <CartesianGrid vertical={false} stroke="#b5c2aa" />
-            <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
+            <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} label={{ value: language === 'vi' ? 'Mô hình' : 'Model', position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
             <YAxis width={62} domain={axisScale.domain} ticks={axisScale.ticks} tickFormatter={(value) => axisNumber(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
             <ReferenceLine y={0} stroke="#819275" />
             <Tooltip isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} content={(props) => <ChartInfo {...props} format={(value) => chartNumber.format(value)} unit={chartUnit} />} />
@@ -52,6 +52,8 @@ export default function ComparisonBarChart({ metric, cohort, axisCohort = cohort
           </BarChart>
         </ResponsiveContainer>
       </div> : <p className="comparison-no-data">{text.noData}</p>}
+      <p className="chart-legend-caption comparison-values-title">{language === 'vi' ? 'Chú giải:' : 'Legend:'}</p>
+      <p className="chart-legend-caption comparison-values-caption">{language === 'vi' ? 'Mô hình' : 'Model'}</p>
       <dl className="comparison-values">{points.map((point) => <div key={point.group}>
         <dt><span className={`comparison-swatch ${point.group}`} aria-hidden="true" />{point.label}</dt>
         <dd>{point.value === null ? <span>{text.unavailable}</span> : <><strong>{number.format(point.value)}</strong>{' '}<span>{unit}</span></>}</dd>

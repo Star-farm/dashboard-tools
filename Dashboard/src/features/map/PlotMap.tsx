@@ -1,5 +1,5 @@
 
-import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Language } from '../../i18n'
 import { colorFor, mapColors  } from './mapData'
@@ -10,6 +10,7 @@ import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
 import type { SoilLayer } from './soilTypes'
 import PlotMapPopup from './PlotMapPopup'
+import MapBasemap, { MapGeographicLabels } from './MapBasemap'
 
 const ThematicOverlay = memo(function ThematicOverlay({ paths, outlines }: { paths: ReactNode; outlines: ReactNode }) {
   return <g pointerEvents="none" aria-hidden="true">{paths}{outlines}</g>
@@ -130,10 +131,11 @@ export default function PlotMap({
   const mapCenter = useMemo(() => adminRegion
     ? { x: (adminRegion.x[0] + adminRegion.x[1]) / 2, y: (adminRegion.y[0] + adminRegion.y[1]) / 2 }
     : { x: geometry.width / 2, y: geometry.height / 2 }, [adminRegion, geometry])
-  const initialView = useMemo(() => ({ zoom: 1, ...mapCenter }), [mapCenter])
+  const mapWidth = adminRegion ? Math.max(geometry.width + 70, (adminRegion.x[1] - adminRegion.x[0]) * 2.1) : geometry.width + 70
+  const mapHeight = adminRegion ? Math.max(geometry.height + 120, (adminRegion.y[1] - adminRegion.y[0]) * 2.1) : geometry.height + 120
+  const initialCenter = useMemo(() => ({ x: mapCenter.x, y: mapCenter.y - mapHeight * 0.032 }), [mapCenter, mapHeight])
+  const initialView = useMemo(() => ({ zoom: 1, ...initialCenter }), [initialCenter])
   const view = storedView ?? initialView
-  const mapWidth = adminRegion ? Math.max(geometry.width + 70, (adminRegion.x[1] - adminRegion.x[0]) * 1.22) : geometry.width + 70
-  const mapHeight = adminRegion ? Math.max(geometry.height + 120, (adminRegion.y[1] - adminRegion.y[0]) * 1.22) : geometry.height + 120
 
   const [hover, setHover] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
@@ -149,6 +151,17 @@ export default function PlotMap({
 
   const width = mapWidth / view.zoom
   const height = mapHeight / view.zoom
+  const clampMapView = useCallback((candidate: { zoom: number; x: number; y: number }) => {
+    if (!adminRegion) return candidate
+    return {
+      ...candidate,
+      x: Math.max(adminRegion.x[0], Math.min(adminRegion.x[1], candidate.x)),
+      y: Math.max(adminRegion.y[0], Math.min(adminRegion.y[1], candidate.y)),
+    }
+  }, [adminRegion])
+  const updateView = useCallback((update: (current: { zoom: number; x: number; y: number }) => { zoom: number; x: number; y: number }) => {
+    setView((current) => clampMapView(update(current ?? initialView)))
+  }, [clampMapView, initialView])
 
   const number = useMemo(
     () =>
@@ -173,11 +186,11 @@ export default function PlotMap({
     : t.yieldUnit
 
   function zoom(factor: number) {
-    setView((current) => zoomViewport(current ?? initialView, factor))
+    updateView((current) => zoomViewport(current, factor))
   }
 
   function reset() {
-    setView({ zoom: 1, ...mapCenter })
+    setView(clampMapView({ zoom: 1, ...initialCenter }))
   }
 
   function pointToMap(event: {
@@ -251,7 +264,7 @@ export default function PlotMap({
           ).matrixTransform(inverse)
         : undefined
 
-      setView((current) => zoomViewport(current ?? initialView, factor, anchor))
+      updateView((current) => zoomViewport(current, factor, anchor))
     }
 
     svg.addEventListener('wheel', wheel, {
@@ -261,7 +274,7 @@ export default function PlotMap({
     return () => {
       svg.removeEventListener('wheel', wheel)
     }
-  }, [initialView])
+  }, [initialView, updateView])
 
   // ---------------------------------------
   // Observe map size for responsive scale
@@ -546,8 +559,8 @@ fill={
       : Math.max(8, width * 0.018)
     return {
       boundaries: <g pointerEvents="none" aria-hidden="true" className="admin-boundary-layer">
-        {provinces.map((feature) => <path key={`province-${feature.properties.provinceCode}`} d={d(feature)} fill="#f2f5ed" fillRule="evenodd" stroke="#526b55" strokeWidth={1.6} vectorEffect="non-scaling-stroke"><title>{feature.properties.provinceName}</title></path>)}
-        {wards.map((feature) => <path key={`ward-${feature.properties.code}`} d={d(feature)} fill={feature.properties.provinceCode === '82' ? '#e8efdf' : 'none'} fillOpacity={0.58} fillRule="evenodd" stroke="#899b84" strokeOpacity={0.85} strokeWidth={0.65} vectorEffect="non-scaling-stroke"><title>{feature.properties.fullName}</title></path>)}
+        {provinces.map((feature) => <path key={`province-${feature.properties.provinceCode}`} d={d(feature)} fill="#f2f5ed" fillOpacity={0.16} fillRule="evenodd" stroke="#526b55" strokeWidth={1.6} vectorEffect="non-scaling-stroke"><title>{feature.properties.provinceName}</title></path>)}
+        {wards.map((feature) => <path key={`ward-${feature.properties.code}`} d={d(feature)} fill={feature.properties.provinceCode === '82' ? '#e8efdf' : 'none'} fillOpacity={0.12} fillRule="evenodd" stroke="#899b84" strokeOpacity={0.85} strokeWidth={0.65} vectorEffect="non-scaling-stroke"><title>{feature.properties.fullName}</title></path>)}
       </g>,
       labels: <g pointerEvents="none" aria-hidden="true" className="admin-label-layer">
       {provinces.map((feature) => {
@@ -696,8 +709,7 @@ fill={
           if (direction) {
             event.preventDefault()
 
-            setView((current) => {
-              const currentView = current ?? initialView
+            updateView((currentView) => {
               return {
                 ...currentView,
                 x: currentView.x + direction[0] * width / 8,
@@ -751,7 +763,7 @@ fill={
                 const anchor = pointToMap({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 })
                 if (anchor && pinchDistance.current && distance > 0) {
                   const factor = distance / pinchDistance.current
-                  setView((current) => zoomViewport(current ?? initialView, factor, anchor))
+                  updateView((current) => zoomViewport(current, factor, anchor))
                 }
                 pinchDistance.current = distance
               }
@@ -789,8 +801,7 @@ fill={
                 active.lastY
               ).matrixTransform(inverse)
 
-              setView((current) => {
-                const currentView = current ?? initialView
+              updateView((currentView) => {
                 return {
                   ...currentView,
                   x: currentView.x - (point.x - previous.x),
@@ -844,9 +855,11 @@ fill={
           setHover(null)
         }}
       >
+        <MapBasemap bounds={geometry.bounds} metersPerUnit={geometry.metersPerUnit} />
         {adminPaths?.boundaries}
         <g>{paths}</g>
         {thematic && <ThematicOverlay paths={rasterFile ? !rasterFailed && <image href={`${import.meta.env.BASE_URL}map-data/${rasterFile}`} x={0} y={0} width={geometry.width} height={geometry.height} preserveAspectRatio="none" onError={() => setFailedRaster(rasterFile)} /> : thematicPaths} outlines={thematicOutlines} />}
+        <MapGeographicLabels bounds={geometry.bounds} metersPerUnit={geometry.metersPerUnit} language={language} labelSize={Math.max(2.4, width * 0.012)} />
         {adminPaths?.labels}
 
         {/* Highlight selected plot */}
@@ -863,6 +876,10 @@ fill={
       </svg>
 
       {rasterFailed && <div className="map-loading-overlay"><div className="map-error" role="alert"><p>{st.error}</p><button type="button" className="primary-button" onClick={() => setFailedRaster(null)}>{st.retry}</button></div></div>}
+
+      <div className="map-basemap-credit" aria-label="Map attribution">
+        <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" target="_blank" rel="noreferrer">{t.basemapCredit}</a>
+      </div>
 
       {/* Fixed geographic scale overlay */}
       {showScale && (

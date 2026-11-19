@@ -6,9 +6,12 @@ describe('header dropdown menus', () => {
   it('provides page links and the shared branches from the reference images', () => {
     render(<HeaderNavigation language="vi" page="home" />)
     const navigation = screen.getByRole('navigation', { name: 'Menu chính' })
-    expect(within(navigation).getAllByRole('link').map((link) => link.textContent)).toEqual(['Trang chủ', 'Về tương lai', 'Bản đồ', 'Kinh tế', 'Tài nguyên', 'Môi trường', 'Chi tiết kịch bản'])
+    expect(within(navigation).getAllByRole('link').map((link) => link.textContent)).toEqual(['Trang chủ', 'Về tương lai', 'Chi tiết kịch bản'])
+    expect(within(navigation).getAllByRole('button').map((button) => button.textContent?.trim())).toEqual(['Bản đồ', 'Kinh tế', 'Tài nguyên', 'Môi trường'])
+    const currentHash = window.location.hash
     for (const label of ['Kinh tế', 'Tài nguyên', 'Môi trường']) {
       fireEvent.click(screen.getByRole('button', { name: label }))
+      expect(window.location.hash).toBe(currentHash)
       expect(screen.getByRole('button', { name: label })).toHaveAttribute('aria-expanded', 'true')
       const panel = screen.getByRole('list', { name: label })
       expect(within(panel).getByRole('button', { name: 'Tổng quan' })).toBeInTheDocument()

@@ -18,9 +18,9 @@ export default function ResourceBarChart({ data, series, metric, language }: { d
   return <article className="comparison-chart-card" aria-labelledby={`resource-bar-${metric}-title`}>
     <header><h2 id={`resource-bar-${metric}-title`}>{t[metric]} {t.period.toLocaleLowerCase(language)} {data.startYear} - {data.endYear}</h2></header>
     {points.some((point) => point.value !== null) ? <div className="comparison-plot" role="group" aria-label={`${t[metric]} · ${unit}`}><ChartUnitLabel unit={unit} language={language} /><ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 600, height: 280 }}>
-      <BarChart data={points} accessibilityLayer margin={{ top: 28, right: 20, bottom: 8, left: 0 }} barCategoryGap="30%">
+      <BarChart data={points} accessibilityLayer margin={{ top: 28, right: 20, bottom: 24, left: 0 }} barCategoryGap="30%">
         <CartesianGrid vertical={false} stroke="#b5c2aa" />
-        <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} />
+        <XAxis dataKey="label" axisLine={{ stroke: '#819275' }} tickLine={false} tick={CHART_TICK} tickMargin={12} interval={0} height={48} label={{ value: language === 'vi' ? 'Mô hình' : 'Model', position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
         <YAxis width={62} domain={axisScale.domain} ticks={axisScale.ticks} tickFormatter={(value) => axisNumber(Number(value))} axisLine={false} tickLine={false} tick={CHART_TICK} />
         <Tooltip isAnimationActive={false} cursor={{ fill: '#254f3d0a' }} content={(props) => <ChartInfo {...props} format={(value) => resourceNumber(value, language)} unit={unit} />} />
         <Bar dataKey="value" name={t[metric]} maxBarSize={84} radius={[4, 4, 0, 0]} isAnimationActive={false}>
@@ -29,6 +29,8 @@ export default function ResourceBarChart({ data, series, metric, language }: { d
         </Bar>
       </BarChart>
     </ResponsiveContainer></div> : <p className="comparison-no-data">{t.noData}</p>}
+    <p className="chart-legend-caption comparison-values-title">{language === 'vi' ? 'Chú giải:' : 'Legend:'}</p>
+    <p className="chart-legend-caption comparison-values-caption">{language === 'vi' ? 'Mô hình' : 'Model'}</p>
     <dl className="comparison-values">{points.map((point) => <div key={point.group}><dt><span className={`comparison-swatch ${point.group}`} aria-hidden="true" />{point.label}</dt><dd>{point.value === null ? '—' : <><strong>{resourceNumber(point.value, language)}</strong> <span>{unit}</span></>}</dd></div>)}</dl>
   </article>
 }

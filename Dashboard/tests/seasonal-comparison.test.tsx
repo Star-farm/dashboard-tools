@@ -90,6 +90,31 @@ describe('seasonal data for all topics and farming systems', () => {
 })
 
 describe('seasonal interface', () => {
+  it('shows model color legends for single-family rate and trend charts', async () => {
+    render(<SeasonalComparison language="en" data={data} config={{ topic: 'economics', kind: 'family', family: 'oneMha', metrics: ['roi', 'income'] }} />)
+
+    const annualLegend = screen.getByRole('group', { name: 'Legend' })
+    expect(annualLegend).toHaveTextContent('1Mha')
+    const annualPlot = document.querySelector('.seasonal-plot')!
+    expect(Boolean(annualPlot.compareDocumentPosition(annualLegend) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Across years' }))
+    await waitFor(() => expect(screen.getAllByRole('group', { name: 'Legend' })).toHaveLength(2))
+    for (const legend of screen.getAllByRole('group', { name: 'Legend' })) expect(legend).toHaveTextContent('1Mha')
+  })
+
+  it('omits seasons that are not grown from a single-model composition legend', () => {
+    render(<SeasonalPieChart language="en" name="1Mha" color="#267e91" unit="%" format={String} selected="early" slices={[
+      { period: 'early', label: 'Winter–Spring', value: 64.5 },
+      { period: 'middle', label: 'Spring–Summer', value: 35.5 },
+      { period: 'late', label: 'Fall–Winter', value: null, notGrown: true, status: 'Not grown' },
+    ]} allowedPeriods={['early', 'middle']} />)
+
+    const legend = screen.getByRole('group', { name: 'Season legend' })
+    expect(legend).toHaveTextContent('Winter–Spring')
+    expect(legend).toHaveTextContent('Spring–Summer')
+    expect(legend).not.toHaveTextContent('Fall–Winter')
+  })
+
   it('localizes the shared crop legend immediately when the language changes', () => {
     const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
     const modelLegendVi = screen.getAllByRole('group', { name: 'Chú giải' })[0]
@@ -209,9 +234,11 @@ describe('seasonal interface', () => {
     render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['roi', 'margin'] }} />)
     await waitFor(() => expect(document.querySelectorAll('.recharts-bar')).toHaveLength(4))
     expect(document.querySelector('.seasonal-pie')).toBeNull()
+    expect(document.querySelector('.seasonal-model-legend-swatch')).toHaveClass('seasonal-model-legend-swatch--bar')
     fireEvent.click(screen.getByRole('button', { name: 'Across years' }))
     await waitFor(() => expect(document.querySelectorAll('.recharts-line')).toHaveLength(4))
     expect(document.querySelector('.recharts-bar')).toBeNull()
+    expect(document.querySelector('.seasonal-model-legend-swatch')).not.toHaveClass('seasonal-model-legend-swatch--bar')
   })
 
   it('groups columns before doughnuts and labels every cultivated crop bar', async () => {

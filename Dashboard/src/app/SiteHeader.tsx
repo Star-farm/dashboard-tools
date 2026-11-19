@@ -82,13 +82,14 @@ type HeaderProps = {
   language: Language
   page: Page
   changeLanguage: (language: Language) => void
+  homeScrolled?: boolean
 }
 
-function DesktopHeader({ language, page, changeLanguage }: HeaderProps) {
+function DesktopHeader({ language, page, changeLanguage, homeScrolled }: HeaderProps) {
   const t = translations[language]
 
   return (
-    <header className={`site-header desktop-header${page === 'home' ? ' header-home' : ''}`}>
+    <header className={`site-header desktop-header${page === 'home' ? ` header-home${homeScrolled ? ' header-home-scrolled' : ''}` : ''}`}>
       <div className="header-inner">
         <a className="brand" href="#home" aria-label={t.homeLabel}><span className="brand-name">STAR-FARM</span></a>
         <HeaderNavigation language={language} page={page} />
@@ -102,7 +103,7 @@ function MobileHeader(props: HeaderProps) {
   const [open, setOpen] = useState(false)
   const t = translations[props.language]
   return (
-    <header className={`site-header mobile-header${props.page === 'home' ? ' header-home' : ''}`}>
+    <header className={`site-header mobile-header${props.page === 'home' ? ` header-home${props.homeScrolled ? ' header-home-scrolled' : ''}` : ''}`}>
       <div className="header-inner mobile-header-inner">
         <a className="brand" href="#home" aria-label={t.homeLabel}><span className="brand-name">STAR-FARM</span></a>
         <div className="header-actions"><QuickGlossary language={props.language} /></div>
@@ -114,5 +115,30 @@ function MobileHeader(props: HeaderProps) {
 
 export default function SiteHeader(props: HeaderProps) {
   const mobile = useSyncExternalStore(subscribeToViewport, getMobileSnapshot, () => false)
-  return mobile ? <MobileHeader {...props} /> : <DesktopHeader {...props} />
+  const [homeScrolled, setHomeScrolled] = useState(false)
+
+  useEffect(() => {
+    if (props.page !== 'home') {
+      setHomeScrolled(false)
+      return
+    }
+    const header = document.querySelector<HTMLElement>('.site-header')
+    const hero = document.querySelector<HTMLElement>('.home-hero')
+    const update = () => {
+      const isMobile = window.matchMedia?.(mobileQuery).matches ?? false
+      const heroHeight = hero?.getBoundingClientRect().height || Math.max(window.innerHeight, isMobile ? 630 : 620)
+      const headerHeight = header?.getBoundingClientRect().height || (isMobile ? 76 : 90)
+      setHomeScrolled(window.scrollY >= Math.max(0, heroHeight - headerHeight))
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [props.page])
+
+  const headerProps = { ...props, homeScrolled }
+  return mobile ? <MobileHeader {...headerProps} /> : <DesktopHeader {...headerProps} />
 }

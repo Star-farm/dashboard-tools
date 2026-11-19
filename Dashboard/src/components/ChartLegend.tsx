@@ -6,7 +6,7 @@ import '../styles/chart-legend.css'
 interface Props<Key extends string> {
   language: Language
   label: string
-  items: { key: Key; label: string; color: string; dashed?: boolean; marker?: ChartMarkerShape }[]
+  items: { key: Key; label: string; color: string; dashed?: boolean; marker?: ChartMarkerShape; kind?: 'line' | 'bar' }[]
   selected: Key | 'all'
   onSelect: (key: Key | 'all') => void
   allLabel?: string
@@ -17,7 +17,7 @@ export default function ChartLegend<Key extends string>({ language, label, items
     <p className="chart-legend-label">{label}</p>
     <button type="button" className="chart-legend-option chart-legend-all" title={`${label}: ${allLabel ?? (language === 'vi' ? 'Tất cả' : 'All')}`} aria-pressed={selected === 'all'} onClick={() => onSelect('all')}>{allLabel ?? (language === 'vi' ? 'Tất cả' : 'All')}</button>
     {items.map((item) => <button key={item.key} type="button" className="chart-legend-option" title={`${label}: ${item.label}`} aria-pressed={selected === item.key} onClick={() => onSelect(item.key)}>
-      {item.marker ? <svg className="chart-legend-marker" viewBox="-7 -7 14 14" aria-hidden="true"><ChartMarker shape={item.marker} color={item.color} /></svg> : <span className="chart-legend-swatch" style={item.dashed ? { borderTop: `3px dashed ${item.color}`, background: 'transparent' } : { background: item.color }} aria-hidden="true" />}{item.label}
+      {item.marker ? <svg className="chart-legend-marker" viewBox="-7 -7 14 14" aria-hidden="true"><ChartMarker shape={item.marker} color={item.color} /></svg> : <span className={`chart-legend-swatch${item.kind === 'bar' ? ' chart-legend-swatch--bar' : ''}`} style={item.dashed && item.kind !== 'bar' ? { borderTop: `3px dashed ${item.color}`, background: 'transparent' } : { background: item.color }} aria-hidden="true" />}{item.label}
     </button>)}
   </div>
 }

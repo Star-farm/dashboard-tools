@@ -82,27 +82,20 @@ export function bauFarmingSummary(data: Bau3Data, language: Language, family: Ba
     ? { bau3s: 'canh tác thường lệ 3 vụ', bau2s: 'canh tác thường lệ 2 vụ', bauss: 'canh tác thường lệ bền vững', oneMha: 'mô hình 1Mha' }[family]
     : { bau3s: 'business as usual with three seasons', bau2s: 'business as usual with two seasons', bauss: 'sustainable business-as-usual farming', oneMha: 'the 1Mha system' }[family]
   const average = vi
-    ? `Trong giai đoạn ${data.startYear}–${data.endYear}, ${model} có thu nhập ròng bình quân ${value('income')}, chi phí sản xuất ${value('cost')} và tỷ suất lợi nhuận ${value('margin')}; năng suất đạt ${value('yield')} với cường độ lao động ${value('labor')}.`
-    : `Over ${data.startYear}–${data.endYear}, ${model} averages ${value('income')} in net income, ${value('cost')} in production costs and a ${value('margin')} profit margin; yield is ${value('yield')} with labor intensity of ${value('labor')}.`
-  const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
-  const endChanges = (['income', 'cost', 'yield', 'margin', 'labor'] as const).flatMap((metric) => {
+    ? `Giai đoạn ${data.startYear}–${data.endYear}, ${model} đạt thu nhập ròng bình quân ${value('income')}, năng suất ${value('yield')} và tỷ suất lợi nhuận ${value('margin')}.`
+    : `From ${data.startYear} to ${data.endYear}, ${model} averages ${value('income')} in net income, ${value('yield')} in yield and a ${value('margin')} profit margin.`
+  const direction = (metric: Bau3Metric) => {
     const change = stats[metric].change
-    if (change === null) return []
-    const direction = Math.abs(change) < .000001 ? vi ? 'không đổi' : 'is unchanged' : vi ? change > 0 ? 'tăng' : 'giảm' : change > 0 ? 'increases' : 'decreases'
-    const amount = Math.abs(change) < .000001 ? '' : ` ${number.format(Math.abs(change))} ${metric === 'margin' ? vi ? 'điểm %' : 'pp' : '%'}`
-    return [`${bau3Text[language][metric].toLocaleLowerCase(language)} ${direction}${amount}`]
-  }).join('; ')
-  const trend = endChanges ? vi ? `So với ${data.startYear}, đến ${data.endYear}, ${endChanges}.` : `By ${data.endYear} compared with ${data.startYear}, ${endChanges}.` : ''
+    if (change === null || Math.abs(change) < .000001) return vi ? 'ổn định' : 'is stable'
+    return vi ? change > 0 ? 'tăng' : 'giảm' : change > 0 ? 'increases' : 'decreases'
+  }
   const incomeEnds = stats.income.conditions
   const shortage = incomeEnds.filter(({ condition }) => condition.endsWith('Shortage'))
   const normal = incomeEnds.filter(({ condition }) => condition.endsWith('Normal'))
   const resourceRisk = shortage.length === 2 && normal.length === 2 && shortage.every((a) => normal.every((b) => a.end < b.end))
-  const risk = resourceRisk ? vi
-    ? `Các nhóm điều kiện thiếu tài nguyên có thu nhập cuối kỳ thấp hơn cả hai nhóm điều kiện tài nguyên bình thường, cho thấy rủi ro kinh tế cần được xem xét theo từng điều kiện.`
-    : `Both resource-shortage combinations have lower end-period income than either normal-resource combination, indicating that economic risk should be assessed for each condition.` : ''
-  const conclusion = vi
-    ? 'Nhìn chung, cần ưu tiên khả năng sinh lời, ổn định tài nguyên và quản lý chi phí; việc giảm lao động chỉ có ý nghĩa tích cực khi đi cùng năng suất và thu nhập được duy trì.'
-    : 'Overall, profitability, reliable resource access and cost management should take priority; lower labor use is beneficial only when yield and income are maintained.'
-  return [average, trend, risk, conclusion].filter(Boolean).join(' ')
+  const trend = vi
+    ? `Đến ${data.endYear}, thu nhập ${direction('income')}, chi phí ${direction('cost')} và năng suất ${direction('yield')}${resourceRisk ? '; nhóm thiếu tài nguyên có thu nhập thấp hơn' : ''}.`
+    : `By ${data.endYear}, income ${direction('income')}, costs ${direction('cost')} and yield ${direction('yield')}${resourceRisk ? '; income is lower under resource shortages' : ''}.`
+  return `${average} ${trend}`
 }
 

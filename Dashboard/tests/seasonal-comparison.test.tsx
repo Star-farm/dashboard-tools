@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+﻿import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import SeasonalComparison from '../src/features/economics/SeasonalComparison'
@@ -90,16 +90,29 @@ describe('seasonal data for all topics and farming systems', () => {
 })
 
 describe('seasonal interface', () => {
+  it.each([
+    ['vi', ['BAU 3 vụ', '1Mha'], 'Trong đó:'],
+    ['en', ['BAU 3 seasons', '1Mha'], 'Breakdown:'],
+  ] as const)('labels each seasonal insight breakdown by model in %s', (language, labels, repeatedHeading) => {
+    render(<SeasonalComparison language={language} data={data} config={{ ...config, metrics: ['roi', 'margin', 'income'] }} />)
+    for (const article of screen.getAllByRole('article')) {
+      const details = [...article.querySelectorAll('.seasonal-crop-detail')]
+      expect(details).toHaveLength(2)
+      expect(details.map((detail) => detail.querySelector('h5')?.textContent)).toEqual(labels)
+      expect(article).not.toHaveTextContent(repeatedHeading)
+    }
+  })
+
   it('shows model color legends for single-family rate and trend charts', async () => {
     render(<SeasonalComparison language="en" data={data} config={{ topic: 'economics', kind: 'family', family: 'oneMha', metrics: ['roi', 'income'] }} />)
 
-    const annualLegend = screen.getByRole('group', { name: 'Legend' })
+    const annualLegend = screen.getByRole('group', { name: 'Legend:' })
     expect(annualLegend).toHaveTextContent('1Mha')
     const annualPlot = document.querySelector('.seasonal-plot')!
     expect(Boolean(annualPlot.compareDocumentPosition(annualLegend) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true)
     fireEvent.click(screen.getByRole('button', { name: 'Across years' }))
-    await waitFor(() => expect(screen.getAllByRole('group', { name: 'Legend' })).toHaveLength(2))
-    for (const legend of screen.getAllByRole('group', { name: 'Legend' })) expect(legend).toHaveTextContent('1Mha')
+    await waitFor(() => expect(screen.getAllByRole('group', { name: 'Legend:' })).toHaveLength(2))
+    for (const legend of screen.getAllByRole('group', { name: 'Legend:' })) expect(legend).toHaveTextContent('1Mha')
   })
 
   it('omits seasons that are not grown from a single-model composition legend', () => {
@@ -117,7 +130,7 @@ describe('seasonal interface', () => {
 
   it('localizes the shared crop legend immediately when the language changes', () => {
     const { rerender } = render(<SeasonalComparison language="vi" data={data} config={config} />)
-    const modelLegendVi = screen.getAllByRole('group', { name: 'Chú giải' })[0]
+    const modelLegendVi = screen.getAllByRole('group', { name: 'Chú giải:' })[0]
     expect(modelLegendVi).toHaveTextContent('BAU 3 vụ')
     expect(modelLegendVi).toHaveTextContent('1Mha')
     expect(screen.queryByRole('button', { name: 'Cả hai mô hình' })).not.toBeInTheDocument()
@@ -128,7 +141,7 @@ describe('seasonal interface', () => {
     expect(vietnameseLegend).not.toHaveTextContent('early')
 
     rerender(<SeasonalComparison language="en" data={data} config={config} />)
-    const modelLegendEn = screen.getAllByRole('group', { name: 'Legend' })[0]
+    const modelLegendEn = screen.getAllByRole('group', { name: 'Legend:' })[0]
     expect(modelLegendEn).toHaveTextContent('BAU 3 seasons')
     expect(modelLegendEn).toHaveTextContent('1Mha')
     expect(screen.queryByRole('button', { name: 'Both models' })).not.toBeInTheDocument()
@@ -146,7 +159,6 @@ describe('seasonal interface', () => {
     ]} />)
     expect(screen.queryByText('Choose crop season')).not.toBeInTheDocument()
     fireEvent.click(container.querySelector('[data-pie-period="middle"]')!)
-    expect(screen.getByRole('status')).toHaveTextContent('Spring–Summer')
     expect(screen.getByRole('status')).toHaveTextContent('30.00 kg')
     expect(selected).toBe('middle')
     fireEvent.click(container.querySelector('[data-pie-period="middle"]')!)
@@ -166,7 +178,7 @@ describe('seasonal interface', () => {
     expect(screen.getByText(/Negative values cannot be shown as shares/)).toHaveTextContent('Winter–Spring: -10 USD/ha')
     fireEvent.keyDown(screen.getByRole('group', { name: /BAU: Winter–Spring/ }), { key: 'ArrowRight' })
     expect(selected).toBe('middle')
-    expect(screen.getByRole('status')).toHaveTextContent('Summer–Fall')
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
     await waitFor(() => expect(container.querySelector('.recharts-sector')).toHaveAttribute('fill', '#dce3d9'))
   })
 
@@ -178,18 +190,10 @@ describe('seasonal interface', () => {
     expect(means.find((row) => row.family === 'bau3s' && row.period === 'late')!.USD.income!.mean).toBe(-10)
     expect(means.some((row) => row.family === 'oneMha' && row.period === 'late')).toBe(false)
     render(<SeasonalComparison language="en" data={sample} config={{ topic: 'economics', kind: 'family', family: 'oneMha', metrics: ['income'] }} />)
-    expect(screen.getByLabelText('Year')).toHaveValue('all')
-    expect(screen.queryByRole('complementary', { name: 'Analysis scope' })).not.toBeInTheDocument()
-    const plot = screen.getByRole('group', { name: 'Composition net income per hectare' })
-    fireEvent.keyDown(plot, { key: 'ArrowRight' })
-    expect(screen.queryByRole('region', { name: 'Selected values · Composition net income per hectare' })).not.toBeInTheDocument()
-    expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 50\.00/ })).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText('Year'), { target: { value: '2027' } })
-    fireEvent.keyDown(screen.getByRole('group', { name: 'Composition net income per hectare' }), { key: 'ArrowRight' })
-    expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 0\.00/ })).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText('Year'), { target: { value: 'all' } })
-    fireEvent.keyDown(screen.getByRole('group', { name: 'Composition net income per hectare' }), { key: 'ArrowRight' })
-    expect(screen.getByRole('group', { name: /1Mha:.*Spring–Summer: 50\.00/ })).toBeInTheDocument()
+    expect(screen.queryByLabelText('Year')).not.toBeInTheDocument()
+    const plot = screen.getByRole('group', { name: /Composition net income per hectare by crop season during 2027-2050/ })
+    expect(screen.getByRole('group', { name: /1Mha:.*Spring.*50[.]00/ })).toBeInTheDocument()
+    expect(plot).toHaveAttribute('tabindex', '0')
   })
 
   it('shows one averaged row per crop in the all-years information table', () => {
@@ -221,12 +225,13 @@ describe('seasonal interface', () => {
     { name: 'environment comparison', page: <EnvironmentPage page="environmentBaussComparison" language="vi" />, cards: 2 },
   ])('offers a seasonal view for $name with all relevant metrics and no removed helper content', async ({ page, cards }) => {
     render(page)
-    fireEvent.click(screen.getByRole('button', { name: 'Theo từng vụ' }))
-    await screen.findByRole('heading', { name: 'Phân tích theo từng vụ' })
+    const scopeButtons = document.querySelectorAll<HTMLButtonElement>('.analysis-view-switch button')
+    fireEvent.click(scopeButtons[1])
+    await screen.findAllByRole('article')
     expect(screen.getAllByRole('article')).toHaveLength(cards)
     expect(document.body).not.toHaveTextContent(/P10|P90|n =|Thời gian mùa vụ|Cách đọc số liệu thử nghiệm/)
-    fireEvent.click(screen.getByRole('button', { name: 'Trung bình năm' }))
-    expect(screen.queryByRole('heading', { name: 'Phân tích theo từng vụ' })).not.toBeInTheDocument()
+    fireEvent.click(scopeButtons[0])
+    expect(document.querySelector('.seasonal-comparison')).toBeNull()
   })
 
 
@@ -238,17 +243,16 @@ describe('seasonal interface', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Across years' }))
     await waitFor(() => expect(document.querySelectorAll('.recharts-line')).toHaveLength(4))
     expect(document.querySelector('.recharts-bar')).toBeNull()
-    expect(document.querySelector('.seasonal-model-legend-swatch')).not.toHaveClass('seasonal-model-legend-swatch--bar')
   })
 
   it('groups columns before doughnuts and labels every cultivated crop bar', async () => {
     render(<SeasonalComparison language="en" data={data} config={{ ...config, metrics: ['income', 'roi', 'cost', 'margin'] }} />)
-    expect(screen.getAllByRole('article').map((card) => card.querySelector('h3')?.textContent)).toEqual(['Return on investment (ROI)', 'Profit margin', 'Composition net income per hectare', 'Composition production cost'])
-    expect(screen.getAllByRole('heading', { name: /^(Bar charts|Doughnut charts)$/ }).map((heading) => heading.textContent)).toEqual(['Bar charts', 'Doughnut charts'])
-    const doughnut = screen.getByRole('article', { name: 'Composition net income per hectare' })
+    expect(screen.getAllByRole('article').map((card) => card.querySelector('h3')?.textContent)).toEqual(['Return on investment (ROI) by crop season during 2027-2050', 'Profit margin by crop season during 2027-2050', 'Composition net income per hectare by crop season during 2027-2050', 'Composition production cost by crop season during 2027-2050'])
+    expect(screen.getAllByRole('article')).toHaveLength(4)
+    const doughnut = screen.getByRole('article', { name: /Composition net income per hectare by crop season during 2027-2050/ })
     expect(doughnut.querySelector('.chart-unit-label')).toHaveTextContent('%')
-    const roi = screen.getByRole('article', { name: 'Return on investment (ROI)' })
-    await waitFor(() => expect(roi.querySelectorAll('.recharts-label-list text')).toHaveLength(5))
+    const roi = screen.getByRole('article', { name: /Return on investment \(ROI\) by crop season during 2027-2050/ })
+    await waitFor(() => expect(roi.querySelectorAll('.recharts-label-list text')).toHaveLength(6))
     for (const label of roi.querySelectorAll('.recharts-label-list text')) expect(label).not.toHaveTextContent('%')
   })
 

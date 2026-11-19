@@ -26,9 +26,7 @@ export default function SeasonalYearInsight({ language, metric, models, format, 
       {comparison && <p>{t[second.family]} {Math.abs(comparison.delta) < .000001 ? vi ? 'bằng' : 'equals' : comparison.delta > 0 ? vi ? 'cao hơn' : 'is higher than' : vi ? 'thấp hơn' : 'is lower than'} {t[first.family]}{Math.abs(comparison.delta) < .000001 ? '' : <>: <strong className={`scenario-change ${comparison.tone}`}>{format(Math.abs(comparison.delta))} {gapUnit}</strong></>}.</p>}
     </section>
     {summaries.map((model) => <section className="seasonal-crop-detail" key={model.family}>
-      {['roi', 'margin'].includes(metric)
-        ? <h5>{vi ? 'Trong đó:' : 'Breakdown:'}</h5>
-        : <p><strong>{vi ? 'Trong đó:' : 'Breakdown:'}</strong></p>}
+      <h5>{t[model.family]}</h5>
       <ul>{model.crops.map((crop) => <li key={crop.label}><strong>{crop.label}:</strong> {crop.value === null ? t.noData : `${format(crop.value)} ${unit}`}</li>)}</ul>
     </section>)}
   </div>

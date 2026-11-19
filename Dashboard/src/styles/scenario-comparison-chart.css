@@ -41,7 +41,7 @@
   }
   .scenario-encoding-legend-groups > .chart-series-legend {
     grid-template-columns: max-content minmax(0, 1fr);
-    align-items: start;
+    align-items: center;
     gap: 6px 12px;
     min-width: 0;
   }

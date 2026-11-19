@@ -27,7 +27,8 @@ export default function TimeSeriesChart({ metric, points, currency, language }: 
   const chartPoints = points.map((point) => ({ ...point, first: valueForChart(point.first) / (metric === 'income' && currency === 'VND' ? 1_000_000 : 1), second: valueForChart(point.second) / (metric === 'income' && currency === 'VND' ? 1_000_000 : 1) }))
   const yScale = lineAxisScale(chartPoints.flatMap((point) => [point.first, point.second]))
   const analysis = analyzeChart(points, metric, currency, language)
-  const title = t[`${metric}Title`]
+  const period = `${points[0]?.year}–${points.at(-1)?.year}`
+  const title = `${t[`${metric}Title`]} ${t.periodPrefix} ${period}`
   const unit = metricUnit(metric, currency, language)
   const chartUnit = metric === 'income' && currency === 'VND' ? 'triệu VNĐ/ha' : unit
   const axisNumber = distinctAxisFormatter(yScale.ticks, language, true)

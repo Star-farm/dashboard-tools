@@ -135,6 +135,12 @@ describe('chart observations', () => {
 
 describe('future page interactions', () => {
 
+  it.each([['vi', 'Dự báo giai đoạn 2027–2050'], ['en', 'Projections for 2027–2050']] as const)('shows the localized page title in %s', (language, title) => {
+    render(<FuturePage language={language} />)
+    expect(screen.getByRole('heading', { level: 1, name: title })).toBeInTheDocument()
+    expect(screen.getAllByRole('article').every((article) => article.querySelector('h2')?.textContent?.includes('2027–2050'))).toBe(true)
+  })
+
 
 
   it('filters all charts and observations, supports one year and prevents invalid ranges', () => {
@@ -144,6 +150,7 @@ describe('future page interactions', () => {
     expect(within(screen.getByLabelText('Từ năm')).getByRole('option', { name: '2031' })).toBeDisabled()
     expect(within(screen.getByLabelText('Đến năm')).getByRole('option', { name: '2029' })).toBeDisabled()
     for (const article of screen.getAllByRole('article')) {
+      expect(article.querySelector('h2')).toHaveTextContent('2030–2030')
       expect(article.querySelector('.chart-insight')).toHaveTextContent('2030–2030')
       expect(article.querySelectorAll('.recharts-line-dots .scenario-dot')).toHaveLength(2)
     }

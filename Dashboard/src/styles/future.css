@@ -49,13 +49,13 @@
   .chart-heading p { font-size: var(--text-small); margin-top: 6px; }
   .chart-area { display: flex; flex-direction: column; padding: 20px 12px 14px; }
   .chart-area > .interactive-chart-legend,
-  .chart-area > .chart-series-legend { order: 3; margin: 12px 12px 0; }
+  .chart-area > .chart-series-legend { order: 3; margin: 12px 0 0; }
   .chart-area > .timeseries-plot { order: 1; }
   .chart-area > .chart-x-label { order: 2; }
   .chart-meta { padding-inline: 12px; margin-bottom: 15px; align-items: flex-start; gap: 13px; }
   .chart-unit { font-size: var(--text-small); }
   .timeseries-plot { height: 270px; }
-  .chart-insight { margin-top: 32px; padding: 18px 17px; }
+  .chart-insight { margin-top: 12px; padding: 18px 17px; }
   .chart-insight > p { font-size: 16px; line-height: 1.7; }
   .insight-eyebrow { font-size: 16px; }
 }

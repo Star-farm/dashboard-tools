@@ -32,6 +32,6 @@ describe('desktop header scrolling', () => {
     expect(header).not.toHaveClass('header-home')
     scrollTo(400)
     fireEvent(window, new HashChangeEvent('hashchange'))
-    expect(within(header).getByRole('link', { name: 'About the future' })).toHaveAttribute('aria-current', 'page')
+    expect(within(header).getByRole('link', { name: 'Projections' })).toHaveAttribute('aria-current', 'page')
   })
 })

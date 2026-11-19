@@ -72,7 +72,7 @@ export default function PlotMapPopup({ plot, wardName, thematic = false, placeme
     '--plot-popup-top': `${position.top}px`,
   } as CSSProperties : undefined
 
-  return <section ref={popupRef} className={`plot-map-popup${position ? ' plot-map-popup--anchored' : ''}`} data-placement={placement} style={style} role="dialog" aria-modal="false" aria-labelledby={titleId}>
+  return <section ref={popupRef} className={`plot-map-popup${thematic ? ' plot-map-popup--thematic' : ''}${position ? ' plot-map-popup--anchored' : ''}`} data-placement={placement} style={style} role="dialog" aria-modal="false" aria-labelledby={titleId}>
     <header>
       <div><p>{t.plotInfo}</p><h3 id={titleId}>{thematic ? soilText[language].plot : t.plot} {plot.id}</h3></div>
       <button type="button" ref={closeRef} aria-label={t.closePopup} onClick={onClose}>

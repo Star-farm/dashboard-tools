@@ -44,6 +44,12 @@
   .soil-map-section .plot-map-popup dd small { display: inline; }
 }
 @media (max-width: 767px) {
+  .soil-map-section .plot-map-popup { box-sizing: border-box; width: 216px; min-width: 216px; height: 112px; min-height: 112px; max-height: 112px; padding: 0 8px 2px; }
+  .soil-map-section .plot-map-popup.plot-map-popup--thematic { height: 88px; min-height: 88px; max-height: 88px; }
+  .soil-map-section .plot-map-popup dl > div { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: start; justify-content: initial; gap: 4px; padding: 3px 0; }
+  .soil-map-section .plot-map-popup dt { min-width: 0; overflow-wrap: normal; }
+  .soil-map-section .plot-map-popup dd { min-width: 0; max-width: none; flex-shrink: 1; text-align: right; }
+  .soil-map-section .plot-map-popup .plot-map-popup-ward-name { display: block; overflow: hidden; overflow-wrap: normal; word-break: normal; }
   .soil-map-section .plot-map-popup dd { font-size: 12px; }
   .soil-map-section .plot-map-popup dd small { display: inline; font-size: 10px; }
   .soil-map-layout.has-chart { grid-template-columns: 1fr; }

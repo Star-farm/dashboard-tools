@@ -5,7 +5,7 @@ import type { Language } from '../../i18n'
 import { colorFor, mapColors  } from './mapData'
 import { mapText } from './mapText'
 import type { AdminBoundaryData, MapGeometry, MapMetric } from './mapTypes'
-import { MAX_MAP_ZOOM, zoomViewport } from './mapViewport'
+import { DEFAULT_MAP_ZOOM, MAX_MAP_ZOOM, MIN_MAP_ZOOM, zoomViewport } from './mapViewport'
 import { soilText } from './soilText'
 import { soilUnknownColor } from './soilTypes'
 import type { SoilLayer } from './soilTypes'
@@ -133,8 +133,13 @@ export default function PlotMap({
     : { x: geometry.width / 2, y: geometry.height / 2 }, [adminRegion, geometry])
   const mapWidth = adminRegion ? Math.max(geometry.width + 70, (adminRegion.x[1] - adminRegion.x[0]) * 2.1) : geometry.width + 70
   const mapHeight = adminRegion ? Math.max(geometry.height + 120, (adminRegion.y[1] - adminRegion.y[0]) * 2.1) : geometry.height + 120
-  const initialCenter = useMemo(() => ({ x: mapCenter.x, y: mapCenter.y - mapHeight * 0.032 }), [mapCenter, mapHeight])
-  const initialView = useMemo(() => ({ zoom: 1, ...initialCenter }), [initialCenter])
+  const plotCenter = useMemo(() => {
+    if (!geometry.plots.length) return mapCenter
+    const xs = geometry.plots.map(({ center }) => center[0]), ys = geometry.plots.map(({ center }) => center[1])
+    return { x: (Math.min(...xs) + Math.max(...xs)) / 2, y: (Math.min(...ys) + Math.max(...ys)) / 2 }
+  }, [geometry.plots, mapCenter])
+  const initialCenter = plotCenter
+  const initialView = useMemo(() => ({ zoom: DEFAULT_MAP_ZOOM, ...initialCenter }), [initialCenter])
   const view = storedView ?? initialView
 
   const [hover, setHover] = useState<number | null>(null)
@@ -190,7 +195,7 @@ export default function PlotMap({
   }
 
   function reset() {
-    setView(clampMapView({ zoom: 1, ...initialCenter }))
+    setView(clampMapView({ zoom: DEFAULT_MAP_ZOOM, ...initialCenter }))
   }
 
   function pointToMap(event: {
@@ -405,14 +410,12 @@ fill={
   // Geographic scale bar
   // ---------------------------------------
 
-  // Keep the previous distance behavior
-  const scaleKm = 20 / view.zoom
+  const scaleMeters = 24000 / view.zoom
 
   // Convert distance to SVG map units
   const scaleWidth =
-    20000 /
-    geometry.metersPerUnit /
-    view.zoom
+    scaleMeters /
+    geometry.metersPerUnit
 
   // Default SVG preserveAspectRatio is xMidYMid meet.
   // Use the same uniform scaling to convert
@@ -571,7 +574,7 @@ fill={
         const line2 = isHoChiMinh ? (language === 'vi' ? 'Hồ Chí Minh' : 'City') : ''
         const [x, y] = placement.point
         const fitFontSize = fontSizeFor(placement, line1, line2)
-        const fontSize = view.zoom === 1
+        const fontSize = view.zoom === DEFAULT_MAP_ZOOM
           ? defaultProvinceFontSize
           : Math.max(defaultProvinceFontSize, Math.min(Math.max(8, width * 0.018), fitFontSize))
         if (fontSize < 4.5) return null
@@ -581,7 +584,7 @@ fill={
             : (language === 'vi' ? feature.properties.name : feature.properties.nameEn)}
         </text>
       })}
-      {view.zoom >= 3 && wards.map((feature) => {
+      {view.zoom >= DEFAULT_MAP_ZOOM * 3 && wards.map((feature) => {
         const [labelX, labelY] = toMap(feature.properties.center)
         return <text key={`ward-label-${feature.properties.code}`} x={labelX} y={labelY} textAnchor="middle" fontSize={Math.max(2.4, width * 0.011)} fill="#354d38" stroke="#fffefa" strokeWidth={0.9} paintOrder="stroke">{language === 'vi' ? feature.properties.name : feature.properties.nameEn}</text>
       })}
@@ -624,7 +627,7 @@ fill={
         <button
           type="button"
           onClick={() => zoom(1 / 1.6)}
-          disabled={view.zoom <= 1}
+          disabled={view.zoom <= MIN_MAP_ZOOM}
           aria-label={t.zoomOut}
           title={t.zoomOut}
         >
@@ -886,12 +889,10 @@ fill={
         <div
           className="map-scale-overlay"
           role="img"
-          aria-label={`${number.format(
-            scaleKm
-          )} km`}
+          aria-label={scaleMeters >= 1000 ? `${number.format(scaleMeters / 1000)} km` : `${number.format(scaleMeters)} m`}
         >
           <span className="map-scale-label">
-            {number.format(scaleKm)} km
+            {scaleMeters >= 1000 ? `${number.format(scaleMeters / 1000)} km` : `${number.format(scaleMeters)} m`}
           </span>
 
           <svg

@@ -62,6 +62,12 @@
 @media (max-width: 767px) { .seasonal-pie-tooltip-unit { display: inline; } .seasonal-pie-tooltip-desktop-value, .seasonal-pie-tooltip-desktop-percent { display: none; } .seasonal-pie-tooltip-mobile-value, .seasonal-pie-tooltip-mobile-percent { display: inline; } }
 .seasonal-pie-tooltip-mobile-name { display: none; }
 @media (max-width: 767px) { .seasonal-pie-tooltip-desktop-name { display: none; } .seasonal-pie-tooltip-mobile-name { display: inline; } }
+@media (max-width: 767px) {
+  .chart-info.seasonal-pie-tooltip { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 8px; width: fit-content; max-width: 100%; padding: 4px 6px; }
+  .seasonal-pie-tooltip .chart-info-title { flex: 0 1 auto; margin: 0; }
+  .seasonal-pie-tooltip dl { min-width: 0; flex: 0 1 auto; }
+  .seasonal-pie-tooltip dl > div { display: block; padding: 0; border: 0; }
+}
 .seasonal-pie-note { margin: 0 0 10px; color: #40533b; font-size: var(--text-small); line-height: 1.6; }
 .seasonal-overview { margin-top: 24px; }
 .seasonal-overview .economic-filters { border-top: 0; }

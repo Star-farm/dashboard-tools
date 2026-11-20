@@ -117,7 +117,7 @@ describe('interactive legends across chart pages', () => {
     rerender(chart('en'))
     expect(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Severe' })).toHaveAttribute('aria-pressed', 'true')
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Normal' }))
-    fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: /^(Normal|Normal economy)$/ }))
+    fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: /Normal/ }))
     expect(container.querySelector('path.recharts-line-curve')).toHaveAttribute('stroke', SCENARIO_COLORS.bau)
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'All' }))
     fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: 'All' }))

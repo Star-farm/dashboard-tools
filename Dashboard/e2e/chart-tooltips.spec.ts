@@ -78,7 +78,7 @@ for (const chart of charts) {
           const swatch = await page.locator('.chart-info-swatch').first().evaluate((element) => getComputedStyle(element).backgroundColor)
           expect(swatch).not.toBe('rgba(0, 0, 0, 0)')
           if (width <= 767) await expect(page.locator('.chart-tooltip-mobile-label').first()).toHaveText('BAU')
-          else await expect(page.locator('.chart-tooltip-desktop-label').first()).toContainText(/Business as usual|Thường lệ/)
+          else await expect(page.locator('.chart-tooltip-desktop-label').first()).toContainText(/Business as usual|thường lệ/i)
         }
         if (chart.name === 'seasonal pie') {
           const compactName = page.locator('.seasonal-pie-tooltip-mobile-name').first()

@@ -27,13 +27,13 @@ export function environmentPageTitle(page: EnvironmentPage, language: Language) 
   if (route.kind === 'overview') return t.title
   if (route.kind === 'bars') return t.comparisonTitle
   if (route.kind === 'farming' && route.family === 'oneMha') {
-    return language === 'vi' ? 'Môi trường Một triệu hecta lúa' : `Environment · ${t.oneMha}`
+    return language === 'vi' ? 'Môi trường Một triệu hecta lúa' : 'Environment One million hectares rice'
   }
   return route.kind === 'pair'
     ? `${language === 'vi' ? 'Môi trường' : 'Environment'} · ${{ bau3s: t.bau3Short, bau2s: t.bau2Short, bauss: t.baussShort }[route.family]} ${language === 'vi' ? 'so với' : 'vs'} 1Mha`
     : language === 'vi'
       ? `Môi trường ${t[route.family].replace(' · ', ' ')}`
-      : `Environment · ${t[route.family]}`
+      : `Environment ${t[route.family].replace(' · ', ' ')}`
 }
 export function environmentDestination(branch: 'overview' | 'comparison' | 'bau', index: number) {
   const pages: Record<typeof branch, EnvironmentContentPage[]> = {

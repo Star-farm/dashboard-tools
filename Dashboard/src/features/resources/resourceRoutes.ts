@@ -27,13 +27,13 @@ export function resourcePageTitle(page: ResourcePage, language: Language) {
   if (route.kind === 'overview') return t.title
   if (route.kind === 'bars') return t.comparisonTitle
   if (route.kind === 'farming' && route.family === 'oneMha') {
-    return language === 'vi' ? 'Tài nguyên Một triệu hecta lúa' : `Resources · ${t.oneMha}`
+    return language === 'vi' ? 'Tài nguyên Một triệu hecta lúa' : 'Resources One million hectares rice'
   }
   return route.kind === 'pair'
     ? `${language === 'vi' ? 'Tài nguyên' : 'Resources'} · ${{ bau3s: t.bau3Short, bau2s: t.bau2Short, bauss: t.baussShort }[route.family]} ${language === 'vi' ? 'so với' : 'vs'} 1Mha`
     : language === 'vi'
       ? `Tài nguyên ${t[route.family].replace(' · ', ' ')}`
-      : `Resources · ${t[route.family]}`
+      : `Resources ${t[route.family].replace(' · ', ' ')}`
 }
 export function resourceDestination(branch: 'overview' | 'comparison' | 'bau', index: number) {
   const pages: Record<typeof branch, ResourceContentPage[]> = {

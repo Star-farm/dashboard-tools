@@ -14,10 +14,10 @@ const vi = {
   method: 'Các KPI tổng hợp bốn nhóm điều kiện thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuối giai đoạn so với năm đầu giai đoạn; tỷ suất lợi nhuận so sánh bằng điểm %.',
 }
 const en: Record<keyof typeof vi, string> = {
-  title: 'Economics · Business as usual · 3 seasons',
-  bau2Title: 'Economics · Business as usual · 2 seasons',
-  baussTitle: 'Economics · Business as usual · Sustainable',
-  oneMhaTitle: 'One million hectares rice',
+  title: 'Economics Business as usual 3 seasons',
+  bau2Title: 'Economics Business as usual 2 seasons',
+  baussTitle: 'Economics Business as usual Sustainable',
+  oneMhaTitle: 'Economics One million hectares rice',
   kpis: 'Economic indicators',
   average: 'Period average',
   change: '2050 compared with 2027',

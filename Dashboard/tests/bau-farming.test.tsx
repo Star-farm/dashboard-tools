@@ -87,7 +87,7 @@ describe('three-season business-as-usual page', () => {
     }
     expect(container.querySelectorAll('.bau3-chart-oneMha')).toHaveLength(0)
     rerender(<Bau3FarmingPage language="en" />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Business as usual · 3 seasons')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Economics Business as usual 3 seasons')
     expect(screen.getByRole('region', { name: 'Economic indicators' })).toHaveTextContent('USD/ha')
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('income is lower under resource shortages')
   })
@@ -111,6 +111,6 @@ describe('three-season business-as-usual page', () => {
     expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Kinh tế Canh tác như thường lệ 3 mùa vụ')
     expect(document.title).toBe('Kinh tế Canh tác như thường lệ 3 mùa vụ | STAR FARM')
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
-    expect(document.title).toBe('Business as usual · 3 seasons | STAR FARM')
+    expect(document.title).toBe('Economics Business as usual 3 seasons | STAR FARM')
   })
 })

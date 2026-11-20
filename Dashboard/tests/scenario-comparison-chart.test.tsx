@@ -13,12 +13,13 @@ const props = {
 describe('combined scenario chart', () => {
   it('renders grouped bars for rates and retains model and condition filtering', async () => {
     const { container } = render(<ScenarioComparisonChart {...props} chartType="bar" />)
+    expect(container.querySelectorAll('.comparison-model-key button abbr')).toHaveLength(0)
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(8))
     expect(container.querySelectorAll('.recharts-line')).toHaveLength(0)
     fireEvent.click(within(screen.getByRole('group', { name: 'Choose comparison models' })).getByRole('button', { name: /1Mha/ }))
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(4))
     fireEvent.click(within(screen.getByRole('group', { name: 'Weather' })).getByRole('button', { name: 'Normal' }))
-    fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: 'Normal economy' }))
+    fireEvent.click(within(screen.getByRole('group', { name: 'Resources' })).getByRole('button', { name: /Normal/ }))
     await waitFor(() => expect(container.querySelectorAll('.recharts-bar')).toHaveLength(1))
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     expect(screen.getByText(/Year 2027 · Normal weather · Normal resources · 1Mha: 103.00 USD\/ha/)).toBeInTheDocument()

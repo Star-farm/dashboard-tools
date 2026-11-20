@@ -4,6 +4,7 @@ import { CONDITION_COLORS, scenarioColor } from './chartStyles'
 import type { Bau3Condition } from '../features/economics/bau3Types'
 import type { Language } from '../i18n'
 import { bau3Text } from '../features/economics/bau3Text'
+import ScenarioAbbreviations from './ScenarioAbbreviations'
 
 type TooltipEntry = {
   name?: string | number
@@ -43,7 +44,7 @@ export default function ChartInfo({
     <div className="chart-info chart-info--list" role="status">
       <p className="chart-info-title">
         {yearLabel ? `${yearLabel} ` : ''}
-        {String(label ?? '')}
+        {language ? <ScenarioAbbreviations text={String(label ?? '')} language={language} /> : String(label ?? '')}
       </p>
 
       <dl>
@@ -53,7 +54,7 @@ export default function ChartInfo({
           const name = group ? row?.label ?? entry.name : entry.name
           const conditionKey = String(entry.dataKey ?? '').split('_').at(-1) as Bau3Condition
           const conditionColor = CONDITION_COLORS[conditionKey]
-          const resourceMarker = conditionKey.endsWith('Shortage') ? 'square' : 'circle'
+          const resourceMarker = conditionKey.endsWith('Shortage') ? 'triangle' : 'circle'
           const conditionLabel = conditionColor && language ? bau3Text[language][conditionKey].split(' · ')[0] : ''
           const compactName = group && conditionColor && language
             ? `${group === 'bau' ? 'BAU' : '1Mha'} · ${conditionLabel}`
@@ -63,7 +64,7 @@ export default function ChartInfo({
             .replace(/Severe weather|Normal weather/gi, (label) => label.startsWith('Severe') ? 'Severe' : 'Normal')
             .replace(/Resource shortage/gi, 'Shortage')
             .replace(/Normal resources/gi, 'Normal')
-            .replace(/Khan hiếm tài nguyên/gi, 'Thiếu')
+            .replace(/Khan hiếm tài nguyên/gi, 'Khan hiếm')
             .replace(/Tài nguyên bình thường/gi, 'Thường')
 
           const scenario =
@@ -94,7 +95,7 @@ export default function ChartInfo({
                   data-marker={resourceMarker}
                   aria-hidden="true"
                 />
-                <span><span className="chart-tooltip-desktop-label">{name}</span><span className="chart-tooltip-mobile-label">{compactName}</span></span>
+                <span><span className="chart-tooltip-desktop-label">{language ? <ScenarioAbbreviations text={String(name ?? '')} language={language} /> : name}</span><span className="chart-tooltip-mobile-label">{language ? <ScenarioAbbreviations text={compactName} language={language} /> : compactName}</span></span>
               </dt>
 
               <dd>

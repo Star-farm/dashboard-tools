@@ -27,4 +27,12 @@ describe('scenario names in insights', () => {
     expect(abbreviation).toHaveAttribute('data-definition')
     expect(abbreviation.getAttribute('aria-label')).toContain(abbreviation.getAttribute('data-definition'))
   })
+
+  it('marks every BAU and 1Mha occurrence in inline content', () => {
+    const { container } = render(<ScenarioAbbreviations text="BAU3S compared with 1Mha, Thường lệ, Canh tác như thường lệ and Business as usual farming" language="vi" />)
+    expect(container.querySelectorAll('abbr')).toHaveLength(5)
+    expect(Array.from(container.querySelectorAll('abbr'), (item) => item.textContent)).toEqual(['BAU', '1Mha', 'Thường lệ', 'Canh tác như thường lệ', 'Business as usual farming'])
+    const bauDefinitions = Array.from(container.querySelectorAll('abbr')).filter((item) => item.textContent !== '1Mha').map((item) => item.getAttribute('data-definition'))
+    expect(new Set(bauDefinitions).size).toBe(1)
+  })
 })

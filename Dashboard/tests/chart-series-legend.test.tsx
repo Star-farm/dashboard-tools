@@ -18,4 +18,13 @@ describe('shared chart series legend', () => {
     expect(container.querySelectorAll('.chart-legend-swatch')).toHaveLength(2)
     expect(container.querySelector('.chart-legend-swatch--bar')).toBeInTheDocument()
   })
+
+  it('marks scenario abbreviations in static legends', () => {
+    const { container } = render(<ChartSeriesLegend language="en" items={[
+      { key: 'bau', label: 'BAU 3 seasons', color: '#217348' },
+      { key: 'oneMha', label: '1Mha', color: '#b8322b' },
+    ]} />)
+
+    expect(container.querySelectorAll('abbr')).toHaveLength(2)
+  })
 })

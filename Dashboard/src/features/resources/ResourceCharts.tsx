@@ -65,7 +65,7 @@ function ResourcePair({ family, language }: { family: Exclude<Bau3Family, 'oneMh
     <Insight label={t.summary} text={resourceSummary(data, selected, language, family, true)} summary />
     <div className="bau3-sections">{resourceMetrics.map((metric) => <section className="bau3-section" key={metric} aria-labelledby={`resource-pair-${metric}-title`}>
       <h2 id={`resource-pair-${metric}-title`}>{t[metric]}</h2>
-      <ScenarioComparisonChart key={family} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={resourceLinePoints(data, family, metric)} oneMha={resourceLinePoints(data, 'oneMha', metric)} startYear={data.startYear} endYear={data.endYear} domain={resourceDomain(selected, metric)} unit={resourceUnit(metric, language)} formatValue={(value) => resourceNumber(value, language)} />
+      <ScenarioComparisonChart key={family} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={resourceLinePoints(data, family, metric)} oneMha={resourceLinePoints(data, 'oneMha', metric)} startYear={data.startYear} endYear={data.endYear} domain={resourceDomain(selected, metric)} unit={resourceUnit(metric, language)} formatValue={(value) => resourceNumber(value, language)} normalResourceLabel={t.normal} />
       <Insight label={`${t.insight} · ${t[metric]}`} text={resourceComparisonInsight(data, selected, metric, language, family)} />
     </section>)}</div>
   </>

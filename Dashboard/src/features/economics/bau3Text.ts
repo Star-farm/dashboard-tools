@@ -1,12 +1,12 @@
 const vi = {
   conditionColumn: 'Điều kiện',
-  title: 'BAU 3 vụ so với 1Mha', bau3s: 'Thường lệ · 3 mùa vụ', oneMha: '1Mha',
+  title: 'BAU 3 vụ so với 1Mha', bau3s: 'Canh tác như thường lệ · 3 mùa vụ', oneMha: '1Mha',
   bau2Title: 'BAU 2 vụ so với 1Mha', baussTitle: 'BAU bền vững so với 1Mha',
-  bau2s: 'Thường lệ · 2 mùa vụ', bauss: 'Thường lệ · Bền vững',
+  bau2s: 'Canh tác như thường lệ · 2 mùa vụ', bauss: 'Canh tác như thường lệ · Bền vững',
   bau3Short: 'BAU 3 vụ', bau2Short: 'BAU 2 vụ', baussShort: 'BAU bền vững',
   oneMhaDescription: 'Lúa chất lượng cao, phát thải thấp',
   income: 'Thu nhập ròng', yield: 'Năng suất trung bình', labor: 'Cường độ lao động', cost: 'Chi phí sản xuất', margin: 'Tỷ suất lợi nhuận',
-  severeShortage: 'Khắc nghiệt · Khan hiếm tài nguyên', severeNormal: 'Khắc nghiệt · Tài nguyên bình thường', mildShortage: 'Bình thường · Khan hiếm tài nguyên', mildNormal: 'Bình thường · Tài nguyên bình thường',
+  severeShortage: 'Khắc nghiệt · Khan hiếm tài nguyên', severeNormal: 'Khắc nghiệt · Bình thường', mildShortage: 'Bình thường · Khan hiếm tài nguyên', mildNormal: 'Bình thường · Bình thường',
   unit: 'Đơn vị', moneyUnit: 'VNĐ/ha', yieldUnit: 'tấn/ha', laborUnit: 'giờ/ha', year: 'Năm', insight: 'Nhận xét', noData: 'Chưa đủ số liệu để so sánh.',
   overlap: 'Một số đường trùng nhau vì có cùng số liệu.',
 }

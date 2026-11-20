@@ -4,7 +4,7 @@ import type { useConditionFilters } from './useConditionFilters'
 import '../styles/condition-filters.css'
 import '../styles/chart-legend.css'
 
-export default function ConditionFilters({ language, filters }: { language: Language; filters: ReturnType<typeof useConditionFilters> }) {
+export default function ConditionFilters({ language, filters, normalResourceLabel }: { language: Language; filters: ReturnType<typeof useConditionFilters>; normalResourceLabel?: string }) {
   const vi = language === 'vi'
   return <div className="condition-filters">
     <div className="comparison-segmented" role="group" aria-label={vi ? 'Thời tiết' : 'Weather'}>
@@ -13,12 +13,12 @@ export default function ConditionFilters({ language, filters }: { language: Lang
     </div>
     <div className="comparison-segmented" role="group" aria-label={vi ? 'Tài nguyên' : 'Resources'}>
       <p className="chart-legend-label">{vi ? 'Tài nguyên' : 'Resources'}</p>
-      {(['all', 'normal', 'shortage'] as const).map((key) => <button type="button" key={key} aria-pressed={filters.resource === key} onClick={() => filters.setResource(key)}>{key === 'all' ? vi ? 'Tất cả' : 'All' : key === 'normal' ? vi ? 'Kinh tế bình thường' : 'Normal economy' : vi ? 'Khan hiếm tài nguyên' : 'Resource shortage'}</button>)}
+      {(['all', 'normal', 'shortage'] as const).map((key) => <button type="button" key={key} aria-pressed={filters.resource === key} onClick={() => filters.setResource(key)}>{key === 'all' ? vi ? 'Tất cả' : 'All' : key === 'normal' ? normalResourceLabel ?? (vi ? 'Bình thường' : 'Normal') : vi ? 'Khan hiếm tài nguyên' : 'Resource shortage'}</button>)}
     </div>
   </div>
 }
 
-export function ConditionLegend({ language, conditions }: { language: Language; conditions: readonly (keyof typeof CONDITION_COLORS)[] }) {
+export function ConditionLegend({ language, conditions, normalResourceLabel }: { language: Language; conditions: readonly (keyof typeof CONDITION_COLORS)[]; normalResourceLabel?: string }) {
   const vi = language === 'vi'
   const severe = conditions.some((key) => key.startsWith('severe'))
   const normalWeather = conditions.some((key) => key.startsWith('mild'))
@@ -30,8 +30,8 @@ export function ConditionLegend({ language, conditions }: { language: Language; 
       {severe && <li><span className="encoding-line encoding-line--dashed" aria-hidden="true" />{vi ? 'Khắc nghiệt' : 'Severe'}</li>}
     </ul></div>
     <div className="condition-legend-group"><p className="chart-legend-caption">{vi ? 'Tài nguyên' : 'Resources'}</p><ul className="condition-key" aria-label={vi ? 'Chú giải tài nguyên' : 'Resource legend'}>
-      {normalResources && <li><span className="encoding-marker encoding-marker--circle" aria-hidden="true" />{vi ? 'Tài nguyên bình thường' : 'Normal resources'}</li>}
-      {shortage && <li><span className="encoding-marker encoding-marker--square" aria-hidden="true" />{vi ? 'Khan hiếm tài nguyên' : 'Resource shortage'}</li>}
+      {normalResources && <li><span className="encoding-marker encoding-marker--circle" aria-hidden="true" />{normalResourceLabel ?? (vi ? 'Bình thường' : 'Normal')}</li>}
+      {shortage && <li><span className="encoding-marker encoding-marker--triangle" aria-hidden="true" />{vi ? 'Khan hiếm' : 'Resource shortage'}</li>}
     </ul></div>
   </div>
 }

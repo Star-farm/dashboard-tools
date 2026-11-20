@@ -3,6 +3,7 @@ import { CHART_TICK, scenarioColor } from '../../components/chartStyles'
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartInfo from '../../components/ChartInfo'
 import ChartSeriesLegend from '../../components/ChartSeriesLegend'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 import type { Language } from '../../i18n'
 import type { ComparisonCohort, ComparisonMetric } from './comparisonData'
 import { economicMetricUnits, economicsText } from './economicsText'
@@ -56,7 +57,7 @@ export default function ComparisonBarChart({ metric, cohort, axisCohort = cohort
       </div> : <p className="comparison-no-data">{text.noData}</p>}
       {chartPoints.length > 0 && <ChartSeriesLegend language={language} legendTitle={language === 'vi' ? 'Chú giải:' : 'Legend:'} label={language === 'vi' ? 'Mô hình' : 'Model'} items={points.map((point) => ({ key: point.group, label: point.label, color: point.color, kind: 'bar' }))} />}
       <dl className="comparison-values">{points.map((point) => <div key={point.group}>
-        <dt>{point.label}</dt>
+        <dt><ScenarioAbbreviations text={point.label} language={language} /></dt>
         <dd>{point.value === null ? <span>{text.unavailable}</span> : <><strong>{number.format(point.value)}</strong>{' '}<span>{unit}</span></>}</dd>
       </div>)}</dl>
     </article>

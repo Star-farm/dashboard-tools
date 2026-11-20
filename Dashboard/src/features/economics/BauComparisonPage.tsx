@@ -5,6 +5,7 @@ import type { Language } from '../../i18n'
 import { getScrollBehavior } from '../../app/scrollBehavior'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
 import ScenarioComparisonChart from '../../components/ScenarioComparisonChart'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 import { bau3Metrics } from './bau3Types'
 import type { Bau3Data } from './bau3Types'
 import { analyzeBau3, bau3ChartUnit, bau3Domain, selectBau3Points } from './bau3Analysis'
@@ -21,7 +22,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
   const baselineLabel = { bau3s: t.bau3Short, bau2s: t.bau2Short, bauss: t.baussShort }[variant]
   const summaryMetrics = (['income', 'yield'] as const).map((metric) => ({ metric, analysis: analyzeBau3(data, metric, language) }))
   const baselineName = language === 'vi'
-    ? { bau3s: 'canh tác thường lệ ba vụ', bau2s: 'canh tác thường lệ hai vụ', bauss: 'canh tác thường lệ bền vững' }[variant]
+    ? { bau3s: 'canh tác như thường lệ ba vụ', bau2s: 'canh tác như thường lệ hai vụ', bauss: 'canh tác như thường lệ bền vững' }[variant]
     : { bau3s: 'business as usual with three seasons', bau2s: 'business as usual with two seasons', bauss: 'sustainable business-as-usual farming' }[variant]
   const metricSummary = (metric: 'income' | 'yield', higher: number, lower: number, equal: number, count: number) => {
     const label = language === 'vi' ? metric === 'income' ? 'thu nhập ròng' : 'năng suất' : metric === 'income' ? 'net income' : 'yield'
@@ -42,7 +43,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
   }, [anchor])
   return (
     <div className="bau3-page page-shell" id={anchor}>
-      <section className="intro bau3-intro" aria-labelledby="bau-comparison-title"><h1 id="bau-comparison-title">{title}</h1><PageDescription language={language} kind="pair" topic="economics" /><span>{data.startYear}–{data.endYear}</span></section>
+      <section className="intro bau3-intro" aria-labelledby="bau-comparison-title"><h1 id="bau-comparison-title"><ScenarioAbbreviations text={title} language={language} /></h1><PageDescription language={language} kind="pair" topic="economics" /><span>{data.startYear}–{data.endYear}</span></section>
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison', family: variant }}>
       <aside className="bau3-insight bau3-comparison-summary" aria-labelledby="bau-comparison-summary-title"><h3 id="bau-comparison-summary-title">{language === 'vi' ? 'Nhận xét tổng hợp' : 'Overall assessment'}</h3><p><EmphasizedNumbers text={summary || t.noData} maxSentences={3} /></p></aside>
       <div className="bau3-sections">{bau3Metrics.map((metric) => {

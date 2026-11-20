@@ -72,7 +72,7 @@ describe('chart observations', () => {
     const result = analyzeChart(selectChartPoints(data.annual, 'labor', 'USD', 2027, 2050), 'labor', 'USD', 'vi')!
     expect(result.firstLabel).toBe('1Mha')
     expect(result.difference).toBeGreaterThan(0)
-    expect(result.comparison).toContain('1Mha cao hơn Thường lệ')
+    expect(result.comparison).toContain('1Mha cao hơn Canh tác như thường lệ')
     expect(result.trend).toContain('1Mha giảm')
     expect(result.conclusion).toContain('nhu cầu lao động bình quân cao hơn')
     expect(SERIES_COLORS).toEqual({ first: '#217348', second: '#b8322b' })

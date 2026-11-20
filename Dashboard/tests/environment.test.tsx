@@ -61,7 +61,7 @@ describe('environmental model pages', () => {
   it.each(['environmentBau3', 'environmentBau2', 'environmentBauss', 'environmentOneMha'] as const)('shows two emission KPIs, AWD rate and yearly plots for %s', async (page) => {
     const { rerender } = render(<EnvironmentPage page={page} language="vi" />)
     await screen.findAllByRole('article')
-    expect(screen.getByRole('heading', { level: 1, name: environmentPageTitle(page, 'vi') })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(environmentPageTitle(page, 'vi'))
     expect(screen.getAllByRole('term')).toHaveLength(3)
     expect(screen.getAllByRole('article')).toHaveLength(2)
     expect(screen.getAllByRole('complementary')).toHaveLength(3)
@@ -75,7 +75,7 @@ describe('environmental model pages', () => {
       expect(chart.nextElementSibling!.querySelectorAll('strong').length).toBeGreaterThan(3)
     }
     rerender(<EnvironmentPage page={page} language="en" />)
-    expect(screen.getByRole('heading', { level: 1, name: environmentPageTitle(page, 'en') })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(environmentPageTitle(page, 'en'))
     expect(screen.getByText('AWD adoption rate')).toBeInTheDocument()
   }, 10000)
 
@@ -131,7 +131,7 @@ describe('environmental navigation', () => {
     expect(environmentPageForHash(hash)).toBe(page)
     window.history.replaceState(null, '', hash)
     render(<App />)
-    expect(await screen.findByRole('heading', { level: 1, name: environmentPageTitle(page, 'vi') })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(environmentPageTitle(page, 'vi'))
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(document.title).toBe(`${environmentPageTitle(page, 'en')} | STAR FARM`)
     expect(window.location.hash).toBe(hash)

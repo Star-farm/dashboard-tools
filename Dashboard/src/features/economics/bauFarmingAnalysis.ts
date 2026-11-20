@@ -79,7 +79,7 @@ export function bauFarmingSummary(data: Bau3Data, language: Language, family: Ba
   if (bau3Metrics.some((metric) => stats[metric].mean === null)) return bau3Text[language].noData
   const value = (metric: Bau3Metric) => `${formatBau3Value(stats[metric].mean!, metric, language)} ${bau3Unit(metric, language)}`
   const model = vi
-    ? { bau3s: 'canh tác thường lệ 3 vụ', bau2s: 'canh tác thường lệ 2 vụ', bauss: 'canh tác thường lệ bền vững', oneMha: 'mô hình 1Mha' }[family]
+    ? { bau3s: 'canh tác như thường lệ 3 vụ', bau2s: 'canh tác như thường lệ 2 vụ', bauss: 'canh tác như thường lệ bền vững', oneMha: 'mô hình 1Mha' }[family]
     : { bau3s: 'business as usual with three seasons', bau2s: 'business as usual with two seasons', bauss: 'sustainable business-as-usual farming', oneMha: 'the 1Mha system' }[family]
   const average = vi
     ? `Giai đoạn ${data.startYear}–${data.endYear}, ${model} đạt thu nhập ròng bình quân ${value('income')}, năng suất ${value('yield')} và tỷ suất lợi nhuận ${value('margin')}.`

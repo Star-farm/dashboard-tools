@@ -2,6 +2,7 @@ import ChartInfo from '../../components/ChartInfo'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import { CHART_TICK, scenarioColor, scenarioLineStyle } from '../../components/chartStyles'
 import ChartSeriesLegend from '../../components/ChartSeriesLegend'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -38,7 +39,7 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
   const hasData = chartPoints.length > 0
   return (
     <article className={`bau3-chart bau3-chart-${family}`} aria-labelledby={`bau3-${metric}-${family}-title`}>
-      <header><h3 id={`bau3-${metric}-${family}-title`} title={family === 'oneMha' ? t.oneMhaDescription : undefined}>{title ?? t[family]}</h3></header>
+      <header><h3 id={`bau3-${metric}-${family}-title`} title={family === 'oneMha' ? t.oneMhaDescription : undefined}><ScenarioAbbreviations text={title ?? t[family]} language={language} /></h3></header>
       <ConditionFilters language={language} filters={filters} />
       {hasData ? <div className="bau3-plot" role="group" aria-label={`${t[metric]} · ${t[family]} · ${data.startYear}–${data.endYear} · ${unit}`}>
         <ChartUnitLabel unit={unit} language={language} />

@@ -65,7 +65,7 @@ describe('three-season business-as-usual KPIs', () => {
 describe('three-season business-as-usual page', () => {
   it('shows five KPIs, an overall assessment before five charts and individual paragraphs below each chart', () => {
     const { container, rerender } = render(<Bau3FarmingPage language="vi" />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Canh tác như thường lệ · 3 mùa vụ' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Kinh tế Canh tác như thường lệ 3 mùa vụ')
     const indicators = screen.getByRole('region', { name: 'Các chỉ số kinh tế' })
     expect(within(indicators).getAllByRole('term')).toHaveLength(5)
     expect(indicators).toHaveTextContent('Năm 2050 so với 2027')
@@ -87,7 +87,7 @@ describe('three-season business-as-usual page', () => {
     }
     expect(container.querySelectorAll('.bau3-chart-oneMha')).toHaveLength(0)
     rerender(<Bau3FarmingPage language="en" />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Business as usual · 3 seasons' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Business as usual · 3 seasons')
     expect(screen.getByRole('region', { name: 'Economic indicators' })).toHaveTextContent('USD/ha')
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('income is lower under resource shortages')
   })
@@ -108,8 +108,8 @@ describe('three-season business-as-usual page', () => {
   it('opens by direct URL and translates the page metadata', async () => {
     window.history.replaceState(null, '', '#economics-bau3')
     render(<App />)
-    expect(await screen.findByRole('heading', { level: 1, name: 'Canh tác như thường lệ · 3 mùa vụ' })).toBeInTheDocument()
-    expect(document.title).toBe('Canh tác thường lệ · 3 mùa vụ | STAR FARM')
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Kinh tế Canh tác như thường lệ 3 mùa vụ')
+    expect(document.title).toBe('Kinh tế Canh tác như thường lệ 3 mùa vụ | STAR FARM')
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(document.title).toBe('Business as usual · 3 seasons | STAR FARM')
   })

@@ -3,6 +3,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import type { Language } from '../../i18n'
 import type { CropPeriod } from './seasonalData'
 import { seasonalComposition } from './seasonalComposition'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 
 const cropColors: Record<CropPeriod, string> = { early: '#267e91', middle: '#ba861f', late: '#8859a5' }
 export interface SeasonalSlice { period: CropPeriod; label: string; value: number | null; status?: string; notGrown?: boolean }
@@ -105,7 +106,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
     setTooltipPosition((current) => current?.left === left && current.top === top ? current : { left, top })
   }, [hoverPointer, hovered, pointer, active?.period])
   return <figure className="seasonal-pie">
-    <figcaption style={{ color }}>{name}</figcaption>
+    <figcaption style={{ color }}><ScenarioAbbreviations text={name} language={language} /></figcaption>
     <div ref={canvasRef} className="seasonal-pie-canvas" role="group" tabIndex={0} aria-label={`${name}: ${normalizedSlices.filter((slice) => slice.value !== 0).map(description).join('; ')}`} onMouseMove={(event) => {
       if (!hoverPointer) return
       setPointer({ x: event.clientX, y: event.clientY })
@@ -131,7 +132,7 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
         </PieChart>
       </ResponsiveContainer>
     </div>
-    {active && <div ref={tooltipRef} className={`chart-info seasonal-pie-tooltip${hoverPointer && hovered && pointer ? ' seasonal-pie-tooltip--pointer' : ''}`} style={hoverPointer && hovered && pointer ? { left: tooltipPosition?.left ?? pointer.x + 14, top: tooltipPosition?.top ?? pointer.y + 14 } : undefined} role="status"><p className="chart-info-title"><span className="seasonal-pie-tooltip-desktop-name">{active.label}</span><span className="seasonal-pie-tooltip-mobile-name">{name.replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')} · {active.label}</span></p><dl><div><dt><span className="chart-info-swatch" style={{ backgroundColor: cropColors[active.period] }} aria-hidden="true" /><span>{active.value === null ? active.status : <><span className="seasonal-pie-tooltip-desktop-value">{format(active.value)}</span><span className="seasonal-pie-tooltip-mobile-value">{mobileNumber(active.value)}</span> <span className="seasonal-pie-tooltip-unit">{unit}</span></>}{tooltipPercent(active) && <><span className="seasonal-pie-tooltip-desktop-percent"> · {tooltipPercent(active)}</span><span className="seasonal-pie-tooltip-mobile-percent"> · {tooltipPercent(active)}</span></>}</span></dt></div></dl></div>}
+    {active && <div ref={tooltipRef} className={`chart-info seasonal-pie-tooltip${hoverPointer && hovered && pointer ? ' seasonal-pie-tooltip--pointer' : ''}`} style={hoverPointer && hovered && pointer ? { left: tooltipPosition?.left ?? pointer.x + 14, top: tooltipPosition?.top ?? pointer.y + 14 } : undefined} role="status"><p className="chart-info-title"><span className="seasonal-pie-tooltip-desktop-name"><ScenarioAbbreviations text={active.label} language={language} /></span><span className="seasonal-pie-tooltip-mobile-name"><ScenarioAbbreviations text={`${name.replace(/Business As Usual|Canh tác như thường lệ/gi, 'BAU')} · ${active.label}`} language={language} /></span></p><dl><div><dt><span className="chart-info-swatch" style={{ backgroundColor: cropColors[active.period] }} aria-hidden="true" /><span>{active.value === null ? active.status : <><span className="seasonal-pie-tooltip-desktop-value">{format(active.value)}</span><span className="seasonal-pie-tooltip-mobile-value">{mobileNumber(active.value)}</span> <span className="seasonal-pie-tooltip-unit">{unit}</span></>}{tooltipPercent(active) && <><span className="seasonal-pie-tooltip-desktop-percent"> · {tooltipPercent(active)}</span><span className="seasonal-pie-tooltip-mobile-percent"> · {tooltipPercent(active)}</span></>}</span></dt></div></dl></div>}
 
     {showLegend && <div
       className="seasonal-model-legend seasonal-pie-shared-legend"

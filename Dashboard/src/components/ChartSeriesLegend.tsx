@@ -2,6 +2,7 @@ import type { Language } from '../i18n'
 import { translations } from '../i18n'
 import type { CSSProperties } from 'react'
 import '../styles/chart-legend.css'
+import ScenarioAbbreviations from './ScenarioAbbreviations'
 
 export interface ChartSeriesLegendItem {
   key: string
@@ -23,7 +24,7 @@ export default function ChartSeriesLegend({ language, items, label, legendTitle 
     <p className="chart-legend-caption">{label ?? translations[language].chartLegend}</p>
     <ul>{items.map((item) => <li key={item.key}>
       <span className={`chart-legend-swatch${item.kind === 'bar' ? ' chart-legend-swatch--bar' : ''}${item.dashed ? ' chart-legend-swatch--dashed' : ''}`} style={{ '--chart-series-color': item.color } as CSSProperties} aria-hidden="true" />
-      {item.label}
+      <ScenarioAbbreviations text={item.label} language={language} />
     </li>)}</ul>
   </div>
 }

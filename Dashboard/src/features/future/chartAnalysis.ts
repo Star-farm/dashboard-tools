@@ -74,7 +74,7 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
     } else if (metric === 'income') {
       conclusion = difference > 0
         ? 'Trong mô phỏng, 1Mha có thu nhập bình quân cao hơn; cần xem thêm chi phí, tài nguyên và phát thải khi cân nhắc áp dụng.'
-        : 'Nhìn chung, thu nhập bình quân của 1Mha chưa vượt thường lệ trong giai đoạn được chọn, nên dữ liệu này chưa cho thấy lợi thế về thu nhập của 1Mha.'
+        : 'Nhìn chung, thu nhập bình quân của 1Mha chưa vượt canh tác như thường lệ trong giai đoạn được chọn, nên dữ liệu này chưa cho thấy lợi thế về thu nhập của 1Mha.'
     } else if (metric === 'labor') {
       conclusion = difference > 0
         ? 'Trong mô phỏng, 1Mha có nhu cầu lao động bình quân cao hơn; đây là một yếu tố cần cân nhắc cùng thu nhập và chi phí.'

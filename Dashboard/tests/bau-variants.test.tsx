@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import App from '../src/app/App'
 import Bau2ComparisonPage from '../src/features/economics/Bau2ComparisonPage'
 import BauSustainableComparisonPage from '../src/features/economics/BauSustainableComparisonPage'
@@ -65,7 +65,7 @@ describe('BAU 2 seasons and sustainable comparisons', () => {
   it.each(variants)('opens $variant through the menu and supports its direct URL and page navigation', async ({ menu, hash, title }) => {
     window.history.replaceState(null, '', hash)
     render(<App />)
-    expect(await screen.findByRole('heading', { name: title })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(title))
     expect(document.title).toBe(`${title} | STAR FARM`)
     fireEvent.click(screen.getByRole('button', { name: 'Kinh tế' }))
     fireEvent.click(screen.getByRole('button', { name: 'So sánh chi tiết' }))
@@ -76,6 +76,6 @@ describe('BAU 2 seasons and sustainable comparisons', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Kinh tế' }))
     fireEvent.click(screen.getByRole('button', { name: 'So sánh chi tiết' }))
     fireEvent.click(screen.getByRole('link', { name: menu }))
-    expect(await screen.findByRole('heading', { name: title })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(title))
   })
 })

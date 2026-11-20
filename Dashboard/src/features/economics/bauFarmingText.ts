@@ -1,8 +1,8 @@
 const vi = {
-  title: 'Canh tác như thường lệ · 3 mùa vụ',
-  bau2Title: 'Canh tác như thường lệ · 2 mùa vụ',
-  baussTitle: 'Canh tác như thường lệ · Bền vững',
-  oneMhaTitle: 'Một triệu héc ta lúa',
+  title: 'Kinh tế Canh tác như thường lệ 3 mùa vụ',
+  bau2Title: 'Kinh tế Canh tác như thường lệ 2 mùa vụ',
+  baussTitle: 'Kinh tế Canh tác như thường lệ bền vững',
+  oneMhaTitle: 'Kinh tế Một triệu hecta lúa',
   kpis: 'Các chỉ số kinh tế',
   average: 'Giá trị bình quân giai đoạn',
   change: 'Năm 2050 so với 2027',
@@ -14,9 +14,9 @@ const vi = {
   method: 'Các KPI tổng hợp bốn nhóm điều kiện thời tiết và tài nguyên. Mức thay đổi thể hiện năm cuối giai đoạn so với năm đầu giai đoạn; tỷ suất lợi nhuận so sánh bằng điểm %.',
 }
 const en: Record<keyof typeof vi, string> = {
-  title: 'Business as usual · 3 seasons',
-  bau2Title: 'Business as usual · 2 seasons',
-  baussTitle: 'Business as usual · Sustainable',
+  title: 'Economics · Business as usual · 3 seasons',
+  bau2Title: 'Economics · Business as usual · 2 seasons',
+  baussTitle: 'Economics · Business as usual · Sustainable',
   oneMhaTitle: 'One million hectares rice',
   kpis: 'Economic indicators',
   average: 'Period average',

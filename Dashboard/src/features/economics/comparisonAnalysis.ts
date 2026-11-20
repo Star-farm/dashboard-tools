@@ -23,7 +23,7 @@ export function comparisonSummary(cohort: ComparisonCohort, language: Language, 
   if (Object.values(one).every((value) => value === null) || Object.values(bau).every((value) => value === null)) return comparisonText[language].noData
   const period = `${startYear} - ${endYear}`
   const introduction = language === 'vi'
-    ? `Giai đoạn ${period}, với điều kiện thời tiết và tài nguyên đã chọn, so sánh 1Mha với thường lệ: `
+    ? `Giai đoạn ${period}, với điều kiện thời tiết và tài nguyên đã chọn, so sánh 1Mha với canh tác như thường lệ: `
     : `Period ${period}, under the selected weather and resource conditions, comparing 1Mha with business as usual: `
   const income = one.income === null || bau.income === null
     ? language === 'vi' ? 'thu nhập ròng: chưa đủ dữ liệu đối chiếu.' : 'net income: insufficient comparison data.'

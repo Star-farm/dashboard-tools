@@ -13,6 +13,10 @@ describe('CSV data', () => {
     expect(CATEGORIES.map((category) => indicators.filter((item) => item.category === category).length)).toEqual([5, 5, 2, 8, 11])
     expect(indicators.find((item) => item.id === '27')?.englishName).toContain('high-quality, low-emission')
     expect(indicators.find((item) => item.id === '21')?.definition).toContain('"Đề án một triệu hecta lúa (1Mha)"')
+    expect(indicators.find((item) => item.id === '26')?.definition).toContain('6.000 VNĐ/kg')
+    expect(indicators.find((item) => item.id === '26')?.englishDefinition).toContain('0.24 USD/kg')
+    expect(indicators.find((item) => item.id === '27')?.definition).toContain('8.750 VNĐ/kg')
+    expect(indicators.find((item) => item.id === '27')?.englishDefinition).toContain('0.35 USD/kg')
   })
 
   it('handles BOM, escaped quotes, comma, CRLF and multiline fields', () => {

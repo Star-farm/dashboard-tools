@@ -33,9 +33,10 @@ interface Props {
   unit: string
   formatValue: (value: number) => string
   formatAxis?: (value: number, ticks: number[]) => string
+  normalResourceLabel?: string
 }
 
-export default function ScenarioComparisonChart({ language, title, baselineLabel, baseline, oneMha, startYear, endYear, domain, unit, formatValue, formatAxis, chartType = 'line' }: Props) {
+export default function ScenarioComparisonChart({ language, title, baselineLabel, baseline, oneMha, startYear, endYear, domain, unit, formatValue, formatAxis, normalResourceLabel, chartType = 'line' }: Props) {
   const bars = chartType === 'bar'
   const id = useId()
   const [width, setWidth] = useState(620)
@@ -78,10 +79,10 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
     <div className="comparison-model-key" data-chart={chartType} role="group" aria-label={vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}>
       <p className="chart-legend-label">{vi ? 'Chọn mô hình so sánh' : 'Choose comparison models'}</p>
       <button type="button" title={vi ? 'Tất cả mô hình' : 'All models'} aria-pressed={model === 'all'} onClick={() => setModel('all')}>{vi ? 'Tất cả mô hình' : 'All models'}</button>
-      <button type="button" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}><ScenarioAbbreviations text="1Mha" language={language} /></button>
-      <button type="button" aria-pressed={model === 'bau'} onClick={() => setModel('bau')}><ScenarioAbbreviations text={baselineLabel} language={language} /></button>
+      <button type="button" aria-pressed={model === 'oneMha'} onClick={() => setModel('oneMha')}>1Mha</button>
+      <button type="button" aria-pressed={model === 'bau'} onClick={() => setModel('bau')}>{baselineLabel}</button>
     </div>
-    <ConditionFilters language={language} filters={filters} />
+    <ConditionFilters language={language} filters={filters} normalResourceLabel={normalResourceLabel} />
     {hasData ? <>
       <div className="bau3-plot comparison-combined-plot" role="group" tabIndex={0} aria-label={`${title} · ${baselineLabel} / 1Mha · ${startYear}–${endYear} · ${unit}`} onKeyDownCapture={(event) => {
         if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
@@ -96,7 +97,7 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
             <XAxis dataKey="year" type={bars ? 'category' : 'number'} domain={bars ? undefined : [startYear, endYear]} ticks={yearTicks(startYear, endYear, width, 88)} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
             <YAxis width={width < 420 ? 46 : 68} domain={bars ? barScale.domain : lineScale.domain} ticks={bars ? barScale.ticks : lineScale.ticks} allowDataOverflow tickFormatter={(value) => bars ? barAxisNumber(Number(value)) : formatAxis ? formatAxis(Number(value), lineScale.ticks) : axisNumber(Number(value))} tickLine={false} tickMargin={width < 420 ? 4 : 6} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
-            <Tooltip shared isAnimationActive={false} content={(tooltipProps) => <ConditionComparisonTooltip {...tooltipProps} language={language} yearLabel={t.year} format={(value) => formatValue(displayChartValue(value))} unit={unit} />} cursor={{ stroke: '#819275', strokeDasharray: '3 3' }} wrapperStyle={{ pointerEvents: 'none', zIndex: 10 }} />
+            <Tooltip shared isAnimationActive={false} content={(tooltipProps) => <ConditionComparisonTooltip {...tooltipProps} language={language} yearLabel={t.year} format={(value) => formatValue(displayChartValue(value))} unit={unit} normalResourceLabel={normalResourceLabel} />} cursor={{ stroke: '#819275', strokeDasharray: '3 3' }} wrapperStyle={{ pointerEvents: 'none', zIndex: 10 }} />
             <ReferenceLine x={selectedYear} stroke="#687a5c" strokeWidth={1} />
             {bars ? visibleModels.flatMap((group) => visible.map((key) => <Bar key={group+'_'+key} dataKey={group+'_'+key} name={(group === 'bau' ? baselineLabel : '1Mha')+' · '+t[key]} fill={scenarioColor(group)} stroke={scenarioColor(group)} maxBarSize={20} isAnimationActive={false}><LabelList dataKey={group+'_'+key} position="top" formatter={(amount) => amount == null ? '' : formatValue(displayChartValue(Number(amount)))} style={{ fill: '#30472d', fontSize: 13, fontWeight: 700 }} /></Bar>)) : visibleModels.flatMap((group) => visible.map((key) => <Line key={`${group}_${key}`} type="linear" dataKey={`${group}_${key}`} name={`${group === 'bau' ? baselineLabel : '1Mha'} · ${t[key]}`} {...scenarioLineStyle(group, key)} connectNulls={false} isAnimationActive={false} />))}
           </ComposedChart>
@@ -111,7 +112,7 @@ export default function ScenarioComparisonChart({ language, title, baselineLabel
           { key: 'oneMha', label: '1Mha', color: scenarioColor('oneMha'), kind: 'bar' },
           { key: 'bau', label: baselineLabel, color: scenarioColor('bau'), kind: 'bar' },
         ]} />
-        <ConditionLegend language={language} conditions={filters.visible} />
+        <ConditionLegend language={language} conditions={filters.visible} normalResourceLabel={normalResourceLabel} />
       </div>
     </section>}
   </article>

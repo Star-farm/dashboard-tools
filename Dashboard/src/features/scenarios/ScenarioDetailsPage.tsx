@@ -5,6 +5,7 @@ import { getScrollBehavior } from '../../app/scrollBehavior'
 import data from '../../data/scenario-details.json'
 import type { Language } from '../../i18n'
 import EmphasizedNumbers from '../../components/EmphasizedNumbers'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 import { scenarioMetrics } from './scenarioTypes'
 import type { ScenarioData, ScenarioFamily, ScenarioMetric } from './scenarioTypes'
 import { scenarioMetricLabels, scenarioText } from './scenarioText'
@@ -44,7 +45,7 @@ export default function ScenarioDetailsPage({ language }: { language: Language }
         <h2 className="filter-group-title">{language === 'vi' ? 'Bộ lọc kịch bản' : 'Scenario filter'}</h2>
         <label htmlFor="scenario-select">{t.select}</label>
         <div className="scenario-select-control">
-          <span className="scenario-selected-name" aria-hidden="true">{selected.name[language]}</span>
+          <span className="scenario-selected-name" aria-hidden="true"><ScenarioAbbreviations text={selected.name[language]} language={language} /></span>
           <select id="scenario-select" title={`${t.select}: ${selected.name[language]}`} value={selected.code} onChange={(event) => setSelectedCode(event.target.value)}>{families.map((family) => <optgroup label={t[`group${family}`]} key={family}>{scenarios.scenarios.filter((scenario) => scenario.family === family).map((scenario) => <option value={scenario.code} key={scenario.code}>{scenario.name[language]}</option>)}</optgroup>)}</select>
         </div>
       </div>

@@ -74,7 +74,7 @@ describe('economic overview interface', () => {
     const cards = within(mobile).getAllByRole('article')
     expect(cards).toHaveLength(17)
     expect(within(cards[0]).getByText('Hiện trạng · 2016–2022')).toBeInTheDocument()
-    expect(within(cards[1]).getByRole('heading', { name: 'Thường lệ Bền vững' })).toBeInTheDocument()
+    expect(within(cards[1]).getByRole('heading', { name: 'Canh tác như thường lệ Bền vững' })).toBeInTheDocument()
     expect(within(cards[0]).getAllByRole('term')).toHaveLength(10)
     expect(within(cards[1]).getByText('17.653.309')).toBeInTheDocument()
   })

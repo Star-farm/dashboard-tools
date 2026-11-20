@@ -17,7 +17,7 @@
 .seasonal-reset:not(:disabled):hover { text-decoration: underline; text-underline-offset: 4px; }
 .seasonal-reset:disabled { opacity: .55; cursor: not-allowed; }
 .seasonal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
-.seasonal-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #cddbc4; border-radius: 8px; background: #fffefa; }
+.seasonal-card { display: flex; flex-direction: column; min-width: 0; overflow: visible; border: 1px solid #cddbc4; border-radius: 8px; background: #fffefa; }
 .seasonal-card > .seasonal-plot { order: 1; }
 .seasonal-card > .seasonal-model-legend,
 .seasonal-card > .interactive-chart-legend { order: 3; }
@@ -26,7 +26,7 @@
 .seasonal-card h3 { margin: 0; color: #30472d; font-size: calc(19px + 1px); line-height: 1.5; }
 .seasonal-card > header p { margin: 7px 0 0; color: #40533b; font-size: var(--text-small); line-height: 1.7; }
 .seasonal-card .interactive-chart-legend { padding-inline: 18px; }
-.seasonal-model-legend { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px 16px; max-width: 100%; overflow-x: auto; padding: 12px 20px 14px; color: #40533b; font-size: var(--text-small); }
+.seasonal-model-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; max-width: 100%; overflow: visible; padding: 12px 20px 14px; color: #40533b; font-size: var(--text-small); }
 .seasonal-model-legend .chart-legend-label { flex: 0 0 auto; margin: 0; color: #30472d; font-size: var(--text-small); font-weight: 700; line-height: 1.5; white-space: nowrap; }
 .seasonal-model-legend-item { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; min-height: 32px; white-space: nowrap; }
 .seasonal-model-legend-swatch { display: inline-block; width: 19px; height: 3px; flex: 0 0 19px; }

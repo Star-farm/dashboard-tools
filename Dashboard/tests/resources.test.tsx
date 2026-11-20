@@ -59,7 +59,7 @@ describe('resource model pages', () => {
   it.each(['resourceBau3', 'resourceBau2', 'resourceBauss', 'resourceOneMha'] as const)('renders isolated KPIs and annual plots for %s', async (page) => {
     const { rerender } = render(<ResourcesPage page={page} language="vi" />)
     await screen.findAllByRole('article')
-    expect(screen.getByRole('heading', { level: 1, name: resourcePageTitle(page, 'vi') })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(resourcePageTitle(page, 'vi'))
     expect(screen.getAllByRole('term')).toHaveLength(3)
     expect(screen.getAllByRole('article')).toHaveLength(3)
     expect(screen.getAllByRole('complementary')).toHaveLength(4)
@@ -71,7 +71,7 @@ describe('resource model pages', () => {
       expect(chart.nextElementSibling!.querySelectorAll('p')).toHaveLength(1)
     }
     rerender(<ResourcesPage page={page} language="en" />)
-    expect(screen.getByRole('heading', { level: 1, name: resourcePageTitle(page, 'en') })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(resourcePageTitle(page, 'en'))
     expect(screen.getByRole('complementary', { name: 'Overall assessment' })).toHaveTextContent('2050')
   }, 10000)
 
@@ -128,7 +128,7 @@ describe('resource navigation', () => {
     expect(resourcePageForHash(hash)).toBe(page)
     window.history.replaceState(null, '', hash)
     render(<App />)
-    expect(await screen.findByRole('heading', { level: 1, name: resourcePageTitle(page, 'vi') })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(resourcePageTitle(page, 'vi'))
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(document.title).toBe(`${resourcePageTitle(page, 'en')} | STAR FARM`)
     expect(window.location.hash).toBe(hash)

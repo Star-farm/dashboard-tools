@@ -25,7 +25,7 @@ export default function SiteFooter({ language }: { language: Language }) {
       <div className="footer-main">
         <div className="footer-content content-width">
           <div className="footer-about">
-            <div className="brand footer-brand"><span className="brand-name">STAR-FARM</span><span className="brand-full-name"><em>{t.footerProjectTitle}</em></span></div>
+            <div className="brand footer-brand"><span className="brand-name">STAR-FARM</span><span className="brand-full-name"><em>{t.footerProjectTitle}</em></span><span className="footer-funding-text">{t.footerFundingTag}</span></div>
           </div>
           <section className="partners-section" id="partners" aria-label={t.partners}>
             <div className="partners-inner">

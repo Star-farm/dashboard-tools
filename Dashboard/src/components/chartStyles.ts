@@ -8,7 +8,7 @@ export const CHART_TICK = { fill: '#30452e', fontSize: 'var(--chart-axis-size)',
 export const CHART_TOOLTIP = { background: '#fffefa', color: '#26382e', border: '1px solid #9bac90', borderRadius: 7, fontSize: 'var(--text-body)', lineHeight: 1.7 } as const
 export type ChartMarkerShape = 'circle' | 'square' | 'triangle' | 'diamond'
 export const CONDITION_MARKERS: Record<Bau3Condition, ChartMarkerShape> = {
-  severeShortage: 'square', severeNormal: 'circle', mildShortage: 'square', mildNormal: 'circle',
+  severeShortage: 'triangle', severeNormal: 'circle', mildShortage: 'triangle', mildNormal: 'circle',
 }
 export const CONDITION_COLORS: Record<Bau3Condition, string> = {
   severeShortage: '#2868b2', severeNormal: '#8650a8', mildShortage: '#b65b15', mildNormal: '#287447',

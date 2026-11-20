@@ -15,13 +15,13 @@ describe('chart tooltip display', () => {
     expect(container.querySelector('.chart-info-swatch')).toHaveAttribute('style', 'background-color: rgb(184, 50, 43);')
   })
 
-  it('uses a square for resource shortage and a circle for normal resources', () => {
+  it('uses a triangle for resource shortage and a circle for normal resources', () => {
     const { container } = render(<ChartInfo active format={String} payload={[
       { name: 'Severe weather · Resource shortage', value: 4, dataKey: 'oneMha_severeShortage', color: '#217348' },
       { name: 'Normal weather · Normal resources', value: 5, dataKey: 'oneMha_mildNormal', color: '#217348' },
     ]} />)
 
-    expect(container.querySelectorAll('.chart-info-swatch--square')).toHaveLength(1)
+    expect(container.querySelectorAll('.chart-info-swatch--triangle')).toHaveLength(1)
     expect(container.querySelectorAll('.chart-info-swatch--circle')).toHaveLength(1)
   })
 
@@ -65,9 +65,10 @@ describe('chart tooltip display', () => {
   )
 
   it('uses the BAU abbreviation for the localized short baseline label', () => {
-    render(<ChartInfo active label={2030} format={(value) => String(value)} payload={[{ name: 'Average income', value: 4, payload: { group: 'bau', label: 'Thường lệ' } }]} />)
+    const { container } = render(<ChartInfo active label={2030} language="vi" format={(value) => String(value)} payload={[{ name: 'Average income', value: 4, payload: { group: 'bau', label: 'Thường lệ' } }]} />)
 
-    expect(screen.getByText('BAU')).toHaveClass('chart-tooltip-mobile-label')
-    expect(screen.getByText('Thường lệ')).toHaveClass('chart-tooltip-desktop-label')
+    expect(container.querySelector('.chart-tooltip-mobile-label')).toHaveTextContent('BAU')
+    expect(container.querySelector('.chart-tooltip-mobile-label abbr')).toHaveTextContent('BAU')
+    expect(container.querySelector('.chart-tooltip-desktop-label abbr')).not.toBeNull()
   })
 })

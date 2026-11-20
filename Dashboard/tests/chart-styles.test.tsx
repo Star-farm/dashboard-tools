@@ -14,8 +14,8 @@ describe('scenario chart encodings', () => {
     expect(scenarioLineStyle('bau', 'severeShortage').strokeDasharray).toBe('6 3')
     expect(CONDITION_MARKERS.mildNormal).toBe('circle')
     expect(CONDITION_MARKERS.severeNormal).toBe('circle')
-    expect(CONDITION_MARKERS.mildShortage).toBe('square')
-    expect(CONDITION_MARKERS.severeShortage).toBe('square')
+    expect(CONDITION_MARKERS.mildShortage).toBe('triangle')
+    expect(CONDITION_MARKERS.severeShortage).toBe('triangle')
   })
 
   it('shows climate line and resource marker encodings in the condition legend', () => {
@@ -25,6 +25,6 @@ describe('scenario chart encodings', () => {
     expect(container.querySelectorAll('.condition-legend-group')).toHaveLength(2)
     expect(items.filter((item) => item.querySelector('.encoding-line--dashed'))).toHaveLength(1)
     expect(items.filter((item) => item.querySelector('.encoding-marker--circle'))).toHaveLength(1)
-    expect(items.filter((item) => item.querySelector('.encoding-marker--square'))).toHaveLength(1)
+    expect(items.filter((item) => item.querySelector('.encoding-marker--triangle'))).toHaveLength(1)
   })
 })

@@ -41,7 +41,7 @@ describe('condition comparison tooltip', () => {
     const markers = Array.from(container.querySelectorAll('.chart-info-condition-marker .scenario-dot'))
 
     expect(markers).toHaveLength(2)
-    expect(markers.map((marker) => marker.getAttribute('data-marker'))).toEqual(['square', 'square'])
+    expect(markers.map((marker) => marker.getAttribute('data-marker'))).toEqual(['triangle', 'triangle'])
     expect(markers.map((marker) => marker.getAttribute('fill'))).toEqual(['#b8322b', '#217348'])
   })
 })

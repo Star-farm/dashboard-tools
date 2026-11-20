@@ -4,13 +4,14 @@ import { bau3Text } from '../features/economics/bau3Text'
 import { CONDITION_MARKERS, SCENARIO_COLORS } from './chartStyles'
 import ChartMarker from './ChartMarker'
 import '../styles/chart-info.css'
+import ScenarioAbbreviations from './ScenarioAbbreviations'
 
 interface TooltipEntry {
   dataKey?: unknown
   value?: unknown
 }
 
-export default function ConditionComparisonTooltip({ active, label, payload, yearLabel, language, format }: {
+export default function ConditionComparisonTooltip({ active, label, payload, yearLabel, language, format, normalResourceLabel }: {
   active?: boolean
   label?: unknown
   payload?: readonly TooltipEntry[]
@@ -18,6 +19,7 @@ export default function ConditionComparisonTooltip({ active, label, payload, yea
   language: Language
   format: (value: number) => string
   unit?: string
+  normalResourceLabel?: string
 }) {
   if (!active || !payload?.length) return null
 
@@ -38,13 +40,13 @@ export default function ConditionComparisonTooltip({ active, label, payload, yea
     <table className="chart-info-condition-table">
       <thead><tr>
         <th scope="col">{t.conditionColumn}</th>
-        <th className="chart-info-bau" scope="col">BAU</th>
-        <th className="chart-info-one-mha" scope="col">1Mha</th>
+        <th className="chart-info-bau" scope="col"><ScenarioAbbreviations text="BAU" language={language} /></th>
+        <th className="chart-info-one-mha" scope="col"><ScenarioAbbreviations text="1Mha" language={language} /></th>
       </tr></thead>
       <tbody>{conditions.map((condition) => <tr key={condition}>
-        <th scope="row"><svg className="chart-info-condition-marker" viewBox="-10 -7 20 14" aria-hidden="true"><ChartMarker shape={CONDITION_MARKERS[condition]} color={SCENARIO_COLORS.bau} cx={-4} /><ChartMarker shape={CONDITION_MARKERS[condition]} color={SCENARIO_COLORS.oneMha} cx={4} /></svg><span className="chart-condition-desktop-label">{t[condition]}</span><span className="chart-condition-mobile-label">{language === 'vi'
-          ? `${condition.startsWith('severe') ? 'Khắc nghiệt' : 'Bình thường'} · ${condition.endsWith('Shortage') ? 'Khan hiếm' : 'Tài nguyên thường'}`
-          : `${condition.startsWith('severe') ? 'Severe' : 'Normal'} · ${condition.endsWith('Shortage') ? 'Shortage' : 'Normal resources'}`}</span></th>
+        <th scope="row"><svg className="chart-info-condition-marker" viewBox="-10 -7 20 14" aria-hidden="true"><ChartMarker shape={CONDITION_MARKERS[condition]} color={SCENARIO_COLORS.bau} cx={-4} /><ChartMarker shape={CONDITION_MARKERS[condition]} color={SCENARIO_COLORS.oneMha} cx={4} /></svg><span className="chart-condition-desktop-label">{normalResourceLabel ? t[condition].replace(/Tài nguyên bình thường|Normal resources/g, normalResourceLabel) : t[condition]}</span><span className="chart-condition-mobile-label">{language === 'vi'
+          ? `${condition.startsWith('severe') ? 'Khắc nghiệt' : 'Bình thường'} · ${condition.endsWith('Shortage') ? 'Khan hiếm' : normalResourceLabel ?? 'Bình thường'}`
+          : `${condition.startsWith('severe') ? 'Severe' : 'Normal'} · ${condition.endsWith('Shortage') ? 'Shortage' : normalResourceLabel ?? 'Normal'}`}</span></th>
         <td>{value('bau', condition)}</td>
         <td>{value('oneMha', condition)}</td>
       </tr>)}</tbody>

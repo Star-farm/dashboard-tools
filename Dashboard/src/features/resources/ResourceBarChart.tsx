@@ -1,6 +1,7 @@
 import ChartInfo from '../../components/ChartInfo'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import ChartSeriesLegend from '../../components/ChartSeriesLegend'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 import { CHART_TICK, scenarioColor } from '../../components/chartStyles'
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -33,6 +34,6 @@ export default function ResourceBarChart({ data, series, metric, language }: { d
       </BarChart>
     </ResponsiveContainer></div> : <p className="comparison-no-data">{t.noData}</p>}
     {chartPoints.length > 0 && <ChartSeriesLegend language={language} legendTitle={language === 'vi' ? 'Chú giải:' : 'Legend:'} label={language === 'vi' ? 'Mô hình' : 'Model'} items={points.map((point) => ({ key: point.group, label: point.label, color: point.color, kind: 'bar' }))} />}
-    <dl className="comparison-values">{points.map((point) => <div key={point.group}><dt><span className={`comparison-swatch ${point.group}`} aria-hidden="true" />{point.label}</dt><dd><strong>{resourceNumber(point.value ?? 0, language)}</strong> <span>{unit}</span></dd></div>)}</dl>
+    <dl className="comparison-values">{points.map((point) => <div key={point.group}><dt><span className={`comparison-swatch ${point.group}`} aria-hidden="true" /><ScenarioAbbreviations text={point.label} language={language} /></dt><dd><strong>{resourceNumber(point.value ?? 0, language)}</strong> <span>{unit}</span></dd></div>)}</dl>
   </article>
 }

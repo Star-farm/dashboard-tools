@@ -8,7 +8,7 @@ const vi = {
   roiNote: 'Thu nhập ròng bình quân / Chi phí sản xuất bình quân × 100 %.',
   moneyUnit: 'VNĐ/ha', yieldUnit: 'tấn/ha', laborUnit: 'giờ/ha',
   group: 'Nhóm kịch bản', season: 'Hệ canh tác', climate: 'Thời tiết', resource: 'Tài nguyên', awd: 'Áp dụng AWD',
-  bau: 'Thường lệ', oneMha: '1Mha', sustainable: 'Bền vững', threeSeasons: '3 mùa vụ', twoSeasons: '2 mùa vụ', mild: 'Bình thường', severe: 'Khắc nghiệt', normal: 'Kinh tế bình thường', neutral: 'Hiện trạng', shortage: 'Khan hiếm tài nguyên', with: 'Có AWD', without: 'Không có AWD', mixed: 'Có và không AWD',
+  bau: 'Canh tác như thường lệ', oneMha: '1Mha', sustainable: 'Bền vững', threeSeasons: '3 mùa vụ', twoSeasons: '2 mùa vụ', mild: 'Bình thường', severe: 'Khắc nghiệt', normal: 'Bình thường', neutral: 'Hiện trạng', shortage: 'Khan hiếm tài nguyên', with: 'Có AWD', without: 'Không có AWD', mixed: 'Có và không AWD',
   income: 'Thu nhập ròng', cost: 'Chi phí sản xuất', straw: 'Giá trị rơm', roi: 'Tỷ suất hoàn vốn', margin: 'Tỷ suất lợi nhuận', yield: 'Năng suất trung bình', labor: 'Cường độ lao động',
 }
 const en: Record<keyof typeof vi, string> = {

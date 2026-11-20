@@ -18,8 +18,8 @@ import three from '../src/data/economics-bau3-series.json'
 import { parseCsv } from '../src/utils/csv'
 
 const models = [
-  { family: 'bau2s' as Bau3Family, data: two as Bau3Data, Component: Bau2FarmingPage, title: 'Canh tác như thường lệ · 2 mùa vụ', enTitle: 'Business as usual · 2 seasons', metadata: 'Canh tác thường lệ · 2 mùa vụ | STAR FARM', name: 'canh tác thường lệ 2 vụ', enName: 'business as usual with two seasons', hash: '#economics-bau2', page: 'bau2Farming' as const, leaf: '2 mùa vụ', season: '2 Seasons', viSeason: '2 vụ', count: 3840 },
-  { family: 'bauss' as Bau3Family, data: sustainable as Bau3Data, Component: BauSustainableFarmingPage, title: 'Canh tác như thường lệ · Bền vững', enTitle: 'Business as usual · Sustainable', metadata: 'Canh tác thường lệ · Bền vững | STAR FARM', name: 'canh tác thường lệ bền vững', enName: 'sustainable business-as-usual farming', hash: '#economics-bauss', page: 'baussFarming' as const, leaf: 'Bền vững', season: 'Sustainable', viSeason: 'Bền vững', count: 5616 },
+  { family: 'bau2s' as Bau3Family, data: two as Bau3Data, Component: Bau2FarmingPage, title: 'Kinh tế Canh tác như thường lệ 2 mùa vụ', enTitle: 'Economics · Business as usual · 2 seasons', metadata: 'Kinh tế Canh tác như thường lệ 2 mùa vụ | STAR FARM', name: 'canh tác như thường lệ 2 vụ', enName: 'business as usual with two seasons', hash: '#economics-bau2', page: 'bau2Farming' as const, leaf: '2 mùa vụ', season: '2 Seasons', viSeason: '2 vụ', count: 3840 },
+  { family: 'bauss' as Bau3Family, data: sustainable as Bau3Data, Component: BauSustainableFarmingPage, title: 'Kinh tế Canh tác như thường lệ bền vững', enTitle: 'Economics · Business as usual · Sustainable', metadata: 'Kinh tế Canh tác như thường lệ bền vững | STAR FARM', name: 'canh tác như thường lệ bền vững', enName: 'sustainable business-as-usual farming', hash: '#economics-bauss', page: 'baussFarming' as const, leaf: 'Bền vững', season: 'Sustainable', viSeason: 'Bền vững', count: 5616 },
   { family: 'oneMha' as Bau3Family, data: three as Bau3Data, Component: OneMhaFarmingPage, title: 'Một triệu héc ta lúa', enTitle: 'One million hectares rice', metadata: 'Một triệu hecta lúa | STAR FARM', name: 'mô hình 1Mha', enName: 'the 1Mha system', hash: '#economics-1mha', page: 'oneMhaFarming' as const, leaf: 'Một triệu hecta lúa', season: '', viSeason: '', count: 3840 },
 ]
 
@@ -69,7 +69,7 @@ describe.each(models)('$family standalone farming page', (model) => {
   it('renders the shared KPI and chart template, the selected data and both languages', () => {
     document.documentElement.lang = 'vi'
     const { container, rerender } = render(<model.Component language="vi" />)
-    expect(screen.getByRole('heading', { level: 1, name: model.title })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(model.title)
     expect(within(screen.getByRole('region', { name: 'Các chỉ số kinh tế' })).getAllByRole('term')).toHaveLength(5)
     expect(screen.getAllByRole('article')).toHaveLength(5)
     expect(container.querySelectorAll(`.bau3-chart-${model.family}`)).toHaveLength(5)
@@ -84,7 +84,7 @@ describe.each(models)('$family standalone farming page', (model) => {
     }
     document.documentElement.lang = 'en'
     rerender(<model.Component language="en" />)
-    expect(screen.getByRole('heading', { level: 1, name: model.enTitle })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(model.enTitle)
     const indicators = screen.getByRole('region', { name: 'Economic indicators' })
     expect(indicators).toHaveTextContent('USD/ha')
     expect(indicators).toHaveTextContent('2050 compared with 2027')
@@ -107,7 +107,7 @@ describe.each(models)('$family standalone farming page', (model) => {
   it('supports direct URLs and translated page metadata', async () => {
     window.history.replaceState(null, '', model.hash)
     render(<App />)
-    expect(await screen.findByRole('heading', { level: 1, name: model.title })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(model.title)
     expect(document.title).toBe(model.metadata)
     fireEvent.click(screen.getByRole('button', { name: 'English' }))
     expect(document.title).toBe(`${model.enTitle} | STAR FARM`)

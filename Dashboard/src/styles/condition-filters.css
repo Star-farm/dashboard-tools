@@ -12,4 +12,5 @@
 .encoding-line--dashed { border-top-style: dashed; }
 .encoding-marker { width: 9px; height: 9px; background: #40533b; }
 .encoding-marker--circle { border-radius: 50%; }
+.encoding-marker--triangle { clip-path: polygon(50% 0, 0 100%, 100% 100%); }
 @media (max-width: 767px) { .condition-filters { padding-inline: 14px; } .condition-legend-wrap { padding-inline: 14px; } }

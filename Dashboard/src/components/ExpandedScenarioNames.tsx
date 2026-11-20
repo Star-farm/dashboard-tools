@@ -1,6 +1,6 @@
 import { translations, type Language } from '../i18n'
 
-const scenarioNamePattern = /1Mha|\bBAU\b/gi
+const scenarioNamePattern = /1Mha|\bBAU\b|Thường lệ/gi
 
 export default function ExpandedScenarioNames({ text, language }: { text: string; language: Language }) {
   const parts = []

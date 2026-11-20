@@ -1,6 +1,7 @@
 import { CHART_TICK, scenarioColor, scenarioLineStyle } from '../../components/chartStyles'
 import ChartUnitLabel from '../../components/ChartUnitLabel'
 import ChartInfo from '../../components/ChartInfo'
+import ScenarioAbbreviations from '../../components/ScenarioAbbreviations'
 import { useId, useMemo, useState } from 'react'
 import { Bar, CartesianGrid, LabelList, Line, ComposedChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
@@ -129,7 +130,7 @@ function SeasonalMetricCard({ language, metric, points, mode, families, startYea
   const hasData = plotted.length > 0
   const modelLegend = !pieMode && plotted.length > 0 ? <div className="seasonal-model-legend" role="group" aria-label={t.modelLegend}>
     <p className="chart-legend-label">{t.modelLegend}</p>
-    {plotted.map((family) => <span className="seasonal-model-legend-item" key={family}><span className="seasonal-model-legend-swatch seasonal-model-legend-swatch--bar" aria-hidden="true" style={{ backgroundColor: scenarioColor(family) }} />{t[family]}</span>)}
+    {plotted.map((family) => <span className="seasonal-model-legend-item" key={family}><span className="seasonal-model-legend-swatch seasonal-model-legend-swatch--bar" aria-hidden="true" style={{ backgroundColor: scenarioColor(family) }} /><ScenarioAbbreviations text={t[family]} language={language} /></span>)}
   </div> : null
   const grid = <CartesianGrid stroke="#d8dfd0" vertical={false} />
   const compactSeasonalBars = mode === 'year' && bars && width < 420

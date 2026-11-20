@@ -51,6 +51,7 @@
 .footer-content { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.4fr); align-items: start; gap: 20px 5%; padding-block: 38px 28px; }
 .footer-about { grid-column: 1; grid-row: 1; min-width: 0; }
 .footer-brand .brand-full-name { color: #e4d9a3; font-size: var(--text-small); line-height: 1.8; }
+.footer-funding-text { color: #e4d9a3; font-size: var(--text-small); line-height: 1.6; }
 .footer-about .footer-links { margin-top: 14px; }
 .footer-links { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 18px; }
 .footer-links h2 { color: #e4d9a3; font-size: var(--text-small); font-weight: 500; margin: 0; white-space: nowrap; }

@@ -96,6 +96,39 @@ const noPerChartTooltipLabelDeduplication = {
   },
 }
 
+const requireAbbreviationPopupRightAndBelowCursor = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'place abbreviation popups to the right and below the cursor' },
+    schema: [],
+    messages: {
+      rightAndBelow: 'Place the abbreviation popup to the right and below the cursor with pointer.x + 14 and pointer.y + 14; keep edge handling so it stays in the viewport.',
+    },
+  },
+  create(context) {
+    const isOffset = (node, axis) => node?.type === 'BinaryExpression'
+      && node.operator === '+'
+      && node.left?.type === 'MemberExpression'
+      && node.left.object?.name === 'pointer'
+      && node.left.property?.name === axis
+      && node.right?.type === 'Literal'
+      && node.right.value === 14
+    let hasRightOffset = false
+    let hasBelowOffset = false
+
+    return {
+      VariableDeclarator(node) {
+        if (node.id.type !== 'Identifier') return
+        if (node.id.name === 'right' && isOffset(node.init, 'x')) hasRightOffset = true
+        if (node.id.name === 'top' && node.init?.type === 'ConditionalExpression' && isOffset(node.init.consequent, 'y')) hasBelowOffset = true
+      },
+      'Program:exit'(node) {
+        if (!hasRightOffset || !hasBelowOffset) context.report({ node, messageId: 'rightAndBelow' })
+      },
+    }
+  },
+}
+
 const requireFilteredSeasonalChartData = {
   meta: {
     type: 'problem',
@@ -124,12 +157,13 @@ const starFarmPlugin = {
     'no-scenario-name-in-seasonal-pie-tooltip': noScenarioNameInSeasonalPieTooltip,
     'no-source-comments': noSourceComments,
     'no-per-chart-tooltip-label-deduplication': noPerChartTooltipLabelDeduplication,
+    'require-abbreviation-popup-right-and-below-cursor': requireAbbreviationPopupRightAndBelowCursor,
     'require-filtered-seasonal-chart-data': requireFilteredSeasonalChartData,
   },
 }
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  globalIgnores(['dist', 'coverage', '.cache', '.vercel', 'test-results']),
   {
     files: ['**/*.{ts,tsx,js,mjs}'],
     plugins: { 'star-farm': starFarmPlugin },
@@ -151,18 +185,19 @@ export default defineConfig([
     },
   },
   {
+    files: ['src/components/ScenarioAbbreviations.tsx'],
+    rules: { 'star-farm/require-abbreviation-popup-right-and-below-cursor': 'error' },
+  },
+  {
     files: ['src/features/map/PlotMapPopup.tsx'],
-    plugins: { 'star-farm': starFarmPlugin },
     rules: { 'star-farm/no-global-plot-popup-context': 'error' },
   },
   {
     files: ['src/features/economics/SeasonalPieChart.tsx'],
-    plugins: { 'star-farm': starFarmPlugin },
     rules: { 'star-farm/no-scenario-name-in-seasonal-pie-tooltip': 'error' },
   },
   {
     files: ['src/features/economics/SeasonalComparison.tsx'],
-    plugins: { 'star-farm': starFarmPlugin },
     rules: { 'star-farm/require-filtered-seasonal-chart-data': 'error' },
   },
   {

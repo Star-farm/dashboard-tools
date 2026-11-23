@@ -28,28 +28,9 @@
 }
 
 .scenario-insight-model { font-weight: 700; }
-.scenario-abbreviation { position: relative; cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
-.scenario-abbreviation::after { position: absolute; z-index: 1100; top: calc(100% + 10px); left: 0; width: max-content; max-width: min(420px, 80vw); padding: 9px 12px; border: 1px solid #526b56; border-radius: 6px; background: #173d2f; color: #fffefa; content: attr(data-definition); font-size: 13px; font-weight: 500; line-height: 1.45; white-space: normal; box-shadow: 0 5px 18px #102a2240; opacity: 0; visibility: hidden; transform: translateY(4px); transition: opacity 120ms ease, transform 120ms ease, visibility 120ms; pointer-events: none; }
-.scenario-abbreviation:hover::after, .scenario-abbreviation:focus::after { opacity: 1; visibility: visible; transform: translateY(0); }
+.scenario-abbreviation { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
+.scenario-abbreviation-popup { position: fixed; z-index: 2147483647; width: max-content; max-width: min(420px, calc(100vw - 16px)); padding: 9px 12px; border: 1px solid #526b56; border-radius: 6px; background: #173d2f; color: #fffefa; font-size: 13px; font-weight: 500; line-height: 1.45; white-space: normal; box-shadow: 0 5px 18px #102a2240; pointer-events: none; }
 .scenario-abbreviation:focus-visible { outline: 2px solid #759b7f; outline-offset: 3px; border-radius: 2px; }
-@media (min-width: 768px) {
-  .scenario-abbreviation::after { position: fixed; top: auto; right: 12px; bottom: 12px; left: 12px; width: auto; max-width: none; }
-}
-@media (max-width: 767px) {
-  .scenario-abbreviation::after {
-    position: fixed;
-    z-index: 1100;
-    top: auto;
-    right: 12px;
-    bottom: 12px;
-    left: 12px;
-    width: auto;
-    max-width: none;
-    transform: translateY(4px);
-  }
-  .scenario-abbreviation:hover::after,
-  .scenario-abbreviation:focus::after { transform: translateY(0); }
-}
 
 * { box-sizing: border-box; }
 html { scroll-padding-top: 112px; scroll-behavior: smooth; }

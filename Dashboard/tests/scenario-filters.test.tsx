@@ -29,7 +29,7 @@ describe.each(pages)('$name linked dropdowns', ({ render: page }) => {
     const options = (key: keyof EconomicFilters) => Array.from(select(key).options, (option) => option.value)
     const reset = () => fireEvent.click(screen.getByRole('button', { name: new RegExp(t.reset) }))
 
-    // Later filters never restrict options in earlier dropdowns.
+
     choose('awd', 'without')
     expect(options('group')).toEqual(['all', 'bau', 'oneMha'])
     expect(options('season')).toEqual(['all', 'sustainable', 'threeSeasons', 'twoSeasons'])
@@ -45,7 +45,7 @@ describe.each(pages)('$name linked dropdowns', ({ render: page }) => {
     choose('climate', 'mild')
     choose('resource', 'shortage')
     expect(screen.getAllByRole('article')).toHaveLength(1)
-    // Only preceding selections constrain the available alternatives.
+
     expect(options('climate')).toEqual(['all', 'mild', 'severe'])
     choose('climate', 'severe')
     expect(select('resource')).toHaveValue('all')
@@ -64,7 +64,7 @@ describe.each(pages)('$name linked dropdowns', ({ render: page }) => {
     expect(options('resource')).toEqual(['all', 'normal', 'neutral', 'shortage'])
     expect(screen.getAllByRole('article')).toHaveLength(17)
 
-    // Changing the first dropdown clears all later selections, including valid ones.
+
     choose('group', 'bau')
     choose('season', 'threeSeasons')
     choose('climate', 'mild')
@@ -89,7 +89,7 @@ describe.each(pages)('$name linked dropdowns', ({ render: page }) => {
     expect(screen.getAllByRole('article')).toHaveLength(8)
     reset()
 
-    // A downstream AWD choice leaves the scenario group and season unchanged.
+
     choose('season', 'twoSeasons')
     choose('awd', 'with')
     expect(options('group')).toEqual(['all', 'bau', 'oneMha'])

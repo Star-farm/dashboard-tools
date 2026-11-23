@@ -204,7 +204,6 @@ def main():
                 payload = aggregate_results(source, 992)
                 assert len(payload["records"]) == 24 * season_count
                 scenario_id = f"{system}-{climate}-{resource}"
-                # Derive the Dashboard code from the actual category metadata.
                 overview = json.loads((Path(__file__).resolve().parents[1] / "src/data/economics-overview.json").read_text(encoding="utf-8"))
                 match = [r for r in overview if not r["historical"] and r["group"] == ("oneMha" if system == "oneMha" else "bau") and (system == "oneMha" or r["season"] == {"bau3": "threeSeasons", "bau2": "twoSeasons", "bauss": "sustainable"}[system]) and r["climate"] == climate and r["resource"] == resource]
                 assert len(match) == 1, (scenario_id, match)

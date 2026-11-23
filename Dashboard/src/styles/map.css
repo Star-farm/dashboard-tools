@@ -167,7 +167,7 @@
 .map-play:hover {
   background: var(--forest);
 }
-/* Fixed scale bar: bottom-left corner */
+
 .map-scale-overlay {
   position: absolute;
   left: 16px;
@@ -201,7 +201,7 @@
   overflow: visible;
 }
 
-/* Mobile */
+
 @media (max-width: 767px) {
   .map-scale-overlay {
     left: 12px;

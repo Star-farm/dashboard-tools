@@ -50,7 +50,7 @@ export function useLanguage(page: Page = 'glossary') {
     try {
       window.localStorage.setItem(LANGUAGE_STORAGE_KEY, next)
     } catch {
-      // Switching stays available when browser storage is blocked.
+      return
     }
   }
 

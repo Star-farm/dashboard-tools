@@ -54,14 +54,12 @@
 .seasonal-pie-canvas { position: relative; width: 100%; aspect-ratio: 1; max-width: 340px; margin-inline: auto; }
 .seasonal-pie-canvas:focus-visible { outline: 2px solid #759b7f; outline-offset: 2px; border-radius: 6px; }
 .seasonal-pie-center { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #40533b; font-size: var(--text-small); pointer-events: none; white-space: nowrap; }
-.seasonal-pie-tooltip { position: static; box-sizing: border-box; width: min(100%, 560px); max-width: 100%; margin: 8px auto 0; pointer-events: none; font-variant-numeric: tabular-nums; }
-@media (min-width: 768px) { .seasonal-pie-tooltip--pointer { position: fixed; z-index: 1000; width: min(560px, calc(100vw - 16px)); max-width: calc(100vw - 16px); margin: 0; } }
+.seasonal-pie-tooltip { position: static; box-sizing: border-box; width: fit-content; max-width: min(100%, 560px); margin: 8px auto 0; pointer-events: none; font-variant-numeric: tabular-nums; }
+@media (min-width: 768px) { .seasonal-pie-tooltip--pointer { position: fixed; z-index: 1000; width: fit-content; max-width: min(560px, calc(100vw - 16px)); margin: 0; } }
 .seasonal-pie-tooltip dt { align-items: center; }
 .seasonal-pie-tooltip dt > span { min-width: 0; font-weight: 700; }
 .seasonal-pie-tooltip-mobile-value, .seasonal-pie-tooltip-mobile-percent { display: none; }
 @media (max-width: 767px) { .seasonal-pie-tooltip-unit { display: inline; } .seasonal-pie-tooltip-desktop-value, .seasonal-pie-tooltip-desktop-percent { display: none; } .seasonal-pie-tooltip-mobile-value, .seasonal-pie-tooltip-mobile-percent { display: inline; } }
-.seasonal-pie-tooltip-mobile-name { display: none; }
-@media (max-width: 767px) { .seasonal-pie-tooltip-desktop-name { display: none; } .seasonal-pie-tooltip-mobile-name { display: inline; } }
 @media (max-width: 767px) {
   .chart-info.seasonal-pie-tooltip { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 8px; width: fit-content; max-width: 100%; padding: 4px 6px; }
   .seasonal-pie-tooltip .chart-info-title { flex: 0 1 auto; margin: 0; }

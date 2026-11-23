@@ -33,7 +33,6 @@ console.log(`BAU 3S comparison: ${bau3.series.length} annual series.`)
 const seasonal = aggregateSeasonalData(master, combined)
 const seasonalOverall = aggregateSeasonalData(master, combined, true)
 
-// Combine detailed BAU variants with overall BAU
 const seasonalMerged = {
   startYear: seasonal.startYear,
   endYear: seasonal.endYear,
@@ -49,7 +48,6 @@ for (const topic of ['economics', 'resources', 'environment', 'all']) {
     JSON.stringify(packSeasonalData(seasonalMerged, topic)) + '\n'
   )
 
-  // Keep existing overall files for compatibility
   writeFileSync(
     new URL(`${topic}-seasonal-overall.json`, directory),
     JSON.stringify(packSeasonalData(seasonalOverall, topic)) + '\n'

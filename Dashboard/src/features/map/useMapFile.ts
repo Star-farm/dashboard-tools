@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-// Bound retained files. Active components keep their own results after eviction.
+
 const MAX_CACHED_FILES = 8
 const cache = new Map<string, unknown>()
 
@@ -28,7 +28,6 @@ function acquireMapFile<T>(filename: string): { promise: Promise<T>; release: ()
       )
       if (!response.ok) throw new Error(`Failed to load ${filename}: ${response.status}`)
       const data = await response.json() as T
-      // A fetch implementation can finish parsing after its request was aborted.
       if (controller.signal.aborted) throw new DOMException('Request aborted', 'AbortError')
       cache.delete(filename)
       cache.set(filename, data)
@@ -52,7 +51,6 @@ function acquireMapFile<T>(filename: string): { promise: Promise<T>; release: ()
       if (released) return
       released = true
       request.consumers--
-      // Allow StrictMode's immediate effect re-subscription to share the request.
       queueMicrotask(() => {
         if (request.consumers === 0 && pending.get(filename) === request) {
           pending.delete(filename)

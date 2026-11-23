@@ -1,6 +1,6 @@
 import type { Language } from '../i18n'
 
-/** Formats an axis tick set with the least precision needed to keep its labels distinct. */
+
 export function distinctAxisFormatter(ticks: number[], language: Language, compact = false) {
   const uniqueTicks = [...new Set(ticks.filter(Number.isFinite))]
   for (let precision = compact ? 2 : 0; precision <= (compact ? 21 : 12); precision += 1) {

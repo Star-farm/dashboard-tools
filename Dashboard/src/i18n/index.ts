@@ -253,12 +253,12 @@ export const categoryLabels: Record<Language, Record<CategoryFilter, string>> = 
 }
 
 export function getInitialLanguage(): Language {
+  const preferred = navigator.languages?.[0] || navigator.language || 'en'
   try {
     const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
     if (saved === 'vi' || saved === 'en') return saved
   } catch {
-    // Browser privacy settings may disable storage; detection still works.
+    return preferred.toLowerCase().split(/[-_]/)[0] === 'vi' ? 'vi' : 'en'
   }
-  const preferred = navigator.languages?.[0] || navigator.language || 'en'
   return preferred.toLowerCase().split(/[-_]/)[0] === 'vi' ? 'vi' : 'en'
 }

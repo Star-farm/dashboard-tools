@@ -46,7 +46,6 @@ function aggregate(source: string) {
     const values = Object.fromEntries(environmentMetrics.map((metric) => {
       const raw = cell(columns[metric]), value = raw === '' ? null : Number(raw) * (metric === 'intensity' ? 1000 : 1)
       if (value !== null && !Number.isFinite(value)) throw new Error(`Environment CSV has a non-finite ${columns[metric]} value.`)
-      // Source intensity is kg CH4/kg rice; display it per tonne of rice.
       return [metric, value]
     })) as EnvironmentValues
     const id = `${code}:${historical}`

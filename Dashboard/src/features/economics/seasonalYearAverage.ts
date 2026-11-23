@@ -2,7 +2,7 @@ import type { SeasonalMetric, SeasonalRow } from './seasonalData'
 
 export type SeasonalYear = number | 'all'
 
-// Each available year has equal weight; crops and conditions stay separate.
+
 export function averageSeasonalYears(rows: SeasonalRow[]): SeasonalRow[] {
   const groups = new Map<string, SeasonalRow[]>()
   for (const row of rows) {

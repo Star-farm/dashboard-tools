@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 
-// Run manually when updating the bundled font; normal builds work offline.
+
 const directory = new URL('../src/assets/fonts/', import.meta.url)
 await mkdir(directory, { recursive: true })
 const response = await fetch('https://fonts.googleapis.com/css2?family=Lora:wght@400..700&display=swap', {
@@ -19,7 +19,7 @@ for (const [, subset, rule] of blocks) {
   if (!font.ok) throw new Error(`Font request failed: ${font.status}`)
   const bytes = Buffer.from(await font.arrayBuffer())
   await writeFile(new URL(`lora-${subset}.woff2`, directory), bytes)
-  localRules.push(`/* ${subset} */\n${rule.replace(url, `./lora-${subset}.woff2`)}`)
+  localRules.push(`\n${rule.replace(url, `./lora-${subset}.woff2`)}`)
   console.log(`Lora ${subset}: ${bytes.length} bytes`)
 }
 const license = await fetch('https://raw.githubusercontent.com/google/fonts/main/ofl/lora/OFL.txt', { signal: AbortSignal.timeout(20000) })

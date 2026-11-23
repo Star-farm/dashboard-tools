@@ -86,7 +86,6 @@ export function aggregateEconomicOverview(masterSource: string, combinedSource: 
   if (master.size !== combined.size) throw new Error('Economic CSV sources have different scenarios.')
   const values = (bucket: Bucket): EconomicRow['USD'] => {
     const means = Object.fromEntries(economicMetrics.map((metric) => [metric, bucket.metrics[metric].count ? bucket.metrics[metric].sum / bucket.metrics[metric].count : null])) as EconomicRow['USD']
-    // The overview reference uses the ratio of mean income to mean cost.
     means.roi = means.income !== null && means.cost !== null && means.cost > 0 ? means.income / means.cost * 100 : null
     return means
   }

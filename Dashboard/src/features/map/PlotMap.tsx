@@ -23,7 +23,7 @@ function incomePlotColor(
   breaks: number[],
   colors: readonly string[]
 ): string {
-  // Preserve the existing no-data color
+
   if (value === null || !Number.isFinite(value)) {
     return colorFor(null, breaks)
   }
@@ -32,19 +32,19 @@ function incomePlotColor(
     return colorFor(value, breaks)
   }
 
-  // All negative income values are red
+
   if (value < 0) {
     return colors[0]
   }
 
-  // Positive income: light to dark green
+
   for (let i = 1; i < colors.length - 1; i++) {
     if (value < breaks[i + 1]) {
       return colors[i]
     }
   }
 
-  // Highest income, including values above the final break
+
   return colors[colors.length - 1]
 }
 
@@ -148,7 +148,7 @@ export default function PlotMap({
   const rasterFailed = !!rasterFile && failedRaster === rasterFile
   useEffect(() => { onSelectionChange?.(selected) }, [selected, onSelectionChange])
 
-  // Track SVG size for an accurate, responsive scale bar
+
   const [svgSize, setSvgSize] = useState({
     width: 0,
     height: 0,
@@ -229,9 +229,9 @@ export default function PlotMap({
     svgRef.current?.focus({ preventScroll: true })
   }
 
-  // ---------------------------------------
-  // Mouse wheel zoom
-  // ---------------------------------------
+
+
+
   useEffect(() => {
     const svg = svgRef.current
     if (!svg) return
@@ -281,9 +281,9 @@ export default function PlotMap({
     }
   }, [initialView, updateView])
 
-  // ---------------------------------------
-  // Observe map size for responsive scale
-  // ---------------------------------------
+
+
+
   useEffect(() => {
     const svg = svgRef.current
     if (!svg) return
@@ -310,9 +310,9 @@ export default function PlotMap({
     return () => observer.disconnect()
   }, [])
 
-  // ---------------------------------------
-  // Popup focus and outside click
-  // ---------------------------------------
+
+
+
   useEffect(() => {
     if (selected === null || thematic) return
 
@@ -344,9 +344,9 @@ export default function PlotMap({
     }
   }, [selected, thematic])
 
-  // ---------------------------------------
-  // Plot paths
-  // ---------------------------------------
+
+
+
   const paths = useMemo(
     () =>
       geometry.plots.map((plot) => (
@@ -406,20 +406,20 @@ fill={
     ]
   )
 
-  // ---------------------------------------
-  // Geographic scale bar
-  // ---------------------------------------
+
+
+
 
   const scaleMeters = 24000 / view.zoom
 
-  // Convert distance to SVG map units
+
   const scaleWidth =
     scaleMeters /
     geometry.metersPerUnit
 
-  // Default SVG preserveAspectRatio is xMidYMid meet.
-  // Use the same uniform scaling to convert
-  // geographic map units into displayed pixels.
+
+
+
   const pixelsPerUnit =
     svgSize.width > 0 &&
     svgSize.height > 0 &&
@@ -438,9 +438,9 @@ fill={
     Number.isFinite(scalePixelWidth) &&
     scalePixelWidth > 0
 
-  // ---------------------------------------
-  // Selected plot
-  // ---------------------------------------
+
+
+
   const plot =
     selected === null
       ? undefined
@@ -608,7 +608,7 @@ fill={
         }
       }}
     >
-      {/* Map controls */}
+
       <div
         className="plot-map-controls"
         role="group"
@@ -644,7 +644,7 @@ fill={
         {thematic && selected !== null && <button type="button" className="map-fit" onClick={() => setSelected(null)}>{language === 'vi' ? 'Bỏ chọn vùng' : 'Clear selection'}</button>}
       </div>
 
-      {/* North indicator */}
+
       <div
         className="plot-map-north"
         aria-label={t.north}
@@ -653,7 +653,7 @@ fill={
         <span>{language === 'vi' ? 'B' : 'N'}</span>
       </div>
 
-      {/* Main map SVG */}
+
       <svg
         ref={svgRef}
         className="plot-map-svg"
@@ -865,7 +865,7 @@ fill={
         <MapGeographicLabels bounds={geometry.bounds} metersPerUnit={geometry.metersPerUnit} language={language} labelSize={Math.max(2.4, width * 0.012)} />
         {adminPaths?.labels}
 
-        {/* Highlight selected plot */}
+
         {plot && (
           <path
             d={plot.path}
@@ -884,7 +884,7 @@ fill={
         <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" target="_blank" rel="noreferrer">{t.basemapCredit}</a>
       </div>
 
-      {/* Fixed geographic scale overlay */}
+
       {showScale && (
         <div
           className="map-scale-overlay"
@@ -925,7 +925,7 @@ fill={
         onClose={closePopup}
       />}
 
-      {/* Map caption */}
+
       <div className="plot-map-caption">
         {hover !== null
           ? `${plotLabel} ${hover}${

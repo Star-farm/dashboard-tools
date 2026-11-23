@@ -36,7 +36,7 @@ export interface PackedSeasonalData {
   rows: [code: string, family: number, condition: number, year: number, period: number, awd: number, usd: (number | null)[], vnd: (number | null)[]][]
 }
 
-// Source timestamps identify Winter–Spring, Summer–Fall, and Fall–Winter crops.
+
 function recordingPeriod(month: number): CropPeriod {
   return month <= 4 ? 'early' : month <= 9 ? 'middle' : 'late'
 }

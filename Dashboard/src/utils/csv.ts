@@ -1,4 +1,4 @@
-// CSV supports quoted commas, escaped quotes, CRLF and multiline cells.
+
 export function parseCsv(source: string): string[][] {
   const rows: string[][] = []
   let row: string[] = []

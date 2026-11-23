@@ -13,11 +13,11 @@ export function mean(values: readonly (number | null)[]): number | null {
   return valid.length ? valid.reduce((sum, value) => sum + value, 0) / valid.length : null
 }
 export const incomeMapColors = [
-  '#c7443e', // Negative income
-  '#dce9c8', // 0–10 million
-  '#a5c796', // 10–20 million
-  '#60976e', // 20–30 million
-  '#284f3c', // 30–50 million
+  '#c7443e',
+  '#dce9c8',
+  '#a5c796',
+  '#60976e',
+  '#284f3c',
 ]
 export function selectPlotValues(records: readonly PlotRecord[], year: number, season: number, metric: PlotMetric): (number | null)[] {
   const selected = records.filter((record) => record.year === year && (season === 0 || record.season === season))
@@ -34,8 +34,6 @@ export function selectPlotValues(records: readonly PlotRecord[], year: number, s
   })
 }
 
-// Quantiles use all years/seasons of the selected scenario. The legend therefore
-// stays fixed when the year or harvest changes, so temporal comparisons are valid.
 export function colorBreaks(results: MapResults, metric: PlotMetric): number[] {
   if (results.breaks) return results.breaks[metric]
   const sorted = results.records.flatMap((record) => record[metric]).filter((value): value is number => value !== null && Number.isFinite(value)).sort((a, b) => a - b)

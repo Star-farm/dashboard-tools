@@ -92,12 +92,12 @@ export default function MapPage({ language }: { language: Language }) {
   const breaks = useMemo(() => {
     if (!displayData) return []
 
-    // Yield: 4–5, 5–6, 6–7, 7–8, 8–9 tons/ha
+
     if (metric === 'yield') {
       return [4, 5, 6, 7, 8, 9]
     }
 
-    // Net income: fixed intervals in VND/ha
+
     const incomeBreaksVND = [
       -10_000_000,
       0,
@@ -111,7 +111,7 @@ export default function MapPage({ language }: { language: Language }) {
       return incomeBreaksVND
     }
 
-    // Convert thresholds to USD
+
     const rate = conversion.data?.vndPerUsd
 
     if (!rate || rate <= 0) return []

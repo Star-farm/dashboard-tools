@@ -6,7 +6,7 @@ import { soilUnknownColor } from './soilTypes'
 import '../../styles/map.css'
 import '../../styles/soil-map.css'
 
-// Identical layout before the route, geometry, and selected layer arrive.
+
 export function SoilPageShell({ language, children }: { language: Language; children: ReactNode }) {
   const vi = language === 'vi'
   return <div className="map-page page-shell" id="soil-map">

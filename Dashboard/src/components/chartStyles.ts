@@ -2,7 +2,7 @@ import { createElement } from 'react'
 import type { Bau3Condition } from '../features/economics/bau3Types'
 import ChartMarker from './ChartMarker'
 
-// Scenario identity stays the same in every annual and seasonal chart.
+
 export const SCENARIO_COLORS = { bau: '#b8322b', oneMha: '#217348' } as const
 export const CHART_TICK = { fill: '#30452e', fontSize: 'var(--chart-axis-size)', fontWeight: 500 } as const
 export const CHART_TOOLTIP = { background: '#fffefa', color: '#26382e', border: '1px solid #9bac90', borderRadius: 7, fontSize: 'var(--text-body)', lineHeight: 1.7 } as const

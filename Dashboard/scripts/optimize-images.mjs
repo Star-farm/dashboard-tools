@@ -6,8 +6,8 @@ const input = new URL('../src/assets/mekong-landscape.jpg', import.meta.url)
 const output = new URL('../src/assets/hero/', import.meta.url)
 await mkdir(output, { recursive: true })
 
-// The mobile hero is taller than it is wide. A centered square preserves
-// the existing object-fit: cover composition without shipping its hidden sides.
+
+
 for (const [name, widths, square] of [
   ['landscape', [1280, 1920, 2560], false],
   ['mobile', [640, 960, 1280], true],

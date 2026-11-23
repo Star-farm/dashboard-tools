@@ -55,9 +55,11 @@ export default function ScenarioAbbreviations({ text, language }: { text: string
     const term = match[0]
     const isOneMha = /^1Mha$/i.test(term)
     const indicator = isOneMha ? glossaryDefinitions.oneMha : glossaryDefinitions.bau
-    const definition = indicator
+    const definition = isOneMha
+      ? translations[language].abbrOneMhaDescription
+      : indicator
       ? language === 'vi' ? indicator.definition : indicator.englishDefinition
-      : isOneMha ? translations[language].abbrOneMhaDefinition : translations[language].abbrBauDefinition
+      : translations[language].abbrBauDefinition
     parts.push(<ScenarioAbbreviation key={`${index}-${term}`} term={term} definition={definition} />)
     cursor = index + term.length
   }

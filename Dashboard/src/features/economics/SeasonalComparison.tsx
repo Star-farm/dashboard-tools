@@ -11,7 +11,7 @@ import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
 import { zeroBasedAxisScale } from '../../utils/zeroBasedAxisScale'
 import type { Bau3Condition } from './bau3Types'
 import { economicsText } from './economicsText'
-import { cropPeriods, cultivatedPeriods, seasonalMetricGroups } from './seasonalData'
+import { cropPeriods, cultivatedPeriods, pointsWithSharedData, seasonalMetricGroups } from './seasonalData'
 import type { CropPeriod, SeasonalConfig, SeasonalData, SeasonalFamily, SeasonalMetric, SeasonalRow } from './seasonalData'
 
 const cropPeriodColors: Record<CropPeriod, string> = { early: '#267e91', middle: '#ba861f', late: '#8859a5' }
@@ -118,7 +118,8 @@ function SeasonalMetricCard({ language, metric, points, mode, families, startYea
   const chartNumberFormat = useMemo(() => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }), [language])
   const chartFormat = (number: number) => chartNumberFormat.format(number / displayScale)
   const label = (key: string) => mode === 'year' ? t[key as CropPeriod] : key
-  const chartData: Array<{ key: string; [key: string]: string | number | null }> = points.map((point) => ({ key: point.key, ...Object.fromEntries(families.map((family) => { const amount = value(point, family); return [family, amount === null ? bars ? ZERO_BAR_VALUE : 0 : amount / displayScale] })) }))
+  const chartPoints = pointsWithSharedData(points, families, (point, family) => value(point, family) !== null)
+  const chartData: Array<{ key: string; [key: string]: string | number | null }> = chartPoints.map((point) => ({ key: point.key, ...Object.fromEntries(families.map((family) => { const amount = value(point, family); return [family, amount === null ? bars ? ZERO_BAR_VALUE : 0 : amount / displayScale] })) }))
   const allScaleValues = chartData.flatMap((point) => families.flatMap((family) => typeof point[family] === 'number' ? [displayChartValue(Number(point[family]))] : []))
   const visibleHasNegativeValue = chartData.some((point) => families.some((family) => typeof point[family] === 'number' && point[family] < 0))
   const scaleValues = visibleHasNegativeValue ? allScaleValues : allScaleValues.filter((amount) => amount >= 0)
@@ -127,7 +128,7 @@ function SeasonalMetricCard({ language, metric, points, mode, families, startYea
   const axisNumber = distinctAxisFormatter(lineScale.ticks, language, metric !== 'intensity')
   const barAxisNumber = distinctAxisFormatter(barScale.ticks, language, true)
   const current = points.find((point) => point.key === selected) ?? points[0]
-  const hasData = plotted.length > 0
+  const hasData = pieMode ? plotted.length > 0 : chartData.length > 0
   const modelLegend = !pieMode && plotted.length > 0 ? <div className="seasonal-model-legend" role="group" aria-label={t.modelLegend}>
     <p className="chart-legend-label">{t.modelLegend}</p>
     {plotted.map((family) => <span className="seasonal-model-legend-item" key={family}><span className="seasonal-model-legend-swatch seasonal-model-legend-swatch--bar" aria-hidden="true" style={{ backgroundColor: scenarioColor(family) }} /><ScenarioAbbreviations text={t[family]} language={language} /></span>)}

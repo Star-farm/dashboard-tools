@@ -52,6 +52,7 @@ export default function ChartInfo({
           const row = entry.payload
           const group = row?.group ?? row?.model
           const name = group ? row?.label ?? entry.name : entry.name
+          const labelIsSameAsName = String(label ?? '').trim().toLocaleLowerCase() === String(name ?? '').trim().toLocaleLowerCase()
           const conditionKey = String(entry.dataKey ?? '').split('_').at(-1) as Bau3Condition
           const conditionColor = CONDITION_COLORS[conditionKey]
           const resourceMarker = conditionKey.endsWith('Shortage') ? 'triangle' : 'circle'
@@ -95,7 +96,7 @@ export default function ChartInfo({
                   data-marker={resourceMarker}
                   aria-hidden="true"
                 />
-                <span><span className="chart-tooltip-desktop-label">{language ? <ScenarioAbbreviations text={String(name ?? '')} language={language} /> : name}</span><span className="chart-tooltip-mobile-label">{language ? <ScenarioAbbreviations text={compactName} language={language} /> : compactName}</span></span>
+                {!labelIsSameAsName && <span><span className="chart-tooltip-desktop-label">{language ? <ScenarioAbbreviations text={String(name ?? '')} language={language} /> : name}</span><span className="chart-tooltip-mobile-label">{language ? <ScenarioAbbreviations text={compactName} language={language} /> : compactName}</span></span>}
               </dt>
 
               <dd>

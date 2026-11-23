@@ -1,17 +1,24 @@
-# STAR-FARM dashboard
+# Dashboard agent instructions
 
-- Work in `Dashboard/`. The adjacent Web App is a separate application.
-- Reuse shared components, hooks, utilities, types, constants, and services when behavior is genuinely shared. Keep feature-specific logic inside its feature and avoid circular imports.
-- Preserve source values, units, missing values, scenario definitions, area shares, and geographic alignment. Check the relevant sections of `README.md` before changing calculations or map data.
-- The working tree may contain user changes. Inspect it before editing and preserve unrelated changes.
-- Node 24 is required. Run focused tests while developing. Before handing off Dashboard-wide changes, run `npm run quality:check` and `npm run e2e`.
-- Mandatory i18n rules: (1) Every new or modified user-facing string must have both Vietnamese (`vi`) and English (`en`) translations. (2) Do not hardcode user-facing Vietnamese or English in React components when it belongs in localization. (3) Use the existing i18n architecture and utilities. (4) Both languages must preserve equivalent functionality, information, and scientific meaning. (5) Every chart, map, filter, tooltip, popup, button, dialog, error, and navigation element must support both languages. (6) Translate dataset-derived display labels without changing source data, identifiers, or category codes. (7) Language switching must update visible text without reload. (8) Do not silently fall back to the other language; validate missing translations. (9) Preserve official scenario identifiers, scientific symbols, proper nouns, and established abbreviations where appropriate. (10) Keep responsive terminology rules, including `BAU` in compact mobile chart tooltips. (11) Update both locale definitions whenever user-facing text changes. (12) Verify both locales before considering UI work complete. (13) Test switching on affected components, including dynamic chart legends/tooltips, maps, filters, loading, and errors. (14) Add or update local regression tests for keys, mappings, and known inconsistencies. (15) Keep language natural, consistent, and scientifically accurate. See `docs/INTERNATIONALIZATION.md`.
-- Read `docs/ARCHITECTURE.md`, `docs/DATA_PIPELINE.md`, `docs/DEVELOPMENT.md`, `docs/TESTING.md`, and `docs/DEPLOYMENT.md` as relevant. The Codex maintenance skill is discoverable at `../.agents/skills/star-farm-maintenance/SKILL.md`.
-- Normal development and builds use the checked-in generated data. Regenerate deliberately with the appropriate `npm run data:*` command when inputs or generators change, then inspect the generated diff. GIS intersections require the documented external inputs and Python dependencies.
-- Map work must retain selection, pan, zoom, keyboard access, legends and per-plot statistics. Measure transfer, render, and memory effects on representative devices when available. Do not claim mobile stability without device evidence.
-- On mobile, `ChartInfo` tooltips hide units; seasonal pie tooltips keep units visible. Preserve the compact `BAU` tooltip label.
-- Verify browser behavior against the local Vite app at desktop and mobile viewport sizes. Check console errors, failed requests, chart interactions, map layer transitions, filters, selection, and responsive overflow. Document browser limitations when a check cannot run.
-- Keep normal development, test, and build commands separate from GIS data generation. Update the relevant Dashboard guide and README links when code, scripts, data flow, or maintenance procedures change.
-- After a meaningful feature, architecture, data-contract, route, localization, or developer-workflow change, sync the relevant documentation in the same change. Update existing guides first; do not perform a full rewrite for a minor change. Invoke the `star-farm-documentation` skill in `SYNC` mode for targeted updates, or `FULL` for a complete audit. Use `VERIFY` to check docs without unnecessary edits. For onboarding, architecture, code walkthrough, or data-only requests, use the matching skill mode. Preserve scientific context and unrelated work.
-- Do not add or modify CI/CD configuration or `.github/` files.
-- Do not push, merge, or deploy unless requested.
+## Start here
+
+- Use pstack `poteto-mode` for Dashboard tasks. Start with `/pstack:poteto-mode` when available. Otherwise read `C:/Users/phamn/.codex/plugins/cache/cursor-plugins/pstack/0.15.46/skills/poteto-mode/SKILL.md` and follow the matching playbook.
+- Inspect `git status` and preserve unrelated changes.
+- Before editing, read the relevant rules in `eslint.config.js`. Follow each custom rule's shared pattern and error guidance.
+
+## Project rules
+
+- Work in `Dashboard/`. Use Node.js 24 and npm. The adjacent Web App is separate.
+- Keep feature logic in its feature. Share code only when multiple consumers need the same behavior.
+- Fix errors at their root cause. Do not mask symptoms with workarounds.
+- Preserve source values, units, missing-versus-zero meaning, scenario definitions, area shares, and geographic alignment. Read `docs/DATA_PIPELINE.md` before changing calculations or map data.
+- Use checked-in generated data for routine work. When inputs or generators change, run the relevant `npm run data:*` command and inspect its diff. GIS intersections need the documented external inputs and Python dependencies.
+- Localize all user-facing text in Vietnamese and English through the existing i18n dictionaries. Keep identifiers and source data unchanged. See `docs/INTERNATIONALIZATION.md`.
+- Preserve map selection, pan, zoom, keyboard access, legends, and per-plot statistics. Do not claim device behavior without device evidence.
+- Update the relevant guide when a change affects behavior, data contracts, architecture, or workflows. See `docs/` for project conventions.
+- Do not add CI/CD configuration. Do not push, merge, or deploy unless asked.
+
+## Checks
+
+- Run `npm run lint` after code changes. `npm run build` does not run ESLint.
+- Run tests only when requested. Use `npm run quality:check` for the full local suite and `npm run e2e` for browser checks when requested.

@@ -76,11 +76,55 @@ const noSourceComments = {
   },
 }
 
+const noPerChartTooltipLabelDeduplication = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'keep tooltip label de-duplication in the shared ChartInfo component' },
+    schema: [],
+    messages: {
+      useSharedDeduplication: 'Remove this per-chart label suppression; ChartInfo should omit the row label automatically when it matches the tooltip heading.',
+    },
+  },
+  create(context) {
+    return {
+      JSXAttribute(node) {
+        if (node.name.type === 'JSXIdentifier' && node.name.name === 'hideEntryLabel') {
+          context.report({ node, messageId: 'useSharedDeduplication' })
+        }
+      },
+    }
+  },
+}
+
+const requireFilteredSeasonalChartData = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'filter seasonal chart categories that have no value in any selected scenario' },
+    schema: [],
+    messages: {
+      useSharedFilter: 'Pass chartData built with pointsWithSharedData(...) so categories with no values in any selected scenario are omitted.',
+    },
+  },
+  create(context) {
+    return {
+      JSXOpeningElement(node) {
+        if (node.name.type !== 'JSXIdentifier' || node.name.name !== 'ComposedChart') return
+        const data = node.attributes.find((attribute) => attribute.type === 'JSXAttribute' && attribute.name.type === 'JSXIdentifier' && attribute.name.name === 'data')
+        if (data?.type !== 'JSXAttribute' || data.value?.type !== 'JSXExpressionContainer' || data.value.expression.type !== 'Identifier' || data.value.expression.name !== 'chartData') {
+          context.report({ node: data ?? node, messageId: 'useSharedFilter' })
+        }
+      },
+    }
+  },
+}
+
 const starFarmPlugin = {
   rules: {
     'no-global-plot-popup-context': noGlobalPlotPopupContext,
     'no-scenario-name-in-seasonal-pie-tooltip': noScenarioNameInSeasonalPieTooltip,
     'no-source-comments': noSourceComments,
+    'no-per-chart-tooltip-label-deduplication': noPerChartTooltipLabelDeduplication,
+    'require-filtered-seasonal-chart-data': requireFilteredSeasonalChartData,
   },
 }
 
@@ -89,7 +133,10 @@ export default defineConfig([
   {
     files: ['**/*.{ts,tsx,js,mjs}'],
     plugins: { 'star-farm': starFarmPlugin },
-    rules: { 'star-farm/no-source-comments': 'error' },
+    rules: {
+      'star-farm/no-source-comments': 'error',
+      'star-farm/no-per-chart-tooltip-label-deduplication': 'error',
+    },
   },
   {
     files: ['**/*.{ts,tsx}'],
@@ -112,6 +159,11 @@ export default defineConfig([
     files: ['src/features/economics/SeasonalPieChart.tsx'],
     plugins: { 'star-farm': starFarmPlugin },
     rules: { 'star-farm/no-scenario-name-in-seasonal-pie-tooltip': 'error' },
+  },
+  {
+    files: ['src/features/economics/SeasonalComparison.tsx'],
+    plugins: { 'star-farm': starFarmPlugin },
+    rules: { 'star-farm/require-filtered-seasonal-chart-data': 'error' },
   },
   {
     files: ['tests/**/*.{ts,tsx}'],

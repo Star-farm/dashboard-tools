@@ -20,6 +20,9 @@ export const seasonalMetricGroups: Record<SeasonalTopic, SeasonalMetric[]> = {
 }
 export const cropFamilies: SeasonalFamily[] = ['bau3s', 'bau2s', 'bauss', 'oneMha', 'bau']
 export const cultivatedPeriods = (family: SeasonalFamily) => family === 'oneMha' || family === 'bau2s' ? cropPeriods.slice(0, 2) : [...cropPeriods]
+export function pointsWithSharedData<T, F>(points: readonly T[], families: readonly F[], hasValue: (point: T, family: F) => boolean): T[] {
+  return points.filter((point) => families.some((family) => hasValue(point, family)))
+}
 export interface SeasonalStats { mean: number }
 export interface SeasonalRow extends Pick<EconomicRow, keyof EconomicFilters> {
   code: string

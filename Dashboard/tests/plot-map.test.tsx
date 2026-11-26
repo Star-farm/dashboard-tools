@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import PlotMap from '../src/features/map/PlotMap'
 import { MAX_MAP_ZOOM, zoomViewport } from '../src/features/map/mapViewport'
-import type { MapGeometry } from '../src/features/map/mapTypes'
+import type { AdminBoundaryData, MapGeometry } from '../src/features/map/mapTypes'
 
 const geometry: MapGeometry = {
   width: 1000, height: 530, metersPerUnit: 173, crs: 'EPSG:32648', bounds: [], sourceSha256: '',
@@ -76,6 +76,35 @@ describe('interactive plot map', () => {
 
     fireEvent.keyDown(svg, { key: 'ArrowDown' })
     expect(svg.getAttribute('viewBox')).not.toBe(northernView)
+  })
+
+  it('keeps administrative boundaries and their labels aligned during pan and zoom', () => {
+    const localGeometry = { ...geometry, metersPerUnit: 1, bounds: [0, 0, 1000, 1000] }
+    const adminBoundaries: AdminBoundaryData = {
+      type: 'FeatureCollection',
+      projection: 'EPSG:32648',
+      bounds: [0, 0, 1000, 1000],
+      features: [{
+        type: 'Feature',
+        properties: {
+          code: 'province-92', name: 'Mekong province', nameEn: 'Mekong province', fullName: 'Mekong province',
+          provinceCode: '92', provinceName: 'Mekong region', kind: 'province', center: [50, 950],
+        },
+        geometry: { type: 'Polygon', coordinates: [[[10, 910], [90, 910], [90, 990], [10, 990], [10, 910]]] },
+      }],
+    }
+    const { container } = render(<PlotMap {...props} geometry={localGeometry} adminBoundaries={adminBoundaries} />)
+    const svg = container.querySelector('.plot-map-svg')!
+    const boundaryPath = container.querySelector('.admin-boundary-layer path')!
+    const originalPath = boundaryPath.getAttribute('d')
+    expect(originalPath).toBe('M10.00,90.00L90.00,90.00L90.00,10.00L10.00,10.00L10.00,90.00Z')
+    expect(screen.getByText('Mekong province')).toBeInTheDocument()
+
+    fireEvent.keyDown(svg, { key: 'ArrowRight' })
+    fireEvent.keyDown(svg, { key: '+' })
+
+    expect(boundaryPath).toHaveAttribute('d', originalPath)
+    expect(screen.getByText('Mekong province')).toBeInTheDocument()
   })
 
   it('opens a plot popup with plot values only and closes with Escape', () => {

@@ -5,7 +5,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import App from '../src/app/App'
 import HeaderNavigation from '../src/app/HeaderNavigation'
 import EconomicOverviewPage from '../src/features/economics/EconomicOverviewPage'
-import { aggregateEconomicOverview, emptyEconomicFilters, filterEconomicRows } from '../src/features/economics/economicsData'
+import { aggregateEconomicOverview, economicMetrics, emptyEconomicFilters, filterEconomicRows } from '../src/features/economics/economicsData'
 import type { EconomicRow } from '../src/features/economics/economicsData'
 import data from '../src/data/economics-overview.json'
 
@@ -66,10 +66,13 @@ describe('economic overview interface', () => {
     expect(screen.getByRole('heading', { name: 'Tổng quan kinh tế' })).toBeInTheDocument()
     expect(screen.getAllByRole('combobox')).toHaveLength(5)
     const table = screen.getByRole('table') as HTMLTableElement
-    expect(within(table).getAllByRole('columnheader')).toHaveLength(15)
-    expect(within(table).getAllByRole('row')).toHaveLength(19)
+    const scenarioRows = rows.filter((row) => !row.historical)
+    const scenarioGroupCount = new Set(scenarioRows.map((row) => `${row.group}:${row.season}:${row.awd}`)).size
+    const baselineHeadingCount = Number(rows.some((row) => row.historical))
+    expect(within(table).getAllByRole('columnheader')).toHaveLength(5 + economicMetrics.length + baselineHeadingCount + scenarioGroupCount)
+    expect(within(table).getAllByRole('row')).toHaveLength(2 + rows.length + baselineHeadingCount + scenarioGroupCount)
     expect(within(table).getAllByText('Đơn vị: VNĐ/ha')).toHaveLength(3)
-    expect(within(table).getByText('Hiện trạng · 2016–2022').closest('tr')).toBe(table.tBodies[0].rows[0])
+    expect(within(table).getByText('MỐC THAM CHIẾU · 2016–2022').closest('tr')).toBe(table.tBodies[0].rows[0])
     const mobile = screen.getByRole('region', { name: 'Các kịch bản kinh tế' })
     const cards = within(mobile).getAllByRole('article')
     expect(cards).toHaveLength(17)

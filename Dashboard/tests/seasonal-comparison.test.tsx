@@ -8,7 +8,7 @@ import Bau3ComparisonPage from '../src/features/economics/Bau3ComparisonPage'
 import Bau2ComparisonPage from '../src/features/economics/Bau2ComparisonPage'
 import ResourcesPage from '../src/features/resources/ResourcesPage'
 import EnvironmentPage from '../src/features/environment/EnvironmentPage'
-import { aggregateSeasonalData, cultivatedPeriods, seasonalMetricGroups, seasonalTopicData, packSeasonalData, unpackSeasonalData } from '../src/features/economics/seasonalData'
+import { aggregateSeasonalData, cropPeriods, cultivatedPeriods, seasonalMetricGroups, seasonalTopicData, packSeasonalData, unpackSeasonalData } from '../src/features/economics/seasonalData'
 import type { SeasonalConfig, PackedSeasonalData } from '../src/features/economics/seasonalData'
 import { seasonalChange } from '../src/features/economics/seasonalFormatting'
 import { averageSeasonalYears } from '../src/features/economics/seasonalYearAverage'
@@ -201,7 +201,7 @@ describe('seasonal interface', () => {
     render(<SeasonalOverview language="en" data={sample} metrics={['income']} mode="year" year="all" period="early" />)
     fireEvent.change(screen.getByLabelText('Scenario group'), { target: { value: 'oneMha' } })
     const table = screen.getByRole('table')
-    expect(within(table).getAllByRole('row')).toHaveLength(4)
+    expect(table.querySelectorAll('tbody th[scope="row"]')).toHaveLength(cropPeriods.length)
     expect(within(table).getByRole('row', { name: /Spring–Summer/ })).toHaveTextContent('50.00')
     expect(within(table).getByRole('row', { name: /Fall–Winter/ })).toHaveTextContent('Not grown')
     expect(table).toHaveTextContent('All years')
@@ -263,7 +263,7 @@ describe('seasonal interface', () => {
     expect(screen.getAllByRole('article')).toHaveLength(12)
     const table = screen.getByRole('table')
     expect(within(table).getAllByText('Không canh tác')).toHaveLength(4)
-    expect(within(table).getAllByRole('columnheader')).toHaveLength(13)
+    expect(table.querySelectorAll('thead tr:last-child th[scope="col"]')).toHaveLength(seasonalMetricGroups.economics.length + 1)
     expect(table).not.toHaveTextContent(/P10|P90|n =|Thời gian mùa vụ/)
   })
 })

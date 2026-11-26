@@ -7,17 +7,21 @@ import ResourceLineChart from '../src/features/resources/ResourceLineChart'
 import { resourcePageForHash, resourcePageTitle, resourceRoutes } from '../src/features/resources/resourceRoutes'
 import { resourceDomain, resourceNumber, resourceStats } from '../src/features/resources/resourceAnalysis'
 import type { ResourceContentPage } from '../src/features/resources/resourceRoutes'
+import { resourceMetrics } from '../src/features/resources/resourceTypes'
 import type { ResourceData } from '../src/features/resources/resourceTypes'
 import cached from '../src/data/resources.json'
 
 const data = cached as ResourceData
 describe('resource overview and comparison', () => {
-  it('shows the historical row first, all eight columns, mobile cards and combined persistent-language filters', () => {
+  it('shows the historical row first, every resource metric, mobile cards and combined persistent-language filters', () => {
     const { rerender } = render(<ResourcesPage page="resourceOverview" language="vi" />)
     const table = screen.getByRole('table')
-    expect(within(table).getAllByRole('row')).toHaveLength(19)
-    expect(table.querySelector('tbody tr')).toHaveTextContent('Hiện trạng · 2016–2022')
-    expect(table.querySelectorAll('thead tr:last-child th')).toHaveLength(8)
+    const scenarioRows = data.rows.filter((row) => !row.historical)
+    const scenarioGroupCount = new Set(scenarioRows.map((row) => `${row.group}:${row.season}:${row.awd}`)).size
+    const baselineHeadingCount = Number(data.rows.some((row) => row.historical))
+    expect(within(table).getAllByRole('row')).toHaveLength(2 + data.rows.length + baselineHeadingCount + scenarioGroupCount)
+    expect(table.querySelector('tbody tr')).toHaveTextContent('MỐC THAM CHIẾU · 2016–2022')
+    expect(table.querySelectorAll('thead tr:last-child th[scope="col"]')).toHaveLength(resourceMetrics.length + 2)
     expect(table).toHaveTextContent('kg nito/ha')
     expect(screen.getAllByRole('article')).toHaveLength(17)
     expect(screen.getAllByRole('article')[0]).toHaveTextContent('Hiện trạng · 2016–2022')

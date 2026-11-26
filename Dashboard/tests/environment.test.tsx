@@ -7,17 +7,21 @@ import EnvironmentLineChart from '../src/features/environment/EnvironmentLineCha
 import { environmentPageForHash, environmentPageTitle, environmentRoutes } from '../src/features/environment/environmentRoutes'
 import { environmentAwdStats, environmentDomain, environmentNumber, environmentStats } from '../src/features/environment/environmentAnalysis'
 import type { EnvironmentContentPage } from '../src/features/environment/environmentRoutes'
+import { environmentMetrics } from '../src/features/environment/environmentTypes'
 import type { EnvironmentData } from '../src/features/environment/environmentTypes'
 import cached from '../src/data/environment.json'
 
 const data = cached as EnvironmentData
 describe('environmental overview and comparison', () => {
-  it('shows historical conditions first, seven columns, correct intensity units and persistent filters', () => {
+  it('shows historical conditions first, every environment metric, correct intensity units and persistent filters', () => {
     const { rerender } = render(<EnvironmentPage page="environmentOverview" language="vi" />)
     const table = screen.getByRole('table')
-    expect(within(table).getAllByRole('row')).toHaveLength(19)
-    expect(table.querySelector('tbody tr')).toHaveTextContent('Hiện trạng · 2016–2022')
-    expect(table.querySelectorAll('thead tr:last-child th')).toHaveLength(7)
+    const scenarioRows = data.rows.filter((row) => !row.historical)
+    const scenarioGroupCount = new Set(scenarioRows.map((row) => `${row.group}:${row.season}:${row.awd}`)).size
+    const baselineHeadingCount = Number(data.rows.some((row) => row.historical))
+    expect(within(table).getAllByRole('row')).toHaveLength(2 + data.rows.length + baselineHeadingCount + scenarioGroupCount)
+    expect(table.querySelector('tbody tr')).toHaveTextContent('MỐC THAM CHIẾU · 2016–2022')
+    expect(table.querySelectorAll('thead tr:last-child th[scope="col"]')).toHaveLength(environmentMetrics.length + 2)
     expect(table).toHaveTextContent('kg metan/tấn gạo')
     expect(table).toHaveTextContent('kg metan/ha')
     expect(screen.getAllByRole('article')).toHaveLength(17)

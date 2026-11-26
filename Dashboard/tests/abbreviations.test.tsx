@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import EmphasizedNumbers from '../src/components/EmphasizedNumbers'
 import ScenarioAbbreviations from '../src/components/ScenarioAbbreviations'
 
@@ -24,8 +24,9 @@ describe('scenario names in insights', () => {
     const { container } = render(<ScenarioAbbreviations text="1Mha" language="vi" />)
     const abbreviation = container.querySelector('abbr')!
     expect(abbreviation).not.toHaveAttribute('title')
-    expect(abbreviation).toHaveAttribute('data-definition')
-    expect(abbreviation.getAttribute('aria-label')).toContain(abbreviation.getAttribute('data-definition'))
+    expect(abbreviation).toHaveAttribute('aria-label', expect.stringContaining('1Mha:'))
+    fireEvent.focus(abbreviation)
+    expect(screen.getByRole('tooltip')).toHaveTextContent(abbreviation.getAttribute('aria-label')!.replace('1Mha: ', ''))
   })
 
   it('marks every BAU and 1Mha occurrence in inline content', () => {

@@ -33,12 +33,14 @@ describe('map context navigation', () => {
     expect(screen.getByLabelText('Farming system')).toHaveValue('threeSeasons')
     expect(screen.getByLabelText('Weather')).toHaveValue('mild')
     expect(screen.getByLabelText('Resource scenario')).toHaveValue('normal')
-    expect(screen.getAllByRole('table')[0].querySelectorAll('tbody tr')).toHaveLength(1)
+    expect(screen.getAllByRole('table')[0].querySelectorAll('tbody.economic-scenario-group tr:not(.economic-group-heading)')).toHaveLength(1)
     expect(readMapContext(screen.getByRole('link', { name: /Back to map/ }).getAttribute('href')!)).toEqual(context)
     fireEvent.change(screen.getByLabelText('Scenario group'), { target: { value: 'oneMha' } })
     expect(screen.getByLabelText('Scenario group')).toHaveValue('oneMha')
     expect(screen.getByLabelText('Farming system')).toHaveValue('all')
-    expect(screen.getAllByRole('table')[0].querySelectorAll('tbody tr')).toHaveLength(4)
+    const table = screen.getAllByRole('table')[0]
+    const visibleScenarioCount = Number(screen.getByRole('status').querySelector('strong')?.textContent)
+    expect(table.querySelectorAll('tbody.economic-scenario-group tr:not(.economic-group-heading)')).toHaveLength(visibleScenarioCount)
   })
 
   it.each(['#economics-overview', '#resources-overview', '#environment-overview'])('opens %s by crop with matching year and updates on same-page navigation', async (anchor) => {

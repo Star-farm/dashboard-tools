@@ -135,7 +135,7 @@ describe('chart observations', () => {
 
 describe('future page interactions', () => {
 
-  it.each([['vi', 'Dự báo giai đoạn 2027–2050'], ['en', 'Projections for 2027–2050']] as const)('shows the localized page title in %s', (language, title) => {
+  it.each([['vi', 'Dự báo'], ['en', 'Projections']] as const)('shows the localized page title in %s', (language, title) => {
     render(<FuturePage language={language} />)
     expect(screen.getByRole('heading', { level: 1, name: title })).toBeInTheDocument()
     expect(screen.getAllByRole('article').every((article) => article.querySelector('h2')?.textContent?.includes('2027–2050'))).toBe(true)

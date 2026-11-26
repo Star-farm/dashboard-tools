@@ -55,6 +55,13 @@ function plotIdFromTarget(target: EventTarget): number | null {
 }
 
 type PlotPopupAnchor = { x: number; y: number; bounds: { left: number; top: number; right: number; bottom: number } }
+type ProjectedAdminFeature = {
+  feature: AdminBoundaryData['features'][number]
+  path: string
+  center: [number, number]
+  horizontalSpan: number
+  verticalSpan: number
+}
 
 export default function PlotMap({
   geometry,
@@ -504,70 +511,83 @@ fill={
       fillRule="evenodd"
     />)
   }, [thematic, rasterFile])
-  const adminPaths = useMemo(() => {
+  const adminBoundaryGeometry = useMemo(() => {
     if (!validAdminBoundaries) return null
-    const toMap = ([x, y]: number[]) => [
+    const toMap = ([x, y]: number[]): [number, number] => [
       (x - geometry.bounds[0]) / geometry.metersPerUnit,
       (geometry.bounds[3] - y) / geometry.metersPerUnit,
     ]
-    const crossSectionSpan = (point: number[], fixedAxis: 0 | 1, polygons: number[][][][]) => {
-      const value = point[fixedAxis], otherAxis = fixedAxis === 0 ? 1 : 0
-      const crossings: number[] = []
+    const crossSectionSpan = (point: [number, number], fixedAxis: 0 | 1, polygons: number[][][][]) => {
+      const target = point[fixedAxis], otherAxis = fixedAxis === 0 ? 1 : 0
+      let before: number | undefined
+      let after: number | undefined
       for (const polygon of polygons) for (const ring of polygon) {
-        const points = ring.map(toMap)
-        for (let index = 0; index < points.length; index++) {
-          const a = points[index], b = points[(index + 1) % points.length]
-          if ((a[fixedAxis] <= value && b[fixedAxis] > value) || (b[fixedAxis] <= value && a[fixedAxis] > value)) {
-            const ratio = (value - a[fixedAxis]) / (b[fixedAxis] - a[fixedAxis])
-            crossings.push(a[otherAxis] + ratio * (b[otherAxis] - a[otherAxis]))
+        for (let index = 0; index < ring.length; index++) {
+          const a = ring[index], b = ring[(index + 1) % ring.length]
+          if ((a[fixedAxis] <= target && b[fixedAxis] > target) || (b[fixedAxis] <= target && a[fixedAxis] > target)) {
+            const ratio = (target - a[fixedAxis]) / (b[fixedAxis] - a[fixedAxis])
+            const crossing = a[otherAxis] + ratio * (b[otherAxis] - a[otherAxis])
+            if (crossing < point[otherAxis] && (before === undefined || crossing > before)) before = crossing
+            if (crossing > point[otherAxis] && (after === undefined || crossing < after)) after = crossing
           }
         }
       }
-      const before = crossings.filter((crossing) => crossing < point[otherAxis]).sort((a, b) => b - a)[0]
-      const after = crossings.filter((crossing) => crossing > point[otherAxis]).sort((a, b) => a - b)[0]
       return before === undefined || after === undefined ? 0 : after - before
     }
-    const labelPlacement = (feature: AdminBoundaryData['features'][number]) => {
-      const point = toMap(feature.properties.center)
-      const viewBounds = [view.x - width / 2, view.y - height / 2, view.x + width / 2, view.y + height / 2]
-      if (point[0] <= viewBounds[0] || point[0] >= viewBounds[2] || point[1] <= viewBounds[1] || point[1] >= viewBounds[3]) return null
+    const projected = validAdminBoundaries.features.map((feature): ProjectedAdminFeature => {
       const polygons = feature.geometry.type === 'Polygon'
         ? [feature.geometry.coordinates as number[][][]]
         : feature.geometry.coordinates as number[][][][]
-      const horizontalSpan = Math.min(crossSectionSpan(point, 1, polygons), 2 * Math.min(point[0] - viewBounds[0], viewBounds[2] - point[0]))
-      const verticalSpan = Math.min(crossSectionSpan(point, 0, polygons), 2 * Math.min(point[1] - viewBounds[1], viewBounds[3] - point[1]))
+      const projectedPolygons: number[][][][] = polygons.map((polygon) => polygon.map((ring) => ring.map(toMap)))
+      const point = toMap(feature.properties.center)
+      const path = projectedPolygons.flatMap((polygon) => polygon.map((ring) =>
+        ring.length ? `M${ring.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join('L')}Z` : '',
+      )).join('')
+      return {
+        feature,
+        path,
+        center: point,
+        horizontalSpan: feature.properties.kind === 'province' ? crossSectionSpan(point, 1, projectedPolygons) : 0,
+        verticalSpan: feature.properties.kind === 'province' ? crossSectionSpan(point, 0, projectedPolygons) : 0,
+      }
+    })
+    const provinces = projected.filter(({ feature }) => feature.properties.kind === 'province')
+    const wards = projected.filter(({ feature }) => feature.properties.kind === 'ward')
+    const boundaries = <g pointerEvents="none" aria-hidden="true" className="admin-boundary-layer">
+      {provinces.map(({ feature, path }) => <path key={`province-${feature.properties.provinceCode}`} d={path} fill="#f2f5ed" fillOpacity={0.16} fillRule="evenodd" stroke="#526b55" strokeWidth={1.6} vectorEffect="non-scaling-stroke"><title>{feature.properties.provinceName}</title></path>)}
+      {wards.map(({ feature, path }) => <path key={`ward-${feature.properties.code}`} d={path} fill={feature.properties.provinceCode === '82' ? '#e8efdf' : 'none'} fillOpacity={0.12} fillRule="evenodd" stroke="#899b84" strokeOpacity={0.85} strokeWidth={0.65} vectorEffect="non-scaling-stroke"><title>{feature.properties.fullName}</title></path>)}
+    </g>
+    return { provinces, wards, boundaries }
+  }, [validAdminBoundaries, geometry])
+  const adminPaths = useMemo(() => {
+    if (!adminBoundaryGeometry) return null
+    const { provinces, wards } = adminBoundaryGeometry
+    const viewBounds = [view.x - width / 2, view.y - height / 2, view.x + width / 2, view.y + height / 2]
+    const labelPlacement = (entry: ProjectedAdminFeature) => {
+      const point = entry.center
+      if (point[0] <= viewBounds[0] || point[0] >= viewBounds[2] || point[1] <= viewBounds[1] || point[1] >= viewBounds[3]) return null
+      const horizontalSpan = Math.min(entry.horizontalSpan, 2 * Math.min(point[0] - viewBounds[0], viewBounds[2] - point[0]))
+      const verticalSpan = Math.min(entry.verticalSpan, 2 * Math.min(point[1] - viewBounds[1], viewBounds[3] - point[1]))
       return { point, horizontalSpan, verticalSpan }
     }
-    const d = (feature: AdminBoundaryData['features'][number]) => {
-      const polygons = feature.geometry.type === 'Polygon'
-        ? [feature.geometry.coordinates as number[][][]]
-        : feature.geometry.coordinates as number[][][][]
-      return polygons.flatMap((polygon) => polygon.map((ring) => {
-        const points = ring.map(toMap)
-        return points.length ? `M${points.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join('L')}Z` : ''
-      })).join('')
-    }
-    const provinces = validAdminBoundaries.features.filter((feature) => feature.properties.kind === 'province')
-    const wards = validAdminBoundaries.features.filter((feature) => feature.properties.kind === 'ward')
     const fontSizeFor = (placement: NonNullable<ReturnType<typeof labelPlacement>>, line1: string, line2: string) => Math.min(
       Math.max(8, width * 0.018),
       placement.horizontalSpan / (Math.max(line1.length, line2.length) * 0.64),
       placement.verticalSpan / ((line2 ? 2 : 1) * 1.2),
     )
-    const canThoFeature = provinces.find((feature) => feature.properties.provinceCode === '92')
-    const canThoPlacement = canThoFeature ? labelPlacement(canThoFeature) : null
+    const canThoEntry = provinces.find(({ feature }) => feature.properties.provinceCode === '92')
+    const canThoFeature = canThoEntry?.feature
+    const canThoPlacement = canThoEntry ? labelPlacement(canThoEntry) : null
     const canThoLine1 = language === 'vi' ? canThoFeature?.properties.name ?? '' : canThoFeature?.properties.nameEn ?? ''
     const defaultProvinceFontSize = canThoPlacement
       ? fontSizeFor(canThoPlacement, canThoLine1, '')
       : Math.max(8, width * 0.018)
     return {
-      boundaries: <g pointerEvents="none" aria-hidden="true" className="admin-boundary-layer">
-        {provinces.map((feature) => <path key={`province-${feature.properties.provinceCode}`} d={d(feature)} fill="#f2f5ed" fillOpacity={0.16} fillRule="evenodd" stroke="#526b55" strokeWidth={1.6} vectorEffect="non-scaling-stroke"><title>{feature.properties.provinceName}</title></path>)}
-        {wards.map((feature) => <path key={`ward-${feature.properties.code}`} d={d(feature)} fill={feature.properties.provinceCode === '82' ? '#e8efdf' : 'none'} fillOpacity={0.12} fillRule="evenodd" stroke="#899b84" strokeOpacity={0.85} strokeWidth={0.65} vectorEffect="non-scaling-stroke"><title>{feature.properties.fullName}</title></path>)}
-      </g>,
+      boundaries: adminBoundaryGeometry.boundaries,
       labels: <g pointerEvents="none" aria-hidden="true" className="admin-label-layer">
-      {provinces.map((feature) => {
-        const placement = labelPlacement(feature)
+      {provinces.map((entry) => {
+        const { feature } = entry
+        const placement = labelPlacement(entry)
         if (!placement) return null
         const isHoChiMinh = feature.properties.provinceCode === '79'
         const line1 = isHoChiMinh ? (language === 'vi' ? 'Thành phố' : 'Ho Chi Minh') : (language === 'vi' ? feature.properties.name : feature.properties.nameEn)
@@ -584,13 +604,13 @@ fill={
             : (language === 'vi' ? feature.properties.name : feature.properties.nameEn)}
         </text>
       })}
-      {view.zoom >= DEFAULT_MAP_ZOOM * 3 && wards.map((feature) => {
-        const [labelX, labelY] = toMap(feature.properties.center)
+      {view.zoom >= DEFAULT_MAP_ZOOM * 3 && wards.map(({ feature, center }) => {
+        const [labelX, labelY] = center
         return <text key={`ward-label-${feature.properties.code}`} x={labelX} y={labelY} textAnchor="middle" fontSize={Math.max(2.4, width * 0.011)} fill="#354d38" stroke="#fffefa" strokeWidth={0.9} paintOrder="stroke">{language === 'vi' ? feature.properties.name : feature.properties.nameEn}</text>
       })}
       </g>,
     }
-  }, [validAdminBoundaries, geometry, view.x, view.y, view.zoom, width, height, language])
+  }, [adminBoundaryGeometry, view.x, view.y, view.zoom, width, height, language])
   const showPopup = true
 
   return (

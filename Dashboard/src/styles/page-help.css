@@ -1,6 +1,6 @@
 .intro:has(> .page-description) { flex-wrap: wrap; }
 .intro > .page-description { flex: 0 0 100%; order: 2; }
-.intro .page-description { margin: 12px 0 0; max-width: 960px; color: #40533b; font-size: var(--text-body); font-weight: 400; line-height: 1.7; }
+.intro .page-description { margin: 12px 0 0; max-width: none; color: #40533b; font-size: var(--text-body); font-weight: 400; line-height: 1.7; text-align: justify; }
 .intro.bau3-intro:has(> .page-description) { row-gap: 0; }
 .header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .desktop-header .header-actions { grid-column: 3; grid-row: 1; justify-self: end; }

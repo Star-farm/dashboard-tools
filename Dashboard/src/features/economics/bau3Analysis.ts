@@ -73,7 +73,7 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const range = minimum === maximum ? minimum : `${minimum}–${maximum}`
   const changeUnit = relative ? '%' : metric === 'margin' ? language === 'vi' ? 'điểm %' : 'pp' : bau3Unit(metric, language)
   const metricName = metric === 'yield' ? language === 'vi' ? 'năng suất' : 'yield' : t[metric].toLocaleLowerCase(language)
-  const change = `${range}${relative ? ' %' : ` ${changeUnit}`}`
+  const change = `${range}${relative ? '%' : ` ${changeUnit}`}`
   const comparison = language === 'vi'
     ? `Trong ${period}, ${metricName} bình quân của 1Mha ${direction} thời tiết–tài nguyên so với ${baseline}; mức chênh lệch ${change}.`
     : `Over ${period}, average ${metricName} under 1Mha is ${direction} compared with ${baseline}, with a difference of ${change}.`
@@ -88,7 +88,7 @@ export function analyzeBau3(data: Bau3Data, metric: Bau3Metric, language: Langua
   const endOne = stats.reduce((sum, stat) => sum + stat.last.one, 0) / count
   const trend = (label: string, start: number, end: number) => {
     const change = metric === 'margin' ? end - start : start === 0 ? null : (end - start) / Math.abs(start) * 100
-    const amount = change === null ? '' : `${number.format(Math.abs(change))} ${metric === 'margin' ? language === 'vi' ? 'điểm %' : 'pp' : '%'}`
+    const amount = change === null ? '' : metric === 'margin' ? `${number.format(Math.abs(change))} ${language === 'vi' ? 'điểm %' : 'pp'}` : `${number.format(Math.abs(change))}%`
     const movement = end > start ? language === 'vi' ? 'tăng' : 'increased' : end < start ? language === 'vi' ? 'giảm' : 'decreased' : language === 'vi' ? 'gần như không đổi' : 'was nearly unchanged'
     return language === 'vi'
       ? `${label} ${movement}${amount ? ` ${amount}` : ''} (từ ${formatBau3Value(start, metric, language)} đến ${formatBau3Value(end, metric, language)} ${unit})`

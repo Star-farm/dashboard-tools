@@ -57,7 +57,7 @@ export default function SeasonalTrendInsight({ language, metric, models, startYe
       const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
       const mean = (points: typeof oneValues) => points.reduce((sum, point) => sum + point.value!, 0) / points.length
       const oneMean = mean(oneValues), bauMean = mean(bauValues), difference = oneMean - bauMean
-      const amount = metric === 'margin' ? `${number.format(Math.abs(difference))} ${language === 'vi' ? 'điểm %' : 'pp'}` : `${number.format(Math.abs(bauMean === 0 ? difference : difference / Math.abs(bauMean) * 100))} %`
+      const amount = metric === 'margin' ? `${number.format(Math.abs(difference))} ${language === 'vi' ? 'điểm %' : 'pp'}` : `${number.format(Math.abs(bauMean === 0 ? difference : difference / Math.abs(bauMean) * 100))}%`
       const relation = Math.abs(difference) < 0.000001 ? (language === 'vi' ? 'tương đương' : 'similar') : difference > 0 ? (language === 'vi' ? 'cao hơn' : 'higher') : (language === 'vi' ? 'thấp hơn' : 'lower')
       const range = (points: typeof oneValues) => `${number.format(Math.min(...points.map((point) => point.value!)))}–${number.format(Math.max(...points.map((point) => point.value!)))} ${seasonalUnit(metric, language)}`
       const change = (points: typeof oneValues) => seasonalChange(points[0]!.value!, points.at(-1)!.value!, metric, language).text

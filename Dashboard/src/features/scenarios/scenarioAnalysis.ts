@@ -24,7 +24,7 @@ export function scenarioSummaryParts(values: ScenarioSnapshot['values'], baselin
     if (Math.abs(change) < 0.000001) return [{ text: language === 'vi' ? 'không thay đổi' : 'remained unchanged' }]
     return [
       { text: language === 'vi' ? `${change > 0 ? 'tăng' : 'giảm'} ` : `${change > 0 ? 'increased' : 'decreased'} by ` },
-      { text: `${percent.format(Math.abs(change))} %`, tone: scenarioChangeTone(metric, change), metric },
+      { text: `${percent.format(Math.abs(change))}%`, tone: scenarioChangeTone(metric, change), metric },
     ]
   }
   let conclusion: string

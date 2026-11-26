@@ -57,7 +57,8 @@ export default function SeasonalComparison({ language, data, config }: { languag
   const t = seasonalText[language]
   const context = readMapContext()
   const defaultPeriod: SelectedPeriod = 'all'
-  const [mode, setMode] = useState<Mode>('year')
+  const [selectedMode, setSelectedMode] = useState<Mode>('year')
+  const mode: Mode = config.kind === 'overview' ? 'year' : selectedMode
   const year = 'all' as const
   const [period, setPeriod] = useState<SelectedPeriod>(defaultPeriod), [condition, setCondition] = useState<Bau3Condition>('mildNormal')
   const resetFilters = () => { setPeriod(defaultPeriod); setCondition('mildNormal') }
@@ -83,7 +84,7 @@ export default function SeasonalComparison({ language, data, config }: { languag
   }))
   const points = buildPoints(selectedRows)
   return <section className="seasonal-comparison" aria-label={t.title}>
-    <div className="seasonal-view-switch"><fieldset><legend>{t.view}</legend><div className="seasonal-mode"><button type="button" title={t.withinYear} aria-pressed={mode === 'year'} onClick={() => setMode('year')}>{t.withinYear}</button><button type="button" title={t.overTime} aria-pressed={mode === 'trend'} onClick={() => setMode('trend')}>{t.overTime}</button></div></fieldset></div>
+    {config.kind !== 'overview' && <div className="seasonal-view-switch"><fieldset><legend>{t.view}</legend><div className="seasonal-mode"><button type="button" title={t.withinYear} aria-pressed={mode === 'year'} onClick={() => setSelectedMode('year')}>{t.withinYear}</button><button type="button" title={t.overTime} aria-pressed={mode === 'trend'} onClick={() => setSelectedMode('trend')}>{t.overTime}</button></div></fieldset></div>}
     {showFilterPanel && <div className="seasonal-controls" role="group" aria-labelledby="seasonal-filters-title">
       <h3 id="seasonal-filters-title" className="seasonal-filters-title">{t.filters}</h3>
       {mode === 'trend' && <label>{t.period}<select title={t.period} value={period} onChange={(event) => setPeriod(event.target.value as SelectedPeriod)}><option value="all">{t.allSeasons}</option>{cropPeriods.map((value) => <option key={value} value={value}>{t[value]}</option>)}</select></label>}

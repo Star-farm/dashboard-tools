@@ -17,7 +17,7 @@ export function comparisonSummary(cohort: ComparisonCohort, language: Language, 
     if (Math.abs(delta) < .000001) return language === 'vi' ? `${name} tương đương` : `${name} is similar`
     const direction = language === 'vi' ? delta > 0 ? 'cao hơn' : 'thấp hơn' : delta > 0 ? 'higher' : 'lower'
     const unit = metric === 'yield' ? t.yieldUnit : metric === 'labor' ? t.laborUnit : t.moneyUnit
-    const amount = bau[metric] === 0 ? `${number(Math.abs(delta), ['income', 'cost', 'straw'].includes(metric))} ${unit}` : `${percent.format(Math.abs(delta) / Math.abs(bau[metric]!) * 100)} %`
+    const amount = bau[metric] === 0 ? `${number(Math.abs(delta), ['income', 'cost', 'straw'].includes(metric))} ${unit}` : `${percent.format(Math.abs(delta) / Math.abs(bau[metric]!) * 100)}%`
     return language === 'vi' ? `${name} ${direction} ${amount}` : `${name} is ${amount} ${direction}`
   }
   if (Object.values(one).every((value) => value === null) || Object.values(bau).every((value) => value === null)) return comparisonText[language].noData

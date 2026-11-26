@@ -8,12 +8,14 @@
 ## Before source changes
 
 - Read every applicable `AGENTS.md` for the target directory on each task. Re-read if the target or applicable instructions change.
+- Use `$pstack:poteto-mode` and `$pstack:in-your-own-words`. Restate the user's goal and wait for explicit confirmation before starting the requested work.
 - Do not edit source until you have read those instructions. If an applicable file is inaccessible, stop and report it.
 
 ## Bug fixes
 
+- Investigate the root cause
 - Once the root cause is known, explain it and the proposed fix with `$pstack:in-your-own-words`; wait for the user's explicit confirmation before changing code.
-- After fixing the bug, encode the correction as a lint rule. Its error message must tell the developer what to do instead. Remove duplicate copies of the check or rule.
+- After fixing the bug, use `$pstack:principle-prove-it-works' to show the result. Then encode the correction as a lint rule. Its error message must tell the developer what to do instead. Remove duplicate copies of the check or rule.
 
 ## Dashboard
 
@@ -29,7 +31,7 @@
 
 ## Desktop interaction
 
-- Prefer `tools/agent-desktop/node_modules/.bin/agent-desktop.cmd` for GUI interaction when available and appropriate. Before first use in a session, run `skills get desktop` and `skills get platform` with it, and follow their guidance.
+- Prefer `compute-use` for GUI interaction when available and appropriate. Before first use in a session, run `skills get desktop` and `skills get platform` with it, and follow their guidance.
 - Observe the UI, act, and verify the result. Use other tools when the environment requires them.
 
 ## Website development

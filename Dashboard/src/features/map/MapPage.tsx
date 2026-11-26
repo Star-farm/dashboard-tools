@@ -1,64 +1,24 @@
-import { mapDestination, readMapContext } from '../../app/mapNavigation'
-import type { MapNavigationContext } from '../../app/mapNavigation'
+import { readMapContext } from '../../app/mapNavigation'
 import { cropPeriods } from '../economics/seasonalData'
 import { seasonalText } from '../economics/seasonalText'
 import { useEffect, useMemo, useState } from 'react'
-import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Language } from '../../i18n'
-import { CHART_TICK } from '../../components/chartStyles'
-import ChartInfo from '../../components/ChartInfo'
-import { lineAxisScale } from '../../utils/lineAxisScale'
-import { valueForChart } from '../../utils/chartMissingValue'
-import { distinctAxisFormatter } from '../../utils/distinctAxisFormatter'
-import ChartUnitLabel from '../../components/ChartUnitLabel'
-import ChartSeriesLegend from '../../components/ChartSeriesLegend'
 import { economicFacets, economicsText } from '../economics/economicsText'
 import { emptyEconomicFilters, filterEconomicRows } from '../economics/economicsData'
 import type { EconomicFilters, EconomicRow } from '../economics/economicsData'
 import economics from '../../data/economics-overview.json'
-import resources from '../../data/resources-overview.json'
-import environment from '../../data/environment-overview.json'
 import {
   displayMapCurrency,
   mapColors,
   incomeMapColors,
-  plotTrend,
   selectPlotValues,
 } from './mapData'
 import { mapText } from './mapText'
-import type { AdminBoundaryData, MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults, MapScenario } from './mapTypes'
+import type { AdminBoundaryData, MapCurrency, MapCurrencyCode, MapGeometry, MapManifest, MapMetric, MapResults } from './mapTypes'
 import PlotMap from './PlotMap'
 import { useMapFile, useMapFiles } from './useMapFile'
 import '../../styles/chart-info.css'
 import '../../styles/map.css'
-
-function DashboardContext({ scenarios, language, context }: { scenarios: MapScenario[]; language: Language; context: MapNavigationContext }) {
-  const t = mapText[language]
-  const codes = new Set(scenarios.map((scenario) => scenario.code))
-  const economic = economics.filter((row) => codes.has(row.code) && !row.historical)
-  const resource = resources.rows.filter((row) => codes.has(row.code) && !row.historical)
-  const environmental = environment.rows.filter((row) => codes.has(row.code) && !row.historical)
-  const currency = language === 'vi' ? 'VND' : 'USD'
-  const weighted = (items: { value: number | null; count: number }[]) => {
-    const valid = items.filter((item) => item.value !== null && item.count > 0)
-    const count = valid.reduce((sum, item) => sum + item.count, 0)
-    return count ? valid.reduce((sum, item) => sum + item.value! * item.count, 0) / count : null
-  }
-  const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
-  const money = new Intl.NumberFormat(language, { maximumFractionDigits: language === 'vi' ? 0 : 2 })
-  const cards = [
-    { label: t.cost, value: weighted(economic.map((row) => ({ value: row[currency].cost, count: row.count }))), unit: language === 'vi' ? 'VNĐ/ha' : 'USD/ha', href: '#economics-overview', link: t.economics, money: true },
-    { label: t.water, value: weighted(resource.map((row) => ({ value: row.values.water, count: row.metricCounts.water }))), unit: 'mm', href: '#resources-overview', link: t.resources },
-    { label: t.methane, value: weighted(environmental.map((row) => ({ value: row.values.methane, count: row.metricCounts.methane }))), unit: language === 'vi' ? 'kg metan/ha' : 'kg methane/ha', href: '#environment-overview', link: t.environment },
-  ]
-  return <section className="map-dashboard-context" aria-labelledby="map-context-title">
-    <div className="map-section-heading"><h2 id="map-context-title">{t.reference}</h2><span>{t.referencePeriod}</span></div>
-    <div className="map-context-values">{cards.map((card) => <article key={card.label}>
-      <h3>{card.label}</h3><p>{card.value == null ? '-' : (card.money ? money : number).format(card.value)} <span>{card.unit}</span></p>
-      <a href={mapDestination(card.href, context)}>{card.link}<span aria-hidden="true"> →</span></a>
-    </article>)}</div>
-  </section>
-}
 
 export default function MapPage({ language }: { language: Language }) {
   const t = mapText[language]
@@ -74,8 +34,6 @@ export default function MapPage({ language }: { language: Language }) {
   const [season, setSeason] = useState(() => initialContext?.harvest ?? 0)
   const [metric, setMetric] = useState<MapMetric>('yield')
   const [playing, setPlaying] = useState(false)
-  const [trendChartWidth, setTrendChartWidth] = useState(620)
-  const trendMetric = metric
   const mapRows = useMemo(() => (economics as EconomicRow[]).filter((row) => !row.historical && manifest.data?.scenarios.some((scenario) => scenario.code === row.code)), [manifest.data])
   const visibleRows = filterEconomicRows(mapRows, filters)
   const codes = new Set(visibleRows.map((row) => row.code))
@@ -119,20 +77,12 @@ export default function MapPage({ language }: { language: Language }) {
     return incomeBreaksVND.map(value => value / rate)
   }, [displayData, metric, currencyCode, conversion.data])
 
-  const trend = useMemo(() => displayData ? plotTrend(displayData, season, trendMetric, null) : [], [displayData, season, trendMetric])
-  const chartTrend = useMemo(() => trend.map((point) => ({ ...point, value: valueForChart(point.value) / (language === 'vi' && trendMetric === 'income' ? 1_000_000 : 1) })), [trend, language, trendMetric])
-  const trendScale = lineAxisScale(chartTrend.map((point) => point.value))
-  const trendAxisNumber = distinctAxisFormatter(trendScale.ticks, language, trendMetric === 'income')
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
   const money = new Intl.NumberFormat(language, { maximumFractionDigits: language === 'vi' ? 0 : 2 })
-  const trendNumber = trendMetric === 'income' ? money : number
   const legendNumber = metric === 'income' && currencyCode === 'VND' ? new Intl.NumberFormat(language, { notation: 'compact', maximumFractionDigits: 1 }) : metric === 'income' ? money : number
+  const formatLegendValue = (value: number) => legendNumber.format(metric === 'income' && language === 'en' ? Math.round(value / 100) * 100 : value)
   const values = metric === 'income' ? incomeValues : yieldValues
   const unit = metric === 'income' ? t.incomeUnit : t.yieldUnit
-  const trendUnit = trendMetric === 'income' ? t.incomeUnit : t.yieldUnit
-  const trendChartUnit = language === 'vi' && trendMetric === 'income' ? 'triệu VNĐ/ha' : trendUnit
-  const trendChartNumber = new Intl.NumberFormat(language, { maximumFractionDigits: 2 })
-  const period = `${year} · ${season === 0 ? t.allHarvests : seasonalText[language][cropPeriods[season - 1]]}`
   const hasError = manifest.error || geometry.error || results.error || conversion.error
   const loading = !manifest.data || !geometry.data || !displayData
   const colors = metric === 'income' ? incomeMapColors : mapColors
@@ -224,8 +174,8 @@ export default function MapPage({ language }: { language: Language }) {
 /> : <div className="map-canvas-skeleton" />}
             {loading && !hasError && <div className="map-loading-overlay" role="status">{t.loading}</div>}
           </div>
-          <div className="map-legend" aria-label={`${t[metric]} (${unit})`}><div className="map-legend-title"><strong>{t[metric]}</strong><span>{unit}</span></div>
-            <div className="map-legend-steps">{colors.map((color, index) => <div key={color}><span style={{ background: color }} /><small title={breaks.length ? `${(metric === 'income' ? money : number).format(breaks[index])} – ${(metric === 'income' ? money : number).format(breaks[index + 1])}` : undefined}>{breaks.length ? `${legendNumber.format(breaks[index])} – ${legendNumber.format(breaks[index + 1])}` : '-'}</small></div>)}</div>
+          <div className="map-legend" aria-label={`${t.legendTitle} ${t[metric]} (${unit})`}><div className="map-legend-title"><strong>{t.legendTitle} {t[metric]}</strong><span>{unit}</span></div>
+            <div className="map-legend-steps">{colors.map((color, index) => <div key={color}><span style={{ background: color }} /><small title={breaks.length ? `${formatLegendValue(breaks[index])} – ${formatLegendValue(breaks[index + 1])}` : undefined}>{breaks.length ? `${formatLegendValue(breaks[index])} – ${formatLegendValue(breaks[index + 1])}` : '-'}</small></div>)}</div>
             <p>{t.legendNote}</p>
           </div>
           <p className="map-interaction-help" id="map-interaction-help">{t.instructions}</p>
@@ -233,71 +183,5 @@ export default function MapPage({ language }: { language: Language }) {
 
       </div>
     </section>
-    <section className="map-trend-section" aria-labelledby="map-trend-title">
-      <div className="map-section-heading"><div><h2 id="map-trend-title">{t.trend}</h2></div></div>
-      <p className="map-chart-note">{t.trendNote}</p>
-{loading ? <div className="map-trend-skeleton" /> : <div className="map-trend-chart" role="img" aria-label={`${t.trend} · ${t[trendMetric]} · ${period}`}>
-        <ChartUnitLabel unit={trendChartUnit} language={language} />
-        <ResponsiveContainer width="100%" height={290} onResize={setTrendChartWidth}>
-        <LineChart
-          data={chartTrend}
-          margin={{ top: 34, right: trendChartWidth < 420 ? 8 : 24, left: trendChartWidth < 420 ? 0 : 20, bottom: 34 }}
-        >
-          <CartesianGrid stroke="#dce3d9" vertical={false} />
-
-          <XAxis
-            dataKey="year"
-            type="number"
-            domain={[2027, 2050]}
-            ticks={[2027, 2030, 2035, 2040, 2045, 2050]}
-            tick={CHART_TICK}
-            tickLine={false}
-            axisLine={false}
-            tickMargin={12}
-            padding={trendChartWidth < 420 ? { left: 0, right: 0 } : { left: 12, right: 12 }}
-            label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }}
-          />
-
-          <YAxis
-            width={trendChartWidth < 420 ? 50 : 85}
-            domain={trendScale.domain}
-            ticks={trendScale.ticks}
-            tickFormatter={(value: number) => trendAxisNumber(value)}
-            tick={CHART_TICK}
-            tickLine={false}
-            axisLine={false}
-            tickMargin={trendChartWidth < 420 ? 4 : 12}
-          />
-
-          <Tooltip
-            isAnimationActive={false}
-            content={(props) => <ChartInfo {...props} yearLabel={t.year} format={(value) => trendChartNumber.format(value)} unit={trendChartUnit} />}
-          />
-
-          <ReferenceLine
-            x={year}
-            stroke="#ad8950"
-            strokeDasharray="4 4"
-          />
-
-          <Line
-            dataKey="value"
-            name={t[trendMetric]}
-            type="linear"
-            stroke="#254f3d"
-            strokeWidth={2.5}
-            dot={{ r: 3.5, fill: '#254f3d', stroke: '#fffefa', strokeWidth: 1 }}
-            activeDot={{ r: 5 }}
-            connectNulls={false}
-            isAnimationActive={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-      </div>}
-      {!loading && <ChartSeriesLegend language={language} items={[{ key: trendMetric, label: t[trendMetric], color: '#254f3d' }]} />}
-      <details className="map-trend-table"><summary>{t.showTable} · 2027–2050</summary><div className="map-data-table-scroll"><table><thead><tr><th>{t.year}</th><th>{t[trendMetric]} ({trendUnit})</th></tr></thead><tbody>{trend.map((point) => <tr key={point.year}><td>{point.year}</td><td>{point.value == null ? '-' : trendNumber.format(point.value)}</td></tr>)}</tbody></table></div></details>
-    </section>
-    {scenarios.length > 0 && <DashboardContext scenarios={scenarios} language={language} context={{ filters, year, harvest: season, codes: scenarios.map((scenario) => scenario.code) }} />}
-
   </div>
 }

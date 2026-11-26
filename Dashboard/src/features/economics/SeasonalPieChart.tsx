@@ -65,11 +65,11 @@ export default function SeasonalPieChart({ language, name, color, slices, unit, 
   const { shares } = seasonalComposition(cultivated.map((slice) => slice.value))
   const percent = (slice: typeof cultivated[number]) => {
     const index = cultivated.indexOf(slice)
-    return shares && index >= 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(shares[index])} %` : null
+    return shares && index >= 0 ? `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(shares[index])}%` : null
   }
   const tooltipPercent = (slice: typeof cultivated[number]) => {
     const index = cultivated.indexOf(slice)
-    return shares && index >= 0 ? `${new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(shares[index])} %` : null
+    return shares && index >= 0 ? `${new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(shares[index])}%` : null
   }
   const mobileNumber = mobileFormat ?? ((value: number) => new Intl.NumberFormat(language, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value))
   const dataLabel = (slice: typeof cultivated[number]) => percent(slice)?.replace(/\s?%$/, '') ?? ''

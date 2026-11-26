@@ -46,7 +46,7 @@ export function environmentFilteredSeries(data: EnvironmentData, climate: string
 function changeText(change: number | null, language: Language) {
   if (change === null) return language === 'vi' ? 'chưa đủ số liệu để tính tỷ lệ thay đổi' : 'a percentage change cannot be calculated'
   const amount = new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))
-  return language === 'vi' ? Math.abs(change) < .000001 ? 'không đổi' : `${change < 0 ? 'giảm' : 'tăng'} ${amount} %` : Math.abs(change) < .000001 ? 'is unchanged' : `${change < 0 ? 'decreases' : 'increases'} by ${amount} %`
+  return language === 'vi' ? Math.abs(change) < .000001 ? 'không đổi' : `${change < 0 ? 'giảm' : 'tăng'} ${amount}%` : Math.abs(change) < .000001 ? 'is unchanged' : `${change < 0 ? 'decreases' : 'increases'} by ${amount}%`
 }
 export function environmentFamilyInsight(data: EnvironmentData, family: Bau3Family, metric: EnvironmentMetric, language: Language) {
   const t = environmentText[language], names = bau3Text[language], vi = language === 'vi'
@@ -68,7 +68,7 @@ export function environmentComparisonInsight(data: EnvironmentData, selected: En
   const name = family ? t[family] : t.bau
   const relative = a === 0 ? null : (b - a) / Math.abs(a) * 100
   const number = new Intl.NumberFormat(language, { maximumFractionDigits: 1 })
-  const comparison = relative === null ? vi ? `chênh lệch ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}` : `a difference of ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}` : Math.abs(relative) < .000001 ? vi ? 'tương đương' : 'similar levels' : vi ? `${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))} %` : `${number.format(Math.abs(relative))} % ${b < a ? 'lower' : 'higher'} levels`
+  const comparison = relative === null ? vi ? `chênh lệch ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}` : `a difference of ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}` : Math.abs(relative) < .000001 ? vi ? 'tương đương' : 'similar levels' : vi ? `${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))}%` : `${number.format(Math.abs(relative))}% ${b < a ? 'lower' : 'higher'} levels`
   const differences = bau3Conditions.flatMap((condition) => {
     const left = baseline.filter((item) => item.condition === condition).flatMap((item) => item.points)
     const right = one.filter((item) => item.condition === condition).flatMap((item) => item.points)
@@ -94,7 +94,7 @@ export function environmentSummary(data: EnvironmentData, selected: EnvironmentS
     return `${t[metric].toLocaleLowerCase(language)} ${environmentNumber(stats.mean, language)} ${environmentUnit(metric, language)}${compare ? '' : ` (${changeText(stats.change, language)})`}`
   })
   const awd = environmentAwdStats(selected.filter((series) => !family || series.family === family), data.startYear, data.endYear)
-  const rate = (value: number | null) => value === null ? t.noData : `${environmentNumber(value, language)} %`
+  const rate = (value: number | null) => value === null ? t.noData : `${environmentNumber(value, language)}%`
   if (compare) {
     const baseline = selected.filter((series) => family ? series.family === family : series.family !== 'oneMha')
     const one = selected.filter((series) => series.family === 'oneMha')
@@ -109,7 +109,7 @@ export function environmentSummary(data: EnvironmentData, selected: EnvironmentS
         ? vi ? `chênh lệch ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}` : `a difference of ${environmentNumber(b - a, language)} ${environmentUnit(metric, language)}`
         : Math.abs(relative) < .000001
           ? vi ? 'tương đương' : 'similar'
-          : vi ? `1Mha ${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))} %` : `1Mha is ${number.format(Math.abs(relative))} % ${b < a ? 'lower' : 'higher'}`
+          : vi ? `1Mha ${b < a ? 'thấp hơn' : 'cao hơn'} ${number.format(Math.abs(relative))}%` : `1Mha is ${number.format(Math.abs(relative))}% ${b < a ? 'lower' : 'higher'}`
       return [`${t[metric].toLocaleLowerCase(language)}: ${environmentNumber(a, language)} / ${environmentNumber(b, language)} ${environmentUnit(metric, language)} (${relation})`]
     })
     const baseRate = environmentAwdStats(baseline, data.startYear, data.endYear).mean

@@ -10,7 +10,7 @@ const descriptions = {
     bars: 'So sánh kết quả bình quân của canh tác như thường lệ và đề án một triệu hecta lúa chất lượng cao, phát thải thấp theo điều kiện thời tiết và tài nguyên.',
     pair: 'Đối chiếu canh tác như thường lệ và đề án một triệu hecta lúa chất lượng cao, phát thải thấp theo thời gian hoặc mùa vụ để nhận diện khác biệt giữa hai mô hình.',
     farming: 'Theo dõi các chỉ số chính, xu hướng qua các năm và sự khác biệt giữa các mùa vụ của mô hình này.',
-    future: 'Theo dõi sự thay đổi của thu nhập, lao động và phát thải metan trong giai đoạn 2027–2050; chọn khoảng năm để xem chi tiết.',
+    future: 'Theo dõi sự thay đổi của thu nhập, lao động và phát thải metan trong giai đoạn 2027–2050.',
     scenario: 'Chọn một kịch bản để xem các chỉ số kinh tế, sử dụng tài nguyên và môi trường, cùng mức thay đổi so với hiện trạng.',
     glossary: 'Tìm định nghĩa các chỉ số, phương pháp canh tác và điều kiện kịch bản bằng tiếng Việt hoặc tiếng Anh.',
   },

@@ -47,7 +47,7 @@ export default function Bau3LineChart({ data, family, metric, domain, language, 
           <LineChart data={chartPoints} accessibilityLayer margin={{ top: 32, right: 20, left: 0, bottom: 24 }}>
             <CartesianGrid stroke="#b5c2aa" strokeWidth={1} />
             <XAxis dataKey="year" type="number" domain={[data.startYear, data.endYear]} ticks={ticks} interval={0} allowDecimals={false} tickLine={false} tickMargin={10} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} label={{ value: t.year, position: 'insideBottom', offset: -18, fill: CHART_TICK.fill, fontSize: CHART_TICK.fontSize, fontWeight: CHART_TICK.fontWeight }} />
-            <YAxis width={chartWidth < 420 ? 46 : 68} domain={yScale.domain} ticks={yScale.ticks} allowDataOverflow tickFormatter={(value) => `${axisNumber(Number(value))}${metric === 'margin' ? ' %' : ''}`} tickLine={false} tickMargin={chartWidth < 420 ? 4 : 8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
+            <YAxis width={chartWidth < 420 ? 46 : 68} domain={yScale.domain} ticks={yScale.ticks} allowDataOverflow tickFormatter={(value) => `${axisNumber(Number(value))}${metric === 'margin' ? '%' : ''}`} tickLine={false} tickMargin={chartWidth < 420 ? 4 : 8} axisLine={{ stroke: '#819275' }} tick={CHART_TICK} />
             {domain[0] <= 0 && domain[1] >= 0 && <ReferenceLine y={0} stroke="#819275" />}
             <Tooltip
   shared

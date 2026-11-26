@@ -41,5 +41,4 @@
   .chart-tooltip-desktop-label { display: none; }
   .chart-info .chart-tooltip-mobile-label { display: inline; }
   .recharts-tooltip-wrapper { max-width: calc(100% - 16px); }
-  .map-trend-chart .recharts-default-tooltip { box-sizing: border-box; max-width: 100%; max-height: min(40dvh, 260px); overflow: auto; padding: 6px 8px !important; font-size: 11px !important; line-height: 1.25 !important; }
 }

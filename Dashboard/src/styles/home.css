@@ -1,6 +1,7 @@
 .home-about { padding-top: 50px; }
 .home-about h2 { margin: 10px 0 12px; font-size: var(--section-title-size); color: var(--forest); }
 .home-about > p:not(.eyebrow) { max-width: 900px; margin: 12px 0 0; color: #40533b; font-size: var(--text-body); line-height: 1.8; }
+.home-about > p.home-about-copy { max-width: none; text-align: justify; }
 .home-about a { color: var(--forest); text-underline-offset: 3px; }
 .home-explore { display: flex; flex-direction: column; gap: 20px; padding-block: 50px; }
 .home-explore .glossary-callout { margin: 0; }
@@ -13,7 +14,7 @@
 .hero-content { width: min(100% - 64px, 1180px); padding: 100px 0 130px; text-align: center; }
 .hero-content h1 { text-wrap: balance; text-shadow: 0 2px 16px #102a2233; }
 .hero-content h1 > span { color: #fff8db; }
-.hero-description { margin: 24px auto 0; font-size: calc(clamp(16px, 1.65vw, 23px) + 1px); line-height: 1.6; color: #f7f5e9; max-width: 860px; text-wrap: balance; }
+.hero-description { margin: 24px auto 0; font-size: calc(clamp(16px, 1.65vw, 23px) + 1px); line-height: 1.6; color: #f7f5e9; max-width: 860px; text-wrap: balance; text-align: justify; text-align-last: center; }
 .hero-project { margin: 19px 0 0; color: #e8e8d5; font-size: var(--text-small); letter-spacing: normal; }
 .hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hero-actions a { min-height: 50px; display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; padding: 14px 21px; border-radius: 5px; font-size: var(--text-body); font-weight: 600; text-decoration: none; transition: background .15s, transform .15s; }

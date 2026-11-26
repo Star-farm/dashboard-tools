@@ -49,7 +49,7 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
   const format = (value: number) => `${formatValue(value, metric, currency, language)} ${unit}`
   const percent = new Intl.NumberFormat(language, { maximumFractionDigits: 1, signDisplay: 'always' })
   const relativeDifference = secondMean > 0 ? difference / secondMean * 100 : null
-  const statistic = relativeDifference !== null ? `${percent.format(relativeDifference)} %` : `${difference > 0 ? '+' : ''}${format(difference)}`
+  const statistic = relativeDifference !== null ? `${percent.format(relativeDifference)}%` : `${difference > 0 ? '+' : ''}${format(difference)}`
   const direction = difference > 0 ? t.higher : difference < 0 ? t.lower : t.equal
   const years = `${paired.length} ${paired.length === 1 ? 'year' : 'years'}`
   const comparison = language === 'vi'
@@ -110,7 +110,7 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
     if (!start || !end || start.year === end.year) return ''
     const startValue = start[key]!, endValue = end[key]!
     const change = startValue === 0 ? null : (endValue - startValue) / Math.abs(startValue) * 100
-    const changeText = change === null ? `${format(endValue - startValue)}` : `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))} %`
+    const changeText = change === null ? `${format(endValue - startValue)}` : `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(change))}%`
     const direction = endValue > startValue ? (language === 'vi' ? 'tăng' : 'increased') : endValue < startValue ? (language === 'vi' ? 'giảm' : 'decreased') : (language === 'vi' ? 'gần như không đổi' : 'remained nearly unchanged')
     const connector = endValue >= startValue ? (language === 'vi' ? 'lên' : 'to') : (language === 'vi' ? 'xuống' : 'to')
     return language === 'vi'
@@ -121,7 +121,7 @@ export function analyzeChart(points: ChartPoint[], metric: Metric, currency: Cur
   const secondTrend = seriesTrend(secondLabel, secondStart, secondEnd, 'second')
   const differenceAmount = relativeDifference === null
     ? format(Math.abs(difference))
-    : `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(relativeDifference))} %`
+    : `${new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(Math.abs(relativeDifference))}%`
   const paragraph = language === 'vi'
     ? `Trong giai đoạn ${validFirst[0]?.year ?? ''}–${validFirst.at(-1)?.year ?? ''}, ${firstLabel} đạt bình quân ${format(firstMean)}, ${direction} ${differenceAmount} so với ${secondLabel} (${format(secondMean)}). ${[firstTrend, secondTrend].filter(Boolean).join('; ')}.`
     : `From ${validFirst[0]?.year ?? ''} to ${validFirst.at(-1)?.year ?? ''}, ${firstLabel} averaged ${format(firstMean)}, ${direction} ${differenceAmount} compared with ${secondLabel} (${format(secondMean)}). ${[firstTrend, secondTrend].filter(Boolean).join('; ')}.`

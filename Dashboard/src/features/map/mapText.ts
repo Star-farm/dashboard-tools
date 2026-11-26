@@ -16,7 +16,7 @@ const vi = {
   legendNote: 'Thang màu cố định theo phân vị của toàn bộ năm và vụ trong các kịch bản đang chọn.',
   riskNote: 'Lớp nhạy cảm với mặn là dữ liệu đầu vào tĩnh, lưới khoảng 5 km. Giá trị 0–1 không phải nồng độ g/L; ô 0 chưa được xác minh là không có rủi ro.',
   staticLayer: 'Lớp tĩnh · không thay đổi theo năm và kịch bản', noData: 'Chưa có dữ liệu', noSelection: 'Chọn vùng trên bản đồ hoặc danh sách để xem chuỗi thời gian riêng của vùng.',
-  trend: 'Diễn biến 2027–2050', trendNote: 'Theo các kịch bản phù hợp bộ lọc; đơn vị tính trên mỗi ha, mỗi vụ.',
+  legendTitle: 'Chú giải:',
   basemapCredit: 'Bản đồ nền tĩnh Natural Earth',
   geographicLabels: 'Tên quốc gia lân cận và biển', countryThailand: 'Thái Lan', countryLaos: 'Lào', countryCambodia: 'Campuchia', eastSea: 'Biển Đông',
   sourceTitle: 'Nguồn dữ liệu và cách liên kết',
@@ -24,10 +24,8 @@ const vi = {
   mapping: 'Mã vùng 0–991 là thứ tự đối tượng trong shapefile và cột xuất của mô hình, không phải mã địa chính. Liên kết dựa trên cách tạo và xuất plot trong mã mô hình hiện có; các file kết quả không lưu dấu kiểm chứng phiên bản shapefile nên vị trí cần được đối soát với mô hình gốc trước khi dùng cho quyết định tại thửa.',
   seasons: 'Vụ 1, 2, 3 được đánh theo thứ tự ngày thu hoạch trong mỗi năm và lần chạy. Không tự gán tên Đông-Xuân, Hè-Thu hay Thu-Đông.',
   moneyNote: 'Thu nhập vùng giữ đơn vị USD/ha theo mô hình gốc ở cả hai ngôn ngữ. Giá trị bình quân được làm tròn khi chuẩn bị dữ liệu; hình học được giản lược để hiển thị, diện tích tính từ hình học gốc.',
-  reference: 'Đối chiếu với Dashboard', referencePeriod: 'Trung bình kịch bản · 2027–2050',
-  cost: 'Chi phí sản xuất', water: 'Lượng nước sử dụng', methane: 'Phát thải metan', economics: 'Xem kinh tế', resources: 'Xem tài nguyên', environment: 'Xem môi trường',
   harvestDates: 'Ngày thu hoạch trong dữ liệu', observedRange: 'Khoảng giá trị các vùng', lower: 'Thấp', higher: 'Cao',
-  valuesTable: 'Tra cứu vùng', showTable: 'Bảng diễn biến theo năm', tableHint: 'Có thể tìm nhanh bằng mã vùng trong danh sách phía trên. Các giá trị là kết quả mô phỏng.',
+  valuesTable: 'Tra cứu vùng', tableHint: 'Có thể tìm nhanh bằng mã vùng trong danh sách phía trên. Các giá trị là kết quả mô phỏng.',
 }
 const en: Record<keyof typeof vi, string> = {
   plotInfo: 'Plot information', closePopup: 'Close plot information',
@@ -47,7 +45,7 @@ const en: Record<keyof typeof vi, string> = {
   legendNote: 'Color thresholds use all years and harvests of the matching scenarios and remain fixed when changing year.',
   riskNote: 'Salinity vulnerability is a static model input on an approximately 5 km grid. The 0–1 index is not concentration in g/L; zero cells have not been verified as risk-free.',
   staticLayer: 'Static layer · independent of year and scenario', noData: 'No data available', noSelection: 'Select an area on the map or in the list to see its own time series.',
-  trend: 'Trends · 2027–2050', trendNote: 'Uses scenarios matching the filters; values are per hectare, per harvest.',
+  legendTitle: 'Legend:',
   basemapCredit: 'Natural Earth static basemap',
   geographicLabels: 'Nearby countries and sea labels', countryThailand: 'Thailand', countryLaos: 'Laos', countryCambodia: 'Cambodia', eastSea: 'South China Sea',
   sourceTitle: 'Sources and spatial linkage',
@@ -55,9 +53,7 @@ const en: Record<keyof typeof vi, string> = {
   mapping: 'Area numbers 0–991 follow shapefile feature order and model output columns; they are not cadastral identifiers. Linkage follows plot creation and export in the available model code. Results contain no shapefile version fingerprint, so locations need checking against the original simulation before making plot-level decisions.',
   seasons: 'Harvests 1, 2 and 3 follow chronological harvest dates within each year and simulation run. They are not automatically assigned named cropping seasons.',
   moneyNote: 'Area income retains the source model unit USD/ha in both languages. Prepared means are rounded; geometry is simplified for display, while area uses the original geometry.',
-  reference: 'Dashboard context', referencePeriod: 'Scenario mean · 2027–2050',
-  cost: 'Production cost', water: 'Water use', methane: 'Methane emissions', economics: 'View economics', resources: 'View resources', environment: 'View environment',
   harvestDates: 'Harvest dates in the source', observedRange: 'Range across areas', lower: 'Low', higher: 'High',
-  valuesTable: 'Area lookup', showTable: 'Annual trend table', tableHint: 'Use the area selector above to find an area quickly. Values are simulation results.',
+  valuesTable: 'Area lookup', tableHint: 'Use the area selector above to find an area quickly. Values are simulation results.',
 }
 export const mapText = { vi, en }

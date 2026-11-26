@@ -1,5 +1,5 @@
 const vi = {
-  title: 'Dự báo giai đoạn 2027–2050',
+  title: 'Dự báo',
   periodPrefix: 'giai đoạn',
   controls: 'Điều chỉnh biểu đồ',
   fromYear: 'Từ năm',
@@ -29,7 +29,7 @@ const vi = {
 }
 
 const en: Record<keyof typeof vi, string> = {
-  title: 'Projections for 2027–2050',
+  title: 'Projections',
   periodPrefix: 'for',
   controls: 'Chart controls',
   fromYear: 'From year',

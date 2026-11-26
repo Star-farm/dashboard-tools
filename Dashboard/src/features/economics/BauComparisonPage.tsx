@@ -43,7 +43,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
   }, [anchor])
   return (
     <div className="bau3-page page-shell" id={anchor}>
-      <section className="intro bau3-intro" aria-labelledby="bau-comparison-title"><h1 id="bau-comparison-title"><ScenarioAbbreviations text={title} language={language} /></h1><PageDescription language={language} kind="pair" topic="economics" /><span>{data.startYear}–{data.endYear}</span></section>
+      <section className="intro bau3-intro" aria-labelledby="bau-comparison-title"><h1 id="bau-comparison-title"><ScenarioAbbreviations text={title} language={language} /></h1><PageDescription language={language} kind="pair" topic="economics" /></section>
       <AnalysisView language={language} config={{ topic: 'economics', kind: 'comparison', family: variant }}>
       <aside className="bau3-insight bau3-comparison-summary" aria-labelledby="bau-comparison-summary-title"><h3 id="bau-comparison-summary-title">{language === 'vi' ? 'Nhận xét tổng hợp' : 'Overall assessment'}</h3><p><EmphasizedNumbers text={summary || t.noData} maxSentences={3} /></p></aside>
       <div className="bau3-sections">{bau3Metrics.map((metric) => {
@@ -51,7 +51,7 @@ export default function BauComparisonPage({ language, data }: { language: Langua
         const analysis = analyzeBau3(data, metric, language)
         return <section className="bau3-section" key={metric} aria-labelledby={`bau-${variant}-${metric}-title`}>
           <h2 id={`bau-${variant}-${metric}-title`}>{t[metric]}</h2>
-          <ScenarioComparisonChart chartType="line" key={variant} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={selectBau3Points(data, variant, metric, currency)} oneMha={selectBau3Points(data, 'oneMha', metric, currency)} startYear={data.startYear} endYear={data.endYear} domain={domain} unit={bau3ChartUnit(metric, language)} formatValue={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} formatAxis={(value, ticks) => `${distinctAxisFormatter(ticks, language, true)(value)}${metric === 'margin' ? ' %' : ''}`} />
+          <ScenarioComparisonChart chartType="line" key={variant} language={language} title={t[metric]} baselineLabel={baselineLabel} baseline={selectBau3Points(data, variant, metric, currency)} oneMha={selectBau3Points(data, 'oneMha', metric, currency)} startYear={data.startYear} endYear={data.endYear} domain={domain} unit={bau3ChartUnit(metric, language)} formatValue={(value) => new Intl.NumberFormat(language, { maximumFractionDigits: 2 }).format(value)} formatAxis={(value, ticks) => `${distinctAxisFormatter(ticks, language, true)(value)}${metric === 'margin' ? '%' : ''}`} />
           <aside className="bau3-insight" aria-label={`${t.insight} · ${t[metric]}`}><h3>{t.insight}</h3><p><EmphasizedNumbers text={analysis?.paragraph ?? t.noData} /></p></aside>
         </section>
       })}</div>

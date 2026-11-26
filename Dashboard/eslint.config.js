@@ -310,6 +310,27 @@ const requireFullWidthJustifiedCopy = {
   },
 }
 
+const requireHeroDescriptionInheritedAlignment = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'inherit centered alignment for the home hero description' },
+    schema: [],
+    messages: {
+      inheritParentAlignment: 'Remove text-align and text-align-last from .hero-description so it inherits centered alignment from .hero-content.',
+    },
+  },
+  create(context) {
+    const homeStylesheet = readFileSync(join(process.cwd(), 'src/styles/home.css'), 'utf8')
+    const heroDescriptionRule = homeStylesheet.match(/\.hero-description\s*\{([^}]*)\}/)?.[1] ?? ''
+    const overridesAlignment = /\btext-align(?:-last)?\s*:/.test(heroDescriptionRule)
+    return {
+      Program(node) {
+        if (overridesAlignment) context.report({ node, messageId: 'inheritParentAlignment' })
+      },
+    }
+  },
+}
+
 const starFarmPlugin = {
   rules: {
     'no-global-plot-popup-context': noGlobalPlotPopupContext,
@@ -321,6 +342,7 @@ const starFarmPlugin = {
     'require-fitting-seasonal-overview-tables': requireFittingSeasonalOverviewTables,
     'require-sticky-economic-group-headings': requireStickyEconomicGroupHeadings,
     'require-full-width-justified-copy': requireFullWidthJustifiedCopy,
+    'require-hero-description-inherited-alignment': requireHeroDescriptionInheritedAlignment,
   },
 }
 
@@ -375,7 +397,10 @@ export default defineConfig([
   },
   {
     files: ['src/features/home/HomePage.tsx'],
-    rules: { 'star-farm/require-full-width-justified-copy': 'error' },
+    rules: {
+      'star-farm/require-full-width-justified-copy': 'error',
+      'star-farm/require-hero-description-inherited-alignment': 'error',
+    },
   },
   {
     files: ['src/components/PageDescription.tsx'],

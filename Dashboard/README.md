@@ -31,7 +31,7 @@ Dashboard/
 │   ├── assets/           Local fonts, images, partner marks
 │   ├── components/       Shared charts and UI
 │   ├── data/              CSV sources and generated JSON
-│   ├── features/          Economics, environment, future, glossary, home, maps, resources, scenarios
+│   ├── features/          Economics, environment, future, glossary, home, map, resources, scenarios
 │   ├── i18n/              Language state and translations
 │   ├── styles/            Global and feature CSS
 │   └── utils/             CSV parsing and year ticks

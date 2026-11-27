@@ -42,7 +42,7 @@ Every changed user-facing string needs Vietnamese and English translations. Use 
 
 Map state and rendering live in `src/features/map/`. Read [DATA_PIPELINE.md](DATA_PIPELINE.md) before changing assets. Keep manifest references, hashes, CRS, shape order, category shares, and geometry fingerprints in sync.
 
-Soil validation expects plot area = known area + unknown area, and category shares to sum to known area within tolerance. Land Use uses compact per-plot statistics and a raster; do not restore a full vector fallback or fetch the complete overlay during normal display. The regional Natural Earth image covers 94–116°E and 4–23°N; country and sea names are translated SVG labels. Plot-map panning stays within the administrative study extent and can reach its northern edge. Plot map zoom is bounded at 120×. Test layer changes, retry, constrained pan/zoom, keyboard selection, labels in both languages, legends, popups, long names, and map-to-dashboard context.
+Soil validation expects plot area = known area + unknown area, and category shares to sum to known area within tolerance. Land Use uses compact per-plot statistics and a raster; do not restore a full vector fallback or fetch the complete overlay during normal display. The regional Natural Earth image covers 94–116°E and 4–23°N; country and sea names are translated SVG labels. The map view center is clamped to the administrative boundary bounds and can reach the northern bound. Plot map zoom is bounded at 120×. Test layer changes, retry, constrained pan/zoom, keyboard selection, labels in both languages, legends, popups, long names, and map-to-dashboard context.
 
 ## Local workflow
 
